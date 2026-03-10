@@ -3,17 +3,25 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Product - Ninewatt",
-  description: "나인와트의 에너지 솔루션 제품군. Opti, GreenPlanner, Save-E, RE:park",
+  description: "나인와트의 에너지 솔루션 제품군. Watti, Opti, GreenPlanner, Save-E, RE:park",
 };
 
 const products = [
+  {
+    href: "/product/watti",
+    name: "Watti",
+    badge: null,
+    tagline: "3D Building Energy Platform",
+    description:
+      "3D 맵 기반 건물 에너지 분석 플랫폼. 건축물·에너지·환경·도시 데이터 분석을 통해 건물 에너지 효율화 인사이트를 제공합니다.",
+  },
   {
     href: "/product/opti",
     name: "Opti",
     badge: "CES 2026 Honoree",
     tagline: "AI Energy Advisor",
     description:
-      "도메인 특화 LLM 기반 대화형 건물 에너지 분석 서비스. 에너지 사용 패턴 분석, 이상 감지, 자동 리포트까지.",
+      "자연어 기반 건물 에너지 투자 인사이트와 진단. 200개 이상의 건물에 적용된 AI 대화형 에너지 분석 서비스.",
   },
   {
     href: "/product/greenplanner",
@@ -21,7 +29,7 @@ const products = [
     badge: null,
     tagline: "Green Remodeling Planner",
     description:
-      "도시 단위 건물 에너지 진단 및 그린리모델링 시뮬레이션 플랫폼.",
+      "건물 에너지 시뮬레이션과 부동산 공공 데이터로 리모델링 후 추정시세를 예측하고, 정부지원자금 컨설팅까지 제공하는 앱.",
   },
   {
     href: "/product/save-e",
@@ -29,15 +37,15 @@ const products = [
     badge: null,
     tagline: "Smart Energy Insight",
     description:
-      "기업 대상 에너지 솔루션 제공 및 자동진단 레포팅 서비스.",
+      "건물 에너지 그룹관리 및 비용관리 솔루션. 15분 단위 전력사용량 분석으로 최적의 요금제와 에너지 절감 방안을 제시합니다.",
   },
   {
     href: "/product/repark",
     name: "RE:park",
     badge: null,
-    tagline: "Renewable Energy Park",
+    tagline: "Smart Facility Management",
     description:
-      "신재생·분산에너지 시뮬레이션 및 설치 최적화 플랫폼.",
+      "시민·관리자·보수업체를 위한 QR 기반 시설물 관리시스템. 비대면 고장신고부터 통합 관리까지.",
   },
 ];
 

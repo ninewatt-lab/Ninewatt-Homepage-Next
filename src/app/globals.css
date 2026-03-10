@@ -5,10 +5,11 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  --primary: #007afc;
-  --primary-dark: #0060c7;
-  --primary-light: #3195ff;
-  --accent: #4d65ff;
+  --primary: #3896A8;
+  --primary-dark: #275E68;
+  --primary-light: #49B6CA;
+  --primary-50: #ECF6F8;
+  --accent: #307481;
   --surface: #f5f7fa;
   --surface-elevated: #ffffff;
   --border: rgba(0, 0, 0, 0.08);
@@ -19,10 +20,11 @@
 .dark {
   --background: #0a0a0f;
   --foreground: #e5e7eb;
-  --primary: #3195ff;
-  --primary-dark: #007afc;
-  --primary-light: #60b0ff;
-  --accent: #4d65ff;
+  --primary: #49B6CA;
+  --primary-dark: #3896A8;
+  --primary-light: #85D2E0;
+  --primary-50: #1a3a40;
+  --accent: #3896A8;
   --surface: #12121a;
   --surface-elevated: #1a1a26;
   --border: rgba(255, 255, 255, 0.08);
@@ -36,6 +38,7 @@
   --color-primary: var(--primary);
   --color-primary-dark: var(--primary-dark);
   --color-primary-light: var(--primary-light);
+  --color-primary-50: var(--primary-50);
   --color-accent: var(--accent);
   --color-surface: var(--surface);
   --color-surface-elevated: var(--surface-elevated);
