@@ -38,11 +38,11 @@ export default function ResearchPage() {
   return (
     <>
       {/* Hero */}
-      <section className="bg-gradient-to-br from-primary to-blue-800 px-6 py-24 text-white">
-        <div className="mx-auto max-w-4xl text-center">
-          <p className="text-sm font-semibold text-white/70">Research & Development</p>
-          <h1 className="mt-2 text-4xl font-bold md:text-5xl">R&D</h1>
-          <p className="mx-auto mt-4 max-w-2xl text-lg text-white/80">
+      <section className="border-b border-border px-6 pb-16 pt-32">
+        <div className="mx-auto max-w-4xl">
+          <p className="text-sm font-semibold text-primary">Research & Development</p>
+          <h1 className="mt-3 text-4xl font-bold tracking-tight md:text-5xl">R&D</h1>
+          <p className="mt-4 max-w-2xl text-lg text-muted">
             정부 R&D 과제 및 용역과제 수행을 통한 기술력 확보
           </p>
         </div>
@@ -56,23 +56,23 @@ export default function ResearchPage() {
           <div className="mt-8 overflow-x-auto">
             <table className="w-full min-w-[900px] text-sm">
               <thead>
-                <tr className="border-b border-gray-200 text-left">
-                  <th className="py-3 pr-4 font-semibold text-foreground/70">중앙행정기관</th>
-                  <th className="py-3 pr-4 font-semibold text-foreground/70">연구개발과제명</th>
-                  <th className="py-3 pr-4 font-semibold text-foreground/70">주관기관</th>
-                  <th className="py-3 pr-4 font-semibold text-foreground/70">기간</th>
-                  <th className="py-3 font-semibold text-foreground/70">비고</th>
+                <tr className="border-b border-border text-left">
+                  <th className="py-3 pr-4 font-semibold text-muted">중앙행정기관</th>
+                  <th className="py-3 pr-4 font-semibold text-muted">연구개발과제명</th>
+                  <th className="py-3 pr-4 font-semibold text-muted">주관기관</th>
+                  <th className="py-3 pr-4 font-semibold text-muted">기간</th>
+                  <th className="py-3 font-semibold text-muted">비고</th>
                 </tr>
               </thead>
               <tbody>
                 {rndProjects.map((p, i) => (
-                  <tr key={i} className="border-b border-gray-100">
-                    <td className="py-3 pr-4 text-foreground/60">{p.agency}</td>
+                  <tr key={i} className="border-b border-border">
+                    <td className="py-3 pr-4 text-muted">{p.agency}</td>
                     <td className="py-3 pr-4">{p.research}</td>
-                    <td className="py-3 pr-4 text-foreground/60">{p.lead}</td>
-                    <td className="py-3 pr-4 whitespace-nowrap text-foreground/60">{p.period}</td>
+                    <td className="py-3 pr-4 text-muted">{p.lead}</td>
+                    <td className="py-3 pr-4 whitespace-nowrap text-muted">{p.period}</td>
                     <td className="py-3">
-                      <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${p.status === "완료" ? "bg-gray-100 text-gray-600" : "bg-primary/10 text-primary"}`}>
+                      <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${p.status === "완료" ? "bg-surface text-muted" : "bg-primary/10 text-primary"}`}>
                         {p.status}
                       </span>
                     </td>
@@ -85,24 +85,24 @@ export default function ResearchPage() {
       </section>
 
       {/* Service Projects */}
-      <section className="bg-gray-50 px-6 py-24">
+      <section className="border-t border-border bg-surface px-6 py-24">
         <div className="mx-auto max-w-7xl">
           <p className="text-sm font-semibold text-primary">Service Projects</p>
           <h2 className="mt-2 text-3xl font-bold">용역과제 수행 이력 (최근 5년)</h2>
           <div className="mt-8 overflow-x-auto">
             <table className="w-full min-w-[700px] text-sm">
               <thead>
-                <tr className="border-b border-gray-200 text-left">
-                  <th className="py-3 pr-4 font-semibold text-foreground/70">기업(기관명)</th>
-                  <th className="py-3 pr-4 font-semibold text-foreground/70">기간</th>
-                  <th className="py-3 font-semibold text-foreground/70">수행내용(계약명)</th>
+                <tr className="border-b border-border text-left">
+                  <th className="py-3 pr-4 font-semibold text-muted">기업(기관명)</th>
+                  <th className="py-3 pr-4 font-semibold text-muted">기간</th>
+                  <th className="py-3 font-semibold text-muted">수행내용(계약명)</th>
                 </tr>
               </thead>
               <tbody>
                 {serviceProjects.map((p, i) => (
-                  <tr key={i} className="border-b border-gray-100">
-                    <td className="py-3 pr-4 whitespace-nowrap text-foreground/60">{p.client}</td>
-                    <td className="py-3 pr-4 whitespace-nowrap text-foreground/60">{p.period}</td>
+                  <tr key={i} className="border-b border-border">
+                    <td className="py-3 pr-4 whitespace-nowrap text-muted">{p.client}</td>
+                    <td className="py-3 pr-4 whitespace-nowrap text-muted">{p.period}</td>
                     <td className="py-3">{p.title}</td>
                   </tr>
                 ))}

@@ -75,11 +75,11 @@ export default function SolutionsPage() {
   return (
     <>
       {/* Hero */}
-      <section className="bg-gradient-to-br from-primary to-blue-800 px-6 py-24 text-white">
-        <div className="mx-auto max-w-4xl text-center">
-          <p className="text-sm font-semibold text-white/70">Solutions</p>
-          <h1 className="mt-2 text-4xl font-bold md:text-5xl">기술 / 솔루션</h1>
-          <p className="mx-auto mt-4 max-w-2xl text-lg text-white/80">
+      <section className="border-b border-border px-6 pb-16 pt-32">
+        <div className="mx-auto max-w-4xl">
+          <p className="text-sm font-semibold text-primary">Solutions</p>
+          <h1 className="mt-3 text-4xl font-bold tracking-tight md:text-5xl">기술 / 솔루션</h1>
+          <p className="mt-4 max-w-2xl text-lg text-muted">
             데이터 수집부터 AI 분석까지, 건물 에너지 관리의 전 과정을 아우르는 6가지 핵심 솔루션
           </p>
         </div>
@@ -92,7 +92,7 @@ export default function SolutionsPage() {
             {solutions.map((sol, idx) => (
               <div
                 key={sol.id}
-                className="group rounded-2xl border border-gray-100 p-8 transition-all hover:border-primary/20 hover:shadow-lg"
+                className="group rounded-2xl border border-border bg-surface-elevated p-8 transition-all hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5"
               >
                 <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-sm font-bold text-primary">
                   {String(idx + 1).padStart(2, "0")}
@@ -104,7 +104,7 @@ export default function SolutionsPage() {
                   {sol.items.map((item) => (
                     <li
                       key={item}
-                      className="flex items-start gap-2 text-sm text-foreground/60"
+                      className="flex items-start gap-2 text-sm text-muted"
                     >
                       <span className="mt-1.5 block h-1.5 w-1.5 shrink-0 rounded-full bg-primary/40" />
                       {item}
@@ -118,19 +118,19 @@ export default function SolutionsPage() {
       </section>
 
       {/* CTA */}
-      <section className="bg-gray-50 px-6 py-20">
+      <section className="border-t border-border bg-surface px-6 py-20">
         <div className="mx-auto max-w-3xl text-center">
           <h2 className="text-2xl font-bold">
-            Opti - AI 대화형 건물 에너지 분석 서비스
+            맞춤형 에너지 솔루션이 필요하신가요?
           </h2>
-          <p className="mt-4 text-foreground/60">
-            CES 2026 Innovation Awards 수상, 나인와트의 주력 제품을 확인하세요.
+          <p className="mt-4 text-muted">
+            나인와트의 전문가가 귀사에 최적화된 솔루션을 제안합니다.
           </p>
           <Link
-            href="/product/opti"
+            href="/contact"
             className="mt-8 inline-block rounded-full bg-primary px-8 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-dark"
           >
-            Opti 자세히 보기
+            문의하기
           </Link>
         </div>
       </section>

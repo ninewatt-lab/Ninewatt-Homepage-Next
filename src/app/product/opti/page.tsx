@@ -37,25 +37,23 @@ export default function OptiPage() {
   return (
     <>
       {/* Hero */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-indigo-600 via-primary to-blue-700 px-6 py-32 text-white">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute right-1/4 top-1/4 h-72 w-72 rounded-full bg-white blur-3xl" />
-        </div>
-        <div className="relative mx-auto max-w-4xl text-center">
-          <p className="inline-block rounded-full bg-white/15 px-4 py-1.5 text-sm font-semibold backdrop-blur-sm">
+      <section className="border-b border-border px-6 pb-16 pt-32">
+        <div className="mx-auto max-w-4xl text-center">
+          <p className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-sm font-semibold text-primary">
+            <span className="inline-block h-1.5 w-1.5 rounded-full bg-primary" />
             CES Innovation Awards 2026 Honoree
           </p>
-          <h1 className="mt-6 text-5xl font-bold md:text-7xl">Opti</h1>
-          <p className="mt-4 text-xl text-white/80 md:text-2xl">
+          <h1 className="mt-6 text-5xl font-bold tracking-tight md:text-7xl">Opti</h1>
+          <p className="mt-4 text-xl text-muted md:text-2xl">
             AI 대화형 건물 에너지 분석 서비스
           </p>
-          <p className="mx-auto mt-6 max-w-2xl leading-relaxed text-white/70">
+          <p className="mx-auto mt-6 max-w-2xl leading-relaxed text-muted">
             Opti는 CES Innovation Awards 2026 스마트 커뮤니티 부문 수상(Honoree)을 통해
             글로벌 무대에서의 경쟁력을 다시 한 번 입증했습니다.
           </p>
           <Link
             href="/contact"
-            className="mt-8 inline-block rounded-full bg-white px-8 py-3 text-sm font-semibold text-primary transition-colors hover:bg-white/90"
+            className="mt-8 inline-block rounded-full bg-primary px-8 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-dark"
           >
             데모 요청하기
           </Link>
@@ -63,7 +61,7 @@ export default function OptiPage() {
       </section>
 
       {/* Award Badge */}
-      <section className="border-b border-gray-100 bg-white px-6 py-12">
+      <section className="border-b border-border bg-surface px-6 py-12">
         <div className="mx-auto flex max-w-4xl items-center justify-center gap-8">
           <div className="flex h-20 w-20 items-center justify-center rounded-xl bg-indigo-900 text-white">
             <div className="text-center">
@@ -73,7 +71,7 @@ export default function OptiPage() {
           </div>
           <div>
             <p className="text-lg font-bold">CES Innovation Awards&reg; 2026 Honoree</p>
-            <p className="text-sm text-foreground/60">
+            <p className="text-sm text-muted">
               Opti: AI Energy Advisor for Buildings — Smart Communities Category
             </p>
           </div>
@@ -89,10 +87,10 @@ export default function OptiPage() {
             {features.map((f) => (
               <div
                 key={f.title}
-                className="rounded-2xl border border-gray-100 p-6 transition-all hover:border-primary/20 hover:shadow-md"
+                className="rounded-2xl border border-border bg-surface-elevated p-6 transition-all hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5"
               >
                 <h3 className="text-lg font-semibold">{f.title}</h3>
-                <p className="mt-3 text-sm leading-relaxed text-foreground/60">
+                <p className="mt-3 text-sm leading-relaxed text-muted">
                   {f.description}
                 </p>
               </div>
@@ -102,7 +100,7 @@ export default function OptiPage() {
       </section>
 
       {/* How it works */}
-      <section className="bg-gray-50 px-6 py-24">
+      <section className="border-t border-border bg-surface px-6 py-24">
         <div className="mx-auto max-w-4xl">
           <p className="text-sm font-semibold text-primary">How it works</p>
           <h2 className="mt-2 text-3xl font-bold">이렇게 작동합니다</h2>
@@ -119,7 +117,7 @@ export default function OptiPage() {
                 </div>
                 <div>
                   <h3 className="text-lg font-bold">{item.title}</h3>
-                  <p className="mt-1 text-sm leading-relaxed text-foreground/60">{item.desc}</p>
+                  <p className="mt-1 text-sm leading-relaxed text-muted">{item.desc}</p>
                 </div>
               </div>
             ))}
@@ -128,7 +126,7 @@ export default function OptiPage() {
       </section>
 
       {/* CTA */}
-      <section className="bg-primary px-6 py-20 text-white">
+      <section className="border-t border-border bg-primary px-6 py-20 text-white">
         <div className="mx-auto max-w-3xl text-center">
           <h2 className="text-3xl font-bold">Opti를 직접 경험해보세요</h2>
           <p className="mt-4 text-white/70">

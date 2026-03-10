@@ -5,11 +5,29 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  --primary: #2563eb;
-  --primary-dark: #1d4ed8;
-  --primary-light: #3b82f6;
-  --accent: #14b8a6;
+  --primary: #007afc;
+  --primary-dark: #0060c7;
+  --primary-light: #3195ff;
+  --accent: #4d65ff;
+  --surface: #f5f7fa;
+  --surface-elevated: #ffffff;
+  --border: rgba(0, 0, 0, 0.08);
+  --muted: #6b7280;
   color-scheme: light;
+}
+
+.dark {
+  --background: #0a0a0f;
+  --foreground: #e5e7eb;
+  --primary: #3195ff;
+  --primary-dark: #007afc;
+  --primary-light: #60b0ff;
+  --accent: #4d65ff;
+  --surface: #12121a;
+  --surface-elevated: #1a1a26;
+  --border: rgba(255, 255, 255, 0.08);
+  --muted: #9ca3af;
+  color-scheme: dark;
 }
 
 @theme inline {
@@ -19,6 +37,10 @@
   --color-primary-dark: var(--primary-dark);
   --color-primary-light: var(--primary-light);
   --color-accent: var(--accent);
+  --color-surface: var(--surface);
+  --color-surface-elevated: var(--surface-elevated);
+  --color-border: var(--border);
+  --color-muted: var(--muted);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -32,4 +54,10 @@ body {
 /* Smooth scroll */
 html {
   scroll-behavior: smooth;
+}
+
+/* Selection color */
+::selection {
+  background: var(--primary);
+  color: #fff;
 }

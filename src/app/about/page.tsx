@@ -47,11 +47,11 @@ export default function AboutPage() {
   return (
     <>
       {/* Hero */}
-      <section className="bg-gradient-to-br from-primary to-blue-800 px-6 py-24 text-white">
-        <div className="mx-auto max-w-4xl text-center">
-          <p className="text-sm font-semibold text-white/70">About Us</p>
-          <h1 className="mt-2 text-4xl font-bold md:text-5xl">회사소개</h1>
-          <p className="mx-auto mt-4 max-w-2xl text-lg text-white/80">
+      <section className="border-b border-border px-6 pb-16 pt-32">
+        <div className="mx-auto max-w-4xl">
+          <p className="text-sm font-semibold text-primary">About Us</p>
+          <h1 className="mt-3 text-4xl font-bold tracking-tight md:text-5xl">회사소개</h1>
+          <p className="mt-4 max-w-2xl text-lg text-muted">
             GX 실현을 이끄는 에너지 기술로,
             스마트시티와 탄소중립 사회에 기여합니다.
           </p>
@@ -68,7 +68,7 @@ export default function AboutPage() {
               <br />
               탄소중립 사회를 실현합니다
             </h2>
-            <p className="mt-6 leading-relaxed text-foreground/60">
+            <p className="mt-6 leading-relaxed text-muted">
               도시 및 건물 에너지 진단 전문가인 CEO를 필두로,
               AI/빅데이터 기반 건물 에너지 플랫폼 연구개발을 주요 사업으로 추진하고 있습니다.
               스마트시티 구축 및 건물 에너지 절감 솔루션을 통해 지속 가능한 미래를 만들어갑니다.
@@ -84,7 +84,7 @@ export default function AboutPage() {
             ].map((item) => (
               <div
                 key={item.label}
-                className="rounded-2xl border border-gray-100 p-6"
+                className="rounded-2xl border border-border bg-surface-elevated p-6"
               >
                 <p className="text-sm font-medium text-primary">{item.label}</p>
                 <p className="mt-2 font-semibold">{item.value}</p>
@@ -95,13 +95,13 @@ export default function AboutPage() {
       </section>
 
       {/* Executives */}
-      <section className="bg-gray-50 px-6 py-24">
+      <section className="border-t border-border bg-surface px-6 py-24">
         <div className="mx-auto max-w-7xl">
           <p className="text-sm font-semibold text-primary">Leadership</p>
           <h2 className="mt-2 text-3xl font-bold">경영진</h2>
           <div className="mt-12 grid gap-8 md:grid-cols-2">
             {executives.map((exec) => (
-              <div key={exec.name} className="rounded-2xl bg-white p-8 shadow-sm">
+              <div key={exec.name} className="rounded-2xl border border-border bg-surface-elevated p-8">
                 <div className="flex items-center gap-4">
                   <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-xl font-bold text-primary">
                     {exec.name[0]}
@@ -109,15 +109,15 @@ export default function AboutPage() {
                   <div>
                     <p className="text-xs font-medium text-primary">{exec.role}</p>
                     <p className="text-xl font-bold">{exec.name}</p>
-                    <p className="text-sm text-foreground/50">{exec.team}</p>
+                    <p className="text-sm text-muted">{exec.team}</p>
                   </div>
                 </div>
-                <p className="mt-4 text-sm leading-relaxed text-foreground/70">
+                <p className="mt-4 text-sm leading-relaxed text-muted">
                   {exec.description}
                 </p>
                 <ul className="mt-4 space-y-1">
                   {exec.details.map((d) => (
-                    <li key={d} className="text-sm text-foreground/50">
+                    <li key={d} className="text-sm text-muted">
                       · {d}
                     </li>
                   ))}
@@ -137,10 +137,10 @@ export default function AboutPage() {
             {orgStructure.map((org) => (
               <div
                 key={org.name}
-                className="rounded-2xl border border-gray-100 p-6 text-center"
+                className="rounded-2xl border border-border bg-surface-elevated p-6 text-center"
               >
                 <p className="text-lg font-bold">{org.name}</p>
-                <p className="mt-2 text-sm text-foreground/60">{org.description}</p>
+                <p className="mt-2 text-sm text-muted">{org.description}</p>
               </div>
             ))}
           </div>
@@ -148,7 +148,7 @@ export default function AboutPage() {
       </section>
 
       {/* History */}
-      <section className="bg-gray-50 px-6 py-24">
+      <section className="border-t border-border bg-surface px-6 py-24">
         <div className="mx-auto max-w-4xl">
           <p className="text-sm font-semibold text-primary">History</p>
           <h2 className="mt-2 text-3xl font-bold">주요 연혁</h2>
@@ -161,7 +161,7 @@ export default function AboutPage() {
                 <div className="space-y-3">
                   {historyByYear[year].map((item) => (
                     <div key={item.id} className="flex gap-3">
-                      <span className="shrink-0 text-sm text-foreground/40">
+                      <span className="shrink-0 text-sm text-muted">
                         {item.date}
                       </span>
                       <span className="text-sm">{item.content}</span>
@@ -180,15 +180,15 @@ export default function AboutPage() {
           <p className="text-sm font-semibold text-primary">Location</p>
           <h2 className="mt-2 text-3xl font-bold">오시는 길</h2>
           <div className="mt-12 grid gap-8 md:grid-cols-2">
-            <div className="rounded-2xl border border-gray-100 p-8">
+            <div className="rounded-2xl border border-border bg-surface-elevated p-8">
               <p className="text-lg font-bold">본사</p>
-              <p className="mt-2 text-foreground/60">
+              <p className="mt-2 text-muted">
                 인천광역시 연수구 컨벤시아대로 204, 104호 인스타2
               </p>
             </div>
-            <div className="rounded-2xl border border-gray-100 p-8">
+            <div className="rounded-2xl border border-border bg-surface-elevated p-8">
               <p className="text-lg font-bold">기업부설연구소 (서울지사)</p>
-              <p className="mt-2 text-foreground/60">
+              <p className="mt-2 text-muted">
                 서울특별시 강남구 강남대로 162길 22 2,4F
               </p>
             </div>

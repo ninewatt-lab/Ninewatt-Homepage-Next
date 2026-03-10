@@ -25,21 +25,21 @@ const domesticCases: CaseItem[] = [
 ];
 
 const categoryColors: Record<string, string> = {
-  "공공기관": "bg-blue-100 text-blue-700",
-  "지자체": "bg-green-100 text-green-700",
-  "기업": "bg-purple-100 text-purple-700",
-  "해외": "bg-orange-100 text-orange-700",
+  "공공기관": "bg-blue-500/10 text-blue-400 dark:bg-blue-500/15 dark:text-blue-300",
+  "지자체": "bg-green-500/10 text-green-600 dark:bg-green-500/15 dark:text-green-300",
+  "기업": "bg-purple-500/10 text-purple-600 dark:bg-purple-500/15 dark:text-purple-300",
+  "해외": "bg-orange-500/10 text-orange-600 dark:bg-orange-500/15 dark:text-orange-300",
 };
 
 export default function CasesPage() {
   return (
     <>
       {/* Hero */}
-      <section className="bg-gradient-to-br from-primary to-blue-800 px-6 py-24 text-white">
-        <div className="mx-auto max-w-4xl text-center">
-          <p className="text-sm font-semibold text-white/70">Case Studies</p>
-          <h1 className="mt-2 text-4xl font-bold md:text-5xl">수행사례</h1>
-          <p className="mx-auto mt-4 max-w-2xl text-lg text-white/80">
+      <section className="border-b border-border px-6 pb-16 pt-32">
+        <div className="mx-auto max-w-4xl">
+          <p className="text-sm font-semibold text-primary">Case Studies</p>
+          <h1 className="mt-3 text-4xl font-bold tracking-tight md:text-5xl">수행사례</h1>
+          <p className="mt-4 max-w-2xl text-lg text-muted">
             국내 공공기관·지자체 및 해외 파트너 대상 다수 솔루션 제공 실적
           </p>
         </div>
@@ -52,17 +52,17 @@ export default function CasesPage() {
             {domesticCases.map((c) => (
               <div
                 key={c.title}
-                className="group rounded-2xl border border-gray-100 p-6 transition-all hover:border-primary/20 hover:shadow-lg"
+                className="group rounded-2xl border border-border bg-surface-elevated p-6 transition-all hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5"
               >
                 <span
-                  className={`inline-block rounded-full px-3 py-1 text-xs font-semibold ${categoryColors[c.category] || "bg-gray-100 text-gray-700"}`}
+                  className={`inline-block rounded-full px-3 py-1 text-xs font-semibold ${categoryColors[c.category] || "bg-surface text-muted"}`}
                 >
                   {c.category}
                 </span>
                 <h3 className="mt-3 text-lg font-bold group-hover:text-primary">
                   {c.title}
                 </h3>
-                <p className="mt-2 text-sm leading-relaxed text-foreground/60">
+                <p className="mt-2 text-sm leading-relaxed text-muted">
                   {c.description}
                 </p>
               </div>
@@ -72,7 +72,7 @@ export default function CasesPage() {
       </section>
 
       {/* Stats */}
-      <section className="bg-gray-50 px-6 py-20">
+      <section className="border-t border-border bg-surface px-6 py-20">
         <div className="mx-auto max-w-4xl">
           <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
             {[
@@ -83,7 +83,7 @@ export default function CasesPage() {
             ].map((s) => (
               <div key={s.label} className="text-center">
                 <p className="text-3xl font-bold text-primary">{s.value}</p>
-                <p className="mt-1 text-sm text-foreground/50">{s.label}</p>
+                <p className="mt-1 text-sm text-muted">{s.label}</p>
               </div>
             ))}
           </div>
