@@ -25,19 +25,19 @@ export default function Footer() {
           <div>
             <p className="font-semibold text-foreground">바로가기</p>
             <div className="mt-3 flex flex-col gap-2 text-sm text-muted">
-              <Link href="/about" className="transition-colors hover:text-foreground">회사소개</Link>
-              <Link href="/solutions" className="transition-colors hover:text-foreground">솔루션</Link>
-              <Link href="/cases" className="transition-colors hover:text-foreground">수행사례</Link>
-              <Link href="/research" className="transition-colors hover:text-foreground">R&D</Link>
+              <Link href="/product" className="transition-colors hover:text-foreground">Product</Link>
+              <Link href="/solutions" className="transition-colors hover:text-foreground">Solutions</Link>
+              <Link href="/company" className="transition-colors hover:text-foreground">Company</Link>
+              <Link href="/contact" className="transition-colors hover:text-foreground">Contact Us</Link>
             </div>
           </div>
 
           <div>
             <p className="font-semibold text-foreground">더보기</p>
             <div className="mt-3 flex flex-col gap-2 text-sm text-muted">
-              <Link href="/patents" className="transition-colors hover:text-foreground">특허</Link>
-              <Link href="/global" className="transition-colors hover:text-foreground">글로벌</Link>
-              <Link href="/contact" className="transition-colors hover:text-foreground">문의하기</Link>
+              <Link href="/company" className="transition-colors hover:text-foreground">특허 & 인증</Link>
+              <Link href="/company" className="transition-colors hover:text-foreground">글로벌 사업</Link>
+              <Link href="/company" className="transition-colors hover:text-foreground">수상 내역</Link>
             </div>
           </div>
         </div>

@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { history } from "@/data/history";
+import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "회사소개 - Ninewatt",
+  title: "Company - Ninewatt",
   description: "나인와트 회사소개. GX 실현을 이끄는 에너지 기술 기업",
 };
 
@@ -30,26 +30,13 @@ const orgStructure = [
   { name: "기술연구부", description: "에너지 분석, 빅데이터 연구" },
 ];
 
-// 연혁을 연도별로 그룹핑 (역순)
-const historyByYear = history.reduce(
-  (acc, item) => {
-    if (!acc[item.year]) acc[item.year] = [];
-    acc[item.year].push(item);
-    return acc;
-  },
-  {} as Record<number, typeof history>,
-);
-const sortedYears = Object.keys(historyByYear)
-  .map(Number)
-  .sort((a, b) => b - a);
-
-export default function AboutPage() {
+export default function CompanyPage() {
   return (
     <>
       {/* Hero */}
-      <section className="border-b border-border px-6 pb-16 pt-32">
+      <section className="border-b border-border px-6 pb-16 pt-16">
         <div className="mx-auto max-w-4xl">
-          <p className="text-sm font-semibold text-primary">About Us</p>
+          <p className="text-sm font-semibold text-primary">Company</p>
           <h1 className="mt-3 text-4xl font-bold tracking-tight md:text-5xl">회사소개</h1>
           <p className="mt-4 max-w-2xl text-lg text-muted">
             GX 실현을 이끄는 에너지 기술로,
@@ -147,35 +134,8 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* History */}
-      <section className="border-t border-border bg-surface px-6 py-24">
-        <div className="mx-auto max-w-4xl">
-          <p className="text-sm font-semibold text-primary">History</p>
-          <h2 className="mt-2 text-3xl font-bold">주요 연혁</h2>
-          <div className="mt-12 space-y-10">
-            {sortedYears.map((year) => (
-              <div key={year} className="flex gap-6">
-                <div className="w-16 shrink-0 text-2xl font-bold text-primary">
-                  {year}
-                </div>
-                <div className="space-y-3">
-                  {historyByYear[year].map((item) => (
-                    <div key={item.id} className="flex gap-3">
-                      <span className="shrink-0 text-sm text-muted">
-                        {item.date}
-                      </span>
-                      <span className="text-sm">{item.content}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Location */}
-      <section className="px-6 py-24">
+      <section className="border-t border-border bg-surface px-6 py-24">
         <div className="mx-auto max-w-7xl">
           <p className="text-sm font-semibold text-primary">Location</p>
           <h2 className="mt-2 text-3xl font-bold">오시는 길</h2>
@@ -193,6 +153,22 @@ export default function AboutPage() {
               </p>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="border-t border-border bg-primary px-6 py-20 text-white">
+        <div className="mx-auto max-w-3xl text-center">
+          <h2 className="text-3xl font-bold">함께 성장할 파트너를 찾습니다</h2>
+          <p className="mt-4 text-white/70">
+            에너지 솔루션 상담, 파트너십, 채용 등 어떤 문의든 환영합니다.
+          </p>
+          <Link
+            href="/contact"
+            className="mt-8 inline-block rounded-full bg-white px-8 py-3 text-sm font-semibold text-primary transition-colors hover:bg-white/90"
+          >
+            문의하기
+          </Link>
         </div>
       </section>
     </>

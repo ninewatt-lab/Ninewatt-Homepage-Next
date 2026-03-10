@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "수행사례 - Ninewatt",
-  description: "나인와트의 국내외 프로젝트 수행 사례",
+  description: "나인와트 수행사례. 국내외 다수 에너지 솔루션 제공 실적",
 };
 
 interface CaseItem {
@@ -11,7 +11,7 @@ interface CaseItem {
   description: string;
 }
 
-const domesticCases: CaseItem[] = [
+const cases: CaseItem[] = [
   { title: "건설기술연구원 - 탄소중립 플랫폼", category: "공공기관", description: "건물·도로 단위의 탄소·교통 배출량을 가시화하고, 지역의 에너지 분석 및 절감 리모델링 시뮬레이션에 대응" },
   { title: "강남구 - 도시 에너지 3D Map", category: "지자체", description: "공공시설의 탄소 발자국을 추적하여 온실가스 감축 목표를 명확히 설정" },
   { title: "경기도 - 경기기후 플랫폼 그린리모델링 시뮬레이션", category: "지자체", description: "부동산 정보를 기반으로 한 건물의 노후도·에너지·임지 분석 및 리모델링 의사결정 지원 서비스" },
@@ -35,7 +35,7 @@ export default function CasesPage() {
   return (
     <>
       {/* Hero */}
-      <section className="border-b border-border px-6 pb-16 pt-32">
+      <section className="border-b border-border px-6 pb-16 pt-16">
         <div className="mx-auto max-w-4xl">
           <p className="text-sm font-semibold text-primary">Case Studies</p>
           <h1 className="mt-3 text-4xl font-bold tracking-tight md:text-5xl">수행사례</h1>
@@ -49,7 +49,7 @@ export default function CasesPage() {
       <section className="px-6 py-24">
         <div className="mx-auto max-w-7xl">
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {domesticCases.map((c) => (
+            {cases.map((c) => (
               <div
                 key={c.title}
                 className="group rounded-2xl border border-border bg-surface-elevated p-6 transition-all hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5"
@@ -68,13 +68,9 @@ export default function CasesPage() {
               </div>
             ))}
           </div>
-        </div>
-      </section>
 
-      {/* Stats */}
-      <section className="border-t border-border bg-surface px-6 py-20">
-        <div className="mx-auto max-w-4xl">
-          <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
+          {/* Stats */}
+          <div className="mt-16 grid grid-cols-2 gap-8 md:grid-cols-4">
             {[
               { value: "60+", label: "국내 프로젝트" },
               { value: "4개국", label: "해외 진출" },

@@ -5,12 +5,9 @@ import { useState, useEffect } from "react";
 import { useTheme } from "./ThemeProvider";
 
 const navItems = [
-  { href: "/about", label: "회사소개" },
-  { href: "/solutions", label: "솔루션" },
-  { href: "/cases", label: "수행사례" },
-  { href: "/research", label: "R&D" },
-  { href: "/patents", label: "특허" },
-  { href: "/global", label: "글로벌" },
+  { href: "/product", label: "Product" },
+  { href: "/solutions", label: "Solutions" },
+  { href: "/company", label: "Company" },
 ];
 
 export default function Header() {

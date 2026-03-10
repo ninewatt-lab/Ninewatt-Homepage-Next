@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Opti - AI 대화형 건물 에너지 분석 서비스 - Ninewatt",
+  title: "Opti - AI Energy Advisor - Ninewatt",
   description: "CES 2026 Innovation Awards Honoree. Opti는 AI 대화형 건물 에너지 분석 서비스입니다.",
 };
 
@@ -33,11 +33,18 @@ const features = [
   },
 ];
 
+const steps = [
+  { step: "01", title: "데이터 연동", desc: "건물 에너지 데이터를 플랫폼에 연결합니다. BMS, IoT 센서, 전력 데이터 등 다양한 소스를 지원합니다." },
+  { step: "02", title: "AI 분석", desc: "도메인 특화 LLM이 에너지 사용 패턴을 분석하고, 이상 징후를 감지하며, 최적화 방안을 도출합니다." },
+  { step: "03", title: "대화형 인사이트", desc: "자연어로 질문하면 즉시 에너지 관련 인사이트를 제공합니다. 복잡한 대시보드 없이도 핵심 정보에 접근할 수 있습니다." },
+  { step: "04", title: "자동 리포트", desc: "정기적으로 에너지 사용 현황과 개선 제안을 포함한 리포트를 자동 생성합니다." },
+];
+
 export default function OptiPage() {
   return (
     <>
       {/* Hero */}
-      <section className="border-b border-border px-6 pb-16 pt-32">
+      <section className="border-b border-border px-6 pb-16 pt-16">
         <div className="mx-auto max-w-4xl text-center">
           <p className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-sm font-semibold text-primary">
             <span className="inline-block h-1.5 w-1.5 rounded-full bg-primary" />
@@ -105,12 +112,7 @@ export default function OptiPage() {
           <p className="text-sm font-semibold text-primary">How it works</p>
           <h2 className="mt-2 text-3xl font-bold">이렇게 작동합니다</h2>
           <div className="mt-12 space-y-8">
-            {[
-              { step: "01", title: "데이터 연동", desc: "건물 에너지 데이터를 플랫폼에 연결합니다. BMS, IoT 센서, 전력 데이터 등 다양한 소스를 지원합니다." },
-              { step: "02", title: "AI 분석", desc: "도메인 특화 LLM이 에너지 사용 패턴을 분석하고, 이상 징후를 감지하며, 최적화 방안을 도출합니다." },
-              { step: "03", title: "대화형 인사이트", desc: "자연어로 질문하면 즉시 에너지 관련 인사이트를 제공합니다. 복잡한 대시보드 없이도 핵심 정보에 접근할 수 있습니다." },
-              { step: "04", title: "자동 리포트", desc: "정기적으로 에너지 사용 현황과 개선 제안을 포함한 리포트를 자동 생성합니다." },
-            ].map((item) => (
+            {steps.map((item) => (
               <div key={item.step} className="flex gap-6">
                 <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-bold text-white">
                   {item.step}
