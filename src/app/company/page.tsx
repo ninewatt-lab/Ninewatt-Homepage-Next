@@ -35,9 +35,8 @@ export default function CompanyPage() {
     <>
       {/* Hero */}
       <section className="border-b border-border px-6 pb-16 pt-16">
-        <div className="mx-auto max-w-4xl">
-          <p className="text-sm font-semibold text-primary">Company</p>
-          <h1 className="mt-3 text-4xl font-bold tracking-tight md:text-5xl">회사소개</h1>
+        <div className="mx-auto max-w-5xl">
+          <h1 className="text-4xl font-bold tracking-tight md:text-5xl">회사소개</h1>
           <p className="mt-4 max-w-2xl text-lg text-muted">
             GX 실현을 이끄는 에너지 기술로,
             스마트시티와 탄소중립 사회에 기여합니다.
@@ -46,63 +45,44 @@ export default function CompanyPage() {
       </section>
 
       {/* Vision */}
-      <section className="px-6 py-24">
-        <div className="mx-auto max-w-7xl">
-          <div className="mx-auto max-w-3xl text-center">
-            <p className="text-sm font-semibold text-primary">Vision & Mission</p>
-            <h2 className="mt-2 text-3xl font-bold">
-              AI/빅데이터 기반 건물 에너지 플랫폼으로
-              <br />
-              탄소중립 사회를 실현합니다
-            </h2>
-            <p className="mt-6 leading-relaxed text-muted">
-              도시 및 건물 에너지 진단 전문가인 CEO를 필두로,
-              AI/빅데이터 기반 건물 에너지 플랫폼 연구개발을 주요 사업으로 추진하고 있습니다.
-              스마트시티 구축 및 건물 에너지 절감 솔루션을 통해 지속 가능한 미래를 만들어갑니다.
-            </p>
-          </div>
+      <section className="px-6 py-20">
+        <div className="mx-auto max-w-5xl">
+          <h2 className="text-2xl font-bold">비전</h2>
+          <p className="mt-4 max-w-3xl leading-relaxed text-muted">
+            도시 및 건물 에너지 진단 전문가인 CEO를 필두로,
+            AI/빅데이터 기반 건물 에너지 플랫폼 연구개발을 주요 사업으로 추진하고 있습니다.
+            스마트시티 구축 및 건물 에너지 절감 솔루션을 통해 지속 가능한 미래를 만들어갑니다.
+          </p>
 
-          <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <dl className="mt-10 grid grid-cols-2 gap-x-8 gap-y-4 text-sm md:grid-cols-4">
             {[
               { label: "설립일", value: "2019.02.12" },
               { label: "사원수", value: "30명" },
               { label: "투자단계", value: "시리즈 A (누적 약 48억원)" },
               { label: "사업분야", value: "스마트시티 구축 및 건물 에너지 절감 솔루션" },
             ].map((item) => (
-              <div
-                key={item.label}
-                className="rounded-2xl border border-border bg-surface-elevated p-6"
-              >
-                <p className="text-sm font-medium text-primary">{item.label}</p>
-                <p className="mt-2 font-semibold">{item.value}</p>
+              <div key={item.label}>
+                <dt className="font-medium text-muted">{item.label}</dt>
+                <dd className="mt-1 font-semibold">{item.value}</dd>
               </div>
             ))}
-          </div>
+          </dl>
         </div>
       </section>
 
       {/* Executives */}
-      <section className="border-t border-border bg-surface px-6 py-24">
-        <div className="mx-auto max-w-7xl">
-          <p className="text-sm font-semibold text-primary">Leadership</p>
-          <h2 className="mt-2 text-3xl font-bold">경영진</h2>
-          <div className="mt-12 grid gap-8 md:grid-cols-2">
+      <section className="border-t border-border px-6 py-20">
+        <div className="mx-auto max-w-5xl">
+          <h2 className="text-2xl font-bold">경영진</h2>
+          <div className="mt-8 space-y-8">
             {executives.map((exec) => (
-              <div key={exec.name} className="rounded-2xl border border-border bg-surface-elevated p-8">
-                <div className="flex items-center gap-4">
-                  <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-xl font-bold text-primary">
-                    {exec.name[0]}
-                  </div>
-                  <div>
-                    <p className="text-xs font-medium text-primary">{exec.role}</p>
-                    <p className="text-xl font-bold">{exec.name}</p>
-                    <p className="text-sm text-muted">{exec.team}</p>
-                  </div>
-                </div>
-                <p className="mt-4 text-sm leading-relaxed text-muted">
+              <div key={exec.name} className="border-l-2 border-primary pl-6">
+                <p className="text-xs font-medium text-muted">{exec.role} · {exec.team}</p>
+                <p className="mt-1 text-lg font-bold">{exec.name}</p>
+                <p className="mt-2 text-sm leading-relaxed text-muted">
                   {exec.description}
                 </p>
-                <ul className="mt-4 space-y-1">
+                <ul className="mt-3 space-y-1">
                   {exec.details.map((d) => (
                     <li key={d} className="text-sm text-muted">
                       · {d}
@@ -116,18 +96,17 @@ export default function CompanyPage() {
       </section>
 
       {/* Organization */}
-      <section className="px-6 py-24">
-        <div className="mx-auto max-w-7xl">
-          <p className="text-sm font-semibold text-primary">Organization</p>
-          <h2 className="mt-2 text-3xl font-bold">조직 구성</h2>
-          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      <section className="border-t border-border px-6 py-20">
+        <div className="mx-auto max-w-5xl">
+          <h2 className="text-2xl font-bold">조직 구성</h2>
+          <div className="mt-8 space-y-4">
             {orgStructure.map((org) => (
               <div
                 key={org.name}
-                className="rounded-2xl border border-border bg-surface-elevated p-6 text-center"
+                className="border-l-2 border-border pl-6"
               >
-                <p className="text-lg font-bold">{org.name}</p>
-                <p className="mt-2 text-sm text-muted">{org.description}</p>
+                <p className="font-semibold">{org.name}</p>
+                <p className="mt-0.5 text-sm text-muted">{org.description}</p>
               </div>
             ))}
           </div>
@@ -135,37 +114,36 @@ export default function CompanyPage() {
       </section>
 
       {/* Location */}
-      <section className="border-t border-border bg-surface px-6 py-24">
-        <div className="mx-auto max-w-7xl">
-          <p className="text-sm font-semibold text-primary">Location</p>
-          <h2 className="mt-2 text-3xl font-bold">오시는 길</h2>
-          <div className="mt-12 grid gap-8 md:grid-cols-2">
-            <div className="rounded-2xl border border-border bg-surface-elevated p-8">
-              <p className="text-lg font-bold">본사</p>
-              <p className="mt-2 text-muted">
-                인천광역시 연수구 컨벤시아대로 204, 104호 인스타2
-              </p>
-            </div>
-            <div className="rounded-2xl border border-border bg-surface-elevated p-8">
-              <p className="text-lg font-bold">기업부설연구소 (서울지사)</p>
-              <p className="mt-2 text-muted">
-                서울특별시 강남구 강남대로 162길 22 2,4F
-              </p>
-            </div>
-          </div>
+      <section className="border-t border-border px-6 py-20">
+        <div className="mx-auto max-w-5xl">
+          <h2 className="text-2xl font-bold">오시는 길</h2>
+          <table className="mt-8 w-full text-sm">
+            <tbody>
+              <tr className="border-b border-border">
+                <td className="py-4 pr-6 font-semibold align-top whitespace-nowrap">본사</td>
+                <td className="py-4 text-muted">인천광역시 연수구 컨벤시아대로 204, 104호 인스타2</td>
+              </tr>
+              <tr className="border-b border-border">
+                <td className="py-4 pr-6 font-semibold align-top whitespace-nowrap">기업부설연구소 (서울지사)</td>
+                <td className="py-4 text-muted">서울특별시 강남구 강남대로 162길 22 2,4F</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </section>
 
       {/* CTA */}
-      <section className="border-t border-border bg-primary px-6 py-20 text-white">
-        <div className="mx-auto max-w-3xl text-center">
-          <h2 className="text-3xl font-bold">함께 성장할 파트너를 찾습니다</h2>
-          <p className="mt-4 text-white/70">
-            에너지 솔루션 상담, 파트너십, 채용 등 어떤 문의든 환영합니다.
-          </p>
+      <section className="border-t border-border px-6 py-16">
+        <div className="mx-auto max-w-5xl md:flex md:items-center md:justify-between">
+          <div>
+            <h2 className="text-xl font-bold">함께 성장할 파트너를 찾습니다</h2>
+            <p className="mt-1 text-sm text-muted">
+              에너지 솔루션 상담, 파트너십, 채용 등 어떤 문의든 환영합니다.
+            </p>
+          </div>
           <Link
             href="/contact"
-            className="mt-8 inline-block rounded-full bg-white px-8 py-3 text-sm font-semibold text-primary transition-colors hover:bg-white/90"
+            className="mt-6 inline-block rounded-lg border border-primary bg-primary px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary/90 md:mt-0"
           >
             문의하기
           </Link>

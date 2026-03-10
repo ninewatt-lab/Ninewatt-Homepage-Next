@@ -15,9 +15,8 @@ export default function PatentsPage() {
     <>
       {/* Hero */}
       <section className="border-b border-border px-6 pb-16 pt-16">
-        <div className="mx-auto max-w-4xl">
-          <p className="text-sm font-semibold text-primary">Intellectual Property</p>
-          <h1 className="mt-3 text-4xl font-bold tracking-tight md:text-5xl">특허 & 인증</h1>
+        <div className="mx-auto max-w-5xl">
+          <h1 className="text-4xl font-bold tracking-tight md:text-5xl">특허 & 인증</h1>
           <p className="mt-4 max-w-2xl text-lg text-muted">
             에너지 AI 기술 분야의 핵심 지식재산권을 보유하고 있습니다
           </p>
@@ -25,32 +24,32 @@ export default function PatentsPage() {
       </section>
 
       {/* Stats */}
-      <section className="px-6 py-24">
-        <div className="mx-auto max-w-7xl">
-          <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
-            <div className="text-center">
-              <p className="text-4xl font-bold text-primary">33</p>
-              <p className="mt-1 text-sm text-muted">총 보유 특허</p>
+      <section className="px-6 py-16">
+        <div className="mx-auto max-w-5xl">
+          <dl className="flex flex-wrap gap-x-12 gap-y-4 text-sm">
+            <div>
+              <dt className="text-muted">총 보유 특허</dt>
+              <dd className="text-2xl font-bold">33</dd>
             </div>
-            <div className="text-center">
-              <p className="text-4xl font-bold text-primary">{domesticPatents.length}</p>
-              <p className="mt-1 text-sm text-muted">국내 특허</p>
+            <div>
+              <dt className="text-muted">국내 특허</dt>
+              <dd className="text-2xl font-bold">{domesticPatents.length}</dd>
             </div>
-            <div className="text-center">
-              <p className="text-4xl font-bold text-primary">{internationalPatents.length}</p>
-              <p className="mt-1 text-sm text-muted">해외 특허 (PCT)</p>
+            <div>
+              <dt className="text-muted">해외 특허 (PCT)</dt>
+              <dd className="text-2xl font-bold">{internationalPatents.length}</dd>
             </div>
-            <div className="text-center">
-              <p className="text-4xl font-bold text-primary">{certifications.length}</p>
-              <p className="mt-1 text-sm text-muted">인증 내역</p>
+            <div>
+              <dt className="text-muted">인증 내역</dt>
+              <dd className="text-2xl font-bold">{certifications.length}</dd>
             </div>
-          </div>
+          </dl>
         </div>
       </section>
 
       {/* Domestic Patents - Registered */}
-      <section className="border-t border-border bg-surface px-6 py-24">
-        <div className="mx-auto max-w-7xl">
+      <section className="border-t border-border px-6 py-20">
+        <div className="mx-auto max-w-5xl">
           <h2 className="text-xl font-bold">
             국내 특허 — 등록 <span className="text-muted">({domesticRegistered.length}건)</span>
           </h2>
@@ -135,11 +134,7 @@ export default function PatentsPage() {
                       <td className="py-3 pr-3 font-mono text-xs text-muted">{p.number}</td>
                       <td className="py-3 pr-3">{p.titleKo}</td>
                       <td className="py-3 pr-3 text-muted">{p.titleEn}</td>
-                      <td className="py-3">
-                        <span className="rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
-                          {p.country}
-                        </span>
-                      </td>
+                      <td className="py-3 whitespace-nowrap text-muted">{p.country}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -150,24 +145,19 @@ export default function PatentsPage() {
       </section>
 
       {/* Certifications */}
-      <section className="px-6 py-24">
-        <div className="mx-auto max-w-7xl">
+      <section className="border-t border-border px-6 py-20">
+        <div className="mx-auto max-w-5xl">
           <h2 className="text-xl font-bold">
             인증 내역 <span className="text-muted">({certifications.length}건)</span>
           </h2>
-          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-6 space-y-3">
             {certifications.map((c) => (
               <div
                 key={c.id}
-                className="flex items-start gap-3 rounded-xl border border-border bg-surface-elevated p-4"
+                className="border-l-2 border-border pl-4"
               >
-                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-xs font-bold text-primary">
-                  {c.id}
-                </div>
-                <div>
-                  <p className="text-sm font-semibold">{c.name}</p>
-                  <p className="mt-0.5 text-xs text-muted">{c.issuer}</p>
-                </div>
+                <p className="text-sm font-semibold">{c.name}</p>
+                <p className="text-xs text-muted">{c.issuer}</p>
               </div>
             ))}
           </div>

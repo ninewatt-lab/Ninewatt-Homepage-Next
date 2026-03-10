@@ -76,61 +76,44 @@ export default function SolutionsPage() {
     <>
       {/* Hero */}
       <section className="border-b border-border px-6 pb-16 pt-16">
-        <div className="mx-auto max-w-4xl">
-          <p className="text-sm font-semibold text-primary">Solutions</p>
-          <h1 className="mt-3 text-4xl font-bold tracking-tight md:text-5xl">솔루션</h1>
+        <div className="mx-auto max-w-5xl">
+          <h1 className="text-4xl font-bold tracking-tight md:text-5xl">솔루션</h1>
           <p className="mt-4 max-w-2xl text-lg text-muted">
             데이터 수집부터 AI 분석까지, 건물 에너지 관리의 전 과정을 아우르는 솔루션
           </p>
         </div>
       </section>
 
-      {/* Solutions Grid */}
-      <section className="px-6 py-24">
-        <div className="mx-auto max-w-7xl">
-          <p className="text-sm font-semibold text-primary">Technology</p>
-          <h2 className="mt-2 text-3xl font-bold">6가지 핵심 솔루션</h2>
-          <div className="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {solutions.map((sol, idx) => (
-              <div
-                key={sol.id}
-                className="group rounded-2xl border border-border bg-surface-elevated p-8 transition-all hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5"
-              >
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-sm font-bold text-primary">
-                  {String(idx + 1).padStart(2, "0")}
-                </div>
-                <h3 className="mt-4 text-lg font-bold group-hover:text-primary">
-                  {sol.title}
-                </h3>
-                <ul className="mt-4 space-y-2">
-                  {sol.items.map((item) => (
-                    <li
-                      key={item}
-                      className="flex items-start gap-2 text-sm text-muted"
-                    >
-                      <span className="mt-1.5 block h-1.5 w-1.5 shrink-0 rounded-full bg-primary/40" />
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
+      {/* Solutions — border-l list */}
+      <section className="px-6 py-20">
+        <div className="mx-auto max-w-5xl space-y-12">
+          {solutions.map((sol) => (
+            <div key={sol.id} className="border-l-2 border-border pl-6">
+              <h2 className="text-lg font-bold">{sol.title}</h2>
+              <ul className="mt-3 space-y-1">
+                {sol.items.map((item) => (
+                  <li key={item} className="text-sm text-muted">
+                    — {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="border-t border-border bg-primary px-6 py-20 text-white">
-        <div className="mx-auto max-w-3xl text-center">
-          <h2 className="text-3xl font-bold">
-            맞춤형 에너지 솔루션이 필요하신가요?
-          </h2>
-          <p className="mt-4 text-white/70">
-            나인와트의 전문가가 귀사에 최적화된 솔루션을 제안합니다.
-          </p>
+      {/* CTA — left-aligned inline */}
+      <section className="border-t border-border px-6 py-16">
+        <div className="mx-auto max-w-5xl md:flex md:items-center md:justify-between">
+          <div>
+            <h2 className="text-xl font-bold">맞춤형 에너지 솔루션이 필요하신가요?</h2>
+            <p className="mt-1 text-sm text-muted">
+              나인와트의 전문가가 귀사에 최적화된 솔루션을 제안합니다.
+            </p>
+          </div>
           <Link
             href="/contact"
-            className="mt-8 inline-block rounded-full bg-white px-8 py-3 text-sm font-semibold text-primary transition-colors hover:bg-white/90"
+            className="mt-6 inline-block rounded-md bg-primary px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary/90 md:mt-0"
           >
             문의하기
           </Link>

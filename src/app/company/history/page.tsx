@@ -23,9 +23,8 @@ export default function HistoryPage() {
     <>
       {/* Hero */}
       <section className="border-b border-border px-6 pb-16 pt-16">
-        <div className="mx-auto max-w-4xl">
-          <p className="text-sm font-semibold text-primary">History</p>
-          <h1 className="mt-3 text-4xl font-bold tracking-tight md:text-5xl">주요 연혁</h1>
+        <div className="mx-auto max-w-5xl">
+          <h1 className="text-4xl font-bold tracking-tight md:text-5xl">주요 연혁</h1>
           <p className="mt-4 max-w-2xl text-lg text-muted">
             2019년 설립부터 현재까지, 나인와트의 성장 과정입니다
           </p>
@@ -33,8 +32,8 @@ export default function HistoryPage() {
       </section>
 
       {/* Timeline */}
-      <section className="px-6 py-24">
-        <div className="mx-auto max-w-4xl">
+      <section className="px-6 py-20">
+        <div className="mx-auto max-w-5xl">
           <div className="space-y-10">
             {sortedYears.map((year) => (
               <div key={year} className="flex gap-6">

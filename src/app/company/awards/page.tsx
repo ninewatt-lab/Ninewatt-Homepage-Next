@@ -23,9 +23,8 @@ export default function AwardsPage() {
     <>
       {/* Hero */}
       <section className="border-b border-border px-6 pb-16 pt-16">
-        <div className="mx-auto max-w-4xl">
-          <p className="text-sm font-semibold text-primary">Awards</p>
-          <h1 className="mt-3 text-4xl font-bold tracking-tight md:text-5xl">
+        <div className="mx-auto max-w-5xl">
+          <h1 className="text-4xl font-bold tracking-tight md:text-5xl">
             수상 내역 <span className="text-muted">({awards.length}건)</span>
           </h1>
           <p className="mt-4 max-w-2xl text-lg text-muted">
@@ -35,8 +34,8 @@ export default function AwardsPage() {
       </section>
 
       {/* Awards List */}
-      <section className="px-6 py-24">
-        <div className="mx-auto max-w-4xl">
+      <section className="px-6 py-20">
+        <div className="mx-auto max-w-5xl">
           <div className="space-y-10">
             {awardYears.map((year) => (
               <div key={year} className="flex gap-6">

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "용역과제 - Ninewatt",
@@ -25,45 +26,21 @@ export default function ServicesPage() {
     <>
       {/* Hero */}
       <section className="border-b border-border px-6 pb-16 pt-16">
-        <div className="mx-auto max-w-4xl">
-          <p className="text-sm font-semibold text-primary">Service Projects</p>
-          <h1 className="mt-3 text-4xl font-bold tracking-tight md:text-5xl">용역과제 수행 이력</h1>
+        <div className="mx-auto max-w-5xl">
+          <h1 className="text-4xl font-bold tracking-tight md:text-5xl">용역과제 수행 이력</h1>
           <p className="mt-4 max-w-2xl text-lg text-muted">
-            다양한 기업 및 기관과 협업하여 에너지 솔루션을 제공하고 있습니다
+            {serviceProjects.length}건의 용역과제, {new Set(serviceProjects.map((p) => p.client)).size}개 파트너 기관과 협업
           </p>
         </div>
       </section>
 
-      {/* Stats */}
-      <section className="px-6 py-16">
-        <div className="mx-auto max-w-7xl">
-          <div className="grid grid-cols-2 gap-8 md:grid-cols-3">
-            <div className="text-center">
-              <p className="text-4xl font-bold text-primary">{serviceProjects.length}</p>
-              <p className="mt-1 text-sm text-muted">총 용역과제</p>
-            </div>
-            <div className="text-center">
-              <p className="text-4xl font-bold text-primary">
-                {new Set(serviceProjects.map((p) => p.client)).size}
-              </p>
-              <p className="mt-1 text-sm text-muted">파트너 기관</p>
-            </div>
-            <div className="text-center">
-              <p className="text-4xl font-bold text-primary">3년+</p>
-              <p className="mt-1 text-sm text-muted">수행 기간</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Table */}
-      <section className="border-t border-border bg-surface px-6 py-24">
-        <div className="mx-auto max-w-7xl">
+      <section className="px-6 py-20">
+        <div className="mx-auto max-w-5xl">
           <div className="overflow-x-auto">
             <table className="w-full min-w-[600px] text-sm">
               <thead>
                 <tr className="border-b border-border text-left">
-                  <th className="py-3 pr-4 font-semibold text-muted">No.</th>
                   <th className="py-3 pr-4 font-semibold text-muted">기업(기관명)</th>
                   <th className="py-3 pr-4 font-semibold text-muted">기간</th>
                   <th className="py-3 font-semibold text-muted">수행내용</th>
@@ -72,7 +49,6 @@ export default function ServicesPage() {
               <tbody>
                 {serviceProjects.map((p, i) => (
                   <tr key={i} className="border-b border-border">
-                    <td className="py-3 pr-4 text-muted">{i + 1}</td>
                     <td className="py-3 pr-4 whitespace-nowrap text-muted">{p.client}</td>
                     <td className="py-3 pr-4 whitespace-nowrap text-muted">{p.period}</td>
                     <td className="py-3">{p.title}</td>
@@ -81,6 +57,19 @@ export default function ServicesPage() {
               </tbody>
             </table>
           </div>
+        </div>
+      </section>
+
+      {/* CTA — inline with content */}
+      <section className="border-t border-border px-6 py-14">
+        <div className="mx-auto max-w-5xl md:flex md:items-center md:justify-between">
+          <p className="text-sm text-muted">용역과제 협업에 관심이 있으신가요?</p>
+          <Link
+            href="/contact"
+            className="mt-4 inline-block text-sm font-semibold text-primary underline underline-offset-4 hover:text-primary/80 md:mt-0"
+          >
+            문의하기
+          </Link>
         </div>
       </section>
     </>

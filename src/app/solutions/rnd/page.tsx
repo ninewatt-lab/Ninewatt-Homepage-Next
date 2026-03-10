@@ -22,102 +22,66 @@ const rndProjects = [
 const inProgress = rndProjects.filter((p) => p.status === "수행중");
 const completed = rndProjects.filter((p) => p.status === "완료");
 
+function ProjectTable({ projects }: { projects: typeof rndProjects }) {
+  return (
+    <div className="overflow-x-auto">
+      <table className="w-full min-w-[700px] text-sm">
+        <thead>
+          <tr className="border-b border-border text-left">
+            <th className="py-3 pr-4 font-semibold text-muted">중앙행정기관</th>
+            <th className="py-3 pr-4 font-semibold text-muted">연구개발과제명</th>
+            <th className="py-3 pr-4 font-semibold text-muted">주관기관</th>
+            <th className="py-3 font-semibold text-muted">기간</th>
+          </tr>
+        </thead>
+        <tbody>
+          {projects.map((p, i) => (
+            <tr key={i} className="border-b border-border">
+              <td className="py-3 pr-4 text-muted">{p.agency}</td>
+              <td className="py-3 pr-4">{p.research}</td>
+              <td className="py-3 pr-4 text-muted">{p.lead}</td>
+              <td className="py-3 whitespace-nowrap text-muted">{p.period}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
 export default function RndPage() {
   return (
     <>
       {/* Hero */}
       <section className="border-b border-border px-6 pb-16 pt-16">
-        <div className="mx-auto max-w-4xl">
-          <p className="text-sm font-semibold text-primary">R&D Projects</p>
-          <h1 className="mt-3 text-4xl font-bold tracking-tight md:text-5xl">R&D 수행 이력</h1>
+        <div className="mx-auto max-w-5xl">
+          <h1 className="text-4xl font-bold tracking-tight md:text-5xl">R&D 수행 이력</h1>
           <p className="mt-4 max-w-2xl text-lg text-muted">
-            정부 R&D 과제 수행을 통한 기술력 확보 (최근 5년)
+            정부 R&D 과제 수행을 통한 기술력 확보 — 총 {rndProjects.length}건 (수행중 {inProgress.length}, 완료 {completed.length})
           </p>
         </div>
       </section>
 
-      {/* Stats */}
-      <section className="px-6 py-16">
-        <div className="mx-auto max-w-7xl">
-          <div className="grid grid-cols-3 gap-8">
-            <div className="text-center">
-              <p className="text-4xl font-bold text-primary">{rndProjects.length}</p>
-              <p className="mt-1 text-sm text-muted">총 R&D 과제</p>
-            </div>
-            <div className="text-center">
-              <p className="text-4xl font-bold text-primary">{inProgress.length}</p>
-              <p className="mt-1 text-sm text-muted">수행중</p>
-            </div>
-            <div className="text-center">
-              <p className="text-4xl font-bold text-primary">{completed.length}</p>
-              <p className="mt-1 text-sm text-muted">완료</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* In Progress */}
-      <section className="border-t border-border bg-surface px-6 py-24">
-        <div className="mx-auto max-w-7xl">
-          <h2 className="text-xl font-bold">
+      <section className="px-6 py-20">
+        <div className="mx-auto max-w-5xl">
+          <h2 className="text-lg font-bold">
             수행중 <span className="text-muted">({inProgress.length}건)</span>
           </h2>
-          <div className="mt-8 overflow-x-auto">
-            <table className="w-full min-w-[800px] text-sm">
-              <thead>
-                <tr className="border-b border-border text-left">
-                  <th className="py-3 pr-4 font-semibold text-muted">No.</th>
-                  <th className="py-3 pr-4 font-semibold text-muted">중앙행정기관</th>
-                  <th className="py-3 pr-4 font-semibold text-muted">연구개발과제명</th>
-                  <th className="py-3 pr-4 font-semibold text-muted">주관기관</th>
-                  <th className="py-3 font-semibold text-muted">기간</th>
-                </tr>
-              </thead>
-              <tbody>
-                {inProgress.map((p, i) => (
-                  <tr key={i} className="border-b border-border">
-                    <td className="py-3 pr-4 text-muted">{i + 1}</td>
-                    <td className="py-3 pr-4 text-muted">{p.agency}</td>
-                    <td className="py-3 pr-4">{p.research}</td>
-                    <td className="py-3 pr-4 text-muted">{p.lead}</td>
-                    <td className="py-3 whitespace-nowrap text-muted">{p.period}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <div className="mt-6">
+            <ProjectTable projects={inProgress} />
           </div>
         </div>
       </section>
 
       {/* Completed */}
-      <section className="px-6 py-24">
-        <div className="mx-auto max-w-7xl">
-          <h2 className="text-xl font-bold">
+      <section className="border-t border-border px-6 py-20">
+        <div className="mx-auto max-w-5xl">
+          <h2 className="text-lg font-bold">
             완료 <span className="text-muted">({completed.length}건)</span>
           </h2>
-          <div className="mt-8 overflow-x-auto">
-            <table className="w-full min-w-[800px] text-sm">
-              <thead>
-                <tr className="border-b border-border text-left">
-                  <th className="py-3 pr-4 font-semibold text-muted">No.</th>
-                  <th className="py-3 pr-4 font-semibold text-muted">중앙행정기관</th>
-                  <th className="py-3 pr-4 font-semibold text-muted">연구개발과제명</th>
-                  <th className="py-3 pr-4 font-semibold text-muted">주관기관</th>
-                  <th className="py-3 font-semibold text-muted">기간</th>
-                </tr>
-              </thead>
-              <tbody>
-                {completed.map((p, i) => (
-                  <tr key={i} className="border-b border-border">
-                    <td className="py-3 pr-4 text-muted">{i + 1}</td>
-                    <td className="py-3 pr-4 text-muted">{p.agency}</td>
-                    <td className="py-3 pr-4">{p.research}</td>
-                    <td className="py-3 pr-4 text-muted">{p.lead}</td>
-                    <td className="py-3 whitespace-nowrap text-muted">{p.period}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <div className="mt-6">
+            <ProjectTable projects={completed} />
           </div>
         </div>
       </section>
