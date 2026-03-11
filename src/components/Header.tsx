@@ -180,12 +180,22 @@ const companyNav: NavItemWithChildren = {
           ),
         },
         {
-          href: "/company/global",
-          label: "글로벌 사업",
-          desc: "일본·영국·프랑스·미국 진출",
+          href: "/company/history",
+          label: "연혁",
+          desc: "나인와트의 주요 발자취",
           icon: (
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
-              <circle cx="12" cy="12" r="10" /><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z" />
+              <circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" />
+            </svg>
+          ),
+        },
+        {
+          href: "/company/career",
+          label: "채용 안내",
+          desc: "함께 성장할 인재를 찾습니다",
+          icon: (
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
+              <path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
             </svg>
           ),
         },
@@ -195,12 +205,12 @@ const companyNav: NavItemWithChildren = {
       title: "성과",
       items: [
         {
-          href: "/company/history",
-          label: "연혁",
-          desc: "나인와트의 주요 발자취",
+          href: "/company/global",
+          label: "글로벌 사업",
+          desc: "일본·영국·프랑스·미국 진출",
           icon: (
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
-              <circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" />
+              <circle cx="12" cy="12" r="10" /><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z" />
             </svg>
           ),
         },
@@ -222,16 +232,6 @@ const companyNav: NavItemWithChildren = {
           icon: (
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
               <path d="M12 2L9 9H2l5.5 4.5L5 21l7-5 7 5-2.5-7.5L22 9h-7L12 2z" />
-            </svg>
-          ),
-        },
-        {
-          href: "/company/career",
-          label: "채용 안내",
-          desc: "함께 성장할 인재를 찾습니다",
-          icon: (
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
-              <path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
             </svg>
           ),
         },
@@ -414,9 +414,16 @@ export default function Header() {
                   key={item.label}
                   className={`${activeMenu === item.label ? "block" : "hidden"}`}
                 >
-                  <div className="flex gap-12">
+                  <div className="flex">
                     {item.sections.map((section, sIdx) => (
-                      <div key={sIdx} className="min-w-60">
+                      <div
+                        key={sIdx}
+                        className={`min-w-60 pr-10 ${
+                          sIdx < item.sections.length - 1
+                            ? "mr-10 border-r border-border"
+                            : ""
+                        }`}
+                      >
                         {section.title && (
                           <h3 className="mb-3 text-xs font-semibold uppercase tracking-widest text-muted/70">
                             {section.title}
@@ -456,8 +463,8 @@ export default function Header() {
                       </div>
                     ))}
 
-                    {/* Right side: Overview link */}
-                    <div className="ml-auto flex items-end">
+                    {/* Right side: Overview link with divider */}
+                    <div className="ml-auto flex items-center border-l border-border pl-10">
                       <Link
                         href={item.href}
                         onClick={() => setActiveMenu(null)}

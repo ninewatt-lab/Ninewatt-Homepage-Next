@@ -5,11 +5,11 @@ import { usePathname } from "next/navigation";
 
 const subPages = [
   { href: "/company", label: "회사 개요" },
+  { href: "/company/history", label: "주요 연혁" },
+  { href: "/company/career", label: "채용 안내" },
   { href: "/company/global", label: "글로벌 사업" },
   { href: "/company/awards", label: "수상 내역" },
   { href: "/company/patents", label: "특허 & 인증" },
-  { href: "/company/history", label: "주요 연혁" },
-  { href: "/company/career", label: "채용 안내" },
 ];
 
 export default function CompanyNav() {

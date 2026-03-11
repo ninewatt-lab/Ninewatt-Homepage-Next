@@ -14,7 +14,7 @@ export default function Home() {
   return (
     <>
       {/* Hero Section — Split Layout */}
-      <section className="flex h-screen items-center px-6 pt-16">
+      <section className="flex items-center px-6 pb-28 pt-52">
         <div className="mx-auto grid max-w-6xl items-center gap-12 md:grid-cols-2">
           {/* Left — Text */}
           <div>
@@ -77,7 +77,7 @@ export default function Home() {
 
           {/* Right — Abstract visual */}
           <div className="relative flex items-center justify-center">
-            <div className="relative h-80 w-full max-w-md md:h-96">
+            <div className="relative h-80 w-full md:h-96">
               {/* Background glow */}
               <div className="absolute inset-0 rounded-3xl bg-linear-to-br from-primary/10 to-primary-light/10 blur-2xl" />
 
@@ -168,6 +168,203 @@ export default function Home() {
                 </svg>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Opti Video — Mapbox style split layout */}
+      <section className="px-6 py-28">
+        <div className="mx-auto grid max-w-6xl items-center gap-12 md:grid-cols-[2fr_3fr]">
+          {/* Left — Text */}
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
+              Opti
+            </p>
+            <h2 className="mt-4 text-3xl font-bold tracking-tight md:text-4xl">
+              AI가 건물 에너지를
+              <br />
+              진단하고 최적화합니다
+            </h2>
+            <p className="mt-5 text-base leading-relaxed text-muted">
+              자연어로 건물 에너지를 질의하면, AI가 비용 절감 전략과
+              투자 시뮬레이션 결과를 실시간으로 제공합니다.
+              CES 2026 Innovation Awards 수상작.
+            </p>
+            <Link
+              href="/product/opti"
+              className="group mt-8 inline-flex items-center gap-2 rounded-full border border-border px-6 py-2.5 text-sm font-semibold text-foreground transition-colors hover:border-primary/30 hover:text-primary"
+            >
+              Opti 알아보기
+              <svg
+                className="h-4 w-4 transition-transform group-hover:translate-x-0.5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+              </svg>
+            </Link>
+          </div>
+
+          {/* Right — Video */}
+          <div className="w-full overflow-hidden rounded-2xl">
+            <video
+              className="h-auto w-full rounded-2xl"
+              autoPlay
+              loop
+              muted
+              playsInline
+            >
+              <source src="/videos/opti-scene-short.mp4" type="video/mp4" />
+            </video>
+          </div>
+        </div>
+      </section>
+
+      {/* GreenPlanner Video — reversed layout */}
+      <section className="px-6 py-28">
+        <div className="mx-auto grid max-w-6xl items-center gap-12 md:grid-cols-[3fr_2fr]">
+          {/* Left — Video */}
+          <div className="w-full overflow-hidden rounded-2xl md:order-1">
+            <video
+              className="h-auto w-full rounded-2xl"
+              autoPlay
+              loop
+              muted
+              playsInline
+            >
+              <source src="/videos/greenplanner-scene.mp4" type="video/mp4" />
+            </video>
+          </div>
+
+          {/* Right — Text */}
+          <div className="md:order-2">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
+              GreenPlanner
+            </p>
+            <h2 className="mt-4 text-3xl font-bold tracking-tight md:text-4xl">
+              그린리모델링,
+              <br />
+              시뮬레이션으로 설계합니다
+            </h2>
+            <p className="mt-5 text-base leading-relaxed text-muted">
+              건물의 단열·창호·설비 개선 효과를 사전에 시뮬레이션하고,
+              최적의 그린리모델링 시나리오를 도출합니다.
+            </p>
+            <Link
+              href="/product/greenplanner"
+              className="group mt-8 inline-flex items-center gap-2 rounded-full border border-border px-6 py-2.5 text-sm font-semibold text-foreground transition-colors hover:border-primary/30 hover:text-primary"
+            >
+              GreenPlanner 알아보기
+              <svg
+                className="h-4 w-4 transition-transform group-hover:translate-x-0.5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+              </svg>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Watti Video — same direction as Opti */}
+      <section className="px-6 py-28">
+        <div className="mx-auto grid max-w-6xl items-center gap-12 md:grid-cols-[2fr_3fr]">
+          {/* Left — Text */}
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
+              Watti
+            </p>
+            <h2 className="mt-4 text-3xl font-bold tracking-tight md:text-4xl">
+              3D 맵 위에서
+              <br />
+              건물 에너지를 읽다
+            </h2>
+            <p className="mt-5 text-base leading-relaxed text-muted">
+              건축물·에너지·환경·도시 데이터를 3D 맵 위에 통합하고,
+              건물별 에너지 효율화 인사이트를 시각적으로 제공합니다.
+            </p>
+            <Link
+              href="/product/watti"
+              className="group mt-8 inline-flex items-center gap-2 rounded-full border border-border px-6 py-2.5 text-sm font-semibold text-foreground transition-colors hover:border-primary/30 hover:text-primary"
+            >
+              Watti 알아보기
+              <svg
+                className="h-4 w-4 transition-transform group-hover:translate-x-0.5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+              </svg>
+            </Link>
+          </div>
+
+          {/* Right — Video */}
+          <div className="w-full overflow-hidden rounded-2xl">
+            <video
+              className="h-auto w-full rounded-2xl"
+              autoPlay
+              loop
+              muted
+              playsInline
+            >
+              <source src="/videos/watti-scene.mp4" type="video/mp4" />
+            </video>
+          </div>
+        </div>
+      </section>
+
+      {/* RE:park Video — reversed layout */}
+      <section className="px-6 py-28">
+        <div className="mx-auto grid max-w-6xl items-center gap-12 md:grid-cols-[3fr_2fr]">
+          {/* Left — Video */}
+          <div className="w-full overflow-hidden rounded-2xl md:order-1">
+            <video
+              className="h-auto w-full rounded-2xl"
+              autoPlay
+              loop
+              muted
+              playsInline
+            >
+              <source src="/videos/repark-scene.mp4" type="video/mp4" />
+            </video>
+          </div>
+
+          {/* Right — Text */}
+          <div className="md:order-2">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
+              RE:park
+            </p>
+            <h2 className="mt-4 text-3xl font-bold tracking-tight md:text-4xl">
+              QR 하나로
+              <br />
+              시설물을 관리합니다
+            </h2>
+            <p className="mt-5 text-base leading-relaxed text-muted">
+              시민은 QR로 고장을 신고하고, 관리자는 접수·배정을 처리하고,
+              보수업체는 완료를 보고합니다. 세 주체를 하나로 잇는 스마트 시설물 관리 시스템입니다.
+            </p>
+            <Link
+              href="/product/repark"
+              className="group mt-8 inline-flex items-center gap-2 rounded-full border border-border px-6 py-2.5 text-sm font-semibold text-foreground transition-colors hover:border-primary/30 hover:text-primary"
+            >
+              RE:park 알아보기
+              <svg
+                className="h-4 w-4 transition-transform group-hover:translate-x-0.5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+              </svg>
+            </Link>
           </div>
         </div>
       </section>
