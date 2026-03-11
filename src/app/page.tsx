@@ -216,7 +216,7 @@ export default function Home() {
               muted
               playsInline
             >
-              <source src="/videos/opti-scene-short.mp4" type="video/mp4" />
+              <source src="https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/videos/opti-scene-short.mp4" type="video/mp4" />
             </video>
           </div>
         </div>
@@ -234,7 +234,7 @@ export default function Home() {
               muted
               playsInline
             >
-              <source src="/videos/greenplanner-scene.mp4" type="video/mp4" />
+              <source src="https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/videos/greenplanner-scene.mp4" type="video/mp4" />
             </video>
           </div>
 
@@ -314,7 +314,7 @@ export default function Home() {
               muted
               playsInline
             >
-              <source src="/videos/watti-scene.mp4" type="video/mp4" />
+              <source src="https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/videos/watti-scene.mp4" type="video/mp4" />
             </video>
           </div>
         </div>
@@ -332,7 +332,7 @@ export default function Home() {
               muted
               playsInline
             >
-              <source src="/videos/repark-scene.mp4" type="video/mp4" />
+              <source src="https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/videos/repark-scene.mp4" type="video/mp4" />
             </video>
           </div>
 
