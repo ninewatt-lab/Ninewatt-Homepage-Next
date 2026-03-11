@@ -221,6 +221,16 @@ const companyNav: NavItemWithChildren = {
             </svg>
           ),
         },
+        {
+          href: "/company/career",
+          label: "채용 안내",
+          desc: "함께 성장할 인재를 찾습니다",
+          icon: (
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
+              <path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
+            </svg>
+          ),
+        },
       ],
     },
   ],

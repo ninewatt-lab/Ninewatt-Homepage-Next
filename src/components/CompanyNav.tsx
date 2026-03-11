@@ -9,6 +9,7 @@ const subPages = [
   { href: "/company/awards", label: "수상 내역" },
   { href: "/company/patents", label: "특허 & 인증" },
   { href: "/company/history", label: "주요 연혁" },
+  { href: "/company/career", label: "채용 안내" },
 ];
 
 export default function CompanyNav() {
