@@ -13,7 +13,7 @@ export default function REparkPage() {
       {/* Hero */}
       <section className="border-b border-border px-6 pb-20 pt-16">
         <div className="mx-auto max-w-5xl">
-          <p className="text-sm font-medium text-amber-600">
+          <p className="text-sm font-medium text-primary">
             Smart Facility Management
           </p>
           <h1 className="mt-6 text-5xl font-bold tracking-tight md:text-7xl">
@@ -29,7 +29,7 @@ export default function REparkPage() {
           <div className="mt-10 flex flex-wrap gap-4">
             <Link
               href="/contact"
-              className="rounded-full bg-amber-600 px-8 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-amber-700"
+              className="rounded-full bg-primary px-8 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-primary-dark"
             >
               서비스 문의하기
             </Link>
@@ -83,7 +83,7 @@ export default function REparkPage() {
               },
             ].map((item) => (
               <div key={item.role} className="md:flex md:items-baseline md:gap-8">
-                <h3 className="md:w-32 shrink-0 text-lg font-bold text-amber-600">
+                <h3 className="md:w-32 shrink-0 text-lg font-bold text-primary">
                   {item.role}
                 </h3>
                 <p className="mt-1 md:mt-0 text-sm text-muted">{item.flow}</p>
@@ -107,7 +107,7 @@ export default function REparkPage() {
               "불필요한 업무 프로세스 생략",
               "통합 관리 데이터베이스 구축으로 업무 전산화",
             ].map((item) => (
-              <li key={item} className="border-l-2 border-amber-500 pl-4 text-sm">
+              <li key={item} className="border-l-2 border-primary pl-4 text-sm">
                 {item}
               </li>
             ))}
@@ -127,11 +127,11 @@ export default function REparkPage() {
             <div className="mt-6 grid gap-6 md:grid-cols-2">
               <div>
                 <p className="text-sm text-muted">1차 실증 (~23.11.30)</p>
-                <p className="mt-1 text-2xl font-bold text-amber-600">조명시설 1,300개</p>
+                <p className="mt-1 text-2xl font-bold text-primary">조명시설 1,300개</p>
               </div>
               <div>
                 <p className="text-sm text-muted">2차 실증 (24.01.01~)</p>
-                <p className="mt-1 text-2xl font-bold text-amber-600">조경·운동시설 2,000개</p>
+                <p className="mt-1 text-2xl font-bold text-primary">조경·운동시설 2,000개</p>
               </div>
             </div>
             <div className="mt-6 space-y-3">
@@ -160,7 +160,7 @@ export default function REparkPage() {
           <div className="mt-6 flex gap-4 md:mt-0">
             <Link
               href="/contact"
-              className="rounded-full bg-amber-600 px-8 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-amber-700"
+              className="rounded-full bg-primary px-8 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-primary-dark"
             >
               문의하기
             </Link>

@@ -44,7 +44,7 @@ export default function SaveEPage() {
       {/* Hero */}
       <section className="border-b border-border px-6 pb-20 pt-16">
         <div className="mx-auto max-w-5xl">
-          <p className="text-sm font-medium text-blue-600">Smart Energy Insight</p>
+          <p className="text-sm font-medium text-primary">Smart Energy Insight</p>
           <h1 className="mt-6 text-5xl font-bold tracking-tight md:text-7xl">
             Save-E
           </h1>
@@ -59,7 +59,7 @@ export default function SaveEPage() {
           <div className="mt-10 flex flex-wrap gap-4">
             <Link
               href="/contact"
-              className="rounded-full bg-blue-600 px-8 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-blue-700"
+              className="rounded-full bg-primary px-8 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-primary-dark"
             >
               데모 요청하기
             </Link>
@@ -112,19 +112,19 @@ export default function SaveEPage() {
           <h2 className="text-2xl font-bold">작동 방식</h2>
           <div className="mt-10 grid gap-12 md:grid-cols-3">
             <div>
-              <h3 className="text-lg font-bold text-blue-600">분석</h3>
+              <h3 className="text-lg font-bold text-primary">분석</h3>
               <p className="mt-3 text-sm leading-relaxed text-muted">
                 과거 전력사용패턴, 요금제, 계약전력, 피크, 역률, 설비효율, 신재생에너지까지 7가지 관점에서 분석합니다.
               </p>
             </div>
             <div>
-              <h3 className="text-lg font-bold text-blue-600">대시보드</h3>
+              <h3 className="text-lg font-bold text-primary">대시보드</h3>
               <p className="mt-3 text-sm leading-relaxed text-muted">
                 데이터 가시화, 상관관계 그래프, 에너지 사용량 및 비용 모니터링을 실시간으로 제공합니다.
               </p>
             </div>
             <div>
-              <h3 className="text-lg font-bold text-blue-600">리포트</h3>
+              <h3 className="text-lg font-bold text-primary">리포트</h3>
               <p className="mt-3 text-sm leading-relaxed text-muted">
                 에너지 진단 결과와 비용 절감 솔루션을 자동 리포트로 생성합니다.
               </p>
@@ -156,7 +156,7 @@ export default function SaveEPage() {
                 desc: "한국전력 고객번호 10자리와 정보제공동의만으로 분석을 시작합니다.",
               },
             ].map((item) => (
-              <li key={item.title} className="border-l-2 border-blue-500 pl-4">
+              <li key={item.title} className="border-l-2 border-primary pl-4">
                 <span className="font-medium">{item.title}</span>
                 <p className="mt-1 text-sm text-muted">{item.desc}</p>
               </li>
@@ -197,7 +197,7 @@ export default function SaveEPage() {
                 <div className="mb-3 md:mb-0 md:w-56 shrink-0">
                   <h3 className="text-lg font-bold">{cs.title}</h3>
                   <p className="text-sm text-muted">{cs.location}</p>
-                  <p className="mt-1 text-sm font-medium text-blue-600">{cs.result}</p>
+                  <p className="mt-1 text-sm font-medium text-primary">{cs.result}</p>
                 </div>
                 <p className="text-sm leading-relaxed text-muted">
                   {cs.description}
@@ -220,7 +220,7 @@ export default function SaveEPage() {
           <div className="mt-6 flex gap-4 md:mt-0">
             <Link
               href="/contact"
-              className="rounded-full bg-blue-600 px-8 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-blue-700"
+              className="rounded-full bg-primary px-8 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-primary-dark"
             >
               문의하기
             </Link>

@@ -14,7 +14,7 @@ export default function Home() {
   return (
     <>
       {/* Hero Section — Split Layout */}
-      <section className="flex min-h-[92vh] items-center px-6 pt-16">
+      <section className="flex h-screen items-center px-6 pt-16">
         <div className="mx-auto grid max-w-6xl items-center gap-12 md:grid-cols-2">
           {/* Left — Text */}
           <div>
@@ -172,25 +172,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Numbers */}
-      <section className="border-y border-border px-6 py-14">
-        <div className="mx-auto grid max-w-5xl grid-cols-3 gap-y-10 md:grid-cols-6">
-          {[
-            { value: "2019", label: "설립" },
-            { value: "30+", label: "직원 수" },
-            { value: "60+", label: "수행 프로젝트" },
-            { value: "96.81%", label: "매출 성장률" },
-            { value: "48억", label: "누적 투자" },
-            { value: "33건", label: "보유 특허" },
-          ].map((stat) => (
-            <div key={stat.label}>
-              <p className="text-2xl font-bold md:text-3xl">{stat.value}</p>
-              <p className="mt-1 text-sm text-muted">{stat.label}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
       {/* What we do — asymmetric layout */}
       <section className="px-6 py-24">
         <div className="mx-auto max-w-5xl">
@@ -250,11 +231,13 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Partners */}
-      <section className="border-t border-border bg-[#1a1a2e] px-6 py-16">
+      {/* Partners — Mapbox style logo cloud */}
+      <section className="border-t border-border px-6 py-20">
         <div className="mx-auto max-w-5xl">
-          <p className="text-sm text-white/50">함께하는 기관과 기업</p>
-          <div className="mt-8 flex flex-wrap items-center gap-x-10 gap-y-6">
+          <p className="text-center text-xs font-semibold uppercase tracking-[0.2em] text-muted">
+            Trusted by industry leaders
+          </p>
+          <div className="mt-12 grid grid-cols-2 items-center justify-items-center gap-x-12 gap-y-10 text-muted sm:grid-cols-4">
             <Kepco />
             <LSelectric />
             <SmesAndStartups />
@@ -264,6 +247,25 @@ export default function Home() {
             <SeoulFacilities />
             <Gangnamgu />
           </div>
+        </div>
+      </section>
+
+      {/* Numbers */}
+      <section className="border-y border-border px-6 py-14">
+        <div className="mx-auto grid max-w-5xl grid-cols-3 gap-y-10 md:grid-cols-6">
+          {[
+            { value: "2019", label: "설립" },
+            { value: "30+", label: "직원 수" },
+            { value: "60+", label: "수행 프로젝트" },
+            { value: "96.81%", label: "매출 성장률" },
+            { value: "48억", label: "누적 투자" },
+            { value: "33건", label: "보유 특허" },
+          ].map((stat) => (
+            <div key={stat.label}>
+              <p className="text-2xl font-bold md:text-3xl">{stat.value}</p>
+              <p className="mt-1 text-sm text-muted">{stat.label}</p>
+            </div>
+          ))}
         </div>
       </section>
 

@@ -30,7 +30,7 @@ export default function GreenPlannerPage() {
       {/* Hero */}
       <section className="border-b border-border px-6 pb-20 pt-16">
         <div className="mx-auto max-w-5xl">
-          <p className="text-sm font-medium text-emerald-600">
+          <p className="text-sm font-medium text-primary">
             Green Remodeling App
           </p>
           <h1 className="mt-6 text-5xl font-bold tracking-tight md:text-7xl">
@@ -46,7 +46,7 @@ export default function GreenPlannerPage() {
           <div className="mt-10 flex flex-wrap gap-4">
             <Link
               href="/contact"
-              className="rounded-full bg-emerald-600 px-8 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-emerald-700"
+              className="rounded-full bg-primary px-8 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-primary-dark"
             >
               서비스 문의하기
             </Link>
@@ -128,7 +128,7 @@ export default function GreenPlannerPage() {
               "체크리스트 — 임대차 계약, 건축사·건설사 미팅, 심의 방법, 핵심질문 TOP6",
               "리모델링 예측보고서 — 공사비, 행정절차, 예측 임대료, 추정 매매가를 PDF로 즉시 다운로드",
             ].map((item) => (
-              <li key={item} className="border-l-2 border-emerald-500 pl-4 text-sm">
+              <li key={item} className="border-l-2 border-primary pl-4 text-sm">
                 {item}
               </li>
             ))}
@@ -147,7 +147,7 @@ export default function GreenPlannerPage() {
             {fundingInfo.map((f) => (
               <div key={f.region} className="rounded-xl border border-border p-6">
                 <p className="text-sm text-muted">{f.program}</p>
-                <p className="mt-2 text-3xl font-bold text-emerald-600">
+                <p className="mt-2 text-3xl font-bold text-primary">
                   최대 {f.maxAmount}
                 </p>
                 <p className="mt-3 text-sm text-muted">{f.terms}</p>
@@ -168,7 +168,7 @@ export default function GreenPlannerPage() {
           <div className="mt-8 flex flex-wrap gap-4">
             <Link
               href="/contact"
-              className="rounded-full bg-emerald-600 px-8 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-emerald-700"
+              className="rounded-full bg-primary px-8 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-primary-dark"
             >
               서비스 문의
             </Link>

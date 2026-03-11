@@ -23,26 +23,18 @@ interface NavSection {
 interface NavItemWithChildren {
   href: string;
   label: string;
+  labelKo: string;
   sections: NavSection[];
 }
 
 const productNav: NavItemWithChildren = {
   href: "/product",
   label: "Product",
+  labelKo: "제품",
   sections: [
     {
       title: "플랫폼",
       items: [
-        {
-          href: "/product/watti",
-          label: "Watti",
-          desc: "3D 건물 에너지 분석 플랫폼",
-          icon: (
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
-              <path d="M12 3L2 9l10 6 10-6-10-6z" /><path d="M2 17l10 6 10-6" /><path d="M2 13l10 6 10-6" />
-            </svg>
-          ),
-        },
         {
           href: "/product/opti",
           label: "Opti",
@@ -51,6 +43,16 @@ const productNav: NavItemWithChildren = {
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
               <path d="M12 2a4 4 0 0 1 4 4c0 1.95-1.4 3.58-3.25 3.93L12 22l-.75-12.07A4.001 4.001 0 0 1 12 2z" />
               <circle cx="12" cy="6" r="1.5" fill="currentColor" stroke="none" />
+            </svg>
+          ),
+        },
+        {
+          href: "/product/watti",
+          label: "Watti",
+          desc: "3D 건물 에너지 분석 플랫폼",
+          icon: (
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
+              <path d="M12 3L2 9l10 6 10-6-10-6z" /><path d="M2 17l10 6 10-6" /><path d="M2 13l10 6 10-6" />
             </svg>
           ),
         },
@@ -101,6 +103,7 @@ const productNav: NavItemWithChildren = {
 const solutionsNav: NavItemWithChildren = {
   href: "/solutions",
   label: "Solutions",
+  labelKo: "솔루션",
   sections: [
     {
       title: "역량",
@@ -161,6 +164,7 @@ const solutionsNav: NavItemWithChildren = {
 const companyNav: NavItemWithChildren = {
   href: "/company",
   label: "Company",
+  labelKo: "회사",
   sections: [
     {
       title: "소개",
@@ -285,10 +289,10 @@ export default function Header() {
     <>
       <header
         ref={headerRef}
-        className={`fixed top-0 z-50 w-full transition-all duration-300 ${
+        className={`fixed top-0 z-50 w-full border-b transition-all duration-300 ${
           scrolled || mobileOpen || activeMenu
-            ? "bg-background/80 border-b border-border backdrop-blur-xl"
-            : "bg-transparent"
+            ? "bg-background/80 border-border backdrop-blur-xl"
+            : "bg-transparent border-transparent"
         }`}
       >
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
@@ -459,7 +463,7 @@ export default function Header() {
                         onClick={() => setActiveMenu(null)}
                         className="group inline-flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-medium text-primary transition-colors hover:bg-primary hover:text-white"
                       >
-                        {item.label} 전체보기
+                        {item.labelKo} 전체보기
                         <svg
                           viewBox="0 0 12 12"
                           fill="none"

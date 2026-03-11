@@ -5,8 +5,8 @@ import { usePathname } from "next/navigation";
 
 const subPages = [
   { href: "/product", label: "제품 소개" },
-  { href: "/product/watti", label: "Watti" },
   { href: "/product/opti", label: "Opti" },
+  { href: "/product/watti", label: "Watti" },
   { href: "/product/greenplanner", label: "GreenPlanner" },
   { href: "/product/save-e", label: "Save-E" },
   { href: "/product/repark", label: "RE:park" },

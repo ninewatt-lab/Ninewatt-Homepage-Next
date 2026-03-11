@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Product - Ninewatt",
-  description: "나인와트의 에너지 솔루션 제품군. Watti, Opti, GreenPlanner, Save-E, RE:park",
+  description: "나인와트의 에너지 솔루션 제품군. Opti, Watti, GreenPlanner, Save-E, RE:park",
 };
 
 const products = [

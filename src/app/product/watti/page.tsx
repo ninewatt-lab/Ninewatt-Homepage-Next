@@ -34,7 +34,7 @@ export default function WattiPage() {
       {/* Hero */}
       <section className="border-b border-border px-6 pb-20 pt-16">
         <div className="mx-auto max-w-5xl">
-          <p className="text-sm font-medium text-teal-600">
+          <p className="text-sm font-medium text-primary">
             Open Data-Based Platform
           </p>
           <h1 className="mt-6 text-5xl font-bold tracking-tight md:text-7xl">
@@ -50,7 +50,7 @@ export default function WattiPage() {
           <div className="mt-10 flex flex-wrap gap-4">
             <Link
               href="/contact"
-              className="rounded-full bg-teal-600 px-8 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-teal-700"
+              className="rounded-full bg-primary px-8 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-primary-dark"
             >
               데모 요청하기
             </Link>
@@ -69,7 +69,7 @@ export default function WattiPage() {
       {/* Big data stat — single number, not a section */}
       <section className="border-b border-border px-6 py-12">
         <div className="mx-auto flex max-w-5xl items-baseline gap-3">
-          <span className="text-4xl font-bold text-teal-600">134,000건+</span>
+          <span className="text-4xl font-bold text-primary">134,000건+</span>
           <span className="text-muted">공간 빅데이터 통합</span>
         </div>
       </section>
@@ -137,7 +137,7 @@ export default function WattiPage() {
               "온실가스 감축 전략 시나리오 분석",
               "공공건축물 에너지/탄소 관리",
             ].map((item) => (
-              <li key={item} className="border-l-2 border-teal-500 pl-4 text-sm">
+              <li key={item} className="border-l-2 border-primary pl-4 text-sm">
                 {item}
               </li>
             ))}
@@ -177,7 +177,7 @@ export default function WattiPage() {
           <div className="mt-6 flex gap-4 md:mt-0">
             <Link
               href="/contact"
-              className="rounded-full bg-teal-600 px-8 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-teal-700"
+              className="rounded-full bg-primary px-8 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-primary-dark"
             >
               문의하기
             </Link>
