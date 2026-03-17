@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Product - Ninewatt",
-  description: "나인와트의 에너지 솔루션 제품군. Opti, Watti, GreenPlanner, Save-E, RE:park",
+  description: "나인와트의 에너지 솔루션 제품군. Opti, Watti, GreenPlanner, Save-E, RE:park, SolarScope",
 };
 
 const products = [
@@ -46,6 +46,14 @@ const products = [
     tagline: "Smart Facility Management",
     description:
       "QR 코드 기반 시설물 관리. 시민 고장신고부터 관리자 현황 파악, 보수업체 작업관리까지.",
+  },
+  {
+    href: "/product/solar-site",
+    name: "SolarScope",
+    badge: null,
+    tagline: "Solar Site Analysis Platform",
+    description:
+      "주소 입력만으로 태양광 설치 후보지의 규제, 이격거리, 배전망, 발전량, 수익성을 통합 분석합니다.",
   },
 ];
 

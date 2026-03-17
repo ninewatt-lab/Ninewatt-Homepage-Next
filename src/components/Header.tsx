@@ -95,6 +95,16 @@ const productNav: NavItemWithChildren = {
             </svg>
           ),
         },
+        {
+          href: "/product/solar-site",
+          label: "SolarScope",
+          desc: "태양광 후보지 통합 타당성 분석",
+          icon: (
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
+              <circle cx="12" cy="12" r="5" /><path d="M12 1v2m0 18v2m-8.66-3.34l1.42-1.42m12.48-12.48l1.42-1.42M1 12h2m18 0h2m-3.34 8.66l-1.42-1.42M4.76 4.76L3.34 3.34" />
+            </svg>
+          ),
+        },
       ],
     },
   ],

@@ -369,6 +369,55 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Solar Site Analysis Platform — same direction as Opti */}
+      <section className="px-6 py-28">
+        <div className="mx-auto grid max-w-6xl items-center gap-12 md:grid-cols-[2fr_3fr]">
+          {/* Left — Text */}
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
+              Solar Site Analysis Platform
+            </p>
+            <h2 className="mt-4 text-3xl font-bold tracking-tight md:text-4xl">
+              주소 입력만으로
+              <br />
+              태양광 적합성을 분석합니다
+            </h2>
+            <p className="mt-5 text-base leading-relaxed text-muted">
+              토지·건물의 태양광 설치 가능성을 분석합니다.
+              규제, 이격거리, 배전망, 발전량, 수익성을 통합 평가합니다.
+            </p>
+            <Link
+              href="/product/solar-site"
+              className="group mt-8 inline-flex items-center gap-2 rounded-full border border-border px-6 py-2.5 text-sm font-semibold text-foreground transition-colors hover:border-primary/30 hover:text-primary"
+            >
+              Solar Site 알아보기
+              <svg
+                className="h-4 w-4 transition-transform group-hover:translate-x-0.5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+              </svg>
+            </Link>
+          </div>
+
+          {/* Right — Video */}
+          <div className="w-full overflow-hidden rounded-2xl">
+            <video
+              className="h-auto w-full rounded-2xl"
+              autoPlay
+              loop
+              muted
+              playsInline
+            >
+              <source src="https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/videos/solar-site-scene.mp4" type="video/mp4" />
+            </video>
+          </div>
+        </div>
+      </section>
+
       {/* What we do — asymmetric layout */}
       <section className="px-6 py-24">
         <div className="mx-auto max-w-5xl">

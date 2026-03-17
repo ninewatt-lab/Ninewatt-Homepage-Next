@@ -10,6 +10,7 @@ const subPages = [
   { href: "/product/greenplanner", label: "GreenPlanner" },
   { href: "/product/save-e", label: "Save-E" },
   { href: "/product/repark", label: "RE:park" },
+  { href: "/product/solar-site", label: "SolarScope" },
 ];
 
 export default function ProductNav() {
