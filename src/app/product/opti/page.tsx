@@ -45,6 +45,24 @@ export default function OptiPage() {
         </div>
       </section>
 
+      {/* Product Video */}
+      <section className="px-6 py-20">
+        <div className="mx-auto max-w-5xl overflow-hidden rounded-2xl">
+          <video
+            className="h-auto w-full rounded-2xl"
+            autoPlay
+            loop
+            muted
+            playsInline
+          >
+            <source
+              src="https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/videos/opti-scene-short.mp4"
+              type="video/mp4"
+            />
+          </video>
+        </div>
+      </section>
+
       {/* Problem → Solution (single section, no separate "Challenge" block) */}
       <section className="px-6 py-24">
         <div className="mx-auto max-w-5xl">

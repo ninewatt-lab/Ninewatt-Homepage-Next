@@ -11,6 +11,7 @@ const subPages = [
   { href: "/product/save-e", label: "Save-E" },
   { href: "/product/repark", label: "RE:park" },
   { href: "/product/solar-site", label: "SolarScope" },
+  { href: "/product/pv-intelligence", label: "PV Intelligence" },
 ];
 
 export default function ProductNav() {

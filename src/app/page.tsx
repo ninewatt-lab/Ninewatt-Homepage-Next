@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import {
   SmesAndStartups,
@@ -403,8 +404,32 @@ export default function Home() {
             </Link>
           </div>
 
-          {/* Right — Video */}
-          <div className="w-full overflow-hidden rounded-2xl">
+          {/* Right — Screenshot */}
+          <div className="group/img w-full overflow-hidden rounded-2xl border border-border bg-neutral-900 shadow-2xl transition-shadow hover:shadow-primary/10">
+            {/* Browser top bar */}
+            <div className="flex items-center gap-2 border-b border-white/10 px-4 py-3">
+              <span className="h-3 w-3 rounded-full bg-white/20" />
+              <span className="h-3 w-3 rounded-full bg-white/20" />
+              <span className="h-3 w-3 rounded-full bg-white/20" />
+            </div>
+            <div className="overflow-hidden">
+              <Image
+                src="/images/SolarScope/SolarScope_Image_2.png"
+                alt="SolarScope 대시보드"
+                width={1200}
+                height={675}
+                className="h-auto w-full transition-transform duration-500 ease-out group-hover/img:scale-105"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* PV Intelligence — reversed layout */}
+      <section className="px-6 py-28">
+        <div className="mx-auto grid max-w-6xl items-center gap-12 md:grid-cols-[3fr_2fr]">
+          {/* Left — Video */}
+          <div className="w-full overflow-hidden rounded-2xl md:order-1">
             <video
               className="h-auto w-full rounded-2xl"
               autoPlay
@@ -412,8 +437,39 @@ export default function Home() {
               muted
               playsInline
             >
-              <source src="https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/videos/solar-site-scene.mp4" type="video/mp4" />
+              <source src="https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/videos/pv-intelligence-scene.mp4" type="video/mp4" />
             </video>
+          </div>
+
+          {/* Right — Text */}
+          <div className="md:order-2">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
+              PV Intelligence
+            </p>
+            <h2 className="mt-4 text-3xl font-bold tracking-tight md:text-4xl">
+              태양광 발전소를
+              <br />
+              하나의 플랫폼에서 관제합니다
+            </h2>
+            <p className="mt-5 text-base leading-relaxed text-muted">
+              자체 RTU로 현장 데이터를 수집하고, 실시간 모니터링부터
+              AI 운영 분석까지 하나의 플랫폼에서 제공합니다.
+            </p>
+            <Link
+              href="/product/pv-intelligence"
+              className="group mt-8 inline-flex items-center gap-2 rounded-full border border-border px-6 py-2.5 text-sm font-semibold text-foreground transition-colors hover:border-primary/30 hover:text-primary"
+            >
+              PV Intelligence 알아보기
+              <svg
+                className="h-4 w-4 transition-transform group-hover:translate-x-0.5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+              </svg>
+            </Link>
           </div>
         </div>
       </section>

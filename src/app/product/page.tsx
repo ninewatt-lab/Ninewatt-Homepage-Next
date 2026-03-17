@@ -55,6 +55,14 @@ const products = [
     description:
       "주소 입력만으로 태양광 설치 후보지의 규제, 이격거리, 배전망, 발전량, 수익성을 통합 분석합니다.",
   },
+  {
+    href: "/product/pv-intelligence",
+    name: "PV Intelligence",
+    badge: null,
+    tagline: "Solar Plant Monitoring System",
+    description:
+      "자체 RTU로 현장 데이터를 수집하고, 실시간 모니터링부터 AI 운영 분석까지 하나의 플랫폼에서 제공합니다.",
+  },
 ];
 
 export default function ProductPage() {

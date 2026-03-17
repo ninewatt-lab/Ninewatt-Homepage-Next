@@ -105,6 +105,16 @@ const productNav: NavItemWithChildren = {
             </svg>
           ),
         },
+        {
+          href: "/product/pv-intelligence",
+          label: "PV Intelligence",
+          desc: "태양광 발전소 통합 관제 시스템",
+          icon: (
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
+              <path d="M2 12h4l3-9 6 18 3-9h4" />
+            </svg>
+          ),
+        },
       ],
     },
   ],

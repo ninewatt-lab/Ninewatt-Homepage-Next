@@ -66,6 +66,24 @@ export default function WattiPage() {
         </div>
       </section>
 
+      {/* Product Video */}
+      <section className="px-6 py-20">
+        <div className="mx-auto max-w-5xl overflow-hidden rounded-2xl">
+          <video
+            className="h-auto w-full rounded-2xl"
+            autoPlay
+            loop
+            muted
+            playsInline
+          >
+            <source
+              src="https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/videos/watti-scene.mp4"
+              type="video/mp4"
+            />
+          </video>
+        </div>
+      </section>
+
       {/* Big data stat — single number, not a section */}
       <section className="border-b border-border px-6 py-12">
         <div className="mx-auto flex max-w-5xl items-baseline gap-3">

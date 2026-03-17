@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 
 export const metadata: Metadata = {
@@ -34,6 +35,92 @@ export default function SolarSitePage() {
             >
               데모 요청하기
             </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Product Screenshots */}
+      <section className="px-6 py-20">
+        <div className="mx-auto max-w-5xl space-y-16">
+          {/* Dashboard */}
+          <div className="grid items-center gap-10 md:grid-cols-[2fr_3fr]">
+            <div>
+              <h2 className="text-2xl font-bold">통합 대시보드</h2>
+              <p className="mt-3 text-sm leading-relaxed text-muted">
+                주소 입력 한 번으로 토지 분석, 배전망 확인, 이격거리 검토,
+                수익성 평가까지. 최근 프로젝트를 한눈에 관리합니다.
+              </p>
+            </div>
+            <div className="group/img overflow-hidden rounded-2xl border border-border bg-neutral-900 shadow-2xl transition-shadow hover:shadow-primary/10">
+              <div className="flex items-center gap-2 border-b border-white/10 px-4 py-3">
+                <span className="h-3 w-3 rounded-full bg-white/20" />
+                <span className="h-3 w-3 rounded-full bg-white/20" />
+                <span className="h-3 w-3 rounded-full bg-white/20" />
+              </div>
+              <div className="overflow-hidden">
+                <Image
+                  src="/images/SolarScope/SolarScope_Image_2.png"
+                  alt="SolarScope 대시보드"
+                  width={1200}
+                  height={675}
+                  className="h-auto w-full transition-transform duration-500 ease-out group-hover/img:scale-105"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Detailed Analysis */}
+          <div className="grid items-center gap-10 md:grid-cols-[3fr_2fr]">
+            <div className="group/img overflow-hidden rounded-2xl border border-border bg-neutral-900 shadow-2xl transition-shadow hover:shadow-primary/10 md:order-1">
+              <div className="flex items-center gap-2 border-b border-white/10 px-4 py-3">
+                <span className="h-3 w-3 rounded-full bg-white/20" />
+                <span className="h-3 w-3 rounded-full bg-white/20" />
+                <span className="h-3 w-3 rounded-full bg-white/20" />
+              </div>
+              <div className="overflow-hidden">
+                <Image
+                  src="/images/SolarScope/SolarScope_Image_3.png"
+                  alt="SolarScope 상세 분석"
+                  width={1200}
+                  height={675}
+                  className="h-auto w-full transition-transform duration-500 ease-out group-hover/img:scale-105"
+                />
+              </div>
+            </div>
+            <div className="md:order-2">
+              <h2 className="text-2xl font-bold">상세 분석</h2>
+              <p className="mt-3 text-sm leading-relaxed text-muted">
+                토지 기본정보, 배전망 여유용량, 이격거리 검사, 일사량·발전량 시뮬레이션을
+                하나의 화면에서 확인합니다.
+              </p>
+            </div>
+          </div>
+
+          {/* Financial Analysis */}
+          <div className="grid items-center gap-10 md:grid-cols-[2fr_3fr]">
+            <div>
+              <h2 className="text-2xl font-bold">사업성 검토</h2>
+              <p className="mt-3 text-sm leading-relaxed text-muted">
+                발전 수익 계산, 대출 상환 시뮬레이션, 조기상환 시나리오,
+                현금흐름 분석까지 투자 의사결정에 필요한 모든 수치를 제공합니다.
+              </p>
+            </div>
+            <div className="group/img overflow-hidden rounded-2xl border border-border bg-neutral-900 shadow-2xl transition-shadow hover:shadow-primary/10">
+              <div className="flex items-center gap-2 border-b border-white/10 px-4 py-3">
+                <span className="h-3 w-3 rounded-full bg-white/20" />
+                <span className="h-3 w-3 rounded-full bg-white/20" />
+                <span className="h-3 w-3 rounded-full bg-white/20" />
+              </div>
+              <div className="overflow-hidden">
+                <Image
+                  src="/images/SolarScope/SolarScope_Image_1.png"
+                  alt="SolarScope 사업성 검토"
+                  width={1200}
+                  height={675}
+                  className="h-auto w-full transition-transform duration-500 ease-out group-hover/img:scale-105"
+                />
+              </div>
+            </div>
           </div>
         </div>
       </section>
