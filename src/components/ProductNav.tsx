@@ -1,21 +1,22 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-
-const subPages = [
-  { href: "/product", label: "제품 소개" },
-  { href: "/product/opti", label: "Opti" },
-  { href: "/product/watti", label: "Watti" },
-  { href: "/product/greenplanner", label: "GreenPlanner" },
-  { href: "/product/save-e", label: "Save-E" },
-  { href: "/product/repark", label: "RE:park" },
-  { href: "/product/solar-site", label: "SolarScope" },
-  { href: "/product/pv-intelligence", label: "PV Intelligence" },
-];
+import { Link, usePathname } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 
 export default function ProductNav() {
   const pathname = usePathname();
+  const t = useTranslations("common");
+
+  const subPages = [
+    { href: "/product", label: t("nav.product") },
+    { href: "/product/opti", label: "Opti" },
+    { href: "/product/watti", label: "Watti" },
+    { href: "/product/greenplanner", label: "GreenPlanner" },
+    { href: "/product/save-e", label: "Save-E" },
+    { href: "/product/repark", label: "RE:park" },
+    { href: "/product/solar-site", label: "SolarScope" },
+    { href: "/product/pv-intelligence", label: "PV Intelligence" },
+  ];
 
   return (
     <nav className="border-b border-border bg-surface">

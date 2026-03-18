@@ -1,0 +1,73 @@
+{
+  "metadata": {
+    "title": "Ninewatt — ビルエネルギーインテリジェンス",
+    "description": "AI駆動型ビルエネルギー分析・最適化プラットフォーム"
+  },
+  "nav": {
+    "product": "製品",
+    "solutions": "ソリューション",
+    "company": "会社情報",
+    "contact": "お問い合わせ",
+    "themeToggle": "テーマ切替",
+    "menu": "メニュー",
+    "viewAllProduct": "製品一覧を見る",
+    "viewAllSolutions": "ソリューション一覧を見る",
+    "viewAllCompany": "会社情報一覧を見る"
+  },
+  "productMenu": {
+    "platform": "プラットフォーム",
+    "appsAndServices": "アプリ＆サービス",
+    "optiDesc": "AI搭載ビルエネルギーアドバイザー",
+    "wattiDesc": "3Dビルエネルギー分析プラットフォーム",
+    "saveEDesc": "ビルエネルギー管理・コスト最適化",
+    "greenplannerDesc": "グリーンリノベーションシミュレーションアプリ",
+    "reparkDesc": "QRベーススマート施設管理システム",
+    "solarScopeDesc": "太陽光発電適地総合フィージビリティ分析",
+    "pvIntelligenceDesc": "太陽光発電所統合監視システム"
+  },
+  "solutionsMenu": {
+    "capabilities": "ケイパビリティ",
+    "trackRecord": "実績",
+    "coreSolutions": "コアソリューション",
+    "coreSolutionsDesc": "エネルギーデータ・AI・シミュレーション技術",
+    "cases": "導入事例",
+    "casesDesc": "国内外60件以上のプロジェクト",
+    "rnd": "R&D実績",
+    "rndDesc": "政府R&Dプロジェクト実績",
+    "services": "受託事業",
+    "servicesDesc": "企業・機関向け受託業務実績"
+  },
+  "companyMenu": {
+    "about": "企業紹介",
+    "achievements": "実績・受賞",
+    "companyIntro": "会社概要",
+    "companyIntroDesc": "ビジョン・ミッション・組織・所在地",
+    "history": "沿革",
+    "historyDesc": "Ninewattの歩み",
+    "career": "採用情報",
+    "careerDesc": "共に成長する仲間を募集しています",
+    "global": "グローバル事業",
+    "globalDesc": "日本・英国・フランス・米国に展開",
+    "awards": "受賞歴",
+    "awardsDesc": "CES・政府表彰等の受賞実績",
+    "patents": "特許・認証",
+    "patentsDesc": "33件の特許および主要認証"
+  },
+  "footer": {
+    "tagline": "GX実現を牽引するエネルギー技術で、\nスマートシティとカーボンニュートラル社会に貢献します。",
+    "hq": "（本社）仁川広域市延寿区コンベンシア大路204, 104号",
+    "rnd": "（企業付設研究所）ソウル特別市江南区江南大路162ギル22 2,4F",
+    "quickLinks": "クイックリンク",
+    "more": "その他",
+    "patentsAndCerts": "特許・認証",
+    "globalBiz": "グローバル事業",
+    "awardsLink": "受賞歴"
+  },
+  "trackRecord": {
+    "title": "関連事業実績",
+    "subtitle": "政府R&D・事業化・実証課題遂行履歴（{count}件）",
+    "period": "事業期間",
+    "department": "主管省庁",
+    "org": "運営機関"
+  }
+}

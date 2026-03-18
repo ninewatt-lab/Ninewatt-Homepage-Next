@@ -1,16 +1,17 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 
 interface Product {
   id: string;
   label: string;
-  title: string;
-  description: string;
+  titleKey: string;
+  descriptionKey: string;
   href: string;
-  linkText: string;
+  linkTextKey: string;
   media:
     | { type: "video"; src: string }
     | { type: "image"; src: string; alt: string };
@@ -20,11 +21,10 @@ const products: Product[] = [
   {
     id: "opti",
     label: "Opti",
-    title: "AI가 건물 에너지를\n진단하고 최적화합니다",
-    description:
-      "자연어로 건물 에너지를 질의하면, AI가 비용 절감 전략과 투자 시뮬레이션 결과를 실시간으로 제공합니다. CES 2026 Innovation Awards 수상작.",
+    titleKey: "showcase.opti.title",
+    descriptionKey: "showcase.opti.description",
     href: "/product/opti",
-    linkText: "Opti 알아보기",
+    linkTextKey: "showcase.opti.linkText",
     media: {
       type: "video",
       src: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/videos/opti-scene-short.mp4",
@@ -33,11 +33,10 @@ const products: Product[] = [
   {
     id: "greenplanner",
     label: "GreenPlanner",
-    title: "그린리모델링,\n시뮬레이션으로 설계합니다",
-    description:
-      "건물의 단열·창호·설비 개선 효과를 사전에 시뮬레이션하고, 최적의 그린리모델링 시나리오를 도출합니다.",
+    titleKey: "showcase.greenplanner.title",
+    descriptionKey: "showcase.greenplanner.description",
     href: "/product/greenplanner",
-    linkText: "GreenPlanner 알아보기",
+    linkTextKey: "showcase.greenplanner.linkText",
     media: {
       type: "video",
       src: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/videos/greenplanner-scene.mp4",
@@ -46,11 +45,10 @@ const products: Product[] = [
   {
     id: "watti",
     label: "Watti",
-    title: "3D 맵 위에서\n건물 에너지를 읽다",
-    description:
-      "건축물·에너지·환경·도시 데이터를 3D 맵 위에 통합하고, 건물별 에너지 효율화 인사이트를 시각적으로 제공합니다.",
+    titleKey: "showcase.watti.title",
+    descriptionKey: "showcase.watti.description",
     href: "/product/watti",
-    linkText: "Watti 알아보기",
+    linkTextKey: "showcase.watti.linkText",
     media: {
       type: "video",
       src: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/videos/watti-scene.mp4",
@@ -59,11 +57,10 @@ const products: Product[] = [
   {
     id: "repark",
     label: "RE:park",
-    title: "QR 하나로\n시설물을 관리합니다",
-    description:
-      "시민은 QR로 고장을 신고하고, 관리자는 접수·배정을 처리하고, 보수업체는 완료를 보고합니다. 세 주체를 하나로 잇는 스마트 시설물 관리 시스템입니다.",
+    titleKey: "showcase.repark.title",
+    descriptionKey: "showcase.repark.description",
     href: "/product/repark",
-    linkText: "RE:park 알아보기",
+    linkTextKey: "showcase.repark.linkText",
     media: {
       type: "video",
       src: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/videos/repark-scene.mp4",
@@ -72,25 +69,23 @@ const products: Product[] = [
   {
     id: "solar-site",
     label: "SolarScope",
-    title: "주소 입력만으로\n태양광 적합성을 분석합니다",
-    description:
-      "토지·건물의 태양광 설치 가능성을 분석합니다. 규제, 이격거리, 배전망, 발전량, 수익성을 통합 평가합니다.",
+    titleKey: "showcase.solarScope.title",
+    descriptionKey: "showcase.solarScope.description",
     href: "/product/solar-site",
-    linkText: "SolarScope 알아보기",
+    linkTextKey: "showcase.solarScope.linkText",
     media: {
       type: "image",
       src: "/images/SolarScope/SolarScope_Image_2.png",
-      alt: "SolarScope 대시보드",
+      alt: "SolarScope",
     },
   },
   {
     id: "pv-intelligence",
     label: "PV Intelligence",
-    title: "태양광 발전소를\n하나의 플랫폼에서 관제합니다",
-    description:
-      "자체 RTU로 현장 데이터를 수집하고, 실시간 모니터링부터 AI 운영 분석까지 하나의 플랫폼에서 제공합니다.",
+    titleKey: "showcase.pvIntelligence.title",
+    descriptionKey: "showcase.pvIntelligence.description",
     href: "/product/pv-intelligence",
-    linkText: "PV Intelligence 알아보기",
+    linkTextKey: "showcase.pvIntelligence.linkText",
     media: {
       type: "video",
       src: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/videos/pv-intelligence-scene.mp4",
@@ -218,6 +213,7 @@ function MediaBlock({ product, isActive }: { product: Product; isActive?: boolea
 export default function ProductShowcase() {
   const [activeIndex, setActiveIndex] = useState(0);
   const sectionRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const t = useTranslations("home");
 
   useEffect(() => {
     const observers: IntersectionObserver[] = [];
@@ -247,10 +243,10 @@ export default function ProductShowcase() {
         {/* Section header */}
         <div className="mb-20 text-center">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
-            Our Products
+            {t("showcase.label")}
           </p>
           <h2 className="mt-4 text-3xl font-bold tracking-tight md:text-4xl">
-            에너지 기술의 모든 것
+            {t("showcase.heading")}
           </h2>
         </div>
 
@@ -306,16 +302,16 @@ export default function ProductShowcase() {
                       {product.label}
                     </p>
                     <h2 className="mt-4 text-3xl font-bold leading-snug tracking-tight whitespace-pre-line lg:text-4xl">
-                      {product.title}
+                      {t(product.titleKey)}
                     </h2>
                     <p className="mt-5 text-base leading-relaxed text-muted">
-                      {product.description}
+                      {t(product.descriptionKey)}
                     </p>
                     <Link
                       href={product.href}
                       className="group mt-8 inline-flex items-center gap-2 rounded-full border border-border px-6 py-2.5 text-sm font-semibold text-foreground transition-colors hover:border-primary/30 hover:text-primary"
                     >
-                      {product.linkText}
+                      {t(product.linkTextKey)}
                       <svg
                         className="h-4 w-4 transition-transform group-hover:translate-x-0.5"
                         fill="none"
@@ -388,16 +384,16 @@ export default function ProductShowcase() {
                   {product.label}
                 </p>
                 <h2 className="mt-4 text-3xl font-bold tracking-tight whitespace-pre-line">
-                  {product.title}
+                  {t(product.titleKey)}
                 </h2>
                 <p className="mt-5 text-base leading-relaxed text-muted">
-                  {product.description}
+                  {t(product.descriptionKey)}
                 </p>
                 <Link
                   href={product.href}
                   className="group mt-6 inline-flex items-center gap-2 rounded-full border border-border px-6 py-2.5 text-sm font-semibold text-foreground transition-colors hover:border-primary/30 hover:text-primary"
                 >
-                  {product.linkText}
+                  {t(product.linkTextKey)}
                   <svg
                     className="h-4 w-4 transition-transform group-hover:translate-x-0.5"
                     fill="none"

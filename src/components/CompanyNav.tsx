@@ -1,19 +1,20 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-
-const subPages = [
-  { href: "/company", label: "회사 개요" },
-  { href: "/company/history", label: "주요 연혁" },
-  { href: "/company/career", label: "채용 안내" },
-  { href: "/company/global", label: "글로벌 사업" },
-  { href: "/company/awards", label: "수상 내역" },
-  { href: "/company/patents", label: "특허 & 인증" },
-];
+import { Link, usePathname } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 
 export default function CompanyNav() {
   const pathname = usePathname();
+  const t = useTranslations("common");
+
+  const subPages = [
+    { href: "/company", label: t("companyMenu.companyIntro") },
+    { href: "/company/history", label: t("companyMenu.history") },
+    { href: "/company/career", label: t("companyMenu.career") },
+    { href: "/company/global", label: t("companyMenu.global") },
+    { href: "/company/awards", label: t("companyMenu.awards") },
+    { href: "/company/patents", label: t("companyMenu.patents") },
+  ];
 
   return (
     <nav className="border-b border-border bg-surface">

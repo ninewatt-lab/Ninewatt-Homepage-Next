@@ -1,0 +1,159 @@
+{
+  "about": {
+    "title": "Qui sommes-nous",
+    "subtitle": "Par nos technologies energetiques au service de la transition verte (GX), nous contribuons aux villes intelligentes et a une societe neutre en carbone.",
+    "vision": "Vision",
+    "visionDesc": "Sous la direction de notre PDG, expert en diagnostic energetique urbain et des batiments, nous menons la R&D de plateformes energetiques pour les batiments basees sur l'IA et le big data. Nous batissons un avenir durable grace a nos solutions de villes intelligentes et de reduction de la consommation energetique des batiments.",
+    "companyInfo": [
+      { "label": "Date de creation", "value": "12 fev. 2019" },
+      { "label": "Effectifs", "value": "30+" },
+      { "label": "Stade de financement", "value": "Serie A (env. 4,8 Mds KRW cumules)" },
+      { "label": "Domaines d'activite", "value": "Solutions de villes intelligentes et de reduction energetique des batiments" }
+    ],
+    "executives": "Direction",
+    "ceo": {
+      "role": "PDG",
+      "name": "김영록 (Youngrok Kim)",
+      "team": "Division commerciale 1",
+      "desc": "Diplome en architecture, expert en conception de batiments economes en energie avec plus de 200 missions de conseil",
+      "details": ["Master en ingenierie u-City, Universite Sungkyunkwan", "Licence en genie architectural, Universite Dankook", "Plusieurs distinctions dont la citation du Ministre des Territoires, des Infrastructures et des Transports"]
+    },
+    "cto": {
+      "role": "Directeur technique (CTO)",
+      "name": "박상린 (Sangrin Park)",
+      "team": "Division commerciale 2",
+      "desc": "Diplome en architecture, ancien ingenieur senior au laboratoire de recherche IA du leader japonais de la construction, specialise dans le developpement de technologies IA",
+      "details": ["Master en ingenierie u-City, Universite Sungkyunkwan", "Licence en genie architectural, Universite Kyung Hee", "Conception de systemes IA bases sur le Deep Learning"]
+    },
+    "organization": "Organisation",
+    "orgItems": [
+      { "name": "Division commerciale 1", "desc": "Conseil energetique, renovation verte" },
+      { "name": "Division commerciale 2", "desc": "Activites internationales, services de plateforme" },
+      { "name": "Departement developpement", "desc": "Developpement full-stack, backend IA" },
+      { "name": "Departement R&D", "desc": "Analyse energetique, recherche big data" }
+    ],
+    "location": "Acces",
+    "hqLabel": "Siege social",
+    "hqAddress": "104, Insta 2, 204 Convensia-daero, Yeonsu-gu, Incheon, Coree du Sud",
+    "rndLabel": "Centre de R&D (Bureau de Seoul)",
+    "rndAddress": "2F & 4F, 22 Gangnam-daero 162-gil, Gangnam-gu, Seoul, Coree du Sud",
+    "ctaTitle": "Nous recherchons des partenaires pour grandir ensemble",
+    "ctaDesc": "Solutions energetiques, partenariats, recrutement — toute demande est la bienvenue.",
+    "ctaButton": "Nous contacter"
+  },
+  "history": {
+    "title": "Historique",
+    "subtitle": "Le parcours de croissance de Ninewatt depuis sa creation en 2019 jusqu'a aujourd'hui"
+  },
+  "awards": {
+    "title": "Prix et distinctions",
+    "subtitle": "Reconnus pour notre innovation en technologie energetique avec de nombreuses recompenses"
+  },
+  "patents": {
+    "title": "Brevets et certifications",
+    "subtitle": "Detenteurs de propriete intellectuelle cle dans le secteur de l'IA energetique",
+    "totalPatents": "Total des brevets",
+    "domestic": "Brevets nationaux",
+    "international": "Brevets internationaux (PCT)",
+    "certifications": "Certifications",
+    "domesticRegistered": "Brevets nationaux — Enregistres",
+    "domesticPending": "Brevets nationaux — En cours",
+    "internationalPatents": "Brevets internationaux",
+    "certList": "Liste des certifications",
+    "tableNo": "N°",
+    "regDate": "Date d'enregistrement",
+    "appDate": "Date de depot",
+    "regNo": "N° d'enregistrement",
+    "appNo": "N° de depot",
+    "patentName": "Nom du brevet",
+    "applicant": "Deposant",
+    "patentNameKo": "Nom du brevet (coreen)",
+    "patentNameEn": "Nom du brevet (anglais)",
+    "country": "Pays"
+  },
+  "career": {
+    "title": "Recrutement",
+    "subtitle": "Nous recherchons des talents pour batir ensemble une culture de croissance",
+    "cultureTitle": "Culture d'entreprise",
+    "cultureDesc": "Chez Ninewatt, les individus et l'entreprise grandissent ensemble au sein d'une culture organisationnelle creative et dynamique. Nous soutenons activement les defis et la croissance de nos collaborateurs, et garantissons la recompense de leurs efforts et performances.",
+    "talentTitle": "Profil recherche",
+    "talentSubtitle": "Nous recrutons des personnes libres mais responsables, desirant grandir ensemble",
+    "values": [
+      { "title": "Soif de croissance", "desc": "Des talents qui se developpent continuellement pour atteindre leurs objectifs et assument la responsabilite de leur propre croissance" },
+      { "title": "Esprit de defi", "desc": "Des talents qui adoptent un etat d'esprit positif et s'engagent activement dans de nouvelles opportunites" },
+      { "title": "Capacite d'action", "desc": "Des talents qui menent et executent les projets de maniere proactive dans une culture de liberte" }
+    ],
+    "benefitsTitle": "Avantages sociaux",
+    "benefitCategories": [
+      {
+        "category": "Environnement de travail",
+        "items": [
+          { "title": "Horaires flexibles", "desc": "Arrivee libre entre 8h et 10h par tranches de 10 minutes" },
+          { "title": "Conges flexibles", "desc": "Aucune approbation prealable requise ; vacances de 10 jours et plus encouragees" },
+          { "title": "Conges selon l'anciennete", "desc": "1 jour/mois la premiere annee, 15 jours/an a partir de la deuxieme annee" },
+          { "title": "Conge d'anniversaire", "desc": "Jour de conge paye pour votre anniversaire, sans decompte de vos conges" }
+        ]
+      },
+      {
+        "category": "Soutien et recompenses",
+        "items": [
+          { "title": "Indemnite repas", "desc": "Repas et collations fournis" },
+          { "title": "Bilan de sante", "desc": "Prise en charge d'un bilan de sante complet" },
+          { "title": "Formation et livres", "desc": "Soutien au developpement professionnel et personnel" },
+          { "title": "Primes de performance", "desc": "Recompenses liees aux KPI et aux contributions aux projets" },
+          { "title": "Equipement de bureau", "desc": "Ordinateurs portables, ecrans et equipements de travail fournis" }
+        ]
+      }
+    ],
+    "recruitTitle": "Processus de recrutement",
+    "steps": [
+      { "step": "01", "title": "Candidature", "desc": "Envoi du CV et du portfolio" },
+      { "step": "02", "title": "Entretiens", "desc": "Evaluation des competences techniques et de l'adequation culturelle" },
+      { "step": "03", "title": "Offre", "desc": "Negociation de la remuneration et integration" }
+    ],
+    "ctaTitle": "Pret a rejoindre Ninewatt ?",
+    "ctaDesc": "Pour toute question relative au recrutement, veuillez nous contacter par e-mail ci-dessous",
+    "ctaButton": "Nous contacter"
+  },
+  "global": {
+    "title": "Activites internationales",
+    "subtitle": "Deploiement de nos solutions energetiques dans 4 pays — Japon, Royaume-Uni, France et Etats-Unis",
+    "countries": [
+      {
+        "country": "Japon",
+        "flag": "JP",
+        "items": [
+          "2024.03 Signature d'un protocole d'accord avec Sinanen Holdings Co., Ltd.",
+          "2024.06 Signature d'un protocole d'accord tripartite avec Sinanen Holdings et la ville de Tsunan, prefecture de Niigata",
+          "2024.12 Projet pilote de plateforme de ville intelligente pour la ville de Tsunan",
+          "2024 Achevement du programme d'expansion PoC a l'etranger par le Korea Institute of Startup & Entrepreneurship Development",
+          "2025.06 Signature d'un protocole d'accord avec PBADAO Inc., Japon",
+          "2025.07 Signature d'un accord de confidentialite avec Azbil Corporation, Japon"
+        ]
+      },
+      {
+        "country": "Royaume-Uni",
+        "flag": "GB",
+        "items": [
+          "Projet PoC pour le conseil de Thurrock — zone de Corringham",
+          "Projet de R&D conjoint Coree-Royaume-Uni en cours (technologie d'analyse energetique des batiments par assistant IA et developpement de plateforme)"
+        ]
+      },
+      {
+        "country": "France",
+        "flag": "FR",
+        "items": [
+          "2023.03 Signature d'un protocole d'accord avec Toltek (startup developpant des solutions pour les professionnels du batiment)"
+        ]
+      },
+      {
+        "country": "Etats-Unis",
+        "flag": "US",
+        "items": [
+          "2024 Selection en tant que partenaire de collaboration OpenAI",
+          "2025.11 Signature d'un contrat d'achat tripartite avec JCI et NRGinsight ; 500 USD d'exportations"
+        ]
+      }
+    ]
+  }
+}

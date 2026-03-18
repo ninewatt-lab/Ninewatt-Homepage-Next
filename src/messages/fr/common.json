@@ -1,0 +1,73 @@
+{
+  "metadata": {
+    "title": "Ninewatt — Intelligence Énergétique du Bâtiment",
+    "description": "Plateforme d'analyse et d'optimisation énergétique des bâtiments par IA"
+  },
+  "nav": {
+    "product": "Produits",
+    "solutions": "Solutions",
+    "company": "Entreprise",
+    "contact": "Nous contacter",
+    "themeToggle": "Changer le thème",
+    "menu": "Menu",
+    "viewAllProduct": "Voir tous les produits",
+    "viewAllSolutions": "Voir toutes les solutions",
+    "viewAllCompany": "Voir toute l'entreprise"
+  },
+  "productMenu": {
+    "platform": "Plateforme",
+    "appsAndServices": "Applications & Services",
+    "optiDesc": "Conseiller énergétique bâtiment alimenté par IA",
+    "wattiDesc": "Plateforme d'analyse énergétique 3D des bâtiments",
+    "saveEDesc": "Gestion énergétique et optimisation des coûts",
+    "greenplannerDesc": "Application de simulation de rénovation verte",
+    "reparkDesc": "Système de gestion intelligente des installations par QR",
+    "solarScopeDesc": "Analyse intégrée de faisabilité de sites solaires",
+    "pvIntelligenceDesc": "Système de supervision intégrée de centrales solaires"
+  },
+  "solutionsMenu": {
+    "capabilities": "Compétences",
+    "trackRecord": "Références",
+    "coreSolutions": "Solutions clés",
+    "coreSolutionsDesc": "Expertise en données énergétiques, IA et simulation",
+    "cases": "Études de cas",
+    "casesDesc": "Plus de 60 projets nationaux et internationaux",
+    "rnd": "Historique R&D",
+    "rndDesc": "Portefeuille de projets R&D gouvernementaux",
+    "services": "Projets de services",
+    "servicesDesc": "Missions pour entreprises et institutions"
+  },
+  "companyMenu": {
+    "about": "Présentation",
+    "achievements": "Réalisations",
+    "companyIntro": "À propos",
+    "companyIntroDesc": "Vision, mission, organisation et localisation",
+    "history": "Historique",
+    "historyDesc": "Les étapes clés de Ninewatt",
+    "career": "Carrières",
+    "careerDesc": "Rejoignez notre équipe en pleine croissance",
+    "global": "Activités internationales",
+    "globalDesc": "Présence au Japon, Royaume-Uni, France et États-Unis",
+    "awards": "Distinctions",
+    "awardsDesc": "CES, distinctions gouvernementales et autres",
+    "patents": "Brevets & Certifications",
+    "patentsDesc": "33 brevets et certifications majeures"
+  },
+  "footer": {
+    "tagline": "Avec une technologie énergétique à la pointe de la transition GX,\nnous contribuons aux villes intelligentes et à la neutralité carbone.",
+    "hq": "(Siège) 204, Convensia-daero, Yeonsu-gu, Incheon, Corée",
+    "rnd": "(Centre R&D) 22, Gangnam-daero 162-gil, Gangnam-gu, Séoul, Corée",
+    "quickLinks": "Liens rapides",
+    "more": "En savoir plus",
+    "patentsAndCerts": "Brevets & Certifications",
+    "globalBiz": "Activités internationales",
+    "awardsLink": "Distinctions"
+  },
+  "trackRecord": {
+    "title": "Références associées",
+    "subtitle": "R&D gouvernemental, commercialisation et projets de démonstration ({count} projets)",
+    "period": "Période",
+    "department": "Ministère responsable",
+    "org": "Organisme gestionnaire"
+  }
+}

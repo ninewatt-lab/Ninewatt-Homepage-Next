@@ -1,0 +1,464 @@
+{
+  "list": {
+    "title": "Produits",
+    "subtitle": "La gamme de produits Ninewatt couvrant l'ensemble du cycle de gestion énergétique des bâtiments",
+    "optiDesc": "Analysez vos données énergétiques de bâtiment en langage naturel et recevez des simulations d'investissement ainsi que des stratégies de réduction des coûts. Déployé dans plus de 200 bâtiments.",
+    "wattiDesc": "Analyse intégrée de données bâtiment, énergie, environnement et urbanisme sur une carte 3D. Une plateforme SaaS personnalisée pour les collectivités et les entreprises.",
+    "greenplannerDesc": "Prévoyez la valeur estimée après rénovation grâce à la simulation énergétique, avec un accompagnement complet pour les financements publics.",
+    "saveEDesc": "Identifiez le tarif optimal grâce à l'analyse de la consommation électrique par tranche de 15 minutes, avec gestion groupée de l'énergie et suivi des coûts.",
+    "reparkDesc": "Gestion des installations par QR code : du signalement citoyen au suivi par le gestionnaire, jusqu'au compte rendu d'intervention des prestataires.",
+    "solarScopeDesc": "Analysez en une seule saisie d'adresse la réglementation, les distances d'éloignement, le réseau de distribution, le productible et la rentabilité d'un site solaire.",
+    "pvIntelligenceDesc": "Collecte de données terrain via nos propres RTU, monitoring en temps réel et analyse opérationnelle par IA, le tout sur une seule plateforme."
+  },
+  "opti": {
+    "heroSubtitle": "Conseiller IA en énergie pour les bâtiments",
+    "heroDesc": "Analysez vos données énergétiques de bâtiment par la conversation et recevez automatiquement des stratégies de réduction des coûts. Solution éprouvée dans plus de 200 bâtiments.",
+    "requestDemo": "Demander une démonstration",
+    "downloadPdf": "Télécharger le PDF",
+    "problem": "Problématique",
+    "problemItems": [
+      "Les rapports énergétiques sont trop complexes pour être interprétés directement par les équipes opérationnelles.",
+      "Le suivi de la production photovoltaïque reste manuel, et la transmission des connaissances lors des changements de poste est insuffisante.",
+      "Face au renforcement de la réglementation carbone, les éléments de décision manquent pour choisir entre le paiement d'amendes et l'investissement en équipements."
+    ],
+    "whatOptiDoes": "Ce que fait Opti",
+    "features": [
+      {
+        "title": "Dialogue en langage naturel",
+        "desc": "Posez simplement votre question pour obtenir instantanément des analyses énergétiques."
+      },
+      {
+        "title": "Simulation d'investissement",
+        "desc": "Analyse précise du retour sur investissement pour les installations photovoltaïques et ESS."
+      },
+      {
+        "title": "Optimisation tarifaire",
+        "desc": "Identification du tarif optimal grâce à sept algorithmes spécialisés."
+      },
+      {
+        "title": "Comparaison de bâtiments similaires",
+        "desc": "Benchmark de la consommation énergétique par rapport à des bâtiments de même usage et de même taille."
+      }
+    ],
+    "howItWorks": "Fonctionnement",
+    "howItWorksSubtitle": "De l'intégration des données à la génération automatique de rapports",
+    "steps": [
+      {
+        "title": "Intégration des données",
+        "desc": "Connexion de la consommation électrique (données à 15 min), des données météorologiques et topographiques, de la géométrie du bâtiment et des tarifs électriques."
+      },
+      {
+        "title": "Analyse et simulation",
+        "desc": "Prévision des coûts électriques, profils de consommation mensuels, décomposition énergétique par équipement et analyses conversationnelles par IA."
+      },
+      {
+        "title": "Exécution et rapport",
+        "desc": "Simulation d'installation PV/ESS, pilotage automatique de l'ESS et génération automatique de rapports d'analyse des économies."
+      }
+    ],
+    "impact": "Impact attendu",
+    "impactItems": [
+      { "value": "~12%", "label": "Réduction des coûts énergétiques" },
+      { "value": "80%", "label": "Réduction du temps de rédaction des rapports M&V" },
+      { "value": "No HW", "label": "Démarrage avec les données de compteurs intelligents existants" }
+    ],
+    "aiModules": "Modules IA",
+    "modules": [
+      { "name": "AI Conversation Engine", "desc": "Analyse énergétique par dialogue en langage naturel" },
+      { "name": "Consumption Forecasting", "desc": "Modélisation prédictive de la consommation énergétique" },
+      { "name": "Tariff Recommendation", "desc": "Recommandation du tarif électrique optimal" },
+      { "name": "Economic Analytics", "desc": "Analyse de rentabilité et retour sur investissement" },
+      { "name": "Meter Integration", "desc": "Intégration automatique des données de compteurs intelligents" },
+      { "name": "Report Automation", "desc": "Génération automatique de rapports M&V" }
+    ],
+    "pricing": "Tarification",
+    "pricingDesc": "Abonnement modulaire. Intégration possible en OEM/API aux plateformes BEMS et ESCO.",
+    "plan": "Formule",
+    "month": "Mensuel",
+    "annual": "Annuel",
+    "desc": "Description",
+    "plans": [
+      { "name": "Standard", "month": "$700", "annual": "$7,000", "desc": "Analyses essentielles pour un site unique" },
+      { "name": "Professional", "month": "$1,200", "annual": "$12,000", "desc": "Analyses avancées et rapports ROI" },
+      { "name": "Business", "month": "$2,500", "annual": "$30,000", "desc": "API, tableau de bord, jusqu'à 5 bâtiments" },
+      { "name": "Enterprise", "month": "Sur devis", "annual": "", "desc": "Marque blanche / intégration / multi-sites" }
+    ],
+    "ctaTitle": "Constatez par vous-même",
+    "ctaDesc": "Découvrez à travers une démonstration comment Opti transforme la gestion énergétique des bâtiments.",
+    "ctaDemo": "Demander une démo",
+    "ctaBrochure": "Brochure PDF"
+  },
+  "watti": {
+    "heroSubtitle": "Plateforme d'analyse énergétique des bâtiments sur carte 3D",
+    "heroDesc": "Analyse intégrée de données bâtiment, énergie, environnement et urbanisme sur une carte 3D. Personnalisez les types de données et les modules d'analyse pour construire une plateforme adaptée à vos besoins.",
+    "requestDemo": "Demander une démonstration",
+    "downloadPdf": "Télécharger le PDF",
+    "bigDataStat": "Intégration de données géospatiales massives",
+    "coreCapabilities": "Compétences clés",
+    "coreCapabilitiesDesc": "Intégration de données à grande échelle, analyse par IA et environnement SaaS personnalisé.",
+    "analysisModules": "Modules d'analyse",
+    "analysisItems": [
+      "Analyse énergétique — Évaluation de l'efficacité énergétique des bâtiments, simulation et analyse de rentabilité de la rénovation",
+      "Analyse carbone — Suivi des émissions carbone à l'échelle urbaine et du bâtiment, scénarios de réduction, intégration de l'absorption CO2 par la végétation",
+      "Analyse solaire — Analyse de l'ensoleillement des toitures et façades, emplacements optimaux d'installation, analyse de rentabilité",
+      "Analyse VE — Suivi de l'état des bornes de recharge, sélection des emplacements optimaux"
+    ],
+    "dataTypes": "Types de données",
+    "dataItems": [
+      "Energy — Consommation électrique et gazière des bâtiments, consommation d'énergie primaire, émissions de gaz à effet de serre",
+      "Sustainability — Bâtiments éligibles à la rénovation verte, classes d'efficacité énergétique, certifications de construction durable",
+      "Weather — Température, humidité, ensoleillement, durée d'insolation, précipitations, traces d'inondation",
+      "Social — Équipements de proximité, culturels, sportifs et sociaux, bornes de recharge VE",
+      "Demographic — Population et ménages, évolution de la population flottante et active, tendances de l'emploi",
+      "Real estate — Prix de transactions immobilières, données standardisées des copropriétés"
+    ],
+    "govUseCases": "Applications pour les collectivités",
+    "govUseCasesDesc": "La visualisation permet de dégager des enseignements et de constituer des bases factuelles pour la planification urbaine.",
+    "govItems": [
+      "Gestion des objectifs de réduction des émissions de GES des collectivités",
+      "État de la consommation énergétique des bâtiments du territoire et pistes d'optimisation",
+      "Analyse de scénarios stratégiques de réduction des émissions de GES",
+      "Gestion énergétique et carbone des bâtiments publics"
+    ],
+    "caseStudies": "Études de cas",
+    "cases": [
+      {
+        "title": "Londres QEOP",
+        "location": "Londres, Royaume-Uni",
+        "description": "Création d'une carte énergétique 3D des bâtiments du Queen Elizabeth Olympic Park. Suivi de la consommation énergétique, évaluation de l'efficacité et rapports de conseil en amélioration."
+      },
+      {
+        "title": "Gangnam Zero Carbon Map",
+        "location": "Arrondissement de Gangnam, Séoul",
+        "description": "Première carte énergétique 3D à l'échelle d'un arrondissement en Corée. Visualisation des émissions carbone par quartier et analyse de la consommation électrique et gazière par bâtiment, fournissant une base quantitative pour la planification de la neutralité carbone."
+      },
+      {
+        "title": "Système d'information spatiale du Gyeonggi-do",
+        "location": "Province du Gyeonggi-do",
+        "description": "Création d'un portail de données climat-énergie. Participation à la sélection des bâtiments éligibles à la rénovation verte, à l'analyse des sites solaires sur terrains vacants et à l'implantation de bornes de recharge pour véhicules propres."
+      }
+    ],
+    "ctaTitle": "Renseignez-vous sur le déploiement de Watti",
+    "ctaDesc": "Nous vous accompagnons dans la conception d'une plateforme sur mesure pour votre collectivité ou votre entreprise.",
+    "ctaContact": "Nous contacter",
+    "ctaBrochure": "Brochure PDF"
+  },
+  "saveE": {
+    "heroSubtitle": "Solution de gestion groupée de l'énergie et de maîtrise des coûts",
+    "heroDesc": "Analysez la consommation électrique par tranche de 15 minutes pour identifier le tarif optimal. Réduisez vos coûts énergétiques même sans investissement en équipements. Il suffit d'un numéro client KEPCO à 10 chiffres pour commencer.",
+    "requestDemo": "Demander une démonstration",
+    "downloadPdf": "Télécharger le PDF",
+    "analysisItems": "Éléments d'analyse",
+    "analysisItemsDesc": "Sept algorithmes de réduction énergétique pour identifier les leviers d'économie.",
+    "items": [
+      "Analyse des profils de consommation historiques",
+      "Changement de formule tarifaire",
+      "Modification de la puissance souscrite",
+      "Optimisation des pointes",
+      "Gestion du facteur de puissance",
+      "Optimisation des équipements",
+      "Énergies renouvelables (PV)"
+    ],
+    "howItWorks": "Fonctionnement",
+    "analysisTitle": "Analyse",
+    "analysisDesc": "Analyse sous sept angles : profils de consommation historiques, formule tarifaire, puissance souscrite, pointes, facteur de puissance, efficacité des équipements et énergies renouvelables.",
+    "dashboardTitle": "Tableau de bord",
+    "dashboardDesc": "Visualisation des données, graphiques de corrélation, suivi en temps réel de la consommation et des coûts énergétiques.",
+    "reportTitle": "Rapport",
+    "reportDesc": "Génération automatique de rapports incluant les résultats du diagnostic énergétique et les solutions de réduction des coûts.",
+    "advantages": "Points forts",
+    "advantageItems": [
+      {
+        "title": "Guide de réduction tarifaire",
+        "desc": "Propositions de scénarios d'économies fondées sur l'analyse de la consommation passée, de la température extérieure et des créneaux horaires."
+      },
+      {
+        "title": "Quantification du potentiel d'économies",
+        "desc": "L'analyse algorithmique chiffre précisément les économies d'énergie et les montants récupérables."
+      },
+      {
+        "title": "Comparaison annuelle des factures",
+        "desc": "Mise en regard du montant actuellement facturé et du montant issu de l'analyse optimisée."
+      },
+      {
+        "title": "Aucun matériel requis",
+        "desc": "L'analyse démarre avec un simple numéro client KEPCO à 10 chiffres et un consentement de partage d'informations."
+      }
+    ],
+    "dataSourcesTitle": "Données exploitées",
+    "dataSources": [
+      "Évolution des tarifs énergétiques",
+      "Registres de bâtiments",
+      "Données météorologiques extérieures",
+      "Données de localisation et d'urbanisme du ministère du Territoire",
+      "Données de facturation KEPCO",
+      "Consommation électrique par tranche de 15 minutes",
+      "Subventions à l'installation d'équipements"
+    ],
+    "caseStudies": "Études de cas",
+    "cases": [
+      {
+        "title": "Programme Énergie Solidaire de KEPCO",
+        "location": "13 PME sur l'ensemble du territoire",
+        "result": "1 508,3 MWh/an, 150 millions de wons économisés",
+        "description": "Consortium mené avec KEPCO dans le cadre du programme Énergie Solidaire (2020-2022). Optimisation par IA réalisée auprès de 13 PME."
+      },
+      {
+        "title": "Shinhan Square Bridge",
+        "location": "Séoul",
+        "result": "8 % d'économies annuelles sans investissement matériel",
+        "description": "L'analyse à partir de données minimales a révélé un potentiel de réduction de 6,84 millions de wons par an (8 %) sans remplacement d'équipements, et de 24,2 % en cas d'investissement."
+      },
+      {
+        "title": "LS Electric R&D Campus",
+        "location": "Incheon",
+        "result": "12 % d'économies par modification de la puissance souscrite",
+        "description": "La seule modification de la puissance souscrite (6 250 kW à 3 750 kW) a permis une réduction effective de 12 % de la facture électrique, soit 6,24 millions de wons par an, sans aucun investissement matériel."
+      },
+      {
+        "title": "Optimisation ESS du Gyeonggi-do",
+        "location": "Province du Gyeonggi-do",
+        "result": "Application d'un algorithme IA de charge/décharge",
+        "description": "Monitoring des données de charge/décharge sur les sites équipés d'ESS, reporting automatique de l'impact tarifaire et déploiement d'un algorithme IA d'optimisation de la charge/décharge."
+      }
+    ],
+    "ctaTitle": "Renseignez-vous sur le déploiement de Save-E",
+    "ctaDesc": "Commencez à réduire vos coûts énergétiques sans investissement matériel.",
+    "ctaContact": "Nous contacter",
+    "ctaBrochure": "Brochure PDF"
+  },
+  "greenplanner": {
+    "heroSubtitle": "La rénovation de bâtiment, accessible à tous",
+    "heroDesc": "Grâce à la simulation énergétique et aux données immobilières publiques, estimez la valeur de votre bien après rénovation et bénéficiez d'un accompagnement complet pour les financements publics.",
+    "serviceInquiry": "Nous contacter",
+    "downloadPdf": "Télécharger le PDF",
+    "targetUsers": [
+      "Propriétaires de bâtiments commerciaux",
+      "Futurs acquéreurs de bâtiments",
+      "Sociétés de courtage immobilier"
+    ],
+    "questionsTitle": "Les questions auxquelles répond GreenPlanner",
+    "questions": [
+      {
+        "q": "Quel est le prix du marché autour de mon bâtiment ?",
+        "a": "Nous fournissons des prix de transactions comparables fondés sur les données immobilières publiques : registres officiels, valeur foncière publiée, transactions réelles, analyse commerciale et démographique."
+      },
+      {
+        "q": "Quel est l'état de vétusté de ce bâtiment ?",
+        "a": "Un diagnostic objectif de la vétusté énergétique du bâtiment est réalisé par simulation EnergyPlus, développé par le DOE américain."
+      },
+      {
+        "q": "Quel gain de classe énergétique après rénovation ?",
+        "a": "Le niveau d'isolation estimé du bâtiment est calculé sur la base des données, puis la classe d'efficacité énergétique post-rénovation est simulée."
+      },
+      {
+        "q": "Quel est le tissu commercial et la fréquentation à proximité ?",
+        "a": "Analyse des commerces, de la fréquentation piétonne, des principaux transports, des grandes surfaces et des arrêts de bus, le tout en un coup d'œil."
+      },
+      {
+        "q": "Quel est le coût des travaux et quelles sont les démarches administratives ?",
+        "a": "Estimation du coût des travaux, procédures administratives de construction, autorisations, durée prévisionnelle du chantier et options de remplacement des finitions."
+      },
+      {
+        "q": "La rénovation sera-t-elle rentable ?",
+        "a": "Prévision de la valeur immobilière avant et après rénovation, estimation des loyers et du prix de vente, et projection détaillée des revenus locatifs sur 10 ans, étage par étage."
+      }
+    ],
+    "moreFeatures": "Autres fonctionnalités",
+    "moreFeaturesItems": [
+      "Recherche d'experts en bâtiment — Informations sur les architectes et entrepreneurs par région, en un seul accès",
+      "Consultation des portfolios — Vérification des réalisations effectives et de l'expérience en rénovation verte, au-delà des simples devis",
+      "Checklists — Bail commercial, réunions avec architectes et entreprises, méthodes d'instruction, TOP 6 des questions clés",
+      "Rapport prévisionnel de rénovation — Coûts des travaux, démarches administratives, loyers prévisionnels et prix de vente estimé, téléchargeables immédiatement en PDF"
+    ],
+    "funding": "Aides publiques",
+    "fundingDesc": "Les coûts de rénovation peuvent faire l'objet de financements publics.",
+    "fundingMax": "Jusqu'à",
+    "fundingItems": [
+      {
+        "region": "Séoul",
+        "program": "Programme d'efficacité énergétique des bâtiments de Séoul (BRP)",
+        "maxAmount": "2 milliards de wons",
+        "terms": "Prêt sans intérêt, 3 ans de différé, remboursement sur 8 ans",
+        "year": "Référence 2024"
+      },
+      {
+        "region": "National",
+        "program": "Rénovation verte du ministère du Territoire",
+        "maxAmount": "5 milliards de wons",
+        "terms": "Prise en charge des intérêts privés à 4 %/an, 3 ans de différé, remboursement sur 10 ans",
+        "year": "Référence 2023"
+      }
+    ],
+    "ctaTitle": "Votre rénovation commence par les données",
+    "ctaDesc": "Évaluez l'état actuel de votre bâtiment et son potentiel de rénovation avec GreenPlanner.",
+    "ctaButton": "Demande de renseignements",
+    "ctaBrochure": "Brochure PDF"
+  },
+  "repark": {
+    "heroSubtitle": "Système de gestion des installations par QR code",
+    "heroDesc": "Les citoyens signalent les pannes par QR code, les gestionnaires traitent la réception et l'affectation, et les prestataires rendent compte de l'exécution. Un système de gestion des installations reliant ces trois acteurs.",
+    "serviceInquiry": "Nous contacter",
+    "downloadPdf": "Télécharger le PDF",
+    "tags": [
+      "Signalement intelligent par QR TAG",
+      "Constitution de bases de données et fabrication de plaques dédiées",
+      "Service cloud en mode SaaS",
+      "Transformation numérique des tâches de gestion",
+      "Simplification des demandes sans contact"
+    ],
+    "serviceFlow": "Flux de service",
+    "serviceFlowDesc": "Workflow à trois acteurs : citoyen, gestionnaire et prestataire de maintenance",
+    "flows": [
+      {
+        "role": "Citoyen",
+        "flow": "Constatation du dysfonctionnement → Scan du QR code → Signalement sans contact"
+      },
+      {
+        "role": "Gestionnaire",
+        "flow": "Réception du signalement → Envoi de l'ordre de mission au prestataire → Suivi du traitement"
+      },
+      {
+        "role": "Prestataire",
+        "flow": "Acceptation de la mission → Compte rendu d'achèvement → Gestion de l'historique"
+      }
+    ],
+    "expansion": "Extension du périmètre",
+    "expansionDesc": "Des équipements de parc à l'ensemble des installations publiques. Gestion intégrée des bancs, regards, abribus et autres équipements sans numéro de gestion.",
+    "expansionItems": [
+      "Signalement sans contact des installations défectueuses et envoi de notifications de traitement",
+      "Réduction des coûts de personnel administratif liés aux signalements de pannes",
+      "Suppression des processus de travail superflus",
+      "Informatisation des opérations par la constitution d'une base de données de gestion intégrée"
+    ],
+    "caseStudy": "Étude de cas",
+    "caseTitle": "Central Park et Parc Haedoji d'Incheon",
+    "casePartners": "Incheon Startup Park × Régie des installations d'Incheon, Division des parcs de Songdo × Ninewatt",
+    "phase1Label": "Phase 1 de validation (~23.11.30)",
+    "phase1Value": "1 300 équipements d'éclairage",
+    "phase2Label": "Phase 2 de validation (24.01.01~)",
+    "phase2Value": "2 000 équipements paysagers et sportifs",
+    "timeline2023": "Programme de validation et commercialisation de l'Incheon Startup Park — Achevé sur les équipements d'éclairage du Central Park et du Parc Haedoji",
+    "timeline2024": "Programme de validation en organisme public de produits technologiques (Phase 2) — Sélectionné pour validation à la Régie des installations d'Incheon, ciblant les équipements paysagers et sportifs",
+    "ctaTitle": "Renseignez-vous sur le déploiement de RE:park",
+    "ctaDesc": "Engagez ensemble la transformation numérique de la gestion de vos installations.",
+    "ctaContact": "Nous contacter",
+    "ctaBrochure": "Brochure PDF"
+  },
+  "solarScope": {
+    "heroSubtitle": "Analysez un site solaire avec une simple adresse",
+    "heroDesc": "Plateforme d'analyse intégrée de la faisabilité technique, juridique et économique des sites candidats à l'installation photovoltaïque. La saisie d'une adresse ou d'une référence cadastrale suffit pour évaluer la réglementation, les distances d'éloignement, le réseau de distribution, le productible et la rentabilité.",
+    "requestDemo": "Demander une démonstration",
+    "dashboard": "Tableau de bord intégré",
+    "dashboardDesc": "Une seule saisie d'adresse pour l'analyse foncière, la vérification du réseau, le contrôle des distances d'éloignement et l'évaluation de la rentabilité. Gérez vos projets récents en un coup d'œil.",
+    "detailAnalysis": "Analyse détaillée",
+    "detailAnalysisDesc": "Informations foncières de base, capacité résiduelle du réseau de distribution, vérification des distances d'éloignement et simulation d'ensoleillement et de productible, le tout sur un seul écran.",
+    "feasibility": "Étude de faisabilité",
+    "feasibilityDesc": "Calcul des revenus de production, simulation de remboursement d'emprunt, scénarios de remboursement anticipé et analyse des flux de trésorerie — l'ensemble des données nécessaires à la décision d'investissement.",
+    "targetUsers": [
+      "Développeurs solaires et entreprises EPC",
+      "Sociétés d'investissement et établissements financiers du secteur énergétique",
+      "Collectivités et organismes publics",
+      "Propriétaires fonciers et immobiliers"
+    ],
+    "problem": "Problématique",
+    "problemDesc": "Un projet solaire nécessite, dès la phase initiale d'étude des sites candidats, de vérifier individuellement de nombreux paramètres dans un processus complexe.",
+    "problemItems": [
+      "Vérification de la zone d'usage et des restrictions d'activité",
+      "Examen des règles de distances d'éloignement",
+      "Vérification de la possibilité de raccordement au réseau",
+      "Analyse du productible et de la rentabilité",
+      "Examen des autorisations et des conditions réglementaires"
+    ],
+    "problemConclusion": "Ce processus implique de naviguer entre plusieurs systèmes et jeux de données, ce qui allonge les délais d'étude et nuit à la cohérence des décisions.",
+    "whatSolarScopeDoes": "Ce que fait SolarScope",
+    "whatSolarScopeDoesDesc": "SolarScope unifie ce processus en un seul workflow.",
+    "solutionItems": [
+      {
+        "title": "Analyse automatique du site",
+        "desc": "L'analyse démarre instantanément à la saisie de l'adresse ou de la référence cadastrale."
+      },
+      {
+        "title": "Examen réglementaire et de localisation",
+        "desc": "Vérification automatique des réglementations et distances d'éloignement par SIG."
+      },
+      {
+        "title": "Vérification du raccordement réseau",
+        "desc": "Évaluation préalable de la possibilité de raccordement au réseau électrique."
+      },
+      {
+        "title": "Estimation de la capacité et du productible",
+        "desc": "Calcul automatique de la capacité installable et du productible annuel."
+      },
+      {
+        "title": "Analyse économique",
+        "desc": "Analyse de la faisabilité : investissement, chiffre d'affaires, temps de retour."
+      }
+    ],
+    "keyFeatures": "Fonctionnalités principales",
+    "features": [
+      { "name": "Integrated Feasibility Analysis", "desc": "Analyse intégrée de la réglementation, des distances, du réseau, du productible et de la rentabilité" },
+      { "name": "GIS-based Spatial Analysis", "desc": "Analyse spatiale à la parcelle et au bâtiment, visualisation cartographique (2D/3D)" },
+      { "name": "Capacity & Yield Estimation", "desc": "Calcul automatique de la capacité installable et du productible annuel" },
+      { "name": "Financial Modeling", "desc": "Analyse de faisabilité : investissement, financement, revenus et temps de retour" },
+      { "name": "Multi-site Comparison", "desc": "Comparaison simultanée de plusieurs sites candidats pour optimiser la prise de décision" },
+      { "name": "Report Generation", "desc": "Sauvegarde et exploitation des résultats d'analyse en format PDF et données" }
+    ],
+    "expectedImpact": "Impact attendu",
+    "expectedImpactDesc": "Réduction du temps et de l'incertitude liés à l'étude des sites solaires candidats, pour des décisions cohérentes fondées sur les données.",
+    "impactItems": [
+      { "title": "Réduction du temps d'étude", "desc": "Processus complet sur une seule plateforme, sans naviguer entre plusieurs systèmes" },
+      { "title": "Standardisation des critères d'analyse", "desc": "Évaluation et comparaison des sites selon des critères homogènes" },
+      { "title": "Amélioration de l'efficacité comparative", "desc": "Analyse simultanée de nombreux sites pour sélectionner l'emplacement optimal" },
+      { "title": "Réduction du risque projet", "desc": "Minimisation de l'incertitude d'investissement grâce à des décisions fondées sur les données" }
+    ],
+    "ctaTitle": "Validez vos sites solaires par les données",
+    "ctaDesc": "Découvrez à travers une démonstration de SolarScope comment l'analyse de sites candidats se transforme.",
+    "ctaDemo": "Demander une démo"
+  },
+  "pvIntelligence": {
+    "heroSubtitle": "Système de supervision intégrée de centrales photovoltaïques",
+    "heroDesc": "Plateforme web de supervision intégrée destinée aux exploitants de centrales photovoltaïques. Nos RTU propriétaires sont installés sur site pour collecter les données des onduleurs, tandis que le cloud assure le monitoring, l'analyse et le pilotage en temps réel.",
+    "requestDemo": "Demander une démonstration",
+    "systemArch": "Architecture du système",
+    "systemArchDesc": "Le parcours des données, de l'onduleur sur site jusqu'au cloud",
+    "archSteps": [
+      { "label": "Onduleur", "sub": "RS-485 Modbus" },
+      { "label": "RTU propriétaire", "sub": "LTE Cat.M1" },
+      { "label": "Cloud PV Intelligence", "sub": "Monitoring · Analyse · IA" }
+    ],
+    "keyFeatures": "Fonctionnalités principales",
+    "featureItems": [
+      {
+        "title": "Tableau de bord en temps réel",
+        "desc": "Consultation du productible par centrale, surveillance de l'état de communication des RTU, visualisation de la puissance, de l'efficacité et de l'état de fonctionnement de chaque onduleur."
+      },
+      {
+        "title": "Analyse détaillée des onduleurs",
+        "desc": "Tensions et courants DC/AC, données par canal MPPT et string, radar de performance et Health Score."
+      },
+      {
+        "title": "Analyse statistique",
+        "desc": "Évolution mensuelle du productible, comparaison rendement réel vs rendement de référence, alertes d'écart de rendement et conversion en réduction carbone."
+      },
+      {
+        "title": "Gestion des incidents et de l'historique",
+        "desc": "Historique des alarmes de communication et de connexion, suivi des instants de défaillance et des types d'erreur par onduleur."
+      },
+      {
+        "title": "Conseiller opérationnel IA",
+        "desc": "Questions-réponses en langage naturel alimentées par l'IA, connectées aux données en temps réel, avec analyse de revenus basée sur les tarifs SMP/REC."
+      }
+    ],
+    "equipment": "Équipements compatibles",
+    "inverter": "Onduleur",
+    "inverterDesc": "Principales marques : Hyosung, Huawei, Hyundai, etc.",
+    "rtu": "RTU",
+    "rtuDesc": "RTU propriétaire (LTE Cat.M1, RS-485 Modbus RTU)",
+    "collectionCycle": "Cycle de collecte des données",
+    "collectionCycleDesc": "5 minutes (paramétrable)",
+    "ctaTitle": "Supervisez vos centrales solaires intelligemment",
+    "ctaDesc": "Découvrez à travers une démonstration de PV Intelligence comment la supervision intégrée se transforme.",
+    "ctaDemo": "Demander une démo"
+  }
+}

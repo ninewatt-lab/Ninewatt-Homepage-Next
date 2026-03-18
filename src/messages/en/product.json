@@ -1,0 +1,305 @@
+{
+  "list": {
+    "title": "Products",
+    "subtitle": "Ninewatt's comprehensive product suite for the entire building energy management lifecycle",
+    "optiDesc": "Analyze building energy data using natural language and receive investment simulations and cost reduction strategies. Deployed across 200+ buildings.",
+    "wattiDesc": "Integrate and analyze building, energy, environmental, and urban data on a 3D map. A customizable SaaS platform for municipalities and enterprises.",
+    "greenplannerDesc": "Predict post-renovation property values through energy simulation, with end-to-end government subsidy consulting.",
+    "saveEDesc": "Identify optimal rate plans through 15-minute interval power consumption analysis, with building energy group management and cost management capabilities.",
+    "reparkDesc": "QR code-based facility management. From citizen fault reports to administrator status tracking and contractor work order management.",
+    "solarScopeDesc": "Perform integrated analysis of regulations, setback distances, distribution grid capacity, energy yield, and financial viability for solar installation candidate sites — using just an address.",
+    "pvIntelligenceDesc": "Collect on-site data via proprietary RTUs and deliver real-time monitoring through AI-powered operational analytics — all on a single platform."
+  },
+  "opti": {
+    "heroSubtitle": "AI Energy Advisor for Buildings",
+    "heroDesc": "Analyze building energy data through conversation and receive automated cost reduction strategies. Validated across 200+ buildings.",
+    "requestDemo": "Request Demo",
+    "downloadPdf": "Download PDF",
+    "problem": "The Challenge",
+    "problemItems": [
+      "Energy reports are too complex for facility managers to interpret on their own.",
+      "Solar generation tracking is manual, and knowledge is lost during personnel transitions.",
+      "Carbon regulations are tightening, yet there is insufficient data to decide between paying fines or investing in equipment upgrades."
+    ],
+    "whatOptiDoes": "What Opti Does",
+    "features": [
+      { "title": "Natural Language Conversation", "desc": "Simply ask a question and receive energy insights instantly." },
+      { "title": "Investment Simulation", "desc": "Precisely analyze the ROI of solar PV and ESS installations." },
+      { "title": "Tariff Optimization", "desc": "Identify the optimal rate plan using seven proprietary algorithms." },
+      { "title": "Peer Building Benchmarking", "desc": "Benchmark energy consumption against buildings of similar type and scale." }
+    ],
+    "howItWorks": "How It Works",
+    "howItWorksSubtitle": "From data integration to automated report generation",
+    "steps": [
+      { "title": "Data Integration", "desc": "Connect power consumption (15-minute interval data), weather and terrain data, building geometry, and electricity tariff schedules." },
+      { "title": "Analysis & Simulation", "desc": "Deliver electricity cost forecasting, monthly consumption patterns, equipment-level energy disaggregation, and AI conversational insights." },
+      { "title": "Execution & Reporting", "desc": "Automatically generate reports covering PV/ESS installation simulations, ESS automated dispatch, and cost reduction analysis results." }
+    ],
+    "impact": "Expected Impact",
+    "impactItems": [
+      { "value": "~12%", "label": "Energy cost reduction" },
+      { "value": "80%", "label": "Reduction in M&V report preparation time" },
+      { "value": "No HW", "label": "Start with existing smart meter data alone" }
+    ],
+    "aiModules": "AI Modules",
+    "modules": [
+      { "name": "AI Conversation Engine", "desc": "Natural language-based energy analysis" },
+      { "name": "Consumption Forecasting", "desc": "Energy consumption predictive modeling" },
+      { "name": "Tariff Recommendation", "desc": "Optimal electricity rate plan recommendation" },
+      { "name": "Economic Analytics", "desc": "Economic analysis and investment ROI" },
+      { "name": "Meter Integration", "desc": "Automated smart meter data integration" },
+      { "name": "Report Automation", "desc": "Automated M&V report generation" }
+    ],
+    "pricing": "Pricing",
+    "pricingDesc": "Modular subscription plans. Available for OEM/API integration with BEMS and ESCO platforms.",
+    "planHeader": "Plan",
+    "monthlyHeader": "Monthly",
+    "annualHeader": "Annual",
+    "descHeader": "Description",
+    "plans": [
+      { "name": "Standard", "monthly": "$700", "annual": "$7,000", "desc": "Core insights for a single site" },
+      { "name": "Professional", "monthly": "$1,200", "annual": "$12,000", "desc": "Advanced analytics and ROI reports" },
+      { "name": "Business", "monthly": "$2,500", "annual": "$30,000", "desc": "API, dashboard, up to 5 buildings" },
+      { "name": "Enterprise", "monthly": "Contact us", "annual": "", "desc": "White-label / integration / multi-site" }
+    ],
+    "ctaTitle": "See It in Action",
+    "ctaDesc": "Schedule a demo to see how Opti transforms building energy management.",
+    "ctaDemo": "Request Demo",
+    "ctaBrochure": "PDF Brochure"
+  },
+  "watti": {
+    "heroSubtitle": "3D Map-Based Building Energy Analysis Platform",
+    "heroDesc": "Integrate and analyze building, energy, environmental, and urban data on a 3D map. Customize data types and analysis modules to build a platform tailored to your needs.",
+    "requestDemo": "Request Demo",
+    "downloadPdf": "Download PDF",
+    "bigDataStat": "Spatial big data records integrated",
+    "coreCapabilities": "Core Capabilities",
+    "coreCapabilitiesDesc": "Large-scale data integration, AI analytics, and a customizable SaaS environment.",
+    "analysisModules": "Analysis Modules",
+    "analysisItems": [
+      "Energy Analysis — Building energy efficiency assessment, simulation, and retrofit economic analysis",
+      "Carbon Analysis — City and building-level carbon emission monitoring, reduction scenarios, and urban forestry carbon absorption modeling",
+      "Solar Analysis — Rooftop and facade solar irradiance analysis, optimal installation positioning, and economic analysis",
+      "EV Analysis — Charging station status monitoring and optimal site selection"
+    ],
+    "dataTypes": "Data Types",
+    "dataItems": [
+      "Energy — Building electricity/gas consumption, primary energy demand, greenhouse gas emissions",
+      "Sustainability — Green retrofit candidate buildings, energy efficiency ratings, green building certifications",
+      "Weather — Temperature, humidity, solar irradiance, sunshine duration, precipitation, flood trace records",
+      "Social — Convenience, culture/sports, and welfare facilities, EV charging stations",
+      "Demographic — Population and household statistics, floating and workplace population trends, employment trends",
+      "Real Estate — Property transaction prices, standardized apartment data"
+    ],
+    "govUseCases": "Municipal Applications",
+    "govUseCasesDesc": "Leveraged as a basis for insight generation through visualization and urban development planning.",
+    "govItems": [
+      "Municipal greenhouse gas reduction target management",
+      "Building energy consumption status and efficiency improvement strategies",
+      "Greenhouse gas reduction strategy scenario analysis",
+      "Public building energy and carbon management"
+    ],
+    "caseStudies": "Deployment Cases",
+    "cases": [
+      { "title": "London QEOP", "location": "London, UK", "desc": "Built a 3D energy map for buildings within Queen Elizabeth Olympic Park. Delivered building energy consumption monitoring, efficiency assessment, and improvement consulting reports." },
+      { "title": "Gangnam Zero Carbon Map", "location": "Gangnam-gu, Seoul", "desc": "Korea's first district-level 3D energy map. Visualized carbon emissions by administrative district and analyzed electricity and gas consumption per building, establishing quantitative foundations for carbon-neutral urban planning." },
+      { "title": "Gyeonggi-do Spatial Information System", "location": "Gyeonggi Province", "desc": "Developed a climate and energy data portal, participated in policy planning including green retrofit candidate building selection, idle land solar suitability analysis, and EV charging station installation support." }
+    ],
+    "ctaTitle": "Inquire About Watti",
+    "ctaDesc": "We provide tailored platform development consulting for municipalities and enterprises.",
+    "ctaContact": "Contact Us",
+    "ctaBrochure": "PDF Brochure"
+  },
+  "saveE": {
+    "heroSubtitle": "Building Energy Group Management and Cost Management Solution",
+    "heroDesc": "Analyze 15-minute interval power consumption to identify optimal rate plans and reduce energy costs without equipment investment. All you need is a 10-digit KEPCO customer number to get started.",
+    "requestDemo": "Request Demo",
+    "downloadPdf": "Download PDF",
+    "analysisItems": "Analysis Items",
+    "analysisItemsDesc": "Identifies cost reduction opportunities through seven energy savings algorithms.",
+    "items": [
+      "Historical power consumption pattern analysis", "Rate plan optimization", "Contract demand adjustment", "Peak demand optimization", "Power factor management", "Equipment efficiency improvement", "Renewable energy (PV)"
+    ],
+    "howItWorks": "How It Works",
+    "analysisTitle": "Analysis",
+    "analysisDesc": "Examines seven dimensions: historical consumption patterns, rate plans, contract demand, peak demand, power factor, equipment efficiency, and renewable energy.",
+    "dashboardTitle": "Dashboard",
+    "dashboardDesc": "Provides real-time data visualization, correlation graphs, and energy consumption and cost monitoring.",
+    "reportTitle": "Report",
+    "reportDesc": "Automatically generates reports with energy diagnostic results and cost reduction solutions.",
+    "advantages": "Key Advantages",
+    "advantageItems": [
+      { "title": "Rate Reduction Guide", "desc": "Delivers predictive cost reduction recommendations based on historical energy consumption, outdoor temperature, and time-of-use analysis." },
+      { "title": "Quantified Savings Potential", "desc": "Algorithmically calculates and presents specific energy and cost savings opportunities." },
+      { "title": "Annual Cost Comparison", "desc": "Displays a side-by-side comparison of current electricity costs versus projected costs after optimization." },
+      { "title": "No Hardware Required", "desc": "Analysis begins with just a 10-digit KEPCO customer number and data sharing consent." }
+    ],
+    "dataSourcesTitle": "Data Sources",
+    "dataSources": [
+      "Energy tariff rate change data", "Building registry information", "Korea Meteorological Administration weather data", "MOLIT location and urban planning data", "KEPCO billing information", "15-minute interval power consumption data", "Hardware installation subsidy data"
+    ],
+    "caseStudies": "Deployment Cases",
+    "cases": [
+      { "title": "KEPCO Energy Partnership Program", "location": "13 SMEs nationwide", "result": "Annual savings of 1,508.3 MWh and KRW 150M", "desc": "Conducted an AI-driven energy efficiency optimization consortium with KEPCO (2020-2022), covering 13 small and medium enterprises." },
+      { "title": "Shinhan Square Bridge", "location": "Seoul", "result": "8% annual savings without equipment investment", "desc": "Analysis with minimal data revealed potential annual savings of approximately KRW 6.84M (8%) without equipment replacement, and up to 24.2% with targeted equipment upgrades." },
+      { "title": "LS Electric R&D Campus", "location": "Incheon", "result": "12% reduction through contract demand adjustment", "desc": "Achieved a 12% reduction in total electricity costs — KRW 6.24M in annual savings — solely by adjusting contract demand from 6,250 kW to 3,750 kW, with no capital expenditure." },
+      { "title": "Gyeonggi Province ESS Optimization", "location": "Gyeonggi Province", "result": "AI charge/discharge algorithm deployed", "desc": "Implemented automated monitoring and cost reduction analysis reporting for ESS installations, with an AI-based optimal charge/discharge algorithm currently in operation." }
+    ],
+    "ctaTitle": "Inquire About Save-E",
+    "ctaDesc": "Start reducing energy costs without any hardware investment.",
+    "ctaContact": "Contact Us",
+    "ctaBrochure": "PDF Brochure"
+  },
+  "greenplanner": {
+    "heroSubtitle": "Making building remodeling accessible to everyone",
+    "heroDesc": "Predict post-renovation property values using energy simulation and public real estate data, with end-to-end government subsidy consulting included.",
+    "serviceInquiry": "Inquire About Service",
+    "downloadPdf": "Download PDF",
+    "targetUsers": ["Commercial building owners", "Prospective building buyers", "Real estate brokerage firms"],
+    "questionsTitle": "Questions GreenPlanner Answers",
+    "questions": [
+      { "q": "What are the property values in my area?", "a": "Provides comparable transaction data based on public real estate records — including official registries, assessed land values, actual transaction prices, commercial district analysis, and population analytics." },
+      { "q": "How deteriorated is this building?", "a": "Objectively diagnoses building energy degradation through simulation powered by the U.S. DOE's EnergyPlus engine." },
+      { "q": "How much will the energy rating improve after renovation?", "a": "Calculates the building's estimated insulation performance based on data and simulates post-renovation energy efficiency ratings." },
+      { "q": "What about the surrounding commercial district and foot traffic?", "a": "Provides a comprehensive view of business type analysis, foot traffic, major transportation access, retail locations, and bus stop information." },
+      { "q": "What are the construction costs and permit procedures?", "a": "Guides you through estimated construction costs, building permit procedures, approvals, projected construction timelines, and finishing material replacement options." },
+      { "q": "Will the renovation yield a positive return on investment?", "a": "Forecasts pre- and post-renovation property values, estimates rental rates and sale prices, and projects 10-year rental income on a floor-by-floor basis." }
+    ],
+    "moreFeatures": "Additional Features",
+    "moreFeaturesItems": [
+      "Expert Search — Find regional design and construction professionals at a glance",
+      "Portfolio Review — Verify actual construction track records and green remodeling credentials, not just quotes",
+      "Checklist — Lease contracts, architect/contractor meetings, review procedures, and top 6 essential questions",
+      "Renovation Forecast Report — Instantly download a PDF covering construction costs, permit procedures, projected rental rates, and estimated sale prices"
+    ],
+    "funding": "Government Funding Programs",
+    "fundingDesc": "Renovation costs can be covered through government support programs.",
+    "fundingMax": "Up to",
+    "fundingItems": [
+      { "program": "Seoul Building Energy Efficiency Program (BRP)", "maxAmount": "KRW 2 billion", "terms": "Interest-free loan, 3-year grace period, 8-year installment repayment", "year": "Based on 2024" },
+      { "program": "MOLIT Green Remodeling Program", "maxAmount": "KRW 5 billion", "terms": "4% interest with government subsidy for private interest, 3-year grace period, 10-year installment repayment", "year": "Based on 2023" }
+    ],
+    "ctaTitle": "Start Your Building Remodeling with Data",
+    "ctaDesc": "Use GreenPlanner to assess your building's current condition and renovation potential.",
+    "ctaButton": "Inquire About Service",
+    "ctaBrochure": "PDF Brochure"
+  },
+  "repark": {
+    "heroSubtitle": "QR-Based Facility Management System",
+    "heroDesc": "Citizens report faults by scanning a QR code, administrators handle intake and assignment, and contractors submit completion reports. A facility management system that connects all three parties.",
+    "serviceInquiry": "Inquire About Service",
+    "downloadPdf": "Download PDF",
+    "tags": [
+      "QR TAG Smart Fault Reporting", "Data Registration & Custom Label Production", "SaaS Cloud Service", "Administrator Digital Workflow Transformation", "Contactless Complaint Intake Simplification"
+    ],
+    "serviceFlow": "Service Flow",
+    "serviceFlowDesc": "Workflow connecting citizens, administrators, and contractors",
+    "flows": [
+      { "role": "Citizen", "flow": "Discover faulty facility → Scan QR code → Submit contactless fault report" },
+      { "role": "Administrator", "flow": "Receive report → Assign contractor → Manage processing status" },
+      { "role": "Contractor", "flow": "Accept work order → Submit completion report → Maintain service history" }
+    ],
+    "expansion": "Business Expansion",
+    "expansionDesc": "From park facilities to all public infrastructure. Integrates management of benches, manholes, bus stops, and other assets without existing asset numbers.",
+    "expansionItems": [
+      "Contactless fault reporting and processing notification for damaged facilities",
+      "Administrative staffing cost reduction for fault report handling",
+      "Elimination of unnecessary workflow processes",
+      "Digitization of operations through unified management database"
+    ],
+    "caseStudy": "Deployment Case",
+    "caseTitle": "Incheon Central Park & Haedoji Park",
+    "casePartners": "Incheon Startup Park x Incheon Facilities Corporation Songdo Park Division x Ninewatt",
+    "phase1Label": "Phase 1 Pilot (~Nov 30, 2023)",
+    "phase1Value": "1,300 lighting fixtures",
+    "phase2Label": "Phase 2 Pilot (Jan 1, 2024~)",
+    "phase2Value": "2,000 landscaping & exercise facilities",
+    "timeline2023": "Incheon Startup Park Pilot Commercialization Program — Completed pilot for lighting fixtures at Central Park and Haedoji Park",
+    "timeline2024": "Phase 2 Public Agency Technology Verification Program — Selected for Incheon Facilities Corporation pilot covering landscaping and exercise facilities",
+    "ctaTitle": "Inquire About RE:park",
+    "ctaDesc": "Begin the digital transformation of your facility management.",
+    "ctaContact": "Contact Us",
+    "ctaBrochure": "PDF Brochure"
+  },
+  "solarScope": {
+    "heroSubtitle": "Analyze Solar Candidate Sites with Just an Address",
+    "heroDesc": "A platform for integrated technical, regulatory, and financial feasibility analysis of solar installation candidate sites. Simply enter an address or parcel number to evaluate regulations, setback distances, distribution grid capacity, energy yield, and profitability in one step.",
+    "requestDemo": "Request Demo",
+    "dashboard": "Integrated Dashboard",
+    "dashboardDesc": "With a single address entry, perform land analysis, distribution grid verification, setback distance review, and profitability assessment. Manage recent projects at a glance.",
+    "detailAnalysis": "Detailed Analysis",
+    "detailAnalysisDesc": "Review land information, distribution grid available capacity, setback distance checks, and solar irradiance/energy yield simulations — all on a single screen.",
+    "feasibility": "Financial Feasibility Review",
+    "feasibilityDesc": "Provides all figures needed for investment decisions: generation revenue calculations, loan repayment simulations, early repayment scenarios, and cash flow analysis.",
+    "targetUsers": ["Solar developers and EPC companies", "Energy investors and financial institutions", "Municipalities and public agencies", "Building and land owners"],
+    "problem": "The Challenge",
+    "problemDesc": "Solar projects require a complex process of individually verifying multiple factors during the initial site screening phase.",
+    "problemItems": [
+      "Land use zoning and activity restriction verification",
+      "Setback distance regulation review",
+      "Distribution grid interconnection feasibility assessment",
+      "Energy yield and profitability analysis",
+      "Permitting and policy requirement review"
+    ],
+    "problemConclusion": "This process involves navigating multiple systems and datasets, resulting in lengthy review times and inconsistent decision-making.",
+    "whatSolarScopeDoes": "What SolarScope Does",
+    "whatSolarScopeDoesDesc": "SolarScope integrates this entire process into a single workflow.",
+    "solutionItems": [
+      { "title": "Automated Site Analysis", "desc": "Initiates analysis instantly with just an address or parcel number." },
+      { "title": "Regulatory & Site Review", "desc": "Automatically verifies regulations and setback distances using GIS." },
+      { "title": "Grid Interconnection Assessment", "desc": "Pre-evaluates power grid interconnection feasibility." },
+      { "title": "Capacity & Yield Estimation", "desc": "Automatically calculates installable capacity and annual energy yield." },
+      { "title": "Financial Analysis", "desc": "Analyzes project viability including investment costs, revenue, and payback period." }
+    ],
+    "keyFeatures": "Key Features",
+    "features": [
+      { "name": "Integrated Feasibility Analysis", "desc": "Unified analysis of regulations, setback distances, distribution grid, energy yield, and profitability" },
+      { "name": "GIS-Based Spatial Analysis", "desc": "Parcel and building-level spatial analysis with map-based visualization (2D/3D)" },
+      { "name": "Capacity & Yield Estimation", "desc": "Automated calculation of installable capacity and annual energy generation" },
+      { "name": "Financial Modeling", "desc": "Project viability analysis including investment costs, loans, revenue, and payback period" },
+      { "name": "Multi-Site Comparison", "desc": "Simultaneous comparison of multiple candidate sites to support decision-making" },
+      { "name": "Report Generation", "desc": "Save and export analysis results in PDF and data formats" }
+    ],
+    "expectedImpact": "Expected Impact",
+    "expectedImpactDesc": "Reduces time costs and uncertainty in the solar site review process, enabling consistent data-driven decision-making.",
+    "impactItems": [
+      { "title": "Reduced Review Time", "desc": "Complete the entire process on a single platform without switching between systems" },
+      { "title": "Standardized Analysis Criteria", "desc": "Evaluate and compare candidate sites using consistent standards" },
+      { "title": "Improved Comparison Efficiency", "desc": "Analyze multiple candidate sites simultaneously to select optimal locations" },
+      { "title": "Reduced Project Risk", "desc": "Minimize investment uncertainty through data-driven assessments" }
+    ],
+    "ctaTitle": "Validate Solar Sites with Data",
+    "ctaDesc": "See how SolarScope transforms your site analysis process with a demo.",
+    "ctaDemo": "Request Demo"
+  },
+  "pvIntelligence": {
+    "heroSubtitle": "Integrated Solar Plant Monitoring and Control System",
+    "heroDesc": "A web-based integrated monitoring platform for solar plant operators. Install our proprietary RTU equipment on-site to collect inverter data, then access real-time monitoring, analytics, and control from the cloud.",
+    "requestDemo": "Request Demo",
+    "systemArch": "System Architecture",
+    "systemArchDesc": "The data pipeline from on-site inverters to the cloud",
+    "archSteps": [
+      { "label": "Inverter", "sub": "RS-485 Modbus" },
+      { "label": "Proprietary RTU", "sub": "LTE Cat.M1" },
+      { "label": "PV Intelligence Cloud", "sub": "Monitoring / Analytics / AI" }
+    ],
+    "keyFeatures": "Key Features",
+    "featureItems": [
+      { "title": "Real-Time Dashboard", "desc": "View generation output by plant, monitor RTU communication status, and check inverter-level output, efficiency, and operational status at a glance." },
+      { "title": "Inverter Detailed Analysis", "desc": "Provides DC/AC voltage and current data, MPPT and string channel-level data, performance radar charts, and Health Scores." },
+      { "title": "Statistical Analysis", "desc": "Supports monthly generation trend tracking, actual vs. rated efficiency comparison, efficiency gap alerts, and carbon reduction equivalent calculations." },
+      { "title": "Fault & History Management", "desc": "Records and tracks communication error and connection fault alarm histories, including fault timestamps and error types per inverter." },
+      { "title": "AI Operations Advisor", "desc": "Offers AI-powered natural language Q&A with real-time data integration, and provides revenue analysis based on SMP/REC pricing." }
+    ],
+    "equipment": "Supported Equipment",
+    "inverter": "Inverter",
+    "inverterDesc": "Major brands including Hyosung, Huawei, Hyundai, and more",
+    "rtu": "RTU",
+    "rtuDesc": "Proprietary RTU (LTE Cat.M1, RS-485 Modbus RTU)",
+    "collectionCycle": "Data Collection Interval",
+    "collectionCycleDesc": "5 minutes (configurable)",
+    "ctaTitle": "Monitor Your Solar Plants Intelligently",
+    "ctaDesc": "See how PV Intelligence transforms integrated plant monitoring with a demo.",
+    "ctaDemo": "Request Demo"
+  }
+}

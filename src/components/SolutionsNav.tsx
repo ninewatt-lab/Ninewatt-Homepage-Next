@@ -1,17 +1,18 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-
-const subPages = [
-  { href: "/solutions", label: "핵심 솔루션" },
-  { href: "/solutions/cases", label: "수행사례" },
-  { href: "/solutions/rnd", label: "R&D 과제" },
-  { href: "/solutions/services", label: "용역과제" },
-];
+import { Link, usePathname } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 
 export default function SolutionsNav() {
   const pathname = usePathname();
+  const t = useTranslations("common");
+
+  const subPages = [
+    { href: "/solutions", label: t("solutionsMenu.coreSolutions") },
+    { href: "/solutions/cases", label: t("solutionsMenu.cases") },
+    { href: "/solutions/rnd", label: t("solutionsMenu.rnd") },
+    { href: "/solutions/services", label: t("solutionsMenu.services") },
+  ];
 
   return (
     <nav className="border-b border-border bg-surface">

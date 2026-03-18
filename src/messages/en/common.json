@@ -1,0 +1,73 @@
+{
+  "metadata": {
+    "title": "Ninewatt — Building Energy Intelligence",
+    "description": "AI-powered building energy analytics and optimization platform"
+  },
+  "nav": {
+    "product": "Product",
+    "solutions": "Solutions",
+    "company": "Company",
+    "contact": "Contact Us",
+    "themeToggle": "Toggle theme",
+    "menu": "Menu",
+    "viewAllProduct": "View all products",
+    "viewAllSolutions": "View all solutions",
+    "viewAllCompany": "View all company"
+  },
+  "productMenu": {
+    "platform": "Platform",
+    "appsAndServices": "Apps & Services",
+    "optiDesc": "AI-powered building energy advisor",
+    "wattiDesc": "3D building energy analytics platform",
+    "saveEDesc": "Building energy management & cost optimization",
+    "greenplannerDesc": "Green retrofit simulation app",
+    "reparkDesc": "QR-based smart facility management system",
+    "solarScopeDesc": "Integrated solar site feasibility analysis",
+    "pvIntelligenceDesc": "Solar power plant integrated monitoring system"
+  },
+  "solutionsMenu": {
+    "capabilities": "Capabilities",
+    "trackRecord": "Track Record",
+    "coreSolutions": "Core Solutions",
+    "coreSolutionsDesc": "Energy data, AI & simulation expertise",
+    "cases": "Case Studies",
+    "casesDesc": "60+ domestic and international projects",
+    "rnd": "R&D History",
+    "rndDesc": "Government R&D project portfolio",
+    "services": "Service Projects",
+    "servicesDesc": "Corporate & institutional service engagements"
+  },
+  "companyMenu": {
+    "about": "About",
+    "achievements": "Achievements",
+    "companyIntro": "About Us",
+    "companyIntroDesc": "Vision, mission, organization & location",
+    "history": "History",
+    "historyDesc": "Key milestones of Ninewatt",
+    "career": "Careers",
+    "careerDesc": "Join our growing team",
+    "global": "Global Business",
+    "globalDesc": "Operations in Japan, UK, France & USA",
+    "awards": "Awards",
+    "awardsDesc": "CES, government honors & more",
+    "patents": "Patents & Certifications",
+    "patentsDesc": "33 patents and key certifications"
+  },
+  "footer": {
+    "tagline": "Leading the GX transformation with energy technology,\ncontributing to smart cities and a carbon-neutral society.",
+    "hq": "(HQ) 204, Convensia-daero, Yeonsu-gu, Incheon, Korea",
+    "rnd": "(R&D Center) 22, Gangnam-daero 162-gil, Gangnam-gu, Seoul, Korea",
+    "quickLinks": "Quick Links",
+    "more": "More",
+    "patentsAndCerts": "Patents & Certifications",
+    "globalBiz": "Global Business",
+    "awardsLink": "Awards"
+  },
+  "trackRecord": {
+    "title": "Related Business Track Record",
+    "subtitle": "Government R&D, commercialization, and demonstration project history ({count} projects)",
+    "period": "Period",
+    "department": "Lead Ministry",
+    "org": "Operating Agency"
+  }
+}

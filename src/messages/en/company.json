@@ -1,0 +1,159 @@
+{
+  "about": {
+    "title": "About Us",
+    "subtitle": "Leading the realization of GX through energy technology, contributing to smart cities and a carbon-neutral society.",
+    "vision": "Vision",
+    "visionDesc": "Led by our CEO, an expert in urban and building energy diagnostics, we are driving R&D of AI/big data-based building energy platforms as our core business. We are building a sustainable future through smart city solutions and building energy reduction technologies.",
+    "companyInfo": [
+      { "label": "Founded", "value": "Feb 12, 2019" },
+      { "label": "Employees", "value": "30+" },
+      { "label": "Funding Stage", "value": "Series A (Approx. KRW 4.8B cumulative)" },
+      { "label": "Business Areas", "value": "Smart city solutions & building energy reduction" }
+    ],
+    "executives": "Leadership",
+    "ceo": {
+      "role": "CEO",
+      "name": "김영록 (Youngrok Kim)",
+      "team": "Business Division 1",
+      "desc": "Architecture major with 200+ consulting projects in energy-efficient building design",
+      "details": ["M.S. in u-City Engineering, Sungkyunkwan University", "B.S. in Architectural Engineering, Dankook University", "Multiple awards including commendation from the Minister of Land, Infrastructure and Transport"]
+    },
+    "cto": {
+      "role": "CTO",
+      "name": "박상린 (Sangrin Park)",
+      "team": "Business Division 2",
+      "desc": "Architecture major, former senior engineer at Japan's top construction AI research lab, specializing in AI technology development",
+      "details": ["M.S. in u-City Engineering, Sungkyunkwan University", "B.S. in Architectural Engineering, Kyung Hee University", "Deep Learning-based AI system architecture"]
+    },
+    "organization": "Organization",
+    "orgItems": [
+      { "name": "Business Div. 1", "desc": "Energy consulting, green remodeling" },
+      { "name": "Business Div. 2", "desc": "Global business, platform services" },
+      { "name": "Development Dept.", "desc": "Full-stack development, AI backend" },
+      { "name": "R&D Dept.", "desc": "Energy analysis, big data research" }
+    ],
+    "location": "Directions",
+    "hqLabel": "Headquarters",
+    "hqAddress": "104, Insta 2, 204 Convensia-daero, Yeonsu-gu, Incheon, Korea",
+    "rndLabel": "R&D Center (Seoul Branch)",
+    "rndAddress": "2F & 4F, 22 Gangnam-daero 162-gil, Gangnam-gu, Seoul, Korea",
+    "ctaTitle": "Looking for Partners to Grow Together",
+    "ctaDesc": "Whether it's energy solutions, partnerships, or recruitment — we welcome all inquiries.",
+    "ctaButton": "Contact Us"
+  },
+  "history": {
+    "title": "History",
+    "subtitle": "Ninewatt's journey of growth from our founding in 2019 to the present"
+  },
+  "awards": {
+    "title": "Awards",
+    "subtitle": "Recognized for energy technology innovation with numerous awards"
+  },
+  "patents": {
+    "title": "Patents & Certifications",
+    "subtitle": "Holding core intellectual property in the energy AI technology sector",
+    "totalPatents": "Total Patents",
+    "domestic": "Domestic Patents",
+    "international": "International Patents (PCT)",
+    "certifications": "Certifications",
+    "domesticRegistered": "Domestic Patents — Registered",
+    "domesticPending": "Domestic Patents — Pending",
+    "internationalPatents": "International Patents",
+    "certList": "Certifications",
+    "tableNo": "No.",
+    "regDate": "Registration Date",
+    "appDate": "Application Date",
+    "regNo": "Registration No.",
+    "appNo": "Application No.",
+    "patentName": "Patent Name",
+    "applicant": "Applicant",
+    "patentNameKo": "Patent Name (Korean)",
+    "patentNameEn": "Patent Name (English)",
+    "country": "Country"
+  },
+  "career": {
+    "title": "Careers",
+    "subtitle": "We are looking for talent to build a culture of growth together",
+    "cultureTitle": "Culture",
+    "cultureDesc": "At Ninewatt, individuals and the company grow together based on a creative and dynamic organizational culture. We actively support our team members' challenges and growth, and guarantee rewards for effort and performance.",
+    "talentTitle": "Ideal Talent",
+    "talentSubtitle": "We recruit individuals who are free yet responsible and eager to grow together",
+    "values": [
+      { "title": "Growth Mindset", "desc": "Talent who continuously develop to achieve goals and take responsibility for their own growth" },
+      { "title": "Challenge", "desc": "Talent who embrace a positive mindset and actively engage in new opportunities" },
+      { "title": "Initiative", "desc": "Talent who proactively drive and execute work within a culture of freedom" }
+    ],
+    "benefitsTitle": "Benefits",
+    "benefitCategories": [
+      {
+        "category": "Work Environment",
+        "items": [
+          { "title": "Flexible Hours", "desc": "Choose your start time between 8–10 AM in 10-min increments" },
+          { "title": "Flexible PTO", "desc": "No prior approval needed; 10+ day vacations encouraged" },
+          { "title": "Annual Leave by Tenure", "desc": "1 day/month in first year, 15 days/year from second year" },
+          { "title": "Birthday Leave", "desc": "Paid birthday leave without using PTO" }
+        ]
+      },
+      {
+        "category": "Support & Rewards",
+        "items": [
+          { "title": "Meal Allowance", "desc": "Meals and snacks provided" },
+          { "title": "Health Checkup", "desc": "Comprehensive health examination support" },
+          { "title": "Education & Books", "desc": "Professional development and self-improvement support" },
+          { "title": "Performance Bonus", "desc": "Rewards linked to KPIs and project contributions" },
+          { "title": "Office Equipment", "desc": "Laptops, monitors, and work equipment provided" }
+        ]
+      }
+    ],
+    "recruitTitle": "Hiring Process",
+    "steps": [
+      { "step": "01", "title": "Application", "desc": "Submit resume and portfolio" },
+      { "step": "02", "title": "Interviews", "desc": "Technical skills and cultural fit assessment" },
+      { "step": "03", "title": "Offer", "desc": "Compensation negotiation and onboarding" }
+    ],
+    "ctaTitle": "Ready to Join Ninewatt?",
+    "ctaDesc": "For recruitment inquiries, please contact us via email below",
+    "ctaButton": "Contact Us"
+  },
+  "global": {
+    "title": "Global Business",
+    "subtitle": "Expanding energy solutions across 4 countries — Japan, UK, France, and the USA",
+    "countries": [
+      {
+        "country": "Japan",
+        "flag": "JP",
+        "items": [
+          "2024.03 Signed MOU with Sinanen Holdings Co., Ltd.",
+          "2024.06 Signed tripartite MOU with Sinanen Holdings and Tsunan Town, Niigata Prefecture",
+          "2024.12 Smart city platform demonstration project for Tsunan Town",
+          "2024 Completed overseas PoC expansion program by Korea Institute of Startup & Entrepreneurship Development",
+          "2025.06 Signed MOU with PBADAO Inc., Japan",
+          "2025.07 Signed NDA with Azbil Corporation, Japan"
+        ]
+      },
+      {
+        "country": "United Kingdom",
+        "flag": "GB",
+        "items": [
+          "PoC project for Thurrock Council — Corringham area",
+          "Ongoing Korea-UK joint R&D project (AI-assistant building energy analysis technology and platform development)"
+        ]
+      },
+      {
+        "country": "France",
+        "flag": "FR",
+        "items": [
+          "2023.03 Signed MOU with Toltek (startup developing solutions for construction professionals)"
+        ]
+      },
+      {
+        "country": "United States",
+        "flag": "US",
+        "items": [
+          "2024 Selected as OpenAI collaboration partner",
+          "2025.11 Signed tripartite purchase agreement with JCI and NRGinsight; USD 500 in exports"
+        ]
+      }
+    ]
+  }
+}

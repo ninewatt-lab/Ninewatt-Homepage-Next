@@ -1,0 +1,69 @@
+{
+  "hero": {
+    "badge": "CES 2026 Innovation Awards",
+    "headline": "Make buildings",
+    "headlineHighlight": "speak energy",
+    "subtitle": "We measure building energy, analyze it with AI, and drive carbon neutrality.",
+    "ctaContact": "Contact Us",
+    "ctaProducts": "View Products"
+  },
+  "showcase": {
+    "label": "Our Products",
+    "heading": "The complete energy technology suite",
+    "opti": {
+      "title": "AI diagnoses and optimizes\nyour building energy",
+      "description": "Query building energy data in natural language and receive real-time cost reduction strategies and investment simulation results. CES 2026 Innovation Awards winner.",
+      "linkText": "Learn about Opti"
+    },
+    "greenplanner": {
+      "title": "Design green retrofits\nthrough simulation",
+      "description": "Simulate insulation, window, and HVAC upgrade effects in advance, and derive the optimal green retrofit scenario for your building.",
+      "linkText": "Learn about GreenPlanner"
+    },
+    "watti": {
+      "title": "Read building energy\non a 3D map",
+      "description": "Integrate building, energy, environmental, and urban data on a 3D map, providing visual energy efficiency insights for every building.",
+      "linkText": "Learn about Watti"
+    },
+    "repark": {
+      "title": "Manage facilities\nwith a single QR code",
+      "description": "Citizens report issues via QR, managers handle assignments, and contractors submit completion reports — one smart system connecting all three parties.",
+      "linkText": "Learn about RE:park"
+    },
+    "solarScope": {
+      "title": "Analyze solar suitability\njust by entering an address",
+      "description": "Assess solar installation feasibility for land and buildings. Evaluate regulations, setback distances, grid capacity, power generation, and profitability in one platform.",
+      "linkText": "Learn about SolarScope"
+    },
+    "pvIntelligence": {
+      "title": "Monitor solar power plants\nfrom a single platform",
+      "description": "Collect field data via proprietary RTUs, delivering real-time monitoring through AI-powered operational analytics on one unified platform.",
+      "linkText": "Learn about PV Intelligence"
+    }
+  },
+  "cards": {
+    "optiTitle": "Opti — AI Energy Advisor",
+    "optiDesc": "CES 2026 winner. Query building energy data in natural language to instantly receive cost reduction strategies and investment simulation results.",
+    "optiLink": "Learn more",
+    "solutionsTitle": "Energy Data · AI · Simulation",
+    "solutionsDesc": "From data collection to urban energy simulation.",
+    "globalTitle": "4 countries, 33 patents",
+    "globalDesc": "Operating across Japan, the UK, France, and the United States."
+  },
+  "partners": {
+    "label": "Trusted by industry leaders"
+  },
+  "stats": {
+    "founded": "Founded",
+    "employees": "Employees",
+    "projects": "Projects",
+    "growth": "Revenue Growth",
+    "investment": "Total Investment",
+    "patents": "Patents"
+  },
+  "cta": {
+    "heading": "Need an energy solution?",
+    "description": "The Ninewatt team designs tailored solutions for your building type and scale.",
+    "button": "Contact Us"
+  }
+}

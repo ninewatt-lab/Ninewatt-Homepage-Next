@@ -1,0 +1,69 @@
+{
+  "hero": {
+    "badge": "CES 2026 Innovation Awards",
+    "headline": "Faire parler l'énergie",
+    "headlineHighlight": "des bâtiments",
+    "subtitle": "Nous mesurons l'énergie des bâtiments, l'analysons par IA et mettons en œuvre la neutralité carbone.",
+    "ctaContact": "Nous contacter",
+    "ctaProducts": "Voir les produits"
+  },
+  "showcase": {
+    "label": "Our Products",
+    "heading": "La suite complète de technologies énergétiques",
+    "opti": {
+      "title": "L'IA diagnostique et optimise\nl'énergie de votre bâtiment",
+      "description": "Interrogez les données énergétiques en langage naturel et recevez en temps réel des stratégies de réduction des coûts et des résultats de simulation d'investissement. Lauréat des CES 2026 Innovation Awards.",
+      "linkText": "Découvrir Opti"
+    },
+    "greenplanner": {
+      "title": "Concevez la rénovation verte\npar la simulation",
+      "description": "Simulez à l'avance les effets d'amélioration de l'isolation, des fenêtres et des équipements, et déterminez le scénario optimal de rénovation écologique.",
+      "linkText": "Découvrir GreenPlanner"
+    },
+    "watti": {
+      "title": "Lisez l'énergie des bâtiments\nsur une carte 3D",
+      "description": "Intégrez les données bâtimentaires, énergétiques, environnementales et urbaines sur une carte 3D, avec des insights visuels d'efficacité énergétique par bâtiment.",
+      "linkText": "Découvrir Watti"
+    },
+    "repark": {
+      "title": "Gérez vos installations\navec un simple QR code",
+      "description": "Les citoyens signalent via QR, les gestionnaires traitent les affectations, les prestataires rendent compte. Un système intelligent reliant les trois parties.",
+      "linkText": "Découvrir RE:park"
+    },
+    "solarScope": {
+      "title": "Analysez l'aptitude solaire\nen saisissant une adresse",
+      "description": "Évaluez la faisabilité d'installation solaire pour terrains et bâtiments. Réglementations, distances, réseau, production et rentabilité en une seule plateforme.",
+      "linkText": "Découvrir SolarScope"
+    },
+    "pvIntelligence": {
+      "title": "Supervisez vos centrales solaires\ndepuis une seule plateforme",
+      "description": "Collectez les données terrain via nos RTU propriétaires, du monitoring en temps réel à l'analyse opérationnelle par IA sur une plateforme unifiée.",
+      "linkText": "Découvrir PV Intelligence"
+    }
+  },
+  "cards": {
+    "optiTitle": "Opti — Conseiller Énergétique IA",
+    "optiDesc": "Lauréat CES 2026. Interrogez les données énergétiques en langage naturel pour recevoir instantanément des stratégies de réduction des coûts et des simulations d'investissement.",
+    "optiLink": "En savoir plus",
+    "solutionsTitle": "Données Énergétiques · IA · Simulation",
+    "solutionsDesc": "De la collecte de données à la simulation énergétique urbaine.",
+    "globalTitle": "4 pays, 33 brevets",
+    "globalDesc": "Présent au Japon, au Royaume-Uni, en France et aux États-Unis."
+  },
+  "partners": {
+    "label": "Trusted by industry leaders"
+  },
+  "stats": {
+    "founded": "Fondée en",
+    "employees": "Collaborateurs",
+    "projects": "Projets réalisés",
+    "growth": "Croissance du CA",
+    "investment": "Investissement total",
+    "patents": "Brevets"
+  },
+  "cta": {
+    "heading": "Besoin d'une solution énergétique ?",
+    "description": "L'équipe Ninewatt conçoit des solutions adaptées au type et à la taille de votre bâtiment.",
+    "button": "Nous contacter"
+  }
+}

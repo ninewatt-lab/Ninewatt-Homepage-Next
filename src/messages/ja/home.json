@@ -1,0 +1,69 @@
+{
+  "hero": {
+    "badge": "CES 2026 Innovation Awards",
+    "headline": "ビルにエネルギーを",
+    "headlineHighlight": "語らせる",
+    "subtitle": "ビルエネルギーを計測し、AIで分析し、カーボンニュートラルを実現します。",
+    "ctaContact": "お問い合わせ",
+    "ctaProducts": "製品を見る"
+  },
+  "showcase": {
+    "label": "Our Products",
+    "heading": "エネルギー技術のすべて",
+    "opti": {
+      "title": "AIがビルエネルギーを\n診断・最適化します",
+      "description": "自然言語でビルエネルギーを照会すると、AIがコスト削減戦略と投資シミュレーション結果をリアルタイムで提供します。CES 2026 Innovation Awards受賞。",
+      "linkText": "Optiを詳しく見る"
+    },
+    "greenplanner": {
+      "title": "グリーンリノベーションを\nシミュレーションで設計",
+      "description": "断熱・窓・設備の改善効果を事前にシミュレーションし、最適なグリーンリノベーションシナリオを導き出します。",
+      "linkText": "GreenPlannerを詳しく見る"
+    },
+    "watti": {
+      "title": "3Dマップ上で\nビルエネルギーを読み解く",
+      "description": "建築物・エネルギー・環境・都市データを3Dマップに統合し、建物ごとの省エネインサイトを視覚的に提供します。",
+      "linkText": "Wattiを詳しく見る"
+    },
+    "repark": {
+      "title": "QRコード一つで\n施設を管理",
+      "description": "市民はQRで故障を報告、管理者は受付・配置を処理、修理業者は完了報告。三者をつなぐスマート施設管理システムです。",
+      "linkText": "RE:parkを詳しく見る"
+    },
+    "solarScope": {
+      "title": "住所入力だけで\n太陽光適合性を分析",
+      "description": "土地・建物の太陽光設置可能性を分析。規制、離隔距離、配電網、発電量、収益性を統合評価します。",
+      "linkText": "SolarScopeを詳しく見る"
+    },
+    "pvIntelligence": {
+      "title": "太陽光発電所を\n一つのプラットフォームで監視",
+      "description": "自社RTUで現場データを収集し、リアルタイムモニタリングからAI運用分析まで一つのプラットフォームで提供します。",
+      "linkText": "PV Intelligenceを詳しく見る"
+    }
+  },
+  "cards": {
+    "optiTitle": "Opti — AIエネルギーアドバイザー",
+    "optiDesc": "CES 2026受賞作。ビルエネルギーデータを自然言語で照会すると、コスト削減戦略と投資シミュレーション結果を即座に受け取れます。",
+    "optiLink": "詳しく見る",
+    "solutionsTitle": "エネルギーデータ・AI・シミュレーション",
+    "solutionsDesc": "データ収集から都市エネルギーシミュレーションまで。",
+    "globalTitle": "4カ国展開、33件の特許",
+    "globalDesc": "日本・英国・フランス・米国で事業を展開しています。"
+  },
+  "partners": {
+    "label": "Trusted by industry leaders"
+  },
+  "stats": {
+    "founded": "設立",
+    "employees": "社員数",
+    "projects": "実施プロジェクト",
+    "growth": "売上成長率",
+    "investment": "累計投資額",
+    "patents": "保有特許"
+  },
+  "cta": {
+    "heading": "エネルギーソリューションをお探しですか？",
+    "description": "Ninewattチームがビルの種類と規模に合わせた最適なソリューションをご提案します。",
+    "button": "お問い合わせ"
+  }
+}

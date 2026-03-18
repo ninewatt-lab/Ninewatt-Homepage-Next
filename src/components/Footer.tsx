@@ -1,6 +1,11 @@
-import Link from "next/link";
+"use client";
+
+import { Link } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 
 export default function Footer() {
+  const t = useTranslations("common");
+
   return (
     <footer className="border-t border-border bg-surface">
       <div className="mx-auto max-w-7xl px-6 py-12">
@@ -8,14 +13,12 @@ export default function Footer() {
           {/* Company Info */}
           <div className="md:col-span-2">
             <p className="text-xl font-bold text-foreground">Ninewatt</p>
-            <p className="mt-3 text-sm leading-relaxed text-muted">
-              GX 실현을 이끄는 에너지 기술로,
-              <br />
-              스마트시티와 탄소중립 사회에 기여합니다.
+            <p className="mt-3 text-sm leading-relaxed text-muted whitespace-pre-line">
+              {t("footer.tagline")}
             </p>
             <div className="mt-4 space-y-1 text-sm text-muted">
-              <p>(본사) 인천광역시 연수구 컨벤시아대로 204, 104호</p>
-              <p>(기업부설연구소) 서울특별시 강남구 강남대로 162길 22 2,4F</p>
+              <p>{t("footer.hq")}</p>
+              <p>{t("footer.rnd")}</p>
               <p>Tel. 070-8866-7226</p>
               <p>Email. ninewatt@ninewatt.com</p>
             </div>
@@ -23,7 +26,7 @@ export default function Footer() {
 
           {/* Quick Links */}
           <div>
-            <p className="font-semibold text-foreground">바로가기</p>
+            <p className="font-semibold text-foreground">{t("footer.quickLinks")}</p>
             <div className="mt-3 flex flex-col gap-2 text-sm text-muted">
               <Link href="/product" className="transition-colors hover:text-foreground">Product</Link>
               <Link href="/solutions" className="transition-colors hover:text-foreground">Solutions</Link>
@@ -33,11 +36,11 @@ export default function Footer() {
           </div>
 
           <div>
-            <p className="font-semibold text-foreground">더보기</p>
+            <p className="font-semibold text-foreground">{t("footer.more")}</p>
             <div className="mt-3 flex flex-col gap-2 text-sm text-muted">
-              <Link href="/company" className="transition-colors hover:text-foreground">특허 & 인증</Link>
-              <Link href="/company" className="transition-colors hover:text-foreground">글로벌 사업</Link>
-              <Link href="/company" className="transition-colors hover:text-foreground">수상 내역</Link>
+              <Link href="/company/patents" className="transition-colors hover:text-foreground">{t("footer.patentsAndCerts")}</Link>
+              <Link href="/company/global" className="transition-colors hover:text-foreground">{t("footer.globalBiz")}</Link>
+              <Link href="/company/awards" className="transition-colors hover:text-foreground">{t("footer.awardsLink")}</Link>
             </div>
           </div>
         </div>

@@ -1,0 +1,87 @@
+{
+  "nav": {
+    "coreSolutions": "Core Solutions",
+    "cases": "Cases",
+    "rnd": "R&D Projects",
+    "services": "Services"
+  },
+  "overview": {
+    "title": "Solutions",
+    "subtitle": "End-to-end building energy management solutions, from data collection to AI-powered analysis",
+    "solutions": [
+      {
+        "id": "data-infra",
+        "title": "Data Collection, Infrastructure & Preprocessing",
+        "items": ["Collection of local power consumption, tariff structures, and weather-related data", "Data collection and storage framework development", "Integrated database and operational platform foundation", "On-site to cloud connectivity architecture design", "Platform integration through data processing"]
+      },
+      {
+        "id": "monitoring",
+        "title": "Energy Monitoring & Integrated Platform Development",
+        "items": ["Real-time energy monitoring system", "Unified visualization of facility, power, and operational status", "Dashboard-based operational support", "Digital twin-based 3D visualization"]
+      },
+      {
+        "id": "ai-analysis",
+        "title": "AI-Based Analysis & Algorithm Development",
+        "items": ["Application of collected data with localized logic", "Power consumption pattern analysis", "Anomaly detection and prediction", "Facility operation optimization algorithms", "Energy analysis through real-world field deployment"]
+      },
+      {
+        "id": "bems-ai",
+        "title": "BEMS-AI Agent Development",
+        "items": ["Domain-specific LLM (RAG)-based energy analysis", "Automated operational data reporting", "Root cause analysis for anomalous events", "Conversational energy management interface"]
+      },
+      {
+        "id": "ubem",
+        "title": "Urban-Scale Energy Analysis & Simulation (UBEM)",
+        "items": ["City-scale building energy diagnostics", "Building energy performance analysis and benchmarking", "Green remodeling impact simulation", "Policy and business feasibility analysis support"]
+      },
+      {
+        "id": "renewable",
+        "title": "Renewable & Distributed Energy Simulation",
+        "items": ["PV (solar) installation suitability analysis", "ESS capacity and operation simulation", "Idle space, rooftop, and solar irradiance analysis", "3D visualization of installation effects"]
+      }
+    ],
+    "ctaTitle": "Need a tailored energy solution?",
+    "ctaDesc": "Our experts will propose a solution optimized for your organization.",
+    "ctaButton": "Contact Us"
+  },
+  "cases": {
+    "title": "Case Studies",
+    "subtitle": "Proven track record delivering solutions to domestic public institutions, local governments, and international partners",
+    "categories": { "public": "Public Institutions", "local": "Local Government", "corporate": "Corporate", "overseas": "Overseas" },
+    "items": [
+      { "title": "건설기술연구원 - Carbon Neutrality Platform", "category": "Public Institutions", "desc": "Visualizing carbon and transportation emissions at building and road levels, supporting regional energy analysis and retrofit simulations" },
+      { "title": "강남구 - Urban Energy 3D Map", "category": "Local Government", "desc": "Tracking carbon footprints of public facilities to set clear greenhouse gas reduction targets" },
+      { "title": "경기도 - Gyeonggi Climate Platform Green Remodeling Simulation", "category": "Local Government", "desc": "Building aging, energy, and site analysis based on real estate data, with remodeling decision support services" },
+      { "title": "경기도 - ESS Integrated Management System", "category": "Local Government", "desc": "Province-wide ESS status monitoring and integrated resource management system" },
+      { "title": "경기도 - SME Climate Management Support Service", "category": "Local Government", "desc": "One-stop solution for GHG emission calculation, energy diagnostics, PV and ESS analysis, and reduction proposals" },
+      { "title": "LS Electric global R&D campus - SAVE-E", "category": "Corporate", "desc": "Energy solution delivery and automated diagnostic reporting system" },
+      { "title": "LS Electric - Smart Energy Insight system", "category": "Corporate", "desc": "Energy solutions for enterprise clients with integrated sales tools" },
+      { "title": "일본 츠난마치 - Decarbonization Project", "category": "Overseas", "desc": "Smart city pilot project for Tsunan Town, Niigata Prefecture, in partnership with Sinanen Holdings" },
+      { "title": "Korea-UK International Research - AI Chatbot Building Energy Analysis Platform", "category": "Overseas", "desc": "AI assistant building energy analysis technology and platform developed with KICT and UCL" },
+      { "title": "France - Green Renovation Platform", "category": "Overseas", "desc": "MOU with Toltek (a startup developing solutions for builders) for building energy analysis services in France" }
+    ],
+    "stats": [
+      { "value": "60+", "label": "Domestic Projects" },
+      { "value": "4", "label": "Countries" },
+      { "value": "30", "label": "Specialists" },
+      { "value": "96.81%", "label": "Avg. Annual Growth" }
+    ]
+  },
+  "rnd": {
+    "title": "R&D Track Record",
+    "subtitle": "Building technical expertise through government-funded R&D projects",
+    "clickHint": "Click on a project name to view details.",
+    "inProgress": "In Progress",
+    "completed": "Completed",
+    "count": "projects",
+    "tableHeaders": { "agency": "Government Agency", "research": "R&D Project Name", "lead": "Lead Organization", "period": "Period" },
+    "detailLabels": { "goal": "R&D Objective", "contents": "Project Details", "category": "Project Type", "department": "Supervising Ministry", "budget": "Total Budget" }
+  },
+  "services": {
+    "title": "Service Project Track Record",
+    "subtitleTemplate": "{count} service projects in collaboration with {partners} partner organizations",
+    "tableHeaders": { "client": "Client (Organization)", "period": "Period", "content": "Scope of Work" },
+    "ctaText": "Interested in collaborating on a service project?",
+    "ctaButton": "Contact Us"
+  }
+}

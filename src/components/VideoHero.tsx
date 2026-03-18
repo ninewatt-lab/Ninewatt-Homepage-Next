@@ -1,8 +1,11 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 
 export default function VideoHero() {
+  const t = useTranslations("home");
+
   return (
     <section className="relative h-dvh w-full overflow-hidden">
       {/* Background video */}
@@ -36,20 +39,20 @@ export default function VideoHero() {
             />
           </svg>
           <span className="text-sm font-semibold text-white">
-            CES 2026 Innovation Awards
+            {t("hero.badge")}
           </span>
         </div>
 
         {/* Headline */}
         <h1 className="text-4xl font-extrabold leading-[1.08] tracking-tight text-white sm:text-5xl lg:text-7xl">
-          건물이 에너지를
+          {t("hero.headline")}
           <br />
-          <span className="hero-shine text-primary-light">말하게 하다</span>
+          <span className="hero-shine text-primary-light">{t("hero.headlineHighlight")}</span>
         </h1>
 
         {/* Subtitle */}
         <p className="mt-6 max-w-xl text-base leading-relaxed text-white/80 sm:text-lg">
-          건물 에너지를 측정하고, AI로 분석하고, 탄소중립을 실행합니다.
+          {t("hero.subtitle")}
         </p>
 
         {/* CTA Buttons */}
@@ -58,13 +61,13 @@ export default function VideoHero() {
             href="/contact"
             className="rounded-full bg-primary px-7 py-3 text-sm font-semibold text-white shadow-lg shadow-primary/20 transition-all hover:bg-primary-dark hover:-translate-y-0.5"
           >
-            문의하기
+            {t("hero.ctaContact")}
           </Link>
           <Link
             href="/product"
             className="group flex items-center gap-2 rounded-full border border-white/30 px-7 py-3 text-sm font-semibold text-white transition-colors hover:border-white/60 hover:bg-white/10"
           >
-            제품 보기
+            {t("hero.ctaProducts")}
             <svg
               className="h-4 w-4 transition-transform group-hover:translate-x-0.5"
               fill="none"

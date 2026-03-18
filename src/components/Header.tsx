@@ -1,8 +1,11 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useTheme } from "./ThemeProvider";
+import { useTranslations, useLocale } from "next-intl";
+import { useRouter, usePathname } from "@/i18n/navigation";
+import { routing } from "@/i18n/routing";
 import NinewattLogo from "./icons/NinewattLogo";
 
 /* ──────────────────────────────────────────────
@@ -11,35 +14,37 @@ import NinewattLogo from "./icons/NinewattLogo";
 
 interface NavSubItem {
   href: string;
-  label: string;
-  desc: string;
+  labelKey: string;
+  descKey: string;
   icon: React.ReactNode;
 }
 
 interface NavSection {
-  title?: string;
+  titleKey?: string;
   items: NavSubItem[];
 }
 
 interface NavItemWithChildren {
   href: string;
-  label: string;
-  labelKo: string;
+  labelKey: string;
+  viewAllKey: string;
+  menuNamespace: string;
   sections: NavSection[];
 }
 
 const productNav: NavItemWithChildren = {
   href: "/product",
-  label: "Product",
-  labelKo: "제품",
+  labelKey: "nav.product",
+  viewAllKey: "nav.viewAllProduct",
+  menuNamespace: "productMenu",
   sections: [
     {
-      title: "플랫폼",
+      titleKey: "productMenu.platform",
       items: [
         {
           href: "/product/opti",
-          label: "Opti",
-          desc: "AI 기반 건물 에너지 어드바이저",
+          labelKey: "Opti",
+          descKey: "productMenu.optiDesc",
           icon: (
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
               <path d="M12 2a4 4 0 0 1 4 4c0 1.95-1.4 3.58-3.25 3.93L12 22l-.75-12.07A4.001 4.001 0 0 1 12 2z" />
@@ -49,8 +54,8 @@ const productNav: NavItemWithChildren = {
         },
         {
           href: "/product/watti",
-          label: "Watti",
-          desc: "3D 건물 에너지 분석 플랫폼",
+          labelKey: "Watti",
+          descKey: "productMenu.wattiDesc",
           icon: (
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
               <path d="M12 3L2 9l10 6 10-6-10-6z" /><path d="M2 17l10 6 10-6" /><path d="M2 13l10 6 10-6" />
@@ -59,8 +64,8 @@ const productNav: NavItemWithChildren = {
         },
         {
           href: "/product/save-e",
-          label: "Save-E",
-          desc: "건물 에너지 관리 및 비용 최적화",
+          labelKey: "Save-E",
+          descKey: "productMenu.saveEDesc",
           icon: (
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
               <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
@@ -70,12 +75,12 @@ const productNav: NavItemWithChildren = {
       ],
     },
     {
-      title: "앱 & 서비스",
+      titleKey: "productMenu.appsAndServices",
       items: [
         {
           href: "/product/greenplanner",
-          label: "GreenPlanner",
-          desc: "그린리모델링 시뮬레이션 앱",
+          labelKey: "GreenPlanner",
+          descKey: "productMenu.greenplannerDesc",
           icon: (
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
               <path d="M17 8C17 5.24 14.76 3 12 3S7 5.24 7 8c0 3.53 5 9 5 9s5-5.47 5-9z" />
@@ -86,8 +91,8 @@ const productNav: NavItemWithChildren = {
         },
         {
           href: "/product/repark",
-          label: "RE:park",
-          desc: "QR 기반 스마트 시설 관리 시스템",
+          labelKey: "RE:park",
+          descKey: "productMenu.reparkDesc",
           icon: (
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
               <rect x="3" y="3" width="7" height="7" rx="1" /><rect x="14" y="3" width="7" height="7" rx="1" />
@@ -98,8 +103,8 @@ const productNav: NavItemWithChildren = {
         },
         {
           href: "/product/solar-site",
-          label: "SolarScope",
-          desc: "태양광 후보지 통합 타당성 분석",
+          labelKey: "SolarScope",
+          descKey: "productMenu.solarScopeDesc",
           icon: (
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
               <circle cx="12" cy="12" r="5" /><path d="M12 1v2m0 18v2m-8.66-3.34l1.42-1.42m12.48-12.48l1.42-1.42M1 12h2m18 0h2m-3.34 8.66l-1.42-1.42M4.76 4.76L3.34 3.34" />
@@ -108,8 +113,8 @@ const productNav: NavItemWithChildren = {
         },
         {
           href: "/product/pv-intelligence",
-          label: "PV Intelligence",
-          desc: "태양광 발전소 통합 관제 시스템",
+          labelKey: "PV Intelligence",
+          descKey: "productMenu.pvIntelligenceDesc",
           icon: (
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
               <path d="M2 12h4l3-9 6 18 3-9h4" />
@@ -123,16 +128,17 @@ const productNav: NavItemWithChildren = {
 
 const solutionsNav: NavItemWithChildren = {
   href: "/solutions",
-  label: "Solutions",
-  labelKo: "솔루션",
+  labelKey: "nav.solutions",
+  viewAllKey: "nav.viewAllSolutions",
+  menuNamespace: "solutionsMenu",
   sections: [
     {
-      title: "역량",
+      titleKey: "solutionsMenu.capabilities",
       items: [
         {
           href: "/solutions",
-          label: "핵심 솔루션",
-          desc: "에너지 데이터·AI·시뮬레이션 역량",
+          labelKey: "solutionsMenu.coreSolutions",
+          descKey: "solutionsMenu.coreSolutionsDesc",
           icon: (
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
               <circle cx="12" cy="12" r="3" /><path d="M12 1v4m0 14v4m-8.66-15l3.46 2m10.4 6l3.46 2M1.34 15l3.46-2m10.4-6l3.46-2M1.34 9l3.46 2m10.4 6l3.46 2m-14.32 0l3.46-2m10.4-6l3.46-2" />
@@ -141,8 +147,8 @@ const solutionsNav: NavItemWithChildren = {
         },
         {
           href: "/solutions/cases",
-          label: "수행사례",
-          desc: "60건 이상의 국내외 프로젝트",
+          labelKey: "solutionsMenu.cases",
+          descKey: "solutionsMenu.casesDesc",
           icon: (
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
               <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2" />
@@ -154,12 +160,12 @@ const solutionsNav: NavItemWithChildren = {
       ],
     },
     {
-      title: "실적",
+      titleKey: "solutionsMenu.trackRecord",
       items: [
         {
           href: "/solutions/rnd",
-          label: "R&D 이력",
-          desc: "정부 R&D 과제 수행 실적",
+          labelKey: "solutionsMenu.rnd",
+          descKey: "solutionsMenu.rndDesc",
           icon: (
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
               <path d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
@@ -168,8 +174,8 @@ const solutionsNav: NavItemWithChildren = {
         },
         {
           href: "/solutions/services",
-          label: "용역과제",
-          desc: "기업·기관 용역 수행 이력",
+          labelKey: "solutionsMenu.services",
+          descKey: "solutionsMenu.servicesDesc",
           icon: (
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
               <path d="M20 7H4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z" />
@@ -184,16 +190,17 @@ const solutionsNav: NavItemWithChildren = {
 
 const companyNav: NavItemWithChildren = {
   href: "/company",
-  label: "Company",
-  labelKo: "회사",
+  labelKey: "nav.company",
+  viewAllKey: "nav.viewAllCompany",
+  menuNamespace: "companyMenu",
   sections: [
     {
-      title: "소개",
+      titleKey: "companyMenu.about",
       items: [
         {
           href: "/company",
-          label: "회사소개",
-          desc: "비전·미션·조직·위치",
+          labelKey: "companyMenu.companyIntro",
+          descKey: "companyMenu.companyIntroDesc",
           icon: (
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
               <path d="M3 21h18M5 21V7l7-4 7 4v14" /><path d="M9 21v-4h6v4" /><path d="M9 10h.01M15 10h.01M9 14h.01M15 14h.01" />
@@ -202,8 +209,8 @@ const companyNav: NavItemWithChildren = {
         },
         {
           href: "/company/history",
-          label: "연혁",
-          desc: "나인와트의 주요 발자취",
+          labelKey: "companyMenu.history",
+          descKey: "companyMenu.historyDesc",
           icon: (
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
               <circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" />
@@ -212,8 +219,8 @@ const companyNav: NavItemWithChildren = {
         },
         {
           href: "/company/career",
-          label: "채용 안내",
-          desc: "함께 성장할 인재를 찾습니다",
+          labelKey: "companyMenu.career",
+          descKey: "companyMenu.careerDesc",
           icon: (
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
               <path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
@@ -223,12 +230,12 @@ const companyNav: NavItemWithChildren = {
       ],
     },
     {
-      title: "성과",
+      titleKey: "companyMenu.achievements",
       items: [
         {
           href: "/company/global",
-          label: "글로벌 사업",
-          desc: "일본·영국·프랑스·미국 진출",
+          labelKey: "companyMenu.global",
+          descKey: "companyMenu.globalDesc",
           icon: (
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
               <circle cx="12" cy="12" r="10" /><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z" />
@@ -237,8 +244,8 @@ const companyNav: NavItemWithChildren = {
         },
         {
           href: "/company/awards",
-          label: "수상 내역",
-          desc: "CES·정부 포상 등 수상 기록",
+          labelKey: "companyMenu.awards",
+          descKey: "companyMenu.awardsDesc",
           icon: (
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
               <path d="M8 21h8m-4-4v4m-4.5-9.25L7 8.5V3h10v5.5l-.5 3.25" />
@@ -248,8 +255,8 @@ const companyNav: NavItemWithChildren = {
         },
         {
           href: "/company/patents",
-          label: "특허 & 인증",
-          desc: "33건의 특허 및 주요 인증",
+          labelKey: "companyMenu.patents",
+          descKey: "companyMenu.patentsDesc",
           icon: (
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
               <path d="M12 2L9 9H2l5.5 4.5L5 21l7-5 7 5-2.5-7.5L22 9h-7L12 2z" />
@@ -263,6 +270,13 @@ const companyNav: NavItemWithChildren = {
 
 const megaMenuItems: NavItemWithChildren[] = [productNav, solutionsNav, companyNav];
 
+const localeLabels: Record<string, string> = {
+  ko: "KO",
+  en: "EN",
+  ja: "JA",
+  fr: "FR",
+};
+
 /* ──────────────────────────────────────────────
    Header Component
    ────────────────────────────────────────────── */
@@ -272,9 +286,15 @@ export default function Header() {
   const [mobileExpanded, setMobileExpanded] = useState<string | null>(null);
   const [scrolled, setScrolled] = useState(false);
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
+  const [langOpen, setLangOpen] = useState(false);
   const { theme, toggleTheme } = useTheme();
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const headerRef = useRef<HTMLElement>(null);
+  const langRef = useRef<HTMLDivElement>(null);
+  const t = useTranslations("common");
+  const locale = useLocale();
+  const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -285,10 +305,24 @@ export default function Header() {
   // Close mega menu on Escape
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setActiveMenu(null);
+      if (e.key === "Escape") {
+        setActiveMenu(null);
+        setLangOpen(false);
+      }
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
+  }, []);
+
+  // Close language dropdown on outside click
+  useEffect(() => {
+    const onClick = (e: MouseEvent) => {
+      if (langRef.current && !langRef.current.contains(e.target as Node)) {
+        setLangOpen(false);
+      }
+    };
+    window.addEventListener("click", onClick);
+    return () => window.removeEventListener("click", onClick);
   }, []);
 
   const handleMouseEnter = useCallback((label: string) => {
@@ -306,7 +340,20 @@ export default function Header() {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
   }, []);
 
-  const isTransparent = !scrolled && !mobileOpen && !activeMenu;
+  const switchLocale = useCallback((newLocale: string) => {
+    router.replace(pathname, { locale: newLocale as "ko" | "en" | "ja" | "fr" });
+    setLangOpen(false);
+  }, [router, pathname]);
+
+  const isHome = pathname === "/";
+  const isTransparent = isHome && !scrolled && !mobileOpen && !activeMenu;
+
+  // Helper to resolve label — product names are literal, others are translation keys
+  const resolveLabel = (key: string) => {
+    // Product names stay as-is
+    if (!key.includes(".")) return key;
+    return t(key);
+  };
 
   return (
     <>
@@ -329,29 +376,29 @@ export default function Header() {
           <nav className="hidden items-center gap-1 lg:flex">
             {megaMenuItems.map((item) => (
               <div
-                key={item.label}
+                key={item.labelKey}
                 className="relative"
-                onMouseEnter={() => handleMouseEnter(item.label)}
+                onMouseEnter={() => handleMouseEnter(item.labelKey)}
                 onMouseLeave={handleMouseLeave}
               >
                 <Link
                   href={item.href}
                   className={`inline-flex items-center gap-1 rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
-                    activeMenu === item.label
+                    activeMenu === item.labelKey
                       ? "text-foreground bg-surface"
                       : isTransparent
                         ? "text-white/80 hover:text-white"
                         : "text-muted hover:text-foreground"
                   }`}
                 >
-                  {item.label}
+                  {t(item.labelKey)}
                   <svg
                     viewBox="0 0 12 12"
                     fill="none"
                     stroke="currentColor"
                     strokeWidth="1.5"
                     className={`h-3 w-3 transition-transform duration-200 ${
-                      activeMenu === item.label ? "rotate-180" : ""
+                      activeMenu === item.labelKey ? "rotate-180" : ""
                     }`}
                   >
                     <path d="M3 4.5L6 7.5L9 4.5" />
@@ -361,11 +408,37 @@ export default function Header() {
             ))}
 
             <div className="ml-4 flex items-center gap-3">
+              {/* Language Switcher */}
+              <div ref={langRef} className="relative">
+                <button
+                  onClick={() => setLangOpen(!langOpen)}
+                  className={`flex h-8 items-center gap-1 rounded-full px-2.5 text-xs font-semibold transition-colors ${isTransparent ? "text-white/80 hover:text-white" : "text-muted hover:text-foreground"}`}
+                >
+                  {localeLabels[locale]}
+                  <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.5" className={`h-3 w-3 transition-transform ${langOpen ? "rotate-180" : ""}`}>
+                    <path d="M3 4.5L6 7.5L9 4.5" />
+                  </svg>
+                </button>
+                {langOpen && (
+                  <div className="absolute right-0 top-full mt-2 min-w-[80px] overflow-hidden rounded-lg border border-border bg-background shadow-lg">
+                    {routing.locales.map((loc) => (
+                      <button
+                        key={loc}
+                        onClick={() => switchLocale(loc)}
+                        className={`flex w-full items-center gap-2 px-4 py-2 text-sm transition-colors hover:bg-surface ${locale === loc ? "font-semibold text-primary" : "text-muted"}`}
+                      >
+                        {localeLabels[loc]}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+
               {/* Theme Toggle */}
               <button
                 onClick={toggleTheme}
                 className={`flex h-8 w-8 items-center justify-center rounded-full transition-colors ${isTransparent ? "text-white/80 hover:text-white" : "text-muted hover:text-foreground"}`}
-                aria-label="테마 전환"
+                aria-label={t("nav.themeToggle")}
               >
                 {theme === "dark" ? (
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -386,7 +459,7 @@ export default function Header() {
                 href="/contact"
                 className="rounded-full bg-primary px-5 py-2 text-sm font-medium text-white transition-colors hover:bg-primary-dark"
               >
-                문의하기
+                {t("nav.contact")}
               </Link>
             </div>
           </nav>
@@ -396,7 +469,7 @@ export default function Header() {
             <button
               onClick={toggleTheme}
               className={`flex h-8 w-8 items-center justify-center rounded-full transition-colors ${isTransparent ? "text-white/80 hover:text-white" : "text-muted hover:text-foreground"}`}
-              aria-label="테마 전환"
+              aria-label={t("nav.themeToggle")}
             >
               {theme === "dark" ? (
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -415,7 +488,7 @@ export default function Header() {
             <button
               className="flex flex-col gap-1.5"
               onClick={() => setMobileOpen(!mobileOpen)}
-              aria-label="메뉴"
+              aria-label={t("nav.menu")}
             >
               <span className={`block h-0.5 w-6 transition-transform ${isTransparent ? "bg-white" : "bg-foreground"} ${mobileOpen ? "translate-y-2 rotate-45" : ""}`} />
               <span className={`block h-0.5 w-6 transition-opacity ${isTransparent ? "bg-white" : "bg-foreground"} ${mobileOpen ? "opacity-0" : ""}`} />
@@ -438,8 +511,8 @@ export default function Header() {
             <div className="mx-auto max-w-7xl px-6 py-6">
               {megaMenuItems.map((item) => (
                 <div
-                  key={item.label}
-                  className={`${activeMenu === item.label ? "block" : "hidden"}`}
+                  key={item.labelKey}
+                  className={`${activeMenu === item.labelKey ? "block" : "hidden"}`}
                 >
                   <div className="flex">
                     {item.sections.map((section, sIdx) => (
@@ -451,9 +524,9 @@ export default function Header() {
                             : ""
                         }`}
                       >
-                        {section.title && (
+                        {section.titleKey && (
                           <h3 className="mb-3 text-xs font-semibold uppercase tracking-widest text-muted/70">
-                            {section.title}
+                            {t(section.titleKey)}
                           </h3>
                         )}
                         <div className="flex flex-col gap-1">
@@ -469,7 +542,7 @@ export default function Header() {
                               </span>
                               <div className="flex flex-col">
                                 <span className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors flex items-center gap-1">
-                                  {subItem.label}
+                                  {resolveLabel(subItem.labelKey)}
                                   <svg
                                     viewBox="0 0 12 12"
                                     fill="none"
@@ -481,7 +554,7 @@ export default function Header() {
                                   </svg>
                                 </span>
                                 <span className="text-xs leading-relaxed text-muted">
-                                  {subItem.desc}
+                                  {t(subItem.descKey)}
                                 </span>
                               </div>
                             </Link>
@@ -497,7 +570,7 @@ export default function Header() {
                         onClick={() => setActiveMenu(null)}
                         className="group inline-flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-medium text-primary transition-colors hover:bg-primary hover:text-white"
                       >
-                        {item.labelKo} 전체보기
+                        {t(item.viewAllKey)}
                         <svg
                           viewBox="0 0 12 12"
                           fill="none"
@@ -521,23 +594,23 @@ export default function Header() {
           <nav className="border-t border-border bg-background/95 px-6 py-4 backdrop-blur-xl lg:hidden max-h-[calc(100dvh-4rem)] overflow-y-auto">
             <div className="flex flex-col gap-1">
               {megaMenuItems.map((item) => (
-                <div key={item.label}>
+                <div key={item.labelKey}>
                   <button
                     onClick={() =>
                       setMobileExpanded(
-                        mobileExpanded === item.label ? null : item.label
+                        mobileExpanded === item.labelKey ? null : item.labelKey
                       )
                     }
                     className="flex w-full items-center justify-between rounded-lg px-3 py-3 text-sm font-medium text-foreground transition-colors hover:bg-surface"
                   >
-                    {item.label}
+                    {t(item.labelKey)}
                     <svg
                       viewBox="0 0 12 12"
                       fill="none"
                       stroke="currentColor"
                       strokeWidth="1.5"
                       className={`h-3.5 w-3.5 text-muted transition-transform duration-200 ${
-                        mobileExpanded === item.label ? "rotate-180" : ""
+                        mobileExpanded === item.labelKey ? "rotate-180" : ""
                       }`}
                     >
                       <path d="M3 4.5L6 7.5L9 4.5" />
@@ -546,7 +619,7 @@ export default function Header() {
 
                   <div
                     className={`overflow-hidden transition-all duration-300 ${
-                      mobileExpanded === item.label
+                      mobileExpanded === item.labelKey
                         ? "max-h-[600px] opacity-100"
                         : "max-h-0 opacity-0"
                     }`}
@@ -554,9 +627,9 @@ export default function Header() {
                     <div className="pb-2 pl-2">
                       {item.sections.map((section, sIdx) => (
                         <div key={sIdx}>
-                          {section.title && (
+                          {section.titleKey && (
                             <h3 className="mb-1 mt-3 px-3 text-xs font-semibold uppercase tracking-widest text-muted/60">
-                              {section.title}
+                              {t(section.titleKey)}
                             </h3>
                           )}
                           {section.items.map((subItem) => (
@@ -574,10 +647,10 @@ export default function Header() {
                               </span>
                               <div>
                                 <span className="text-sm font-medium text-foreground">
-                                  {subItem.label}
+                                  {resolveLabel(subItem.labelKey)}
                                 </span>
                                 <span className="ml-2 text-xs text-muted">
-                                  {subItem.desc}
+                                  {t(subItem.descKey)}
                                 </span>
                               </div>
                             </Link>
@@ -589,6 +662,26 @@ export default function Header() {
                 </div>
               ))}
 
+              {/* Mobile Language Switcher */}
+              <div className="mt-2 flex gap-2 px-3">
+                {routing.locales.map((loc) => (
+                  <button
+                    key={loc}
+                    onClick={() => {
+                      switchLocale(loc);
+                      setMobileOpen(false);
+                    }}
+                    className={`rounded-full px-3 py-1.5 text-xs font-semibold transition-colors ${
+                      locale === loc
+                        ? "bg-primary text-white"
+                        : "border border-border text-muted hover:text-foreground"
+                    }`}
+                  >
+                    {localeLabels[loc]}
+                  </button>
+                ))}
+              </div>
+
               <Link
                 href="/contact"
                 className="mt-3 rounded-full bg-primary px-5 py-2.5 text-center text-sm font-medium text-white transition-colors hover:bg-primary-dark"
@@ -597,7 +690,7 @@ export default function Header() {
                   setMobileExpanded(null);
                 }}
               >
-                문의하기
+                {t("nav.contact")}
               </Link>
             </div>
           </nav>

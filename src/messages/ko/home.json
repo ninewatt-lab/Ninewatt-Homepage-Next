@@ -1,0 +1,69 @@
+{
+  "hero": {
+    "badge": "CES 2026 Innovation Awards",
+    "headline": "건물이 에너지를",
+    "headlineHighlight": "말하게 하다",
+    "subtitle": "건물 에너지를 측정하고, AI로 분석하고, 탄소중립을 실행합니다.",
+    "ctaContact": "문의하기",
+    "ctaProducts": "제품 보기"
+  },
+  "showcase": {
+    "label": "Our Products",
+    "heading": "에너지 기술의 모든 것",
+    "opti": {
+      "title": "AI가 건물 에너지를\n진단하고 최적화합니다",
+      "description": "자연어로 건물 에너지를 질의하면, AI가 비용 절감 전략과 투자 시뮬레이션 결과를 실시간으로 제공합니다. CES 2026 Innovation Awards 수상작.",
+      "linkText": "Opti 알아보기"
+    },
+    "greenplanner": {
+      "title": "그린리모델링,\n시뮬레이션으로 설계합니다",
+      "description": "건물의 단열·창호·설비 개선 효과를 사전에 시뮬레이션하고, 최적의 그린리모델링 시나리오를 도출합니다.",
+      "linkText": "GreenPlanner 알아보기"
+    },
+    "watti": {
+      "title": "3D 맵 위에서\n건물 에너지를 읽다",
+      "description": "건축물·에너지·환경·도시 데이터를 3D 맵 위에 통합하고, 건물별 에너지 효율화 인사이트를 시각적으로 제공합니다.",
+      "linkText": "Watti 알아보기"
+    },
+    "repark": {
+      "title": "QR 하나로\n시설물을 관리합니다",
+      "description": "시민은 QR로 고장을 신고하고, 관리자는 접수·배정을 처리하고, 보수업체는 완료를 보고합니다. 세 주체를 하나로 잇는 스마트 시설물 관리 시스템입니다.",
+      "linkText": "RE:park 알아보기"
+    },
+    "solarScope": {
+      "title": "주소 입력만으로\n태양광 적합성을 분석합니다",
+      "description": "토지·건물의 태양광 설치 가능성을 분석합니다. 규제, 이격거리, 배전망, 발전량, 수익성을 통합 평가합니다.",
+      "linkText": "SolarScope 알아보기"
+    },
+    "pvIntelligence": {
+      "title": "태양광 발전소를\n하나의 플랫폼에서 관제합니다",
+      "description": "자체 RTU로 현장 데이터를 수집하고, 실시간 모니터링부터 AI 운영 분석까지 하나의 플랫폼에서 제공합니다.",
+      "linkText": "PV Intelligence 알아보기"
+    }
+  },
+  "cards": {
+    "optiTitle": "Opti — AI 에너지 어드바이저",
+    "optiDesc": "CES 2026 수상작. 건물 에너지 데이터를 자연어로 질의하면, 비용 절감 전략과 투자 시뮬레이션 결과를 바로 받아볼 수 있습니다.",
+    "optiLink": "제품 알아보기",
+    "solutionsTitle": "에너지 데이터·AI·시뮬레이션",
+    "solutionsDesc": "데이터 수집부터 도시 에너지 시뮬레이션까지.",
+    "globalTitle": "4개국 진출, 33건 특허",
+    "globalDesc": "일본·영국·프랑스·미국에서 사업을 전개하고 있습니다."
+  },
+  "partners": {
+    "label": "Trusted by industry leaders"
+  },
+  "stats": {
+    "founded": "설립",
+    "employees": "직원 수",
+    "projects": "수행 프로젝트",
+    "growth": "매출 성장률",
+    "investment": "누적 투자",
+    "patents": "보유 특허"
+  },
+  "cta": {
+    "heading": "에너지 솔루션이 필요하신가요?",
+    "description": "나인와트 팀이 건물 유형과 규모에 맞는 방안을 함께 설계합니다.",
+    "button": "문의하기"
+  }
+}

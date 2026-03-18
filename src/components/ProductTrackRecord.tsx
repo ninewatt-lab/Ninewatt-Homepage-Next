@@ -1,3 +1,7 @@
+"use client";
+
+import { useTranslations } from "next-intl";
+
 export interface TrackRecordItem {
   year: number;
   type: "R&D" | "사업화" | "용역" | "PoC" | "지원사업";
@@ -12,6 +16,7 @@ export function ProductTrackRecord({
 }: {
   items: TrackRecordItem[];
 }) {
+  const t = useTranslations("common");
   const sorted = [...items].sort((a, b) => b.year - a.year);
   const grouped = sorted.reduce<Record<number, TrackRecordItem[]>>(
     (acc, item) => {
@@ -27,9 +32,9 @@ export function ProductTrackRecord({
   return (
     <section className="border-t border-border px-6 py-24">
       <div className="mx-auto max-w-5xl">
-        <h2 className="text-2xl font-bold">관련 사업 실적</h2>
+        <h2 className="text-2xl font-bold">{t("trackRecord.title")}</h2>
         <p className="mt-3 text-muted">
-          정부 R&D·사업화·실증 과제 수행 이력 ({items.length}건)
+          {t("trackRecord.subtitle", { count: items.length })}
         </p>
         <div className="mt-10 space-y-8">
           {years.map((year) => (
@@ -49,13 +54,13 @@ export function ProductTrackRecord({
                     {(item.period || item.department || item.org) && (
                       <div className="mt-1 flex flex-wrap gap-x-4 text-xs text-muted">
                         {item.period && (
-                          <span>사업기간: {item.period}</span>
+                          <span>{t("trackRecord.period")}: {item.period}</span>
                         )}
                         {item.department && (
-                          <span>주관부처: {item.department}</span>
+                          <span>{t("trackRecord.department")}: {item.department}</span>
                         )}
                         {item.org && (
-                          <span>운영기관: {item.org}</span>
+                          <span>{t("trackRecord.org")}: {item.org}</span>
                         )}
                       </div>
                     )}
