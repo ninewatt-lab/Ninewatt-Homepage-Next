@@ -15,6 +15,7 @@
     "heroDesc": "Analysez vos données énergétiques de bâtiment par la conversation et recevez automatiquement des stratégies de réduction des coûts. Solution éprouvée dans plus de 200 bâtiments.",
     "requestDemo": "Demander une démonstration",
     "downloadPdf": "Télécharger le PDF",
+    "goToService": "Accéder au service",
     "problem": "Problématique",
     "problemItems": [
       "Les rapports énergétiques sont trop complexes pour être interprétés directement par les équipes opérationnelles.",
@@ -232,6 +233,7 @@
     "heroDesc": "Grâce à la simulation énergétique et aux données immobilières publiques, estimez la valeur de votre bien après rénovation et bénéficiez d'un accompagnement complet pour les financements publics.",
     "serviceInquiry": "Nous contacter",
     "downloadPdf": "Télécharger le PDF",
+    "goToService": "Accéder au service",
     "targetUsers": [
       "Propriétaires de bâtiments commerciaux",
       "Futurs acquéreurs de bâtiments",

@@ -19,6 +19,7 @@ import { Executives } from "@/globals/Executives";
 import { Organization } from "@/globals/Organization";
 import { Career } from "@/globals/Career";
 import { GlobalBusiness } from "@/globals/GlobalBusiness";
+import { Products } from "@/globals/Products";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -50,7 +51,7 @@ export default buildConfig({
     fallback: true,
   },
   collections: [Users, Media, Awards, Certifications, History, Patents, Partners, RndProjects],
-  globals: [CompanyInfo, HomeStats, Executives, Organization, Career, GlobalBusiness],
+  globals: [CompanyInfo, HomeStats, Executives, Organization, Career, GlobalBusiness, Products],
   secret: process.env.PAYLOAD_SECRET || "",
   typescript: {
     outputFile: path.resolve(dirname, "src/payload-types.ts"),

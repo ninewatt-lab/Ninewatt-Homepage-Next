@@ -15,6 +15,7 @@
     "heroDesc": "건물 에너지 데이터를 대화로 분석하고, 비용 절감 전략을 자동으로 제안합니다. 200개 이상의 건물에서 검증되었습니다.",
     "requestDemo": "데모 요청하기",
     "downloadPdf": "PDF 다운로드",
+    "goToService": "서비스 바로가기",
     "problem": "문제",
     "problemItems": [
       "에너지 리포트가 너무 복잡해서 실무자가 직접 해석하기 어렵습니다.",
@@ -155,6 +156,7 @@
     "heroDesc": "에너지 시뮬레이션과 부동산 공공 데이터로 리모델링 후 추정시세를 예측하고, 정부지원자금 컨설팅까지 한 번에 제공합니다.",
     "serviceInquiry": "서비스 문의하기",
     "downloadPdf": "PDF 다운로드",
+    "goToService": "서비스 바로가기",
     "targetUsers": ["상업용 건물 소유자", "건물 예비소유자", "부동산 중개법인"],
     "questionsTitle": "GreenPlanner가 답하는 질문들",
     "questions": [

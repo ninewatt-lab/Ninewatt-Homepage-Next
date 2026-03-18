@@ -72,3 +72,19 @@ export const RndContentRowLabel = () => {
   const { data } = useRowLabel<{ item?: string }>();
   return <span>{data?.item || "새 연구내용"}</span>;
 };
+
+const productLabels: Record<string, string> = {
+  opti: "Opti",
+  greenplanner: "GreenPlanner",
+  watti: "Watti",
+  "save-e": "Save-E",
+  repark: "RE:park",
+  "solar-site": "SolarScope",
+  "pv-intelligence": "PV Intelligence",
+};
+
+export const ProductRowLabel = () => {
+  const { data } = useRowLabel<{ slug?: string; serviceUrl?: string }>();
+  const label = data?.slug ? productLabels[data.slug] || data.slug : "새 제품";
+  return <span>{data?.serviceUrl ? `${label} — ${data.serviceUrl}` : label}</span>;
+};

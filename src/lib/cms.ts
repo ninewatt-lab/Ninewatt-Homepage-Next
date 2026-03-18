@@ -93,3 +93,15 @@ export async function getGlobalBusiness(locale: string) {
   const payload = await getPayloadClient();
   return payload.findGlobal({ slug: "global-business", locale });
 }
+
+export async function getProducts() {
+  const payload = await getPayloadClient();
+  return payload.findGlobal({ slug: "products" });
+}
+
+export async function getProductServiceUrl(slug: string): Promise<string | null> {
+  const data = await getProducts();
+  const items = data.items as { slug: string; serviceUrl?: string }[] | undefined;
+  const product = items?.find((item) => item.slug === slug);
+  return product?.serviceUrl || null;
+}

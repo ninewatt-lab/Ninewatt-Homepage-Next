@@ -48,7 +48,7 @@ async function seed() {
       data: {
         name: cert.name,
         issuer: cert.issuer,
-        sortOrder: i,
+        sortOrder: (i + 1) * 10,
       },
     });
   }
@@ -466,6 +466,17 @@ async function seed() {
             { text: "2025.11 Johnson Controls와 Opti 구독 계약 체결, 수출 실적 발생" },
           ],
         },
+      ],
+    },
+  });
+
+  // Products
+  await payload.updateGlobal({
+    slug: "products",
+    data: {
+      items: [
+        { slug: "opti", serviceUrl: "https://opti-bi.com" },
+        { slug: "greenplanner", serviceUrl: "https://greenplanner.co.kr/map" },
       ],
     },
   });

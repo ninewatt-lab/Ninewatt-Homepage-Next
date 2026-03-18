@@ -1,6 +1,7 @@
 import { Link } from "@/i18n/navigation";
 import { getTranslations } from "next-intl/server";
 import { ProductTrackRecord, type TrackRecordItem } from "@/components/ProductTrackRecord";
+import { getProductServiceUrl } from "@/lib/cms";
 
 export async function generateMetadata() {
   const t = await getTranslations("product");
@@ -22,7 +23,10 @@ const trackRecord: TrackRecordItem[] = [
 ];
 
 export default async function GreenPlannerPage() {
-  const t = await getTranslations("product");
+  const [t, serviceUrl] = await Promise.all([
+    getTranslations("product"),
+    getProductServiceUrl("greenplanner"),
+  ]);
   const targetUsers = t.raw("greenplanner.targetUsers") as string[];
   const questions = t.raw("greenplanner.questions") as { q: string; a: string }[];
   const moreFeaturesItems = t.raw("greenplanner.moreFeaturesItems") as string[];
@@ -60,6 +64,16 @@ export default async function GreenPlannerPage() {
             >
               {t("greenplanner.downloadPdf")}
             </a>
+            {serviceUrl && (
+              <a
+                href={serviceUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-full border border-border px-8 py-3.5 text-sm font-semibold transition-colors hover:bg-surface"
+              >
+                {t("greenplanner.goToService")} &rarr;
+              </a>
+            )}
           </div>
         </div>
       </section>

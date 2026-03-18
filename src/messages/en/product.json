@@ -15,6 +15,7 @@
     "heroDesc": "Analyze building energy data through conversation and receive automated cost reduction strategies. Validated across 200+ buildings.",
     "requestDemo": "Request Demo",
     "downloadPdf": "Download PDF",
+    "goToService": "Go to Service",
     "problem": "The Challenge",
     "problemItems": [
       "Energy reports are too complex for facility managers to interpret on their own.",
@@ -155,6 +156,7 @@
     "heroDesc": "Predict post-renovation property values using energy simulation and public real estate data, with end-to-end government subsidy consulting included.",
     "serviceInquiry": "Inquire About Service",
     "downloadPdf": "Download PDF",
+    "goToService": "Go to Service",
     "targetUsers": ["Commercial building owners", "Prospective building buyers", "Real estate brokerage firms"],
     "questionsTitle": "Questions GreenPlanner Answers",
     "questions": [

@@ -1,5 +1,6 @@
 import { Link } from "@/i18n/navigation";
 import { getTranslations } from "next-intl/server";
+import { getProductServiceUrl } from "@/lib/cms";
 
 export async function generateMetadata() {
   const t = await getTranslations("product");
@@ -10,7 +11,10 @@ export async function generateMetadata() {
 }
 
 export default async function OptiPage() {
-  const t = await getTranslations("product");
+  const [t, serviceUrl] = await Promise.all([
+    getTranslations("product"),
+    getProductServiceUrl("opti"),
+  ]);
   const features = t.raw("opti.features") as { title: string; desc: string }[];
   const steps = t.raw("opti.steps") as { title: string; desc: string }[];
   const impactItems = t.raw("opti.impactItems") as { value: string; label: string }[];
@@ -50,6 +54,16 @@ export default async function OptiPage() {
             >
               {t("opti.downloadPdf")}
             </a>
+            {serviceUrl && (
+              <a
+                href={serviceUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-full border border-border px-8 py-3.5 text-sm font-semibold transition-colors hover:bg-surface"
+              >
+                {t("opti.goToService")} &rarr;
+              </a>
+            )}
           </div>
         </div>
       </section>
