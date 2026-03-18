@@ -13,7 +13,7 @@ export default function VideoHero() {
         playsInline
         className="absolute inset-0 h-full w-full object-cover"
       >
-        <source src="/videos/intro/intro.mp4" type="video/mp4" />
+        <source src="https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/videos/intro.mp4" type="video/mp4" />
       </video>
 
       {/* Dark overlay gradient */}
