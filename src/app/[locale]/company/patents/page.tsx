@@ -1,6 +1,5 @@
 import { getTranslations } from "next-intl/server";
-import { domesticPatents, internationalPatents } from "@/data/patents";
-import { certifications } from "@/data/certifications";
+import { getPatents, getCertifications } from "@/lib/cms";
 
 export async function generateMetadata() {
   const t = await getTranslations("company");
@@ -10,11 +9,27 @@ export async function generateMetadata() {
   };
 }
 
-const domesticRegistered = domesticPatents.filter((p) => p.status === "등록");
-const domesticPending = domesticPatents.filter((p) => p.status === "출원");
-
-export default async function PatentsPage() {
+export default async function PatentsPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
   const t = await getTranslations("company");
+
+  const [
+    { docs: domesticPatentsAll },
+    { docs: internationalPatents },
+    { docs: certifications },
+  ] = await Promise.all([
+    getPatents(locale, "domestic"),
+    getPatents(locale, "international"),
+    getCertifications(locale),
+  ]);
+
+  const domesticRegistered = domesticPatentsAll.filter((p) => p.status === "등록");
+  const domesticPending = domesticPatentsAll.filter((p) => p.status === "출원");
+  const totalPatents = domesticPatentsAll.length + internationalPatents.length;
 
   return (
     <>
@@ -34,11 +49,11 @@ export default async function PatentsPage() {
           <dl className="flex flex-wrap gap-x-12 gap-y-4 text-sm">
             <div>
               <dt className="text-muted">{t("patents.totalPatents")}</dt>
-              <dd className="text-2xl font-bold">33</dd>
+              <dd className="text-2xl font-bold">{totalPatents}</dd>
             </div>
             <div>
               <dt className="text-muted">{t("patents.domestic")}</dt>
-              <dd className="text-2xl font-bold">{domesticPatents.length}</dd>
+              <dd className="text-2xl font-bold">{domesticPatentsAll.length}</dd>
             </div>
             <div>
               <dt className="text-muted">{t("patents.international")}</dt>
@@ -137,8 +152,8 @@ export default async function PatentsPage() {
                       <td className="py-3 pr-3 text-muted">{i + 1}</td>
                       <td className="py-3 pr-3 whitespace-nowrap text-muted">{p.date}</td>
                       <td className="py-3 pr-3 font-mono text-xs text-muted">{p.number}</td>
-                      <td className="py-3 pr-3">{p.titleKo}</td>
-                      <td className="py-3 pr-3 text-muted">{p.titleEn}</td>
+                      <td className="py-3 pr-3">{p.title}</td>
+                      <td className="py-3 pr-3 text-muted">{p.title}</td>
                       <td className="py-3 whitespace-nowrap text-muted">{p.country}</td>
                     </tr>
                   ))}

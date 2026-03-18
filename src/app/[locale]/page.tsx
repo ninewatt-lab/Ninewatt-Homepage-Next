@@ -1,5 +1,6 @@
 import { Link } from "@/i18n/navigation";
 import { getTranslations } from "next-intl/server";
+import { getHomeStats } from "@/lib/cms";
 import {
   SmesAndStartups,
   SeoulMetropolitanGov,
@@ -32,17 +33,19 @@ import ProductShowcase from "@/components/ProductShowcase";
 import CountUp from "@/components/CountUp";
 import LogoMarquee from "@/components/LogoMarquee";
 
-export default async function Home() {
+export default async function Home({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
   const t = await getTranslations("home");
 
-  const stats = [
-    { value: "2019", label: t("stats.founded") },
-    { value: "30+", label: t("stats.employees") },
-    { value: "60+", label: t("stats.projects") },
-    { value: "96.81%", label: t("stats.growth") },
-    { value: "48억", label: t("stats.investment") },
-    { value: "33건", label: t("stats.patents") },
-  ];
+  const homeStatsData = await getHomeStats(locale);
+  const stats = ((homeStatsData.stats ?? []) as Array<{ value?: string | null; label?: string | null }>).map((s) => ({
+    value: s.value ?? "",
+    label: s.label ?? "",
+  }));
 
   return (
     <>

@@ -1,5 +1,5 @@
 import { getTranslations } from "next-intl/server";
-import { history } from "@/data/history";
+import { getHistory } from "@/lib/cms";
 
 export async function generateMetadata() {
   const t = await getTranslations("company");
@@ -9,20 +9,26 @@ export async function generateMetadata() {
   };
 }
 
-const historyByYear = history.reduce(
-  (acc, item) => {
-    if (!acc[item.year]) acc[item.year] = [];
-    acc[item.year].push(item);
-    return acc;
-  },
-  {} as Record<number, typeof history>,
-);
-const sortedYears = Object.keys(historyByYear)
-  .map(Number)
-  .sort((a, b) => b - a);
-
-export default async function HistoryPage() {
+export default async function HistoryPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
   const t = await getTranslations("company");
+  const { docs: history } = await getHistory(locale);
+
+  const historyByYear = history.reduce(
+    (acc, item) => {
+      if (!acc[item.year]) acc[item.year] = [];
+      acc[item.year].push(item);
+      return acc;
+    },
+    {} as Record<number, typeof history>,
+  );
+  const sortedYears = Object.keys(historyByYear)
+    .map(Number)
+    .sort((a, b) => b - a);
 
   return (
     <>

@@ -1,5 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
+import { getCareer } from "@/lib/cms";
 
 export async function generateMetadata() {
   const t = await getTranslations("company");
@@ -9,22 +10,21 @@ export async function generateMetadata() {
   };
 }
 
-export default async function CareerPage() {
+export default async function CareerPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
   const t = await getTranslations("company");
+  const careerData = await getCareer(locale);
 
-  const values = t.raw("career.values") as Array<{
-    title: string;
-    desc: string;
-  }>;
-  const benefitCategories = t.raw("career.benefitCategories") as Array<{
+  const values = (careerData.values ?? []) as Array<{ title: string; desc?: string | null }>;
+  const benefitCategories = (careerData.benefitCategories ?? []) as Array<{
     category: string;
-    items: Array<{ title: string; desc: string }>;
+    items?: Array<{ title: string; desc?: string | null }> | null;
   }>;
-  const steps = t.raw("career.steps") as Array<{
-    step: string;
-    title: string;
-    desc: string;
-  }>;
+  const steps = (careerData.steps ?? []) as Array<{ step: string; title: string; desc?: string | null }>;
 
   const valueIcons = [
     <svg key="growth" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-6 w-6">
@@ -58,9 +58,11 @@ export default async function CareerPage() {
           <h2 className="text-sm font-semibold uppercase tracking-widest text-primary">
             Culture
           </h2>
-          <h3 className="mt-2 text-3xl font-bold tracking-tight">{t("career.cultureTitle")}</h3>
+          <h3 className="mt-2 text-3xl font-bold tracking-tight">
+            {careerData.cultureTitle || t("career.cultureTitle")}
+          </h3>
           <p className="mt-4 max-w-2xl text-muted leading-relaxed">
-            {t("career.cultureDesc")}
+            {careerData.cultureDesc || t("career.cultureDesc")}
           </p>
         </div>
       </section>
@@ -71,9 +73,11 @@ export default async function CareerPage() {
           <h2 className="text-sm font-semibold uppercase tracking-widest text-primary">
             Talent
           </h2>
-          <h3 className="mt-2 text-3xl font-bold tracking-tight">{t("career.talentTitle")}</h3>
+          <h3 className="mt-2 text-3xl font-bold tracking-tight">
+            {careerData.talentTitle || t("career.talentTitle")}
+          </h3>
           <p className="mt-4 max-w-2xl text-muted">
-            {t("career.talentSubtitle")}
+            {careerData.talentSubtitle || t("career.talentSubtitle")}
           </p>
 
           <div className="mt-12 grid gap-6 sm:grid-cols-3">
@@ -108,7 +112,7 @@ export default async function CareerPage() {
                   {group.category}
                 </h4>
                 <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                  {group.items.map((item) => (
+                  {(group.items ?? []).map((item) => (
                     <div
                       key={item.title}
                       className="rounded-xl border border-border p-5"

@@ -14,6 +14,13 @@ FROM base AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+
+# Payload needs DATABASE_URL at build time for schema generation
+ARG DATABASE_URL
+ARG PAYLOAD_SECRET
+ENV DATABASE_URL=$DATABASE_URL
+ENV PAYLOAD_SECRET=$PAYLOAD_SECRET
+
 RUN pnpm build
 
 # --- Production ---
@@ -28,6 +35,9 @@ RUN adduser --system --uid 1001 nextjs
 COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+
+# Create media upload directory
+RUN mkdir -p /app/public/media && chown nextjs:nodejs /app/public/media
 
 USER nextjs
 EXPOSE 3000

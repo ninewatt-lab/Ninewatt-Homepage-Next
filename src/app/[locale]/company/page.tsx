@@ -1,5 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
+import { getExecutives, getOrganization, getCompanyInfo } from "@/lib/cms";
 
 export async function generateMetadata() {
   const t = await getTranslations("company");
@@ -9,36 +10,36 @@ export async function generateMetadata() {
   };
 }
 
-export default async function CompanyPage() {
+export default async function CompanyPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
   const t = await getTranslations("company");
+
+  const [executivesData, orgData, companyInfoData] = await Promise.all([
+    getExecutives(locale),
+    getOrganization(locale),
+    getCompanyInfo(locale),
+  ]);
 
   const companyInfo = t.raw("about.companyInfo") as Array<{
     label: string;
     value: string;
   }>;
-  const orgItems = t.raw("about.orgItems") as Array<{
-    name: string;
-    desc: string;
-  }>;
-  const ceoDetails = t.raw("about.ceo.details") as string[];
-  const ctoDetails = t.raw("about.cto.details") as string[];
 
-  const executives = [
-    {
-      role: t("about.ceo.role"),
-      name: t("about.ceo.name"),
-      team: t("about.ceo.team"),
-      description: t("about.ceo.desc"),
-      details: ceoDetails,
-    },
-    {
-      role: t("about.cto.role"),
-      name: t("about.cto.name"),
-      team: t("about.cto.team"),
-      description: t("about.cto.desc"),
-      details: ctoDetails,
-    },
-  ];
+  const executives = (executivesData.members ?? []) as Array<{
+    role?: string | null;
+    name?: string | null;
+    team?: string | null;
+    description?: string | null;
+    details?: Array<{ item?: string | null }> | null;
+  }>;
+  const orgItems = (orgData.departments ?? []) as Array<{
+    name?: string | null;
+    description?: string | null;
+  }>;
 
   return (
     <>
@@ -83,13 +84,15 @@ export default async function CompanyPage() {
                 <p className="mt-2 text-sm leading-relaxed text-muted">
                   {exec.description}
                 </p>
-                <ul className="mt-3 space-y-1">
-                  {exec.details.map((d) => (
-                    <li key={d} className="text-sm text-muted">
-                      · {d}
-                    </li>
-                  ))}
-                </ul>
+                {exec.details && (
+                  <ul className="mt-3 space-y-1">
+                    {(exec.details as Array<{ item?: string }>).map((d, i) => (
+                      <li key={i} className="text-sm text-muted">
+                        · {typeof d === "string" ? d : d.item}
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </div>
             ))}
           </div>
@@ -107,7 +110,7 @@ export default async function CompanyPage() {
                 className="border-l-2 border-border pl-6"
               >
                 <p className="font-semibold">{org.name}</p>
-                <p className="mt-0.5 text-sm text-muted">{org.desc}</p>
+                <p className="mt-0.5 text-sm text-muted">{org.description}</p>
               </div>
             ))}
           </div>
@@ -122,11 +125,11 @@ export default async function CompanyPage() {
             <tbody>
               <tr className="border-b border-border">
                 <td className="py-4 pr-6 font-semibold align-top whitespace-nowrap">{t("about.hqLabel")}</td>
-                <td className="py-4 text-muted">{t("about.hqAddress")}</td>
+                <td className="py-4 text-muted">{companyInfoData.hqAddress || t("about.hqAddress")}</td>
               </tr>
               <tr className="border-b border-border">
                 <td className="py-4 pr-6 font-semibold align-top whitespace-nowrap">{t("about.rndLabel")}</td>
-                <td className="py-4 text-muted">{t("about.rndAddress")}</td>
+                <td className="py-4 text-muted">{companyInfoData.rndAddress || t("about.rndAddress")}</td>
               </tr>
             </tbody>
           </table>

@@ -1,5 +1,5 @@
 import { getTranslations } from "next-intl/server";
-import { awards } from "@/data/awards";
+import { getAwards } from "@/lib/cms";
 
 export async function generateMetadata() {
   const t = await getTranslations("company");
@@ -9,20 +9,26 @@ export async function generateMetadata() {
   };
 }
 
-const awardsByYear = awards.reduce(
-  (acc, item) => {
-    if (!acc[item.year]) acc[item.year] = [];
-    acc[item.year].push(item);
-    return acc;
-  },
-  {} as Record<number, typeof awards>,
-);
-const awardYears = Object.keys(awardsByYear)
-  .map(Number)
-  .sort((a, b) => b - a);
-
-export default async function AwardsPage() {
+export default async function AwardsPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
   const t = await getTranslations("company");
+  const { docs: awards } = await getAwards(locale);
+
+  const awardsByYear = awards.reduce(
+    (acc, item) => {
+      if (!acc[item.year]) acc[item.year] = [];
+      acc[item.year].push(item);
+      return acc;
+    },
+    {} as Record<number, typeof awards>,
+  );
+  const awardYears = Object.keys(awardsByYear)
+    .map(Number)
+    .sort((a, b) => b - a);
 
   return (
     <>
