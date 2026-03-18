@@ -9,8 +9,8 @@
 set -euo pipefail
 
 # --- 설정 ---
-S3_BUCKET="ninewatt-backups"           # S3 버킷명 (변경 필요)
-S3_PREFIX="db-backups"
+S3_BUCKET="ninewatt-homepage"
+S3_PREFIX="database_backup"
 DB_CONTAINER="ninewatt-db"
 DB_USER="ninewatt"
 DB_NAME="ninewatt"

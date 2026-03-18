@@ -10,8 +10,8 @@
 set -euo pipefail
 
 # --- 설정 ---
-S3_BUCKET="ninewatt-backups"           # S3 버킷명 (변경 필요)
-S3_PREFIX="db-backups"                  # S3 내 경로
+S3_BUCKET="ninewatt-homepage"
+S3_PREFIX="database_backup"
 DB_CONTAINER="ninewatt-db"              # PostgreSQL Docker 컨테이너명
 DB_USER="ninewatt"                      # DB 사용자
 DB_NAME="ninewatt"                      # DB 이름
