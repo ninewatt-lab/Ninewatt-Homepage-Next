@@ -43,5 +43,4 @@ next-env.d.ts
 /public/videos/
 
 # payload
-/src/app/(payload)/admin/importMap.js
 /public/media/
