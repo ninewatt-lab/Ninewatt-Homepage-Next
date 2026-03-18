@@ -82,23 +82,6 @@ export default function VideoHero() {
         </div>
       </div>
 
-      {/* Scroll indicator */}
-      <div className="absolute bottom-8 left-1/2 z-10 -translate-x-1/2 animate-bounce">
-        <svg
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="white"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="opacity-60"
-        >
-          <path d="M7 13l5 5 5-5" />
-          <path d="M7 7l5 5 5-5" />
-        </svg>
-      </div>
     </section>
   );
 }

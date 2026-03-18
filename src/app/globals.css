@@ -85,29 +85,25 @@ html {
   }
 }
 
-/* Hero headline shimmer shine */
+/* Hero headline gradient flow */
 .hero-shine {
-  position: relative;
-  background-image: linear-gradient(
-    120deg,
-    currentColor 0%,
-    currentColor 35%,
-    rgba(255, 255, 255, 0.9) 50%,
-    currentColor 65%,
-    currentColor 100%
+  background: linear-gradient(
+    270deg,
+    #49B6CA,
+    #85D2E0,
+    #ffffff,
+    #85D2E0,
+    #49B6CA
   );
-  background-size: 200% 100%;
+  background-size: 300% 100%;
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: shine 4s ease-in-out infinite;
+  animation: gradient-flow 6s ease infinite;
 }
 
-@keyframes shine {
-  0%, 100% {
-    background-position: 200% center;
-  }
-  50% {
-    background-position: -200% center;
-  }
+@keyframes gradient-flow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }

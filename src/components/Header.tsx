@@ -305,6 +305,8 @@ export default function Header() {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
   }, []);
 
+  const isTransparent = !scrolled && !mobileOpen && !activeMenu;
+
   return (
     <>
       <header
@@ -316,7 +318,7 @@ export default function Header() {
         }`}
       >
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
-          <Link href="/" className="text-xl font-bold tracking-tight text-foreground">
+          <Link href="/" className={`text-xl font-bold tracking-tight transition-colors ${isTransparent ? "text-white" : "text-foreground"}`}>
             Ninewatt
           </Link>
 
@@ -334,7 +336,9 @@ export default function Header() {
                   className={`inline-flex items-center gap-1 rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
                     activeMenu === item.label
                       ? "text-foreground bg-surface"
-                      : "text-muted hover:text-foreground"
+                      : isTransparent
+                        ? "text-white/80 hover:text-white"
+                        : "text-muted hover:text-foreground"
                   }`}
                 >
                   {item.label}
@@ -357,7 +361,7 @@ export default function Header() {
               {/* Theme Toggle */}
               <button
                 onClick={toggleTheme}
-                className="flex h-8 w-8 items-center justify-center rounded-full text-muted transition-colors hover:text-foreground"
+                className={`flex h-8 w-8 items-center justify-center rounded-full transition-colors ${isTransparent ? "text-white/80 hover:text-white" : "text-muted hover:text-foreground"}`}
                 aria-label="테마 전환"
               >
                 {theme === "dark" ? (
@@ -388,7 +392,7 @@ export default function Header() {
           <div className="flex items-center gap-3 lg:hidden">
             <button
               onClick={toggleTheme}
-              className="flex h-8 w-8 items-center justify-center rounded-full text-muted transition-colors hover:text-foreground"
+              className={`flex h-8 w-8 items-center justify-center rounded-full transition-colors ${isTransparent ? "text-white/80 hover:text-white" : "text-muted hover:text-foreground"}`}
               aria-label="테마 전환"
             >
               {theme === "dark" ? (
@@ -410,9 +414,9 @@ export default function Header() {
               onClick={() => setMobileOpen(!mobileOpen)}
               aria-label="메뉴"
             >
-              <span className={`block h-0.5 w-6 bg-foreground transition-transform ${mobileOpen ? "translate-y-2 rotate-45" : ""}`} />
-              <span className={`block h-0.5 w-6 bg-foreground transition-opacity ${mobileOpen ? "opacity-0" : ""}`} />
-              <span className={`block h-0.5 w-6 bg-foreground transition-transform ${mobileOpen ? "-translate-y-2 -rotate-45" : ""}`} />
+              <span className={`block h-0.5 w-6 transition-transform ${isTransparent ? "bg-white" : "bg-foreground"} ${mobileOpen ? "translate-y-2 rotate-45" : ""}`} />
+              <span className={`block h-0.5 w-6 transition-opacity ${isTransparent ? "bg-white" : "bg-foreground"} ${mobileOpen ? "opacity-0" : ""}`} />
+              <span className={`block h-0.5 w-6 transition-transform ${isTransparent ? "bg-white" : "bg-foreground"} ${mobileOpen ? "-translate-y-2 -rotate-45" : ""}`} />
             </button>
           </div>
         </div>
