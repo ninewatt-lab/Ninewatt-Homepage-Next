@@ -287,7 +287,60 @@ docker restart ninewatt-homepage
 docker exec ninewatt-db pg_dump -U ninewatt ninewatt > ~/backup-$(date +%Y%m%d).sql
 ```
 
-### 6-6. Docker Compose (로컬 전체 스택 테스트)
+### 6-6. DB 백업 및 복구
+
+#### 데이터 저장 위치
+
+DB 데이터는 EC2의 Docker 볼륨(`ninewatt-pgdata`)에 저장됩니다.
+
+| 상황 | 데이터 | 조치 |
+|------|--------|------|
+| EC2 **재부팅/중지→시작** | 유지됨 | `docker start ninewatt-db`로 재시작 |
+| EC2 **종료(Terminate)** | **삭제됨** | 사전 백업 필수 |
+| EBS 볼륨 장애 | **손실 가능** | 자동 백업 권장 |
+
+#### 수동 백업/복구
+
+```bash
+# EC2에서 수동 백업
+docker exec ninewatt-db pg_dump -U ninewatt ninewatt > ~/backup-$(date +%Y%m%d).sql
+
+# 백업 파일을 로컬로 다운로드
+scp -i ./ninewatt-homepage.pem ec2-user@<EC2_HOST>:~/backup-*.sql ./backups/
+
+# 복구 (필요 시)
+docker exec -i ninewatt-db psql -U ninewatt ninewatt < ~/backup-20260319.sql
+```
+
+#### 자동 백업 (S3, 권장)
+
+EC2에서 cron으로 매일 S3에 백업하는 설정:
+
+```bash
+# EC2에 접속 후 백업 스크립트 생성
+cat > ~/db-backup.sh << 'SCRIPT'
+#!/bin/bash
+BACKUP_FILE="/tmp/ninewatt-backup-$(date +%Y%m%d-%H%M%S).sql"
+docker exec ninewatt-db pg_dump -U ninewatt ninewatt > "$BACKUP_FILE"
+aws s3 cp "$BACKUP_FILE" s3://<YOUR_BUCKET>/db-backups/
+rm "$BACKUP_FILE"
+# 30일 이상된 백업 삭제
+aws s3 ls s3://<YOUR_BUCKET>/db-backups/ | awk '{print $4}' | while read file; do
+  file_date=$(echo "$file" | grep -o '[0-9]\{8\}')
+  if [ $(( ($(date +%s) - $(date -d "$file_date" +%s)) / 86400 )) -gt 30 ]; then
+    aws s3 rm "s3://<YOUR_BUCKET>/db-backups/$file"
+  fi
+done
+SCRIPT
+chmod +x ~/db-backup.sh
+
+# 매일 새벽 3시 자동 실행
+(crontab -l 2>/dev/null; echo "0 3 * * * /home/ec2-user/db-backup.sh") | crontab -
+```
+
+> S3 버킷과 IAM 권한 설정이 필요합니다. 간단하게는 수동 백업만으로도 충분합니다.
+
+### 6-7. Docker Compose (로컬 전체 스택 테스트)
 
 ```bash
 # 프로덕션 환경변수 설정
@@ -298,7 +351,7 @@ export PAYLOAD_SECRET=your-production-secret-min-32-chars
 docker compose up --build -d
 ```
 
-### 6-7. 환경 변수
+### 6-8. 환경 변수
 
 | 변수 | 설명 | 필수 | 위치 |
 |------|------|:----:|------|
@@ -307,7 +360,23 @@ docker compose up --build -d
 
 ---
 
-## 7. 알려진 이슈 및 해결
+## 7. 코드와 DB의 관계
+
+코드 배포와 DB 데이터는 **독립적으로 동작**합니다.
+
+| 작업 | 앱 코드 | DB 데이터 |
+|------|:-------:|:---------:|
+| `git push` → 배포 | 갱신됨 | 변경 없음 |
+| Admin UI에서 데이터 수정 | 변경 없음 | 갱신됨 |
+| Collection/Global 스키마 변경 후 배포 | 갱신됨 | Payload가 자동 마이그레이션 |
+
+**예시:**
+- "수상 내역 1건 추가" → Admin UI에서 추가. 코드 수정 불필요.
+- "수상 내역에 '카테고리' 필드 추가" → `src/collections/Awards.ts`에 필드 추가 → push → 배포 후 Admin UI에 새 필드 노출
+
+---
+
+## 9. 알려진 이슈 및 해결
 
 ### Next.js 16 호환성
 
@@ -340,7 +409,7 @@ docker compose up db -d
 
 ---
 
-## 8. 개발자 참고
+## 10. 개발자 참고
 
 ### 새 Collection 추가
 
