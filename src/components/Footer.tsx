@@ -42,18 +42,10 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t border-border pt-8 md:flex-row">
+        <div className="mt-10 border-t border-border pt-8">
           <p className="text-sm text-muted">
-            &copy; {new Date().getFullYear()} Ninewatt Inc. All rights reserved.
+            &copy; {new Date().getFullYear()} NINEWATT Co., Ltd. All rights reserved.
           </p>
-          <div className="flex gap-6 text-sm text-muted">
-            <a href="#" className="transition-colors hover:text-foreground">
-              개인정보처리방침
-            </a>
-            <a href="#" className="transition-colors hover:text-foreground">
-              이용약관
-            </a>
-          </div>
         </div>
       </div>
     </footer>

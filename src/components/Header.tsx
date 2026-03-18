@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useTheme } from "./ThemeProvider";
+import NinewattLogo from "./icons/NinewattLogo";
 
 /* ──────────────────────────────────────────────
    Navigation data with sub-items
@@ -311,15 +312,17 @@ export default function Header() {
     <>
       <header
         ref={headerRef}
-        className={`fixed top-0 z-50 w-full border-b transition-all duration-300 ${
-          scrolled || mobileOpen || activeMenu
-            ? "bg-background/80 border-border backdrop-blur-xl"
-            : "bg-transparent border-transparent"
+        className={`fixed top-0 z-50 w-full transition-all duration-300 ${
+          activeMenu
+            ? "bg-background/95 backdrop-blur-xl"
+            : scrolled || mobileOpen
+              ? "bg-background/80 border-b border-border backdrop-blur-xl"
+              : "bg-transparent"
         }`}
       >
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
-          <Link href="/" className={`text-xl font-bold tracking-tight transition-colors ${isTransparent ? "text-white" : "text-foreground"}`}>
-            Ninewatt
+          <Link href="/" className={`transition-colors ${isTransparent ? "text-white" : "text-foreground"}`}>
+            <NinewattLogo height={28} width="auto" />
           </Link>
 
           {/* Desktop Nav */}
@@ -431,7 +434,7 @@ export default function Header() {
           onMouseEnter={handleDropdownEnter}
           onMouseLeave={handleMouseLeave}
         >
-          <div className="border-b border-border bg-background/95 backdrop-blur-xl shadow-xl shadow-black/3">
+          <div className="border-b border-border bg-background/95 backdrop-blur-xl shadow-lg shadow-black/5">
             <div className="mx-auto max-w-7xl px-6 py-6">
               {megaMenuItems.map((item) => (
                 <div
