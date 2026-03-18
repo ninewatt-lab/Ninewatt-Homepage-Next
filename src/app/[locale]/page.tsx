@@ -10,10 +10,27 @@ import {
   LSelectric,
   Kepco,
 } from "@/components/logos/contractors";
+import {
+  Molit,
+  KoreaEnergyAgency,
+  Msit,
+  Motie,
+  Moe,
+  KepcoKdn,
+  HyundaiEng,
+  Kict,
+  SinanenHoldings,
+  Toltek,
+  Ucl,
+  JohnsonControls,
+  ThurrockCouncil,
+  BluepointPartners,
+} from "@/components/logos/partners";
 import VideoHero from "@/components/VideoHero";
 import ScrollReveal from "@/components/ScrollReveal";
 import ProductShowcase from "@/components/ProductShowcase";
 import CountUp from "@/components/CountUp";
+import LogoMarquee from "@/components/LogoMarquee";
 
 export default async function Home() {
   const t = await getTranslations("home");
@@ -95,22 +112,42 @@ export default async function Home() {
         </section>
       </ScrollReveal>
 
-      {/* Partners — Mapbox style logo cloud */}
+      {/* Partners — Infinite marquee logo cloud */}
       <ScrollReveal>
         <section className="border-t border-border px-6 py-20">
-          <div className="mx-auto max-w-5xl">
+          <div className="mx-auto max-w-6xl">
             <p className="text-center text-xs font-semibold uppercase tracking-[0.2em] text-muted">
               {t("partners.label")}
             </p>
-            <div className="mt-12 grid grid-cols-2 items-center justify-items-center gap-x-12 gap-y-10 text-muted sm:grid-cols-4">
-              <Kepco />
-              <LSelectric />
-              <SmesAndStartups />
-              <SeoulMetropolitanGov />
-              <Gyeonggido />
-              <IcnMetropolitanCity />
-              <SeoulFacilities />
-              <Gangnamgu />
+            <div className="mt-12">
+              <LogoMarquee
+                row1={[
+                  <Kepco key="kepco" />,
+                  <LSelectric key="ls" />,
+                  <SmesAndStartups key="smes" />,
+                  <SeoulMetropolitanGov key="seoul" />,
+                  <Gyeonggido key="gyeonggi" />,
+                  <IcnMetropolitanCity key="incheon" />,
+                  <SeoulFacilities key="facilities" />,
+                  <Gangnamgu key="gangnam" />,
+                  <Molit key="molit" />,
+                  <KoreaEnergyAgency key="kea" />,
+                  <Msit key="msit" />,
+                  <Kict key="kict" />,
+                ]}
+                row2={[
+                  <Motie key="motie" />,
+                  <Moe key="moe" />,
+                  <KepcoKdn key="kepco-kdn" />,
+                  <HyundaiEng key="hyundai" />,
+                  <SinanenHoldings key="sinanen" />,
+                  <Toltek key="toltek" />,
+                  <Ucl key="ucl" />,
+                  <JohnsonControls key="jc" />,
+                  <ThurrockCouncil key="thurrock" />,
+                  <BluepointPartners key="bluepoint" />,
+                ]}
+              />
             </div>
           </div>
         </section>
