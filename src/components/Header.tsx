@@ -359,9 +359,9 @@ export default function Header() {
     <>
       <header
         ref={headerRef}
-        className={`fixed top-0 z-50 w-full transition-all duration-300 ${
+        className={`fixed top-0 z-50 w-full transition-all duration-200 ${
           activeMenu
-            ? "bg-background/95 backdrop-blur-xl"
+            ? "bg-background/95 backdrop-blur-xl border-b border-border shadow-lg shadow-black/5"
             : scrolled || mobileOpen
               ? "bg-background/80 border-b border-border backdrop-blur-xl"
               : "bg-transparent"
@@ -383,7 +383,7 @@ export default function Header() {
               >
                 <Link
                   href={item.href}
-                  className={`inline-flex items-center gap-1 rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
+                  className={`inline-flex items-center gap-1 rounded-lg px-4 py-2 text-sm font-medium transition-colors duration-200 ${
                     activeMenu === item.labelKey
                       ? "text-foreground bg-surface"
                       : isTransparent
@@ -499,20 +499,25 @@ export default function Header() {
 
         {/* ── Desktop Mega Menu Dropdown ── */}
         <div
-          className={`hidden lg:block absolute left-0 w-full transition-all duration-300 ease-out ${
+          className={`hidden lg:block absolute left-0 w-full transition-[clip-path] duration-200 ease-out ${
             activeMenu
-              ? "opacity-100 translate-y-0 pointer-events-auto"
-              : "opacity-0 -translate-y-2 pointer-events-none"
+              ? "[clip-path:inset(0)] pointer-events-auto"
+              : "[clip-path:inset(0_0_100%_0)] pointer-events-none"
           }`}
           onMouseEnter={handleDropdownEnter}
           onMouseLeave={handleMouseLeave}
         >
-          <div className="border-b border-border bg-background/95 backdrop-blur-xl shadow-lg shadow-black/5">
+          <div className="bg-background/95 backdrop-blur-xl">
             <div className="mx-auto max-w-7xl px-6 py-6">
+              <div className="grid *:col-start-1 *:row-start-1">
               {megaMenuItems.map((item) => (
                 <div
                   key={item.labelKey}
-                  className={`${activeMenu === item.labelKey ? "block" : "hidden"}`}
+                  className={`transition-opacity duration-200 ${
+                    activeMenu === item.labelKey
+                      ? "opacity-100"
+                      : "opacity-0 pointer-events-none"
+                  }`}
                 >
                   <div className="flex">
                     {item.sections.map((section, sIdx) => (
@@ -585,6 +590,7 @@ export default function Header() {
                   </div>
                 </div>
               ))}
+              </div>
             </div>
           </div>
         </div>
@@ -699,7 +705,7 @@ export default function Header() {
 
       {/* ── Overlay (dims page when mega menu is open) ── */}
       <div
-        className={`fixed inset-0 z-40 bg-black/20 backdrop-blur-[2px] transition-opacity duration-300 hidden lg:block ${
+        className={`fixed inset-0 z-40 bg-black/20 backdrop-blur-[2px] transition-opacity duration-200 hidden lg:block ${
           activeMenu ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
         }`}
         onClick={() => setActiveMenu(null)}
