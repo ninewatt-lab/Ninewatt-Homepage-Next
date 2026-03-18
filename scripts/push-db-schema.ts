@@ -16,7 +16,7 @@ async function main() {
   payload.logger.info("Database schema push completed successfully");
 
   // Drizzle 커넥션 종료 후 프로세스 종료
-  await payload.db.destroy();
+  await payload.db.destroy?.();
   process.exit(0);
 }
 
