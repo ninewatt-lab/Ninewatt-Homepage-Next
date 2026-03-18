@@ -1,11 +1,19 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ProductTrackRecord, type TrackRecordItem } from "@/components/ProductTrackRecord";
 
 export const metadata: Metadata = {
   title: "RE:park - 스마트 시설물 관리 시스템 - Ninewatt",
   description:
     "시민·관리자·보수업체를 위한 QR 기반 시설물 관리시스템. 공원시설물에서 공공시설물 관리 시스템으로.",
 };
+
+const trackRecord: TrackRecordItem[] = [
+  { year: 2023, type: "지원사업", name: "실증 상용화 프로그램 — 인천 센트럴파크, 해돋이공원 조명시설 관리", period: "2023.03~2023.11", org: "인천테크노파크" },
+  { year: 2023, type: "R&D", name: "스케일업 팁스 투자연계 — 에너지맵 기반 수요반응형 모듈러 버티포트 기술 개발", period: "2023.12~2026.12", department: "중소벤처기업부" },
+  { year: 2023, type: "PoC", name: "미래 모빌리티 허브의 에너지 효율화 관리를 위한 알고리즘 및 시뮬레이션 개발", period: "2023.11~2024.07", org: "한전KDN" },
+  { year: 2023, type: "지원사업", name: "2차 기술개발제품 공공기관 실증지원 사업", org: "현대엔지비" },
+];
 
 export default function REparkPage() {
   return (
@@ -165,6 +173,9 @@ export default function REparkPage() {
           </div>
         </div>
       </section>
+
+      {/* Track Record */}
+      <ProductTrackRecord items={trackRecord} />
 
       {/* CTA */}
       <section className="border-t border-border px-6 py-20">

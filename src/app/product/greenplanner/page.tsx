@@ -1,11 +1,23 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ProductTrackRecord, type TrackRecordItem } from "@/components/ProductTrackRecord";
 
 export const metadata: Metadata = {
   title: "GreenPlanner - 그린리모델링 플래너 - Ninewatt",
   description:
     "건물 에너지 시뮬레이션과 부동산 공공 데이터를 활용한 리모델링 예측 보고서 앱. 건물 리모델링, 모두가 할 수 있도록.",
 };
+
+const trackRecord: TrackRecordItem[] = [
+  { year: 2021, type: "용역", name: "공공건축물 에너지소비량 공개 및 성능개선 사업 제도 기술 지원 용역", period: "2021.10~2021.12", org: "한국건설기술연구원" },
+  { year: 2022, type: "R&D", name: "도시의 탄소감축량과 녹색금융을 융합한 그린리모델링 매칭 서비스", period: "2022.04~2025.03", department: "중소벤처기업부" },
+  { year: 2022, type: "R&D", name: "그린리모델링 효율향상을 위한 디지털진단 모듈화 기술", period: "2022.04~2024.12", department: "국토교통부", org: "국토교통과학기술진흥원" },
+  { year: 2022, type: "사업화", name: "그린벤처 프로그램 사업화", period: "2022.04~2025.03", department: "중소벤처기업부" },
+  { year: 2022, type: "PoC", name: "SBA-KITA 영국 스마트시티 PoC", period: "2022.10~2023.02", org: "서울산업진흥원" },
+  { year: 2023, type: "지원사업", name: "Smart-X City 인천도시공사 프로그램 (인천스타트업파크)", period: "2023.04~2023.11", org: "인천지식재산센터" },
+  { year: 2023, type: "지원사업", name: "Smart-X energy LS일렉트릭 프로그램 (인천스타트업파크)", period: "2023.08~2023.11", org: "인천테크노파크" },
+  { year: 2023, type: "사업화", name: "공공건축물 그린리모델링 종합사업지원", period: "2023.05~2025.12", org: "국토안전관리원" },
+];
 
 const fundingInfo = [
   {
@@ -175,6 +187,9 @@ export default function GreenPlannerPage() {
           </div>
         </div>
       </section>
+
+      {/* Track Record */}
+      <ProductTrackRecord items={trackRecord} />
 
       {/* CTA */}
       <section className="border-t border-border px-6 py-20">
