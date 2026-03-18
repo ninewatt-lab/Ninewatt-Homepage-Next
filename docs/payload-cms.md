@@ -241,28 +241,53 @@ GitHub (main push)
 
 ### 6-4. EC2 초기 설정 (최초 배포 후 1회)
 
-첫 배포 후 EC2에서 시드 데이터를 입력해야 합니다:
+첫 배포 후 로컬에서 시드한 DB 데이터를 EC2로 이전해야 합니다.
+
+> **SSH 키 파일**: 프로젝트 루트의 `ninewatt-homepage.pem`을 사용합니다.
+> 권한이 열려 있으면 `chmod 400 ninewatt-homepage.pem`으로 변경해야 합니다.
 
 ```bash
-# 로컬에서 DB dump
-docker exec ninewatt_homepage_next-db-1 pg_dump -U ninewatt ninewatt > dump.sql
+# 1. 로컬에서 DB dump
+docker exec ninewatt_homepage_next-db-1 pg_dump -U ninewatt ninewatt > /tmp/ninewatt-dump.sql
 
-# EC2로 파일 전송
-scp dump.sql ec2-user@<EC2_HOST>:~/
+# 2. EC2로 파일 전송
+scp -i ./ninewatt-homepage.pem /tmp/ninewatt-dump.sql ec2-user@<EC2_HOST>:~/
 
-# EC2 접속
-ssh ec2-user@<EC2_HOST>
+# 3. EC2 접속
+ssh -i ./ninewatt-homepage.pem ec2-user@<EC2_HOST>
 
-# DB에 데이터 복원
-docker exec -i ninewatt-db psql -U ninewatt ninewatt < ~/dump.sql
+# 4. DB에 데이터 복원
+docker exec -i ninewatt-db psql -U ninewatt ninewatt < ~/ninewatt-dump.sql
 
-# 앱 로그 확인
+# 5. 앱 로그 확인
 docker logs ninewatt-homepage --tail 20
 ```
 
 복원 완료 후 `http://<EC2_HOST>:3000/admin`에서 Admin UI에 접속할 수 있습니다.
 
-### 6-5. Docker Compose (로컬 전체 스택 테스트)
+### 6-5. EC2 운영 참고
+
+```bash
+# EC2 접속
+ssh -i ./ninewatt-homepage.pem ec2-user@<EC2_HOST>
+
+# 컨테이너 상태 확인
+docker ps
+
+# 앱 로그 확인
+docker logs ninewatt-homepage --tail 50
+
+# DB 로그 확인
+docker logs ninewatt-db --tail 20
+
+# 앱 재시작
+docker restart ninewatt-homepage
+
+# DB 백업
+docker exec ninewatt-db pg_dump -U ninewatt ninewatt > ~/backup-$(date +%Y%m%d).sql
+```
+
+### 6-6. Docker Compose (로컬 전체 스택 테스트)
 
 ```bash
 # 프로덕션 환경변수 설정
@@ -273,7 +298,7 @@ export PAYLOAD_SECRET=your-production-secret-min-32-chars
 docker compose up --build -d
 ```
 
-### 6-6. 환경 변수
+### 6-7. 환경 변수
 
 | 변수 | 설명 | 필수 | 위치 |
 |------|------|:----:|------|
