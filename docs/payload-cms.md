@@ -4,7 +4,7 @@ Ninewatt 홈페이지는 Payload CMS 3.x를 사용하여 콘텐츠를 관리합�
 
 ---
 
-## 1. 초기 설정
+## 1. 초기 설정 (로컬 개발)
 
 ### 1-1. PostgreSQL 실행
 
@@ -13,6 +13,9 @@ Ninewatt 홈페이지는 Payload CMS 3.x를 사용하여 콘텐츠를 관리합�
 ```bash
 docker compose up db -d
 ```
+
+> **주의**: 로컬에 Homebrew PostgreSQL이 설치되어 있으면 포트 5432가 충돌할 수 있습니다.
+> `brew services stop postgresql@14` 등으로 로컬 PG를 중지한 후 Docker를 사용하세요.
 
 **또는 로컬 PostgreSQL**
 
@@ -30,7 +33,7 @@ DATABASE_URL=postgresql://ninewatt:ninewatt@localhost:5432/ninewatt
 PAYLOAD_SECRET=ninewatt-payload-secret-key-change-in-production-min-32-chars
 ```
 
-> **프로덕션 배포 시** `PAYLOAD_SECRET`을 반드시 변경하세요.
+> **프로덕션 배포 시** `PAYLOAD_SECRET`을 반드시 변경하세요 (32자 이상).
 
 ### 1-3. 데이터 시딩 (최초 1회)
 
@@ -157,6 +160,8 @@ Payload CMS에서 다국어가 필요한 필드는 `localized` 표시가 있습�
 
 ```
 payload.config.ts              ← CMS 전체 설정
+patches/
+└── payload@3.79.1.patch       ← Next.js 16 호환 패치 (@next/env)
 src/
 ├── collections/               ← Collection 스키마 정의
 │   ├── Users.ts
@@ -179,17 +184,85 @@ src/
 │   └── cms.ts                 ← 데이터 조회 래퍼 함수
 ├── seed/
 │   └── index.ts               ← 초기 데이터 시딩
-└── app/(payload)/             ← Admin UI 라우트
-    ├── layout.tsx
-    ├── admin/[[...segments]]/
-    └── api/[...slug]/
+└── app/
+    ├── layout.tsx             ← 루트 레이아웃 (children만 반환)
+    ├── [locale]/
+    │   └── layout.tsx         ← 프론트엔드 레이아웃 (<html>, Header, Footer)
+    └── (payload)/             ← Admin UI 라우트 (별도 <html>)
+        ├── layout.tsx         ← Payload RootLayout 사용
+        ├── admin/
+        │   ├── importMap.js   ← 자동 생성, git 추적 대상
+        │   └── [[...segments]]/
+        └── api/[...slug]/
 ```
+
+> **레이아웃 구조 참고**: 루트 `layout.tsx`는 `<html>`/`<body>` 없이 `children`만 반환합니다.
+> `[locale]/layout.tsx`와 `(payload)/layout.tsx`가 각각 독립적으로 `<html>`/`<body>`를 관리하여
+> 프론트엔드와 Admin UI의 충돌을 방지합니다.
 
 ---
 
 ## 6. 배포
 
-### Docker Compose (전체 스택)
+### 6-1. 배포 아키텍처
+
+```
+GitHub (main push)
+  → GitHub Actions
+    → Docker Build (임시 PostgreSQL로 빌드)
+    → ECR Push
+    → EC2 SSH 배포
+      → ninewatt-db (PostgreSQL 16, Docker)
+      → ninewatt-homepage (Next.js + Payload, Docker)
+      → ninewatt-net (Docker 네트워크)
+```
+
+### 6-2. GitHub Actions (자동 배포)
+
+`main` 브랜치에 push하면 `.github/workflows/deploy.yml`에 의해 자동 배포됩니다.
+
+**배포 흐름:**
+1. GitHub Actions에서 임시 PostgreSQL 서비스 컨테이너 실행 (빌드용)
+2. `--network=host`로 Docker 이미지 빌드 (Payload가 빌드 시 DB 접속 필요)
+3. ECR에 이미지 push
+4. EC2에 SSH 접속하여 이미지 pull & 컨테이너 교체
+
+### 6-3. GitHub Secrets (필수)
+
+| Secret | 설명 | 비고 |
+|--------|------|------|
+| `AWS_ACCESS_KEY_ID` | AWS IAM 액세스 키 | ECR/EC2 접근용 |
+| `AWS_SECRET_ACCESS_KEY` | AWS IAM 시크릿 키 | |
+| `EC2_HOST` | EC2 퍼블릭 IP | |
+| `EC2_USERNAME` | SSH 사용자명 | 보통 `ec2-user` |
+| `EC2_SSH_KEY` | SSH 프라이빗 키 | PEM 형식 |
+| `PAYLOAD_SECRET` | JWT 서명용 시크릿 | 32자 이상 |
+| `DB_PASSWORD` | PostgreSQL 비밀번호 | EC2 DB용 |
+
+### 6-4. EC2 초기 설정 (최초 배포 후 1회)
+
+첫 배포 후 EC2에서 시드 데이터를 입력해야 합니다:
+
+```bash
+# 로컬에서 DB dump
+docker exec ninewatt_homepage_next-db-1 pg_dump -U ninewatt ninewatt > dump.sql
+
+# EC2로 파일 전송
+scp dump.sql ec2-user@<EC2_HOST>:~/
+
+# EC2 접속
+ssh ec2-user@<EC2_HOST>
+
+# DB에 데이터 복원
+docker exec -i ninewatt-db psql -U ninewatt ninewatt < ~/dump.sql
+
+# 앱 로그 확인
+docker logs ninewatt-homepage --tail 20
+```
+
+복원 완료 후 `http://<EC2_HOST>:3000/admin`에서 Admin UI에 접속할 수 있습니다.
+
+### 6-5. Docker Compose (로컬 전체 스택 테스트)
 
 ```bash
 # 프로덕션 환경변수 설정
@@ -200,16 +273,49 @@ export PAYLOAD_SECRET=your-production-secret-min-32-chars
 docker compose up --build -d
 ```
 
-### 환경 변수 (프로덕션 필수)
+### 6-6. 환경 변수
 
-| 변수 | 설명 | 필수 |
-|------|------|:----:|
-| `DATABASE_URL` | PostgreSQL 연결 문자열 | O |
-| `PAYLOAD_SECRET` | JWT 서명용 시크릿 (32자 이상) | O |
+| 변수 | 설명 | 필수 | 위치 |
+|------|------|:----:|------|
+| `DATABASE_URL` | PostgreSQL 연결 문자열 | O | 런타임 |
+| `PAYLOAD_SECRET` | JWT 서명용 시크릿 (32자 이상) | O | 빌드 + 런타임 |
 
 ---
 
-## 7. 개발자 참고
+## 7. 알려진 이슈 및 해결
+
+### Next.js 16 호환성
+
+Payload CMS 3.79.1은 공식적으로 `Next.js >=16.2.0-canary.10`을 요구하지만,
+현재 프로젝트는 Next.js 16.1.7을 사용합니다. `@next/env`의 default export 문제를
+`patches/payload@3.79.1.patch`로 해결했습니다.
+
+- 패치 내용: `import nextEnvImport from '@next/env'` → `import * as nextEnvModule from '@next/env'`
+- `pnpm install` 시 자동 적용됩니다
+- Payload 버전 업데이트 시 패치가 불필요해질 수 있습니다
+
+### importMap.js
+
+`src/app/(payload)/admin/importMap.js`는 Payload가 자동 생성하는 파일입니다.
+Docker 빌드 시 필요하므로 **git에 포함**되어 있습니다 (.gitignore에서 제외).
+로컬 `pnpm dev` 실행 시 Payload가 자동으로 내용을 갱신합니다.
+
+### 로컬 PostgreSQL 포트 충돌
+
+Homebrew PostgreSQL이 설치되어 있으면 Docker의 5432 포트와 충돌합니다:
+
+```bash
+# Homebrew PostgreSQL 중지
+brew services stop postgresql@14
+brew services stop postgresql@18
+
+# Docker DB만 사용
+docker compose up db -d
+```
+
+---
+
+## 8. 개발자 참고
 
 ### 새 Collection 추가
 
@@ -251,3 +357,13 @@ return <ClientComponent data={docs} />;
 "use client";
 export function ClientComponent({ data }) { ... }
 ```
+
+### 주요 의존성
+
+| 패키지 | 버전 | 용도 |
+|--------|------|------|
+| `payload` | 3.79.1 | CMS 코어 |
+| `@payloadcms/next` | 3.79.1 | Next.js 통합 |
+| `@payloadcms/db-postgres` | 3.79.1 | PostgreSQL 어댑터 |
+| `@payloadcms/richtext-lexical` | 3.79.1 | 리치텍스트 에디터 |
+| `@next/env` | 16.1.7 | 환경변수 로딩 (Payload 호환용) |
