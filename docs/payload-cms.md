@@ -312,33 +312,66 @@ scp -i ./ninewatt-homepage.pem ec2-user@<EC2_HOST>:~/backup-*.sql ./backups/
 docker exec -i ninewatt-db psql -U ninewatt ninewatt < ~/backup-20260319.sql
 ```
 
-#### 자동 백업 (S3, 권장)
+#### 자동 백업 (S3)
 
-EC2에서 cron으로 매일 S3에 백업하는 설정:
+S3 백업 스크립트가 `scripts/` 디렉토리에 준비되어 있습니다.
+
+- **백업**: `scripts/db-backup.sh` — gzip 압축 후 S3 업로드, 30일 보관 정책
+- **복구**: `scripts/db-restore.sh` — S3에서 최신 또는 특정 백업 복원
+- **S3 경로**: `s3://ninewatt-homepage/database_backup/`
+
+**현재 EC2 설정 상태:**
+- IAM Role `ec2-ecr-readonly`에 S3 쓰기 권한(`NinewattDBBackupS3`) 추가 완료
+- cronie 설치 및 cron 등록 완료 (3일마다 새벽 3시 UTC)
+- 스크립트 위치: `/home/ec2-user/scripts/`
+
+**EC2 설정 방법 (신규 서버 세팅 시):**
 
 ```bash
-# EC2에 접속 후 백업 스크립트 생성
-cat > ~/db-backup.sh << 'SCRIPT'
-#!/bin/bash
-BACKUP_FILE="/tmp/ninewatt-backup-$(date +%Y%m%d-%H%M%S).sql"
-docker exec ninewatt-db pg_dump -U ninewatt ninewatt > "$BACKUP_FILE"
-aws s3 cp "$BACKUP_FILE" s3://<YOUR_BUCKET>/db-backups/
-rm "$BACKUP_FILE"
-# 30일 이상된 백업 삭제
-aws s3 ls s3://<YOUR_BUCKET>/db-backups/ | awk '{print $4}' | while read file; do
-  file_date=$(echo "$file" | grep -o '[0-9]\{8\}')
-  if [ $(( ($(date +%s) - $(date -d "$file_date" +%s)) / 86400 )) -gt 30 ]; then
-    aws s3 rm "s3://<YOUR_BUCKET>/db-backups/$file"
-  fi
-done
-SCRIPT
-chmod +x ~/db-backup.sh
+# 1. IAM Role에 S3 권한 추가 (AWS 콘솔)
+#    ec2-ecr-readonly Role → Add inline policy:
+#    {
+#      "Version": "2012-10-17",
+#      "Statement": [{
+#        "Effect": "Allow",
+#        "Action": ["s3:PutObject", "s3:GetObject", "s3:ListBucket", "s3:DeleteObject"],
+#        "Resource": [
+#          "arn:aws:s3:::ninewatt-homepage",
+#          "arn:aws:s3:::ninewatt-homepage/database_backup/*"
+#        ]
+#      }]
+#    }
 
-# 매일 새벽 3시 자동 실행
-(crontab -l 2>/dev/null; echo "0 3 * * * /home/ec2-user/db-backup.sh") | crontab -
+# 2. 로컬에서 스크립트를 EC2로 복사
+scp -i ./ninewatt-homepage.pem scripts/db-backup.sh scripts/db-restore.sh ec2-user@<EC2_HOST>:/home/ec2-user/scripts/
+
+# 3. EC2에서 실행 권한 부여 및 테스트
+chmod +x /home/ec2-user/scripts/*.sh
+/home/ec2-user/scripts/db-backup.sh
+
+# 4. cronie 설치 및 cron 등록
+sudo yum install -y cronie
+sudo systemctl enable crond
+sudo systemctl start crond
+(crontab -l 2>/dev/null; echo "0 3 */3 * * /home/ec2-user/scripts/db-backup.sh >> /home/ec2-user/db-backup.log 2>&1") | crontab -
+
+# 5. 등록 확인
+crontab -l
 ```
 
-> S3 버킷과 IAM 권한 설정이 필요합니다. 간단하게는 수동 백업만으로도 충분합니다.
+**복구 방법:**
+
+```bash
+# EC2에서 실행
+/home/ec2-user/scripts/db-restore.sh                                    # 최신 백업으로 복원
+/home/ec2-user/scripts/db-restore.sh ninewatt-backup-20260319-030000.sql.gz  # 특정 백업 복원
+```
+
+**백업 로그 확인:**
+
+```bash
+cat /home/ec2-user/db-backup.log
+```
 
 ### 6-7. Docker Compose (로컬 전체 스택 테스트)
 
