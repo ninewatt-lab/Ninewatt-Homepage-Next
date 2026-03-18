@@ -73,6 +73,7 @@
     "heroDesc": "Integrate and analyze building, energy, environmental, and urban data on a 3D map. Customize data types and analysis modules to build a platform tailored to your needs.",
     "requestDemo": "Request Demo",
     "downloadPdf": "Download PDF",
+    "goToService": "Go to Service",
     "bigDataStat": "Spatial big data records integrated",
     "coreCapabilities": "Core Capabilities",
     "coreCapabilitiesDesc": "Large-scale data integration, AI analytics, and a customizable SaaS environment.",
@@ -116,6 +117,7 @@
     "heroDesc": "Analyze 15-minute interval power consumption to identify optimal rate plans and reduce energy costs without equipment investment. All you need is a 10-digit KEPCO customer number to get started.",
     "requestDemo": "Request Demo",
     "downloadPdf": "Download PDF",
+    "goToService": "Go to Service",
     "analysisItems": "Analysis Items",
     "analysisItemsDesc": "Identifies cost reduction opportunities through seven energy savings algorithms.",
     "items": [
@@ -191,6 +193,7 @@
     "heroDesc": "Citizens report faults by scanning a QR code, administrators handle intake and assignment, and contractors submit completion reports. A facility management system that connects all three parties.",
     "serviceInquiry": "Inquire About Service",
     "downloadPdf": "Download PDF",
+    "goToService": "Go to Service",
     "tags": [
       "QR TAG Smart Fault Reporting", "Data Registration & Custom Label Production", "SaaS Cloud Service", "Administrator Digital Workflow Transformation", "Contactless Complaint Intake Simplification"
     ],
@@ -227,6 +230,7 @@
     "heroSubtitle": "Analyze Solar Candidate Sites with Just an Address",
     "heroDesc": "A platform for integrated technical, regulatory, and financial feasibility analysis of solar installation candidate sites. Simply enter an address or parcel number to evaluate regulations, setback distances, distribution grid capacity, energy yield, and profitability in one step.",
     "requestDemo": "Request Demo",
+    "goToService": "Go to Service",
     "dashboard": "Integrated Dashboard",
     "dashboardDesc": "With a single address entry, perform land analysis, distribution grid verification, setback distance review, and profitability assessment. Manage recent projects at a glance.",
     "detailAnalysis": "Detailed Analysis",
@@ -278,6 +282,7 @@
     "heroSubtitle": "Integrated Solar Plant Monitoring and Control System",
     "heroDesc": "A web-based integrated monitoring platform for solar plant operators. Install our proprietary RTU equipment on-site to collect inverter data, then access real-time monitoring, analytics, and control from the cloud.",
     "requestDemo": "Request Demo",
+    "goToService": "Go to Service",
     "systemArch": "System Architecture",
     "systemArchDesc": "The data pipeline from on-site inverters to the cloud",
     "archSteps": [

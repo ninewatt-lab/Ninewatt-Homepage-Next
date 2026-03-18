@@ -100,8 +100,12 @@ export async function getProducts() {
 }
 
 export async function getProductServiceUrl(slug: string): Promise<string | null> {
-  const data = await getProducts();
-  const items = data.items as { slug: string; serviceUrl?: string }[] | undefined;
-  const product = items?.find((item) => item.slug === slug);
-  return product?.serviceUrl || null;
+  try {
+    const data = await getProducts();
+    const items = data.items as { slug: string; serviceUrl?: string }[] | undefined;
+    const product = items?.find((item) => item.slug === slug);
+    return product?.serviceUrl || null;
+  } catch {
+    return null;
+  }
 }

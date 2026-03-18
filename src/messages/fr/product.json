@@ -94,6 +94,7 @@
     "heroDesc": "Analyse intégrée de données bâtiment, énergie, environnement et urbanisme sur une carte 3D. Personnalisez les types de données et les modules d'analyse pour construire une plateforme adaptée à vos besoins.",
     "requestDemo": "Demander une démonstration",
     "downloadPdf": "Télécharger le PDF",
+    "goToService": "Accéder au service",
     "bigDataStat": "Intégration de données géospatiales massives",
     "coreCapabilities": "Compétences clés",
     "coreCapabilitiesDesc": "Intégration de données à grande échelle, analyse par IA et environnement SaaS personnalisé.",
@@ -149,6 +150,7 @@
     "heroDesc": "Analysez la consommation électrique par tranche de 15 minutes pour identifier le tarif optimal. Réduisez vos coûts énergétiques même sans investissement en équipements. Il suffit d'un numéro client KEPCO à 10 chiffres pour commencer.",
     "requestDemo": "Demander une démonstration",
     "downloadPdf": "Télécharger le PDF",
+    "goToService": "Accéder au service",
     "analysisItems": "Éléments d'analyse",
     "analysisItemsDesc": "Sept algorithmes de réduction énergétique pour identifier les leviers d'économie.",
     "items": [
@@ -302,6 +304,7 @@
     "heroDesc": "Les citoyens signalent les pannes par QR code, les gestionnaires traitent la réception et l'affectation, et les prestataires rendent compte de l'exécution. Un système de gestion des installations reliant ces trois acteurs.",
     "serviceInquiry": "Nous contacter",
     "downloadPdf": "Télécharger le PDF",
+    "goToService": "Accéder au service",
     "tags": [
       "Signalement intelligent par QR TAG",
       "Constitution de bases de données et fabrication de plaques dédiées",
@@ -351,6 +354,7 @@
     "heroSubtitle": "Analysez un site solaire avec une simple adresse",
     "heroDesc": "Plateforme d'analyse intégrée de la faisabilité technique, juridique et économique des sites candidats à l'installation photovoltaïque. La saisie d'une adresse ou d'une référence cadastrale suffit pour évaluer la réglementation, les distances d'éloignement, le réseau de distribution, le productible et la rentabilité.",
     "requestDemo": "Demander une démonstration",
+    "goToService": "Accéder au service",
     "dashboard": "Tableau de bord intégré",
     "dashboardDesc": "Une seule saisie d'adresse pour l'analyse foncière, la vérification du réseau, le contrôle des distances d'éloignement et l'évaluation de la rentabilité. Gérez vos projets récents en un coup d'œil.",
     "detailAnalysis": "Analyse détaillée",
@@ -422,6 +426,7 @@
     "heroSubtitle": "Système de supervision intégrée de centrales photovoltaïques",
     "heroDesc": "Plateforme web de supervision intégrée destinée aux exploitants de centrales photovoltaïques. Nos RTU propriétaires sont installés sur site pour collecter les données des onduleurs, tandis que le cloud assure le monitoring, l'analyse et le pilotage en temps réel.",
     "requestDemo": "Demander une démonstration",
+    "goToService": "Accéder au service",
     "systemArch": "Architecture du système",
     "systemArchDesc": "Le parcours des données, de l'onduleur sur site jusqu'au cloud",
     "archSteps": [

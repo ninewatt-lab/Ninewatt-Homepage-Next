@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 import { getTranslations } from "next-intl/server";
+import { getProductServiceUrl } from "@/lib/cms";
 
 export async function generateMetadata() {
   const t = await getTranslations("product");
@@ -11,7 +12,10 @@ export async function generateMetadata() {
 }
 
 export default async function SolarSitePage() {
-  const t = await getTranslations("product");
+  const [t, serviceUrl] = await Promise.all([
+    getTranslations("product"),
+    getProductServiceUrl("solar-site"),
+  ]);
   const targetUsers = t.raw("solarScope.targetUsers") as string[];
   const problemItems = t.raw("solarScope.problemItems") as string[];
   const solutionItems = t.raw("solarScope.solutionItems") as { title: string; desc: string }[];
@@ -42,6 +46,16 @@ export default async function SolarSitePage() {
             >
               {t("solarScope.requestDemo")}
             </Link>
+            {serviceUrl && (
+              <a
+                href={serviceUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-full border border-border px-8 py-3.5 text-sm font-semibold transition-colors hover:bg-surface"
+              >
+                {t("solarScope.goToService")} &rarr;
+              </a>
+            )}
           </div>
         </div>
       </section>

@@ -1,6 +1,7 @@
 import { Link } from "@/i18n/navigation";
 import { getTranslations } from "next-intl/server";
 import { ProductTrackRecord, type TrackRecordItem } from "@/components/ProductTrackRecord";
+import { getProductServiceUrl } from "@/lib/cms";
 
 export async function generateMetadata() {
   const t = await getTranslations("product");
@@ -29,7 +30,10 @@ const trackRecord: TrackRecordItem[] = [
 ];
 
 export default async function SaveEPage() {
-  const t = await getTranslations("product");
+  const [t, serviceUrl] = await Promise.all([
+    getTranslations("product"),
+    getProductServiceUrl("save-e"),
+  ]);
   const items = t.raw("saveE.items") as string[];
   const advantageItems = t.raw("saveE.advantageItems") as { title: string; desc: string }[];
   const dataSources = t.raw("saveE.dataSources") as string[];
@@ -65,6 +69,16 @@ export default async function SaveEPage() {
             >
               {t("saveE.downloadPdf")}
             </a>
+            {serviceUrl && (
+              <a
+                href={serviceUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-full border border-border px-8 py-3.5 text-sm font-semibold transition-colors hover:bg-surface"
+              >
+                {t("saveE.goToService")} &rarr;
+              </a>
+            )}
           </div>
         </div>
       </section>

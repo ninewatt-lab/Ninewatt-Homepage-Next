@@ -1,6 +1,7 @@
 import { Link } from "@/i18n/navigation";
 import { getTranslations } from "next-intl/server";
 import { ProductTrackRecord, type TrackRecordItem } from "@/components/ProductTrackRecord";
+import { getProductServiceUrl } from "@/lib/cms";
 
 export async function generateMetadata() {
   const t = await getTranslations("product");
@@ -18,7 +19,10 @@ const trackRecord: TrackRecordItem[] = [
 ];
 
 export default async function REparkPage() {
-  const t = await getTranslations("product");
+  const [t, serviceUrl] = await Promise.all([
+    getTranslations("product"),
+    getProductServiceUrl("repark"),
+  ]);
   const tags = t.raw("repark.tags") as string[];
   const flows = t.raw("repark.flows") as { role: string; flow: string }[];
   const expansionItems = t.raw("repark.expansionItems") as string[];
@@ -55,6 +59,16 @@ export default async function REparkPage() {
             >
               {t("repark.downloadPdf")}
             </a>
+            {serviceUrl && (
+              <a
+                href={serviceUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-full border border-border px-8 py-3.5 text-sm font-semibold transition-colors hover:bg-surface"
+              >
+                {t("repark.goToService")} &rarr;
+              </a>
+            )}
           </div>
         </div>
       </section>
