@@ -29,6 +29,9 @@ export default buildConfig({
     importMap: {
       baseDir: path.resolve(dirname),
     },
+    meta: {
+      titleSuffix: "- 나인와트 콘텐츠 관리",
+    },
   },
   editor: lexicalEditor(),
   db: postgresAdapter({
