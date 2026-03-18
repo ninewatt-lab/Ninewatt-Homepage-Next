@@ -47,19 +47,32 @@ jobs:
         id: ecr-login
         uses: aws-actions/amazon-ecr-login@v2
 
-      - name: Build and push Docker image
+      - name: Build and push Docker images
         env:
           ECR_REGISTRY: ${{ steps.ecr-login.outputs.registry }}
         run: |
           IMAGE_TAG="${ECR_REGISTRY}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}"
           IMAGE_LATEST="${ECR_REGISTRY}/${{ env.ECR_REPOSITORY }}:latest"
+          MIGRATOR_TAG="${ECR_REGISTRY}/${{ env.ECR_REPOSITORY }}:migrator-${{ github.sha }}"
+
+          # Production 이미지 빌드
           docker build \
             --network=host \
             --build-arg DATABASE_URL="postgresql://ninewatt:build-temp-password@localhost:5432/ninewatt" \
             --build-arg PAYLOAD_SECRET="${{ secrets.PAYLOAD_SECRET }}" \
             -t "$IMAGE_TAG" -t "$IMAGE_LATEST" .
+
+          # DB 스키마 push용 migrator 이미지 빌드 (builder 스테이지 기반)
+          docker build \
+            --network=host \
+            --build-arg DATABASE_URL="postgresql://ninewatt:build-temp-password@localhost:5432/ninewatt" \
+            --build-arg PAYLOAD_SECRET="${{ secrets.PAYLOAD_SECRET }}" \
+            --target migrator \
+            -t "$MIGRATOR_TAG" .
+
           docker push "$IMAGE_TAG"
           docker push "$IMAGE_LATEST"
+          docker push "$MIGRATOR_TAG"
 
       - name: Deploy to EC2
         uses: appleboy/ssh-action@v1
@@ -92,6 +105,17 @@ jobs:
               echo "Waiting for PostgreSQL to start..."
               sleep 5
             fi
+
+            # DB 스키마 마이그레이션 (새 global/collection 테이블 자동 생성)
+            MIGRATOR_TAG="${ECR_REGISTRY}/ninewatt-homepage:migrator-${{ github.sha }}"
+            docker pull ${MIGRATOR_TAG}
+            echo "Running database schema migration..."
+            docker run --rm \
+              --network ninewatt-net \
+              -e DATABASE_URL=postgresql://ninewatt:${{ secrets.DB_PASSWORD }}@ninewatt-db:5432/ninewatt \
+              -e PAYLOAD_SECRET=${{ secrets.PAYLOAD_SECRET }} \
+              ${MIGRATOR_TAG}
+            echo "Schema migration completed."
 
             # 앱 컨테이너 교체
             docker stop ninewatt-homepage || true

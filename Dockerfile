@@ -24,6 +24,11 @@ ENV PAYLOAD_SECRET=$PAYLOAD_SECRET
 
 RUN pnpm build
 
+# --- Migrator (schema push) ---
+FROM builder AS migrator
+ENV NODE_ENV=development
+CMD ["npx", "tsx", "scripts/push-db-schema.ts"]
+
 # --- Production ---
 FROM base AS runner
 WORKDIR /app
