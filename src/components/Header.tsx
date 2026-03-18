@@ -270,11 +270,11 @@ const companyNav: NavItemWithChildren = {
 
 const megaMenuItems: NavItemWithChildren[] = [productNav, solutionsNav, companyNav];
 
-const localeLabels: Record<string, string> = {
-  ko: "KO",
-  en: "EN",
-  ja: "JA",
-  fr: "FR",
+const localeLabels: Record<string, { short: string; native: string }> = {
+  ko: { short: "KO", native: "한국어" },
+  en: { short: "EN", native: "English" },
+  ja: { short: "JA", native: "日本語" },
+  fr: { short: "FR", native: "Français" },
 };
 
 /* ──────────────────────────────────────────────
@@ -414,20 +414,20 @@ export default function Header() {
                   onClick={() => setLangOpen(!langOpen)}
                   className={`flex h-8 items-center gap-1 rounded-full px-2.5 text-xs font-semibold transition-colors ${isTransparent ? "text-white/80 hover:text-white" : "text-muted hover:text-foreground"}`}
                 >
-                  {localeLabels[locale]}
+                  {localeLabels[locale].short}
                   <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.5" className={`h-3 w-3 transition-transform ${langOpen ? "rotate-180" : ""}`}>
                     <path d="M3 4.5L6 7.5L9 4.5" />
                   </svg>
                 </button>
                 {langOpen && (
-                  <div className="absolute right-0 top-full mt-2 min-w-[80px] overflow-hidden rounded-lg border border-border bg-background shadow-lg">
+                  <div className="absolute right-0 top-full mt-2 overflow-hidden rounded-lg border border-border bg-background shadow-lg">
                     {routing.locales.map((loc) => (
                       <button
                         key={loc}
                         onClick={() => switchLocale(loc)}
-                        className={`flex w-full items-center gap-2 px-4 py-2 text-sm transition-colors hover:bg-surface ${locale === loc ? "font-semibold text-primary" : "text-muted"}`}
+                        className={`flex w-full items-center gap-2 whitespace-nowrap px-3.5 py-2 text-xs transition-colors hover:bg-surface ${locale === loc ? "font-semibold text-primary" : "text-muted"}`}
                       >
-                        {localeLabels[loc]}
+                        {localeLabels[loc].native}
                       </button>
                     ))}
                   </div>
@@ -677,7 +677,7 @@ export default function Header() {
                         : "border border-border text-muted hover:text-foreground"
                     }`}
                   >
-                    {localeLabels[loc]}
+                    {localeLabels[loc].native}
                   </button>
                 ))}
               </div>
