@@ -12,22 +12,6 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
 
-    # 빌드 시 Payload가 DB 스키마를 생성하기 위해 임시 PostgreSQL 필요
-    services:
-      build-db:
-        image: postgres:16-alpine
-        env:
-          POSTGRES_DB: ninewatt
-          POSTGRES_USER: ninewatt
-          POSTGRES_PASSWORD: build-temp-password
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd "pg_isready -U ninewatt"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-
     permissions:
       contents: read
       id-token: write
@@ -47,32 +31,17 @@ jobs:
         id: ecr-login
         uses: aws-actions/amazon-ecr-login@v2
 
-      - name: Build and push Docker images
+      - name: Build and push Docker image
         env:
           ECR_REGISTRY: ${{ steps.ecr-login.outputs.registry }}
         run: |
           IMAGE_TAG="${ECR_REGISTRY}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}"
           IMAGE_LATEST="${ECR_REGISTRY}/${{ env.ECR_REPOSITORY }}:latest"
-          MIGRATOR_TAG="${ECR_REGISTRY}/${{ env.ECR_REPOSITORY }}:migrator-${{ github.sha }}"
 
-          # Production 이미지 빌드
-          docker build \
-            --network=host \
-            --build-arg DATABASE_URL="postgresql://ninewatt:build-temp-password@localhost:5432/ninewatt" \
-            --build-arg PAYLOAD_SECRET="${{ secrets.PAYLOAD_SECRET }}" \
-            -t "$IMAGE_TAG" -t "$IMAGE_LATEST" .
-
-          # DB 스키마 push용 migrator 이미지 빌드 (builder 스테이지 기반)
-          docker build \
-            --network=host \
-            --build-arg DATABASE_URL="postgresql://ninewatt:build-temp-password@localhost:5432/ninewatt" \
-            --build-arg PAYLOAD_SECRET="${{ secrets.PAYLOAD_SECRET }}" \
-            --target migrator \
-            -t "$MIGRATOR_TAG" .
+          docker build -t "$IMAGE_TAG" -t "$IMAGE_LATEST" .
 
           docker push "$IMAGE_TAG"
           docker push "$IMAGE_LATEST"
-          docker push "$MIGRATOR_TAG"
 
       - name: Deploy to EC2
         uses: appleboy/ssh-action@v1
@@ -88,44 +57,11 @@ jobs:
             IMAGE_TAG="${ECR_REGISTRY}/ninewatt-homepage:${{ github.sha }}"
             docker pull ${IMAGE_TAG}
 
-            # 네트워크 생성 (최초 1회)
-            docker network create ninewatt-net 2>/dev/null || true
-
-            # PostgreSQL 컨테이너가 없으면 최초 1회 생성
-            if ! docker ps -q -f name=ninewatt-db | grep -q .; then
-              docker run -d \
-                --name ninewatt-db \
-                --network ninewatt-net \
-                --restart unless-stopped \
-                -v ninewatt-pgdata:/var/lib/postgresql/data \
-                -e POSTGRES_DB=ninewatt \
-                -e POSTGRES_USER=ninewatt \
-                -e POSTGRES_PASSWORD=${{ secrets.DB_PASSWORD }} \
-                postgres:16-alpine
-              echo "Waiting for PostgreSQL to start..."
-              sleep 5
-            fi
-
-            # DB 스키마 마이그레이션 (새 global/collection 테이블 자동 생성)
-            MIGRATOR_TAG="${ECR_REGISTRY}/ninewatt-homepage:migrator-${{ github.sha }}"
-            docker pull ${MIGRATOR_TAG}
-            echo "Running database schema migration..."
-            docker run --rm \
-              --network ninewatt-net \
-              -e DATABASE_URL=postgresql://ninewatt:${{ secrets.DB_PASSWORD }}@ninewatt-db:5432/ninewatt \
-              -e PAYLOAD_SECRET=${{ secrets.PAYLOAD_SECRET }} \
-              ${MIGRATOR_TAG}
-            echo "Schema migration completed."
-
             # 앱 컨테이너 교체
             docker stop ninewatt-homepage || true
             docker rm ninewatt-homepage || true
             docker run -d \
               --name ninewatt-homepage \
-              --network ninewatt-net \
               --restart unless-stopped \
               -p 3000:3000 \
-              -v ninewatt-media:/app/public/media \
-              -e DATABASE_URL=postgresql://ninewatt:${{ secrets.DB_PASSWORD }}@ninewatt-db:5432/ninewatt \
-              -e PAYLOAD_SECRET=${{ secrets.PAYLOAD_SECRET }} \
               ${IMAGE_TAG}

@@ -1,111 +1,111 @@
-import { getPayloadClient } from "./payload";
+import { awards } from "@/data/awards";
+import { certifications } from "@/data/certifications";
+import { history } from "@/data/history";
+import { domesticPatents, internationalPatents } from "@/data/patents";
+import { rndProjects } from "@/data/rndProjects";
+import { companyInfo } from "@/data/companyInfo";
+import { homeStats } from "@/data/homeStats";
+import { executives } from "@/data/executives";
+import { organization } from "@/data/organization";
+import { career } from "@/data/career";
+import { globalBusiness } from "@/data/globalBusiness";
+import { products } from "@/data/products";
 
 // Collections
 
-export async function getAwards(locale: string) {
-  const payload = await getPayloadClient();
-  return payload.find({
-    collection: "awards",
-    locale,
-    sort: "-year",
-    limit: 100,
-  });
+export async function getAwards(_locale: string) {
+  const sorted = [...awards].sort((a, b) => b.year - a.year);
+  return { docs: sorted };
 }
 
-export async function getCertifications(locale: string) {
-  const payload = await getPayloadClient();
-  return payload.find({
-    collection: "certifications",
-    locale,
-    sort: "sortOrder",
-    limit: 100,
-  });
+export async function getCertifications(_locale: string) {
+  return { docs: certifications };
 }
 
-export async function getHistory(locale: string) {
-  const payload = await getPayloadClient();
-  return payload.find({
-    collection: "history",
-    locale,
-    sort: "-year",
-    limit: 100,
-  });
+export async function getHistory(_locale: string) {
+  const sorted = [...history].sort((a, b) => b.year - a.year);
+  return { docs: sorted };
 }
 
-export async function getPatents(locale: string, type?: "domestic" | "international") {
-  const payload = await getPayloadClient();
-  return payload.find({
-    collection: "patents",
-    locale,
-    sort: "-date",
-    limit: 100,
-    where: type ? { type: { equals: type } } : {},
-  });
+interface PatentDoc {
+  id: number;
+  type: "domestic" | "international";
+  status: string;
+  date: string;
+  number: string;
+  title: string;
+  applicant: string;
+  country?: string;
 }
 
-export async function getPartners(locale: string) {
-  const payload = await getPayloadClient();
-  return payload.find({
-    collection: "partners",
-    locale,
-    sort: "sortOrder",
-    limit: 100,
-  });
+export async function getPatents(_locale: string, type?: "domestic" | "international"): Promise<{ docs: PatentDoc[] }> {
+  const domestic: PatentDoc[] = domesticPatents.map((p) => ({
+    ...p,
+    type: "domestic" as const,
+  }));
+  const international: PatentDoc[] = internationalPatents.map((p) => ({
+    id: p.id,
+    type: "international" as const,
+    status: p.status,
+    date: p.date,
+    number: p.number,
+    title: p.titleKo,
+    applicant: "",
+    country: p.country,
+  }));
+
+  let docs: PatentDoc[];
+  if (type === "domestic") {
+    docs = domestic;
+  } else if (type === "international") {
+    docs = international;
+  } else {
+    docs = [...domestic, ...international];
+  }
+
+  docs.sort((a, b) => b.date.localeCompare(a.date));
+  return { docs };
 }
 
-export async function getRndProjects(locale: string) {
-  const payload = await getPayloadClient();
-  return payload.find({
-    collection: "rnd-projects",
-    locale,
-    limit: 100,
-  });
+export async function getPartners(_locale: string) {
+  return { docs: [] };
+}
+
+export async function getRndProjects(_locale: string) {
+  return { docs: rndProjects };
 }
 
 // Globals
 
-export async function getCompanyInfo(locale: string) {
-  const payload = await getPayloadClient();
-  return payload.findGlobal({ slug: "company-info", locale });
+export async function getCompanyInfo(_locale: string) {
+  return companyInfo;
 }
 
-export async function getHomeStats(locale: string) {
-  const payload = await getPayloadClient();
-  return payload.findGlobal({ slug: "home-stats", locale });
+export async function getHomeStats(_locale: string) {
+  return homeStats;
 }
 
-export async function getExecutives(locale: string) {
-  const payload = await getPayloadClient();
-  return payload.findGlobal({ slug: "executives", locale });
+export async function getExecutives(_locale: string) {
+  return executives;
 }
 
-export async function getOrganization(locale: string) {
-  const payload = await getPayloadClient();
-  return payload.findGlobal({ slug: "organization", locale });
+export async function getOrganization(_locale: string) {
+  return organization;
 }
 
-export async function getCareer(locale: string) {
-  const payload = await getPayloadClient();
-  return payload.findGlobal({ slug: "career", locale });
+export async function getCareer(_locale: string) {
+  return career;
 }
 
-export async function getGlobalBusiness(locale: string) {
-  const payload = await getPayloadClient();
-  return payload.findGlobal({ slug: "global-business", locale });
+export async function getGlobalBusiness(_locale: string) {
+  return globalBusiness;
 }
 
 export async function getProducts() {
-  const payload = await getPayloadClient();
-  return payload.findGlobal({ slug: "products" });
+  return products;
 }
 
 export async function getProductServiceUrl(slug: string): Promise<string | null> {
-  try {
-    const data = await getProducts();
-    const items = data.items as { slug: string; serviceUrl?: string }[] | undefined;
-    const product = items?.find((item) => item.slug === slug);
-    return product?.serviceUrl || null;
-  } catch {
-    return null;
-  }
+  const product = products.items.find((item) => item.slug === slug);
+  return product?.serviceUrl || null;
 }

@@ -7,7 +7,6 @@ RUN corepack enable && corepack prepare pnpm@latest --activate
 FROM base AS deps
 WORKDIR /app
 COPY package.json pnpm-lock.yaml* pnpm-workspace.yaml* ./
-COPY patches/ ./patches/
 RUN pnpm install --frozen-lockfile
 
 # --- Build ---
@@ -16,18 +15,7 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# Payload needs DATABASE_URL at build time for schema generation
-ARG DATABASE_URL
-ARG PAYLOAD_SECRET
-ENV DATABASE_URL=$DATABASE_URL
-ENV PAYLOAD_SECRET=$PAYLOAD_SECRET
-
 RUN pnpm build
-
-# --- Migrator (schema push) ---
-FROM builder AS migrator
-ENV NODE_ENV=development
-CMD ["npx", "tsx", "scripts/push-db-schema.ts"]
 
 # --- Production ---
 FROM base AS runner
@@ -41,9 +29,6 @@ RUN adduser --system --uid 1001 nextjs
 COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-
-# Create media upload directory
-RUN mkdir -p /app/public/media && chown nextjs:nodejs /app/public/media
 
 USER nextjs
 EXPOSE 3000

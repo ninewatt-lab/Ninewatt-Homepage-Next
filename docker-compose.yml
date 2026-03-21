@@ -1,31 +1,6 @@
 services:
-  db:
-    image: postgres:16-alpine
-    environment:
-      POSTGRES_DB: ninewatt
-      POSTGRES_USER: ninewatt
-      POSTGRES_PASSWORD: ${DB_PASSWORD:-ninewatt}
-    volumes:
-      - pgdata:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
-
   app:
     build:
       context: .
-      args:
-        DATABASE_URL: postgresql://ninewatt:${DB_PASSWORD:-ninewatt}@db:5432/ninewatt
-        PAYLOAD_SECRET: ${PAYLOAD_SECRET:-ninewatt-payload-secret-key-change-in-production-min-32-chars}
-    environment:
-      DATABASE_URL: postgresql://ninewatt:${DB_PASSWORD:-ninewatt}@db:5432/ninewatt
-      PAYLOAD_SECRET: ${PAYLOAD_SECRET:-ninewatt-payload-secret-key-change-in-production-min-32-chars}
     ports:
       - "3000:3000"
-    depends_on:
-      - db
-    volumes:
-      - media:/app/public/media
-
-volumes:
-  pgdata:
-  media:
