@@ -1,5 +1,6 @@
 import { getTranslations } from "next-intl/server";
-import { getPatents, getCertifications } from "@/lib/cms";
+import { getPatents, getCertifications, getTrademarks } from "@/lib/cms";
+import { ThumbnailButton } from "@/components/ImageLightbox";
 
 export async function generateMetadata() {
   const t = await getTranslations("company");
@@ -7,6 +8,15 @@ export async function generateMetadata() {
     title: `${t("patents.title")} - Ninewatt`,
     description: t("patents.subtitle"),
   };
+}
+
+function DocLabel({ thumbnailUrl, alt, children, className }: { thumbnailUrl?: string; alt: string; children: React.ReactNode; className?: string }) {
+  if (!thumbnailUrl) return <span className={className}>{children}</span>;
+  return (
+    <ThumbnailButton src={thumbnailUrl} alt={alt} className={className}>
+      {children}
+    </ThumbnailButton>
+  );
 }
 
 export default async function PatentsPage({
@@ -21,15 +31,19 @@ export default async function PatentsPage({
     { docs: domesticPatentsAll },
     { docs: internationalPatents },
     { docs: certifications },
+    { docs: allTrademarks },
   ] = await Promise.all([
     getPatents(locale, "domestic"),
     getPatents(locale, "international"),
     getCertifications(locale),
+    getTrademarks(locale),
   ]);
 
   const domesticRegistered = domesticPatentsAll.filter((p) => p.status === "등록");
   const domesticPending = domesticPatentsAll.filter((p) => p.status === "출원");
   const totalPatents = domesticPatentsAll.length + internationalPatents.length;
+  const domesticTrademarks = allTrademarks.filter((tm) => tm.country === "국내");
+  const internationalTrademarks = allTrademarks.filter((tm) => tm.country !== "국내");
 
   return (
     <>
@@ -58,6 +72,10 @@ export default async function PatentsPage({
             <div>
               <dt className="text-muted">{t("patents.international")}</dt>
               <dd className="text-2xl font-bold">{internationalPatents.length}</dd>
+            </div>
+            <div>
+              <dt className="text-muted">{t("patents.trademarks")}</dt>
+              <dd className="text-2xl font-bold">{allTrademarks.length}</dd>
             </div>
             <div>
               <dt className="text-muted">{t("patents.certifications")}</dt>
@@ -90,7 +108,7 @@ export default async function PatentsPage({
                     <td className="py-3 pr-3 text-muted">{i + 1}</td>
                     <td className="py-3 pr-3 whitespace-nowrap text-muted">{p.date}</td>
                     <td className="py-3 pr-3 font-mono text-xs text-muted">{p.number}</td>
-                    <td className="py-3 pr-3">{p.title}</td>
+                    <td className="py-3 pr-3"><DocLabel thumbnailUrl={p.thumbnailUrl} alt={p.title}>{p.title}</DocLabel></td>
                     <td className="py-3 whitespace-nowrap text-muted">{p.applicant}</td>
                   </tr>
                 ))}
@@ -120,7 +138,7 @@ export default async function PatentsPage({
                       <td className="py-3 pr-3 text-muted">{i + 1}</td>
                       <td className="py-3 pr-3 whitespace-nowrap text-muted">{p.date}</td>
                       <td className="py-3 pr-3 font-mono text-xs text-muted">{p.number}</td>
-                      <td className="py-3 pr-3">{p.title}</td>
+                      <td className="py-3 pr-3"><DocLabel thumbnailUrl={p.thumbnailUrl} alt={p.title}>{p.title}</DocLabel></td>
                       <td className="py-3 whitespace-nowrap text-muted">{p.applicant}</td>
                     </tr>
                   ))}
@@ -152,8 +170,8 @@ export default async function PatentsPage({
                       <td className="py-3 pr-3 text-muted">{i + 1}</td>
                       <td className="py-3 pr-3 whitespace-nowrap text-muted">{p.date}</td>
                       <td className="py-3 pr-3 font-mono text-xs text-muted">{p.number}</td>
-                      <td className="py-3 pr-3">{p.title}</td>
-                      <td className="py-3 pr-3 text-muted">{p.title}</td>
+                      <td className="py-3 pr-3"><DocLabel thumbnailUrl={p.thumbnailUrl} alt={p.title}>{p.title}</DocLabel></td>
+                      <td className="py-3 pr-3 text-muted">{p.titleEn}</td>
                       <td className="py-3 whitespace-nowrap text-muted">{p.country}</td>
                     </tr>
                   ))}
@@ -161,6 +179,79 @@ export default async function PatentsPage({
               </table>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Trademarks */}
+      <section className="border-t border-border px-6 py-20">
+        <div className="mx-auto max-w-5xl">
+          <h2 className="text-xl font-bold">
+            {t("patents.domesticTrademarks")} <span className="text-muted">({domesticTrademarks.length}건)</span>
+          </h2>
+          <div className="mt-4 overflow-x-auto">
+            <table className="w-full min-w-150 text-sm">
+              <thead>
+                <tr className="border-b border-border text-left">
+                  <th className="py-3 pr-3 font-semibold text-muted">{t("patents.tableNo")}</th>
+                  <th className="py-3 pr-3 font-semibold text-muted">{t("patents.trademarkName")}</th>
+                  <th className="py-3 pr-3 font-semibold text-muted">{t("patents.tmStatus")}</th>
+                  <th className="py-3 pr-3 font-semibold text-muted">{t("patents.regDate")}</th>
+                  <th className="py-3 font-semibold text-muted">{t("patents.regNo")}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {domesticTrademarks.map((tm, i) => (
+                  <tr key={tm.id} className="border-b border-border">
+                    <td className="py-3 pr-3 text-muted">{i + 1}</td>
+                    <td className="py-3 pr-3 font-medium"><DocLabel thumbnailUrl={tm.thumbnailUrl} alt={tm.name}>{tm.name}</DocLabel></td>
+                    <td className="py-3 pr-3">
+                      <span className={`inline-block rounded px-2 py-0.5 text-xs font-medium ${tm.status === "등록" ? "bg-emerald-500/10 text-emerald-600" : "bg-amber-500/10 text-amber-600"}`}>
+                        {tm.status}
+                      </span>
+                    </td>
+                    <td className="py-3 pr-3 whitespace-nowrap text-muted">{tm.date}</td>
+                    <td className="py-3 font-mono text-xs text-muted">{tm.number}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {internationalTrademarks.length > 0 && (
+            <div className="mt-16">
+              <h2 className="text-xl font-bold">
+                {t("patents.internationalTrademarks")} <span className="text-muted">({internationalTrademarks.length}건)</span>
+              </h2>
+              <div className="mt-4 overflow-x-auto">
+                <table className="w-full min-w-150 text-sm">
+                  <thead>
+                    <tr className="border-b border-border text-left">
+                      <th className="py-3 pr-3 font-semibold text-muted">{t("patents.tableNo")}</th>
+                      <th className="py-3 pr-3 font-semibold text-muted">{t("patents.trademarkName")}</th>
+                      <th className="py-3 pr-3 font-semibold text-muted">{t("patents.tmStatus")}</th>
+                      <th className="py-3 pr-3 font-semibold text-muted">{t("patents.appDate")}</th>
+                      <th className="py-3 font-semibold text-muted">{t("patents.country")}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {internationalTrademarks.map((tm, i) => (
+                      <tr key={tm.id} className="border-b border-border">
+                        <td className="py-3 pr-3 text-muted">{i + 1}</td>
+                        <td className="py-3 pr-3 font-medium"><DocLabel thumbnailUrl={tm.thumbnailUrl} alt={tm.name}>{tm.name}</DocLabel></td>
+                        <td className="py-3 pr-3">
+                          <span className={`inline-block rounded px-2 py-0.5 text-xs font-medium ${tm.status === "등록" ? "bg-emerald-500/10 text-emerald-600" : "bg-amber-500/10 text-amber-600"}`}>
+                            {tm.status}
+                          </span>
+                        </td>
+                        <td className="py-3 pr-3 whitespace-nowrap text-muted">{tm.date}</td>
+                        <td className="py-3 whitespace-nowrap text-muted">{tm.country}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
         </div>
       </section>
 
@@ -176,7 +267,13 @@ export default async function PatentsPage({
                 key={c.id}
                 className="border-l-2 border-border pl-4"
               >
-                <p className="text-sm font-semibold">{c.name}</p>
+                {c.thumbnailUrl ? (
+                  <ThumbnailButton src={c.thumbnailUrl} alt={c.name} className="text-sm font-semibold">
+                    {c.name}
+                  </ThumbnailButton>
+                ) : (
+                  <p className="text-sm font-semibold">{c.name}</p>
+                )}
                 <p className="text-xs text-muted">{c.issuer}</p>
               </div>
             ))}

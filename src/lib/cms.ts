@@ -2,6 +2,7 @@ import { awards } from "@/data/awards";
 import { certifications } from "@/data/certifications";
 import { history } from "@/data/history";
 import { domesticPatents, internationalPatents } from "@/data/patents";
+import { trademarks } from "@/data/trademarks";
 import { rndProjects } from "@/data/rndProjects";
 import { companyInfo } from "@/data/companyInfo";
 import { homeStats } from "@/data/homeStats";
@@ -22,6 +23,10 @@ export async function getCertifications(_locale: string) {
   return { docs: certifications };
 }
 
+export async function getTrademarks(_locale: string) {
+  return { docs: trademarks };
+}
+
 export async function getHistory(_locale: string) {
   const sorted = [...history].sort((a, b) => b.year - a.year);
   return { docs: sorted };
@@ -34,8 +39,10 @@ interface PatentDoc {
   date: string;
   number: string;
   title: string;
+  titleEn?: string;
   applicant: string;
   country?: string;
+  thumbnailUrl?: string;
 }
 
 export async function getPatents(_locale: string, type?: "domestic" | "international"): Promise<{ docs: PatentDoc[] }> {
@@ -50,8 +57,10 @@ export async function getPatents(_locale: string, type?: "domestic" | "internati
     date: p.date,
     number: p.number,
     title: p.titleKo,
-    applicant: "",
+    titleEn: p.titleEn,
+    applicant: p.applicant,
     country: p.country,
+    thumbnailUrl: p.thumbnailUrl,
   }));
 
   let docs: PatentDoc[];

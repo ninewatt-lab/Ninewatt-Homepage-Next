@@ -69,7 +69,12 @@
     "applicant": "Applicant",
     "patentNameKo": "Patent Name (Korean)",
     "patentNameEn": "Patent Name (English)",
-    "country": "Country"
+    "country": "Country",
+    "trademarks": "Trademarks",
+    "domesticTrademarks": "Domestic Trademarks",
+    "internationalTrademarks": "International Trademarks",
+    "trademarkName": "Trademark",
+    "tmStatus": "Status"
   },
   "career": {
     "title": "Careers",

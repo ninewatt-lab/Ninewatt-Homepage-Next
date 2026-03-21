@@ -1,5 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { getAwards } from "@/lib/cms";
+import { ThumbnailButton } from "@/components/ImageLightbox";
 
 export async function generateMetadata() {
   const t = await getTranslations("company");
@@ -54,16 +55,27 @@ export default async function AwardsPage({
                   {year}
                 </div>
                 <div className="space-y-3">
-                  {awardsByYear[year].map((award) => (
-                    <div key={award.id} className="flex flex-col gap-0.5 sm:flex-row sm:gap-3">
-                      <span className="shrink-0 text-sm font-medium">
-                        {award.name}
-                      </span>
-                      <span className="text-sm text-muted">
-                        {award.organization} · {award.grade}
-                      </span>
-                    </div>
-                  ))}
+                  {awardsByYear[year].map((award) =>
+                    award.thumbnailUrl ? (
+                      <div key={award.id} className="flex flex-col gap-0.5 sm:flex-row sm:gap-3">
+                        <ThumbnailButton src={award.thumbnailUrl} alt={award.name} className="shrink-0 text-sm font-medium">
+                          {award.name}
+                        </ThumbnailButton>
+                        <span className="text-sm text-muted">
+                          {award.organization} · {award.grade}
+                        </span>
+                      </div>
+                    ) : (
+                      <div key={award.id} className="flex flex-col gap-0.5 sm:flex-row sm:gap-3">
+                        <span className="shrink-0 text-sm font-medium">
+                          {award.name}
+                        </span>
+                        <span className="text-sm text-muted">
+                          {award.organization} · {award.grade}
+                        </span>
+                      </div>
+                    )
+                  )}
                 </div>
               </div>
             ))}

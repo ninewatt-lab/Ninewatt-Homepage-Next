@@ -69,7 +69,12 @@
     "applicant": "Deposant",
     "patentNameKo": "Nom du brevet (coreen)",
     "patentNameEn": "Nom du brevet (anglais)",
-    "country": "Pays"
+    "country": "Pays",
+    "trademarks": "Marques",
+    "domesticTrademarks": "Marques nationales",
+    "internationalTrademarks": "Marques internationales",
+    "trademarkName": "Nom de la marque",
+    "tmStatus": "Statut"
   },
   "career": {
     "title": "Recrutement",

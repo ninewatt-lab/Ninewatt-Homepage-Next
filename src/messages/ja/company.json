@@ -69,7 +69,12 @@
     "applicant": "出願・登録者",
     "patentNameKo": "特許名（韓国語）",
     "patentNameEn": "特許名（英語）",
-    "country": "国"
+    "country": "国",
+    "trademarks": "商標",
+    "domesticTrademarks": "国内商標",
+    "internationalTrademarks": "海外商標",
+    "trademarkName": "商標名",
+    "tmStatus": "状態"
   },
   "career": {
     "title": "採用情報",

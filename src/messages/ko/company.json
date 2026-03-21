@@ -69,7 +69,12 @@
     "applicant": "출원/등록자",
     "patentNameKo": "특허명 (국문)",
     "patentNameEn": "특허명 (영문)",
-    "country": "국가"
+    "country": "국가",
+    "trademarks": "상표",
+    "domesticTrademarks": "국내 상표",
+    "internationalTrademarks": "해외 상표",
+    "trademarkName": "상표명",
+    "tmStatus": "상태"
   },
   "career": {
     "title": "채용 안내",

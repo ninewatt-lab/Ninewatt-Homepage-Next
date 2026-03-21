@@ -44,3 +44,7 @@ next-env.d.ts
 
 # payload
 /public/media/
+
+# local document files & DB dump
+/files/
+prod_dump.sql
