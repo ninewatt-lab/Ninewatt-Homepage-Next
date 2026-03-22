@@ -46,5 +46,5 @@ next-env.d.ts
 /public/media/
 
 # local document files & DB dump
-/files/
+/assets/documents/
 prod_dump.sql
