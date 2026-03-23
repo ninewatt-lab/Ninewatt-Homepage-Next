@@ -14,6 +14,7 @@ export default function CompanyNav() {
     { href: "/company/global", label: t("companyMenu.global") },
     { href: "/company/awards", label: t("companyMenu.awards") },
     { href: "/company/patents", label: t("companyMenu.patents") },
+    { href: "/company/media", label: t("companyMenu.media") },
   ];
 
   return (

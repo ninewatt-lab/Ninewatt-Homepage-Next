@@ -11,32 +11,38 @@
     "solutions": [
       {
         "id": "data-infra",
-        "title": "Data Collection, Infrastructure & Preprocessing",
+        "title": "Data Collection & Infrastructure",
+        "desc": "Collect local power, weather, and tariff data while building cloud-connected infrastructure and integrated databases.",
         "items": ["Collection of local power consumption, tariff structures, and weather-related data", "Data collection and storage framework development", "Integrated database and operational platform foundation", "On-site to cloud connectivity architecture design", "Platform integration through data processing"]
       },
       {
         "id": "monitoring",
-        "title": "Energy Monitoring & Integrated Platform Development",
+        "title": "Energy Monitoring Platform",
+        "desc": "Real-time energy monitoring with digital twin 3D visualization for unified facility and power management.",
         "items": ["Real-time energy monitoring system", "Unified visualization of facility, power, and operational status", "Dashboard-based operational support", "Digital twin-based 3D visualization"]
       },
       {
         "id": "ai-analysis",
-        "title": "AI-Based Analysis & Algorithm Development",
+        "title": "AI Analysis & Algorithms",
+        "desc": "Develop and deploy AI algorithms for power pattern analysis, anomaly detection, and facility optimization.",
         "items": ["Application of collected data with localized logic", "Power consumption pattern analysis", "Anomaly detection and prediction", "Facility operation optimization algorithms", "Energy analysis through real-world field deployment"]
       },
       {
         "id": "bems-ai",
-        "title": "BEMS-AI Agent Development",
+        "title": "BEMS-AI Agent",
+        "desc": "Domain-specific LLM-powered conversational energy management with automated reporting and root cause analysis.",
         "items": ["Domain-specific LLM (RAG)-based energy analysis", "Automated operational data reporting", "Root cause analysis for anomalous events", "Conversational energy management interface"]
       },
       {
         "id": "ubem",
-        "title": "Urban-Scale Energy Analysis & Simulation (UBEM)",
+        "title": "Urban Energy Simulation",
+        "desc": "City-scale building energy diagnostics and green remodeling impact simulation.",
         "items": ["City-scale building energy diagnostics", "Building energy performance analysis and benchmarking", "Green remodeling impact simulation", "Policy and business feasibility analysis support"]
       },
       {
         "id": "renewable",
-        "title": "Renewable & Distributed Energy Simulation",
+        "title": "Renewable Energy Simulation",
+        "desc": "Analyze PV and ESS installation suitability with 3D operation simulation.",
         "items": ["PV (solar) installation suitability analysis", "ESS capacity and operation simulation", "Idle space, rooftop, and solar irradiance analysis", "3D visualization of installation effects"]
       }
     ],

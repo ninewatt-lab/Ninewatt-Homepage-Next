@@ -194,7 +194,6 @@ export default async function PatentsPage({
                 <tr className="border-b border-border text-left">
                   <th className="py-3 pr-3 font-semibold text-muted">{t("patents.tableNo")}</th>
                   <th className="py-3 pr-3 font-semibold text-muted">{t("patents.trademarkName")}</th>
-                  <th className="py-3 pr-3 font-semibold text-muted">{t("patents.tmStatus")}</th>
                   <th className="py-3 pr-3 font-semibold text-muted">{t("patents.regDate")}</th>
                   <th className="py-3 font-semibold text-muted">{t("patents.regNo")}</th>
                 </tr>
@@ -204,11 +203,6 @@ export default async function PatentsPage({
                   <tr key={tm.id} className="border-b border-border">
                     <td className="py-3 pr-3 text-muted">{i + 1}</td>
                     <td className="py-3 pr-3 font-medium"><DocLabel thumbnailUrl={tm.thumbnailUrl} alt={tm.name}>{tm.name}</DocLabel></td>
-                    <td className="py-3 pr-3">
-                      <span className={`inline-block rounded px-2 py-0.5 text-xs font-medium ${tm.status === "등록" ? "bg-emerald-500/10 text-emerald-600" : "bg-amber-500/10 text-amber-600"}`}>
-                        {tm.status}
-                      </span>
-                    </td>
                     <td className="py-3 pr-3 whitespace-nowrap text-muted">{tm.date}</td>
                     <td className="py-3 font-mono text-xs text-muted">{tm.number}</td>
                   </tr>
@@ -228,7 +222,6 @@ export default async function PatentsPage({
                     <tr className="border-b border-border text-left">
                       <th className="py-3 pr-3 font-semibold text-muted">{t("patents.tableNo")}</th>
                       <th className="py-3 pr-3 font-semibold text-muted">{t("patents.trademarkName")}</th>
-                      <th className="py-3 pr-3 font-semibold text-muted">{t("patents.tmStatus")}</th>
                       <th className="py-3 pr-3 font-semibold text-muted">{t("patents.appDate")}</th>
                       <th className="py-3 font-semibold text-muted">{t("patents.country")}</th>
                     </tr>
@@ -238,11 +231,6 @@ export default async function PatentsPage({
                       <tr key={tm.id} className="border-b border-border">
                         <td className="py-3 pr-3 text-muted">{i + 1}</td>
                         <td className="py-3 pr-3 font-medium"><DocLabel thumbnailUrl={tm.thumbnailUrl} alt={tm.name}>{tm.name}</DocLabel></td>
-                        <td className="py-3 pr-3">
-                          <span className={`inline-block rounded px-2 py-0.5 text-xs font-medium ${tm.status === "등록" ? "bg-emerald-500/10 text-emerald-600" : "bg-amber-500/10 text-amber-600"}`}>
-                            {tm.status}
-                          </span>
-                        </td>
                         <td className="py-3 pr-3 whitespace-nowrap text-muted">{tm.date}</td>
                         <td className="py-3 whitespace-nowrap text-muted">{tm.country}</td>
                       </tr>

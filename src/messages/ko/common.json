@@ -51,7 +51,9 @@
     "awards": "수상 내역",
     "awardsDesc": "CES·정부 포상 등 수상 기록",
     "patents": "특허 & 인증",
-    "patentsDesc": "33건의 특허 및 주요 인증"
+    "patentsDesc": "33건의 특허 및 주요 인증",
+    "media": "미디어",
+    "mediaDesc": "뉴스·보도자료·영상 콘텐츠"
   },
   "footer": {
     "tagline": "GX 실현을 이끄는 에너지 기술로,\n스마트시티와 탄소중립 사회에 기여합니다.",

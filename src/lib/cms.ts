@@ -11,6 +11,7 @@ import { organization } from "@/data/organization";
 import { career } from "@/data/career";
 import { globalBusiness } from "@/data/globalBusiness";
 import { products } from "@/data/products";
+import { newsArticles, videos } from "@/data/media";
 
 // Collections
 
@@ -117,4 +118,10 @@ export async function getProducts() {
 export async function getProductServiceUrl(slug: string): Promise<string | null> {
   const product = products.items.find((item) => item.slug === slug);
   return product?.serviceUrl || null;
+}
+
+export async function getMedia(_locale: string) {
+  const sortedNews = [...newsArticles].sort((a, b) => b.date.localeCompare(a.date));
+  const sortedVideos = [...videos].sort((a, b) => b.date.localeCompare(a.date));
+  return { news: sortedNews, videos: sortedVideos };
 }

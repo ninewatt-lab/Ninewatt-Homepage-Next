@@ -5,32 +5,38 @@
     "solutions": [
       {
         "id": "data-infra",
-        "title": "Collecte de données, infrastructure et prétraitement",
+        "title": "Collecte de données et infrastructure",
+        "desc": "Collecte des données locales d'énergie, de météo et de tarification, avec mise en place d'une infrastructure cloud et d'une base de données intégrée.",
         "items": ["Collecte des données de consommation électrique locale, des tarifs et des données météorologiques associées", "Mise en place d'un système de collecte et de stockage des données", "Création d'une base de données intégrée et d'une plateforme opérationnelle", "Conception d'une architecture de connectivité site-cloud", "Intégration de la plateforme par le traitement des données"]
       },
       {
         "id": "monitoring",
-        "title": "Monitoring énergétique et développement de plateforme intégrée",
+        "title": "Plateforme de monitoring énergétique",
+        "desc": "Monitoring énergétique en temps réel avec visualisation 3D par jumeau numérique pour une gestion unifiée.",
         "items": ["Système de monitoring énergétique en temps réel", "Visualisation unifiée des équipements, de l'énergie et de l'état opérationnel", "Support opérationnel basé sur des tableaux de bord", "Visualisation 3D basée sur le jumeau numérique"]
       },
       {
         "id": "ai-analysis",
-        "title": "Analyse et développement d'algorithmes basés sur l'IA",
+        "title": "Analyse IA et algorithmes",
+        "desc": "Développement et déploiement d'algorithmes IA pour l'analyse des consommations, la détection d'anomalies et l'optimisation.",
         "items": ["Application des données collectées avec une logique localisée", "Analyse des schémas de consommation électrique", "Détection et prédiction des anomalies", "Algorithmes d'optimisation du fonctionnement des équipements", "Analyse énergétique par déploiement sur le terrain"]
       },
       {
         "id": "bems-ai",
-        "title": "Développement d'agents BEMS-IA",
+        "title": "Agent BEMS-IA",
+        "desc": "Interface conversationnelle de gestion énergétique alimentée par un LLM spécialisé, avec rapports automatisés et analyse causale.",
         "items": ["Analyse énergétique basée sur un LLM (RAG) spécialisé", "Rapports automatisés des données opérationnelles", "Aide à l'analyse des causes d'anomalies", "Interface conversationnelle de gestion énergétique"]
       },
       {
         "id": "ubem",
-        "title": "Analyse énergétique et simulation à l'échelle urbaine (UBEM)",
+        "title": "Simulation énergétique urbaine",
+        "desc": "Diagnostic énergétique des bâtiments à l'échelle urbaine et simulation de l'impact de la rénovation verte.",
         "items": ["Diagnostic énergétique des bâtiments à l'échelle urbaine", "Analyse et comparaison des performances énergétiques des bâtiments", "Simulation de l'impact de la rénovation verte", "Aide à l'analyse de faisabilité des politiques et projets"]
       },
       {
         "id": "renewable",
-        "title": "Simulation des énergies renouvelables et distribuées",
+        "title": "Simulation des énergies renouvelables",
+        "desc": "Analyse de l'aptitude à l'installation PV et ESS avec simulation d'exploitation en 3D.",
         "items": ["Analyse d'aptitude à l'installation PV (solaire)", "Simulation de capacité et d'exploitation ESS", "Analyse des espaces disponibles, toitures et ensoleillement", "Visualisation 3D des effets d'installation"]
       }
     ],

@@ -51,7 +51,9 @@
     "awards": "Distinctions",
     "awardsDesc": "CES, distinctions gouvernementales et autres",
     "patents": "Brevets & Certifications",
-    "patentsDesc": "33 brevets et certifications majeures"
+    "patentsDesc": "33 brevets et certifications majeures",
+    "media": "Médias",
+    "mediaDesc": "Actualités, communiqués de presse et vidéos"
   },
   "footer": {
     "tagline": "Avec une technologie énergétique à la pointe de la transition GX,\nnous contribuons aux villes intelligentes et à la neutralité carbone.",

@@ -51,7 +51,9 @@
     "awards": "Awards",
     "awardsDesc": "CES, government honors & more",
     "patents": "Patents & Certifications",
-    "patentsDesc": "33 patents and key certifications"
+    "patentsDesc": "33 patents and key certifications",
+    "media": "Media",
+    "mediaDesc": "News, press releases & video content"
   },
   "footer": {
     "tagline": "Leading the GX transformation with energy technology,\ncontributing to smart cities and a carbon-neutral society.",

@@ -263,6 +263,17 @@ const companyNav: NavItemWithChildren = {
             </svg>
           ),
         },
+        {
+          href: "/company/media",
+          labelKey: "companyMenu.media",
+          descKey: "companyMenu.mediaDesc",
+          icon: (
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
+              <path d="M19 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V5a2 2 0 00-2-2z" />
+              <path d="M10 9l5 3-5 3V9z" />
+            </svg>
+          ),
+        },
       ],
     },
   ],
