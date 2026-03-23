@@ -16,8 +16,8 @@ export default async function ContactPage() {
   return (
     <>
       {/* Hero */}
-      <section className="border-b border-border px-6 pb-16 pt-32">
-        <div className="mx-auto max-w-4xl">
+      <section className="border-b border-border px-6 pb-16 pt-16">
+        <div className="mx-auto max-w-5xl">
           <p className="text-sm font-semibold text-primary">Contact Us</p>
           <h1 className="mt-3 text-4xl font-bold tracking-tight md:text-5xl">{t("title")}</h1>
           <p className="mt-4 max-w-2xl text-lg text-muted">
@@ -27,7 +27,7 @@ export default async function ContactPage() {
       </section>
 
       <section className="px-6 py-24">
-        <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-2">
+        <div className="mx-auto grid max-w-5xl gap-12 lg:grid-cols-2">
           {/* Contact Form */}
           <div>
             <h2 className="text-2xl font-bold">{t("formTitle")}</h2>

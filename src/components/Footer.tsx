@@ -83,6 +83,9 @@ export default function Footer() {
 
         <div className="mt-10 border-t border-border pt-8">
           <p className="text-sm text-muted">
+            대표자 : 김영록 | 사업자등록번호 : 107-88-42750
+          </p>
+          <p className="mt-1 text-sm text-muted">
             &copy; {new Date().getFullYear()} NINEWATT Co., Ltd. All rights reserved.
           </p>
         </div>
