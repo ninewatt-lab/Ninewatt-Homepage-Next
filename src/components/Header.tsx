@@ -380,7 +380,7 @@ export default function Header() {
       >
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
           <Link href="/" className={`transition-colors ${isTransparent ? "text-white" : "text-foreground"}`}>
-            <NinewattLogo height={28} width="auto" />
+            <NinewattLogo height={36} width="auto" />
           </Link>
 
           {/* Desktop Nav */}
