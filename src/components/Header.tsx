@@ -145,6 +145,11 @@ const solutionsNav: NavItemWithChildren = {
             </svg>
           ),
         },
+      ],
+    },
+    {
+      titleKey: "solutionsMenu.trackRecord",
+      items: [
         {
           href: "/solutions/cases",
           labelKey: "solutionsMenu.cases",
@@ -157,11 +162,6 @@ const solutionsNav: NavItemWithChildren = {
             </svg>
           ),
         },
-      ],
-    },
-    {
-      titleKey: "solutionsMenu.trackRecord",
-      items: [
         {
           href: "/solutions/rnd",
           labelKey: "solutionsMenu.rnd",
