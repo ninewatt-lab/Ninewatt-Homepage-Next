@@ -47,11 +47,12 @@ jobs:
         uses: appleboy/ssh-action@v1
         env:
           ECR_REGISTRY: ${{ steps.ecr-login.outputs.registry }}
+          TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL }}
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
-          envs: ECR_REGISTRY
+          envs: ECR_REGISTRY,TEAMS_WEBHOOK_URL
           script: |
             aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin ${ECR_REGISTRY}
             IMAGE_TAG="${ECR_REGISTRY}/ninewatt-homepage:${{ github.sha }}"
@@ -64,4 +65,5 @@ jobs:
               --name ninewatt-homepage \
               --restart unless-stopped \
               -p 3000:3000 \
+              -e "TEAMS_WEBHOOK_URL=$TEAMS_WEBHOOK_URL" \
               ${IMAGE_TAG}
