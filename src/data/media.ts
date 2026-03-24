@@ -15,16 +15,7 @@ export const newsArticles: MediaItem[] = [
     link: "https://www.dailian.co.kr/news/view/738252/?sc=naver",
     image: "http://cdnimage.dailian.co.kr/news/201809/news_1536542613_738252_m_1.jpg",
     type: "article",
-  },
-  {
-    title: "세상을 밝히는 특별한 시민 아이디어' 소개",
-    date: "2018.09.20",
-    origin: "에너지데일리",
-    link: "http://www.energydaily.co.kr/news/articleView.html?idxno=93178",
-    image: "https://cdn.energydaily.co.kr/news/thumbnail/201809/93178_50785_1554_v150.jpg",
-    type: "article",
-  },
-  {
+  },  {
     title: "한국에너지공단, '에너지 벤처' 든든한 동반자로…시민창업대회 1만명 넘게 몰려",
     date: "2018.11.08",
     origin: "매일경제",
@@ -63,96 +54,35 @@ export const newsArticles: MediaItem[] = [
     link: "http://www.kyeonggi.com/news/articleView.html?idxno=2160278",
     image: "https://ypzxxdrj8709.edge.naverncp.com/data2/content/image/2019/09/05/.cache/512/201909050949334.jpg",
     type: "article",
-  },
-  {
-    title: "2019 인천 지식재산(IP) FESTIVAL 개최, 발명아이디어 콘테스트 대상",
-    date: "2019.11.06",
-    origin: "일간투데이",
-    link: "http://www.dtoday.co.kr/news/articleView.html?idxno=335746",
-    image: "http://www.dtoday.co.kr/image/logo/snslogo_20240326030744.png",
-    type: "article",
-  },
-  {
+  },  {
     title: "인천 도시문제 해결 공공플랫폼 개발대회 수상자 10팀 선발",
     date: "2019.11.17",
     origin: "국민일보",
     link: "http://news.kmib.co.kr/article/view.asp?arcid=0013938144&code=61121111&cp=nv",
     image: "https://image.kmib.co.kr/online_image/2019/1117/611211110013938144_1.jpg",
     type: "article",
-  },
-  {
-    title: "인천시, '2019 시빅 핵페어' 최종 수상작 선정",
-    date: "2019.11.18",
-    origin: "이뉴스투데이",
-    link: "http://www.enewstoday.co.kr/news/articleView.html?idxno=1349792",
-    image: "http://www.enewstoday.co.kr/image/logo/snslogo_20230418091055.jpg",
-    type: "article",
-  },
-  {
+  },  {
     title: "한국사회투자, 네번째 임팩트투자 기업에 '나인와트' 선정",
     date: "2019.11.21",
     origin: "전자신문",
     link: "https://m.etnews.com/20191121000187",
     image: "https://img.etnews.com/photonews/1911/1245787_20191121154525_303_0001.jpg",
     type: "article",
-  },
-  {
-    title: "국내 AI스타트업 정보 총 망라된 '2019 KOREA AI Startups' 출간...",
-    date: "2019.11.26",
-    origin: "인공지능신문",
-    link: "http://www.aitimes.kr/news/articleView.html?idxno=14758",
-    image: "https://cdn.aitimes.kr/news/thumbnail/201911/14758_15733_255_v150.jpg",
-    type: "article",
-  },
-  {
-    title: "환경부-SK이노베이션, '환경분야 소셜 비즈니스 발굴 공모전' 기업 선정",
-    date: "2020.08.12",
-    origin: "이로운넷",
-    link: "https://www.eroun.net/news/articleView.html?idxno=13078",
-    image: "https://cdn.eroun.net/news/thumbnail/202008/13078_38125_5820_v150.jpg",
-    type: "article",
-  },
-  {
-    title: "한국인공지능협회, '서울형 뉴딜 일자리 AI 데이터 구축사업' MOU 체결",
-    date: "2020.09.21",
-    origin: "로봇신문",
-    link: "http://www.irobotnews.com/news/articleView.html?idxno=22382",
-    image: "https://cdn.irobotnews.com/news/photo/202009/22382_49765_1045.jpg",
-    type: "article",
-  },
-  {
+  },  {
     title: "비행선박부터 액화수소 충전트럭까지…스타트업도 '녹색' 바람",
     date: "2020.10.14",
     origin: "머니투데이",
     link: "https://news.mt.co.kr/mtview.php?no=2020100713423412549",
     image: "https://thumb.mt.co.kr/21/2020/10/2020100713423412549_1.jpg",
     type: "article",
-  },
-  {
-    title: "[20Startup] 기술과 혁신으로 무장한 솔루션 스타트업 부각",
-    date: "2020.11.22",
-    origin: "w-startup",
-    link: "http://www.w-startup.com/news/articleView.html?idxno=11347",
-    image: "https://cdn.issuenbiz.com/news/thumbnail/202011/11347_11710_4643_v150.jpg",
-    type: "article",
-  },
-  {
+  },  {
     title: "도시문제 해결사 나인와트, 건축물 에너지 건강검진 솔루션(energyMAP) 성과 주목",
     date: "2020.12.30",
     origin: "국민일보",
     link: "http://news.kmib.co.kr/article/view.asp?arcid=0015376870&code=61141411",
     image: "https://image.kmib.co.kr/online_image/2020/1230/611414110015376870_1.jpg",
     type: "article",
-  },
-  {
-    title: "2021 주목할만한 AI 스타트업 25",
-    date: "2020.12.31",
-    origin: "Ai타임스",
-    link: "http://www.aitimes.com/news/articleView.html?idxno=135345",
-    image: "https://cdn.aitimes.com/news/thumbnail/202012/135345_133668_849_v150.jpg",
-    type: "article",
-  },
-  {
+  },  {
     title: "KB금융, 육성 대상 스타트업 22개사 추가 선정",
     date: "2021.03.19",
     origin: "연합뉴스",
@@ -165,7 +95,7 @@ export const newsArticles: MediaItem[] = [
     date: "2021.03.30",
     origin: "인더뉴스",
     link: "https://www.inthenews.co.kr/news/article.html?no=32205",
-    image: "",
+    image: "https://www.inthenews.co.kr/data/photos/20210312/art_16165536112264_e946fd.jpg",
     type: "article",
   },
   {
@@ -181,7 +111,7 @@ export const newsArticles: MediaItem[] = [
     date: "2021.05.28",
     origin: "NSP통신",
     link: "http://www.nspna.com/news/?mode=view&newsid=504690",
-    image: "",
+    image: "https://file.nspna.com/news/2021/05/28/20210528133906_504690_1.jpg",
     type: "article",
   },
   {
@@ -189,7 +119,7 @@ export const newsArticles: MediaItem[] = [
     date: "2021.06.01",
     origin: "디지털타임스",
     link: "http://www.dt.co.kr/contents.html?article_no=2021060102109931650010",
-    image: "",
+    image: "https://wimg.dt.co.kr/news/legacy/contents/images/202106/2021060102109931650010.jpg",
     type: "article",
   },
   {
@@ -247,16 +177,7 @@ export const newsArticles: MediaItem[] = [
     link: "http://news.kmib.co.kr/article/view.asp?arcid=0016421848&code=61121111&cp=nv",
     image: "https://image.kmib.co.kr/online_image/2021/1101/2021110112571186235_1635739031_0016421848.jpg",
     type: "article",
-  },
-  {
-    title: "SK에코플랜트, 글로벌 ESG 선도 스타트업 발굴 나서",
-    date: "2021.11.15",
-    origin: "투데이에너지",
-    link: "http://www.todayenergy.kr/news/articleView.html?idxno=242203",
-    image: "https://cdn.todayenergy.kr/news/thumbnail/202111/242203_122295_657_v150.jpg",
-    type: "article",
-  },
-  {
+  },  {
     title: "한국데이터산업진흥원, 2021 DATA-Stars Awards 성료",
     date: "2021.11.19",
     origin: "보안뉴스",
@@ -269,7 +190,7 @@ export const newsArticles: MediaItem[] = [
     date: "2021.11.29",
     origin: "Viewers",
     link: "http://theviewers.co.kr/View.aspx?No=2130094",
-    image: "http://theviewers.co.kr/Files/30/News/202111/1979_20211129144315370.JPG",
+    image: "",
     type: "article",
   },
   {
@@ -303,16 +224,7 @@ export const newsArticles: MediaItem[] = [
     link: "https://zdnet.co.kr/view/?no=20211228172454",
     image: "https://image.zdnet.co.kr/2021/10/06/6a040504d2eb4b4bbdf7ebd796caa02b.jpg",
     type: "article",
-  },
-  {
-    title: "가비아, 에너지 부문 11개 기업 SaaS 전환·개발 지원",
-    date: "2021.12.30",
-    origin: "IT Daily",
-    link: "http://www.itdaily.kr/news/articleView.html?idxno=205765",
-    image: "https://cdn.itdaily.kr/news/thumbnail/202112/205765_206655_2524_v150.jpg",
-    type: "article",
-  },
-  {
+  },  {
     title: "유니콘팩토리 올라탄 스타트업, '인재·자금·고객' 몰렸다",
     date: "2022.02.09",
     origin: "머니투데이",
@@ -327,32 +239,14 @@ export const newsArticles: MediaItem[] = [
     link: "https://www.businesspost.co.kr/BP?command=article_view&num=276315",
     image: "https://www.businesspost.co.kr/news/photo/202203/20220331175912_59332.jpg",
     type: "article",
-  },
-  {
-    title: "교통혼잡 걱정 마세요 스마트시티 성큼 개인정보 침해 우려도",
-    date: "2022.04.01",
-    origin: "TECHWORLD",
-    link: "https://www.epnc.co.kr/news/articleView.html?idxno=221581",
-    image: "https://cdn.epnc.co.kr/news/thumbnail/202204/221581_222277_3542_v150.jpg",
-    type: "article",
-  },
-  {
+  },  {
     title: "구자균 회장이 직접 챙긴 스타트업 6개사...협업 기대 커",
     date: "2022.04.01",
     origin: "머니투데이",
     link: "https://news.mt.co.kr/mtview.php?no=2022040115352049935",
     image: "https://thumb.mt.co.kr/21/2022/04/2022040115352049935_1.jpg",
     type: "article",
-  },
-  {
-    title: "대통령 인수위-LX공사, 중소벤처 ESG 역량 강화 간담회",
-    date: "2022.05.04",
-    origin: "전기신문",
-    link: "https://www.electimes.com/news/articleView.html?idxno=304112",
-    image: "https://cdn.electimes.com/news/thumbnail/202205/304112_503292_5321_v150.jpg",
-    type: "article",
-  },
-  {
+  },  {
     title: "2022년 그린뉴딜 유망기업 30개사 선정, 수여식 개최",
     date: "2022.05.04",
     origin: "국토일보",
@@ -375,24 +269,7 @@ export const newsArticles: MediaItem[] = [
     link: "https://www.venturesquare.net/858358",
     image: "https://www.venturesquare.net/wp-content/uploads/2022/07/2022년도-상반기-빅웨이브-투자유치-IR-포스터-e1656991421844.jpg",
     type: "article",
-  },
-  {
-    title: "이지스자산운용, 소셜벤처 육성 프로그램 '이지스 임팩트 스테이지' 참가팀 모집",
-    date: "2022.08.08",
-    origin: "파이낸셜투데이",
-    link: "https://www.ftoday.co.kr/news/articleView.html?idxno=239694",
-    image: "https://cdn.ftoday.co.kr/news/thumbnail/202208/239694_238806_188_v150.jpg",
-    type: "article",
-  },
-  {
-    title: "나인와트, 2022월드 스마트시티 엑스포서 건물 에너지 진단 플랫폼 공개",
-    date: "2022.09.07",
-    origin: "AVING",
-    link: "https://kr.aving.net/news/articleView.html?idxno=1771642",
-    image: "https://cdn.kr.aving.net/news/photo/202209/1771642_688112_595.jpg",
-    type: "article",
-  },
-  {
+  },  {
     title: "인천TP '인천 라이징 스타 데모데이' 열어",
     date: "2022.11.14",
     origin: "전자신문",
@@ -461,7 +338,7 @@ export const newsArticles: MediaItem[] = [
     date: "2023.11.06",
     origin: "서울신문",
     link: "https://amp.seoul.co.kr/seoul/20231106500252",
-    image: "",
+    image: "https://img.seoul.co.kr/img/upload/2023/11/06/SSC_20231106170609.jpg",
     type: "article",
   },
   {
@@ -487,16 +364,7 @@ export const newsArticles: MediaItem[] = [
     link: "https://news.mt.co.kr/mtview.php?no=2024012618214340000",
     image: "https://thumb.mt.co.kr/21/2024/01/2024012618214340000_1.jpg",
     type: "article",
-  },
-  {
-    title: "중기부, 오픈AI 협업할 스타트업 13곳과 간담회",
-    date: "2024.01.30",
-    origin: "중소기업신문",
-    link: "https://www.smedaily.co.kr/news/articleView.html?idxno=280389",
-    image: "https://cdn.smedaily.co.kr/news/thumbnail/202401/280389_217627_5554_v150.jpg",
-    type: "article",
-  },
-  {
+  },  {
     title: "맞춤형 전기요금 설정 도움...나인와트가 도시를 살리는 비법",
     date: "2024.02.26",
     origin: "이데일리",
@@ -511,32 +379,14 @@ export const newsArticles: MediaItem[] = [
     link: "https://www.edaily.co.kr/News/Read?newsId=01426806638824304&mediaCodeNo=257",
     image: "https://image.edaily.co.kr/images/Photo/files/NP/S/2024/03/PS24031700152.jpg",
     type: "article",
-  },
-  {
-    title: "(2024 전기산업대전) 창사 50년 LS일렉트릭, 파트너사와 100년 미래 꿈꾼다",
-    date: "2024.04.04",
-    origin: "전기신문",
-    link: "https://www.electimes.com/news/articleView.html?idxno=335020",
-    image: "https://cdn.electimes.com/news/thumbnail/202404/335020_536715_5436_v150.jpg",
-    type: "article",
-  },
-  {
+  },  {
     title: "서울경제진흥원, 미·중·일 진출 액셀러레이팅 프로그램 운영",
     date: "2024.05.24",
     origin: "ZDNet Korea",
     link: "https://zdnet.co.kr/view/?no=20240524135002",
     image: "https://image.zdnet.co.kr/2024/05/20/d8511e018029a2b6f9d12694f9fd17f8.jpg",
     type: "article",
-  },
-  {
-    title: "에너지공단, 지역 분산자원 살리는 'ESS 9총사' 결성",
-    date: "2024.05.24",
-    origin: "데일리 한국",
-    link: "https://daily.hankooki.com/news/articleView.html?idxno=1087729",
-    image: "https://cdn.daily.hankooki.com/news/thumbnail/202405/1087729_1314736_034_v150.jpg",
-    type: "article",
-  },
-  {
+  },  {
     title: "[VC 투자기업] 나인와트, 30억 시리즈A 추가 유치 시동",
     date: "2024.09.25",
     origin: "더벨",
@@ -559,16 +409,7 @@ export const newsArticles: MediaItem[] = [
     link: "https://www.newsprime.co.kr/news/article/?no=661663",
     image: "http://www.newsprime.co.kr/data/photos/cdn/20241145/art_661663_1730859711.jpg",
     type: "article",
-  },
-  {
-    title: "나인와트, Pre-CES2025 인천(IFEZ)서 에너지 리노베이션 플랫폼 'WATTI' 알린다",
-    date: "2024.11.07",
-    origin: "에이빙뉴스",
-    link: "https://kr.aving.net/news/articleView.html?idxno=1795290",
-    image: "https://cdn.kr.aving.net/news/photo/202411/1795290_738196_537.jpg",
-    type: "article",
-  },
-  {
+  },  {
     title: "마이크로소프트와 손잡는 인천... 인천경제청, 스타트업 육성 '협업'",
     date: "2024.11.13",
     origin: "경기일보",
@@ -591,16 +432,7 @@ export const newsArticles: MediaItem[] = [
     link: "https://www.breaknews.com/1070760",
     image: "http://www.ebreaknews.com/imgdata/ebreaknews_com/202411/2024111438133136.jpg",
     type: "article",
-  },
-  {
-    title: "나인와트, CES 2025서 도시 단위 에너지 리노베이션 솔루션 'WATTI' 소개",
-    date: "2025.01.10",
-    origin: "에이빙뉴스",
-    link: "https://kr.aving.net/news/articleView.html?idxno=1796763",
-    image: "https://cdn.kr.aving.net/news/photo/202501/1796763_741203_292.jpg",
-    type: "article",
-  },
-  {
+  },  {
     title: "에스아이디파트너스, 투자기업 5개사 CES서 혁신상 수상·비즈니스 밋업 등 성과",
     date: "2025.01.16",
     origin: "머니투데이",
@@ -639,64 +471,21 @@ export const newsArticles: MediaItem[] = [
     link: "https://www.ikld.kr/news/articleView.html?idxno=311777",
     image: "http://www.ikld.kr/news/thumbnail/202504/311777_158634_1145_v150.jpg",
     type: "article",
-  },
-  {
-    title: "K-스타트업, 프랑스 비바테크 3년 연속 출전...19개 창업기업 유럽 시장 진출 '날개'",
-    date: "2025.04.24",
-    origin: "뉴스핌",
-    link: "https://www.newspim.com/news/view/20250424001022",
-    image: "https://img.newspim.com/news/2025/04/24/2504241555393670_559_tc.jpg",
-    type: "article",
-  },
-  {
+  },  {
     title: "더데이원랩 등 19개 스타트업, 유럽 공략...'비바테크 2025' 참가",
     date: "2025.04.24",
     origin: "머니투데이",
     link: "https://news.mt.co.kr/mtview.php?no=2025042415491591088",
     image: "https://thumb.mt.co.kr/21/2025/04/2025042415491591088_1.jpg",
     type: "article",
-  },
-  {
-    title: "에기연, 수열E 활용·에너지믹스 기술개발 '킥오프 회의' 성료",
-    date: "2025.05.18",
-    origin: "냉동공조저널",
-    link: "https://www.hvacrj.co.kr/news/articleView.html?idxno=30198",
-    image: "https://cdn.hvacrj.co.kr/news/photo/202505/30198_30659_4149.jpg",
-    type: "article",
-  },
-  {
+  },  {
     title: "IBK창공, 스타트업 8개사와 '2025년 일본 액셀러레이팅 프로그램'",
     date: "2025.05.23",
     origin: "벤처스퀘어",
     link: "https://www.venturesquare.net/970339",
     image: "https://www.venturesquare.net/wp-content/uploads/2025/05/ibk.jpg",
     type: "article",
-  },
-  {
-    title: "[클린테크 기업 찾아서] 나인와트, 도시 속 건물에너지 분석-해결책 제시...스마트시티 만들다",
-    date: "2025.06.02",
-    origin: "SDG뉴스",
-    link: "https://www.sdgnews.net/news/articleView.html?idxno=48050",
-    image: "https://cdn.sdgnews.net/news/photo/202506/48050_52790_4124.jpg",
-    type: "article",
-  },
-  {
-    title: "[비바테크 2025] 나인와트 '도시의 숨은 에너지 낭비를 제로로'",
-    date: "2025.06.04",
-    origin: "뉴스핌",
-    link: "https://www.newspim.com/news/view/20250529000058",
-    image: "https://img.newspim.com/news/2025/06/03/2506031300357940.jpg",
-    type: "article",
-  },
-  {
-    title: "나인와트, 비바테크 2025서 AI 기반 건물·도시 에너지 성능 분석 플랫폼 'WATTI' 소개",
-    date: "2025.06.05",
-    origin: "에이빙뉴스",
-    link: "https://kr.aving.net/news/articleView.html?idxno=1800792",
-    image: "https://cdn.kr.aving.net/news/photo/202506/1800792_749682_90.jpg",
-    type: "article",
-  },
-  {
+  },  {
     title: '"기술 놀랍다" 쏟아진 투자상담…비바테크 사로잡은 K스타트업',
     date: "2025.06.22",
     origin: "머니투데이",
@@ -735,16 +524,7 @@ export const newsArticles: MediaItem[] = [
     link: "https://www.venturesquare.net/995531",
     image: "https://www.venturesquare.net/wp-content/uploads/2025/07/GCCEI_01-1.png",
     type: "article",
-  },
-  {
-    title: "창업진흥원, '비바테크 2025' K-Startup 통합관 성과공유회 개최",
-    date: "2025.08.22",
-    origin: "에이빙뉴스",
-    link: "https://kr.aving.net/news/articleView.html?idxno=1803290",
-    image: "https://cdn.kr.aving.net/news/photo/202508/1803290_755142_4131.jpg",
-    type: "article",
-  },
-  {
+  },  {
     title: "서울시, 데이터로 정책 바꾼다…시민 시각화 경진대회 나인와트 우수상",
     date: "2025.09.22",
     origin: "환경과조경",
@@ -759,16 +539,7 @@ export const newsArticles: MediaItem[] = [
     link: "https://www.hankyung.com/article/202509282195i",
     image: "https://img.hankyung.com/photo/202509/01.41876574.1.jpg",
     type: "article",
-  },
-  {
-    title: "경기도, '기후테크 컨퍼런스' 35건 투자상담 448억 원 성과",
-    date: "2025.10.28",
-    origin: "투어코리아뉴스",
-    link: "https://www.tournews21.com/news/articleView.html?idxno=118626",
-    image: "https://cdn.tournews21.com/news/photo/202510/118626_234382_584.jpg",
-    type: "article",
-  },
-  {
+  },  {
     title: "인천 스타트업, 샌프란시스코에서 780만 달러 상담 성과",
     date: "2025.10.31",
     origin: "브릿지경제",
@@ -821,7 +592,7 @@ export const newsArticles: MediaItem[] = [
     date: "2025.11.13",
     origin: "중기이코노미",
     link: "https://www.junggi.co.kr/article/articleView.html?no=34794",
-    image: "https://www.junggi.co.kr/data/article/20251113/69153a5335af5.jpg",
+    image: "https://cdn.junggi.co.kr/news/photo/202511/34794_1_80.jpg",
     type: "article",
   },
   {
@@ -831,7 +602,7 @@ export const newsArticles: MediaItem[] = [
     link: "https://www.mt.co.kr/industry/2025/11/14/2025111414165255717",
     image: "https://thumb.mt.co.kr/cdn-cgi/image/f=avif/21/2025/11/2025111414165255717_1.jpg",
     type: "article",
-  },
+  }
 ];
 
 export const videos: MediaItem[] = [
@@ -882,16 +653,7 @@ export const videos: MediaItem[] = [
     type: "video",
     image: "https://i.ytimg.com/vi/-rwpBOqQmoc/maxresdefault.jpg",
     link: "https://www.youtube.com/watch?v=-rwpBOqQmoc",
-  },
-  {
-    title: "나인와트 김영록 | 통계화된 수치로 공간에 새로운 문화를 만드는 솔루션",
-    date: "2022.08.18",
-    origin: "IGIS IMPACT STAGE",
-    type: "video",
-    image: "https://i.ytimg.com/vi/NqyqeNSlWgE/maxresdefault.jpg",
-    link: "https://www.youtube.com/watch?v=NqyqeNSlWgE",
-  },
-  {
+  },  {
     title: "[무삭제] 기후 문제를 해결할 효율적인 소프트웨어 | 나인와트 IR 피칭, Q&A",
     date: "2022.07.02",
     origin: "EO",
@@ -1034,5 +796,5 @@ export const videos: MediaItem[] = [
     type: "video",
     image: "https://i.ytimg.com/vi/yRAgjCPVtF0/hqdefault.jpg",
     link: "https://www.youtube.com/watch?v=yRAgjCPVtF0",
-  },
+  }
 ];
