@@ -2,8 +2,8 @@
   "nav": {
     "coreSolutions": "Core Solutions",
     "cases": "Cases",
-    "rnd": "R&D Projects",
-    "services": "Services"
+    "rnd": "R&D",
+    "services": "System Development"
   },
   "overview": {
     "title": "Solutions",
@@ -86,10 +86,10 @@
     "detailLabels": { "goal": "R&D Objective", "contents": "Project Details", "category": "Project Type", "department": "Supervising Ministry", "budget": "Total Budget" }
   },
   "services": {
-    "title": "Service Project Track Record",
-    "subtitleTemplate": "{count} service projects in collaboration with {partners} partner organizations",
+    "title": "System Development Track Record",
+    "subtitleTemplate": "{count} system development projects in collaboration with {partners} partner organizations",
     "tableHeaders": { "client": "Client (Organization)", "period": "Period", "content": "Scope of Work" },
-    "ctaText": "Interested in collaborating on a service project?",
+    "ctaText": "Interested in collaborating on a system development project?",
     "ctaButton": "Contact Us"
   }
 }

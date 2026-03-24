@@ -4,7 +4,7 @@ import { getTranslations } from "next-intl/server";
 export async function generateMetadata() {
   const t = await getTranslations("solutions");
   return {
-    title: "용역과제 - Ninewatt",
+    title: "시스템개발 - Ninewatt",
     description: t("services.title"),
   };
 }

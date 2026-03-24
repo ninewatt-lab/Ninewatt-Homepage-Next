@@ -2,8 +2,8 @@
   "nav": {
     "coreSolutions": "Solutions principales",
     "cases": "Études de cas",
-    "rnd": "Projets R&D",
-    "services": "Projets de services"
+    "rnd": "R&D",
+    "services": "Développement de systèmes"
   },
   "overview": {
     "title": "Solutions",
@@ -86,10 +86,10 @@
     "detailLabels": { "goal": "Objectif R&D", "contents": "Détails du projet", "category": "Type de projet", "department": "Ministère de tutelle", "budget": "Budget total" }
   },
   "services": {
-    "title": "Historique des projets de services",
-    "subtitleTemplate": "{count} projets de services en collaboration avec {partners} organisations partenaires",
+    "title": "Historique de développement de systèmes",
+    "subtitleTemplate": "{count} projets de développement de systèmes en collaboration avec {partners} organisations partenaires",
     "tableHeaders": { "client": "Client (Organisation)", "period": "Période", "content": "Périmètre des travaux" },
-    "ctaText": "Intéressé par une collaboration sur un projet de services ?",
+    "ctaText": "Intéressé par une collaboration en développement de systèmes ?",
     "ctaButton": "Nous contacter"
   }
 }

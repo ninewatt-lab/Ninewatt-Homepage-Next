@@ -32,10 +32,10 @@
     "coreSolutionsDesc": "에너지 데이터·AI·시뮬레이션 역량",
     "cases": "수행사례",
     "casesDesc": "60건 이상의 국내외 프로젝트",
-    "rnd": "R&D 이력",
+    "rnd": "연구개발(R&D)",
     "rndDesc": "정부 R&D 과제 수행 실적",
-    "services": "용역과제",
-    "servicesDesc": "기업·기관 용역 수행 이력"
+    "services": "시스템개발",
+    "servicesDesc": "기업·기관 시스템개발 수행 이력"
   },
   "companyMenu": {
     "about": "소개",

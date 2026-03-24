@@ -2,8 +2,8 @@
   "nav": {
     "coreSolutions": "핵심 솔루션",
     "cases": "수행사례",
-    "rnd": "R&D 과제",
-    "services": "용역과제"
+    "rnd": "연구개발(R&D)",
+    "services": "시스템개발"
   },
   "overview": {
     "title": "솔루션",
@@ -86,10 +86,10 @@
     "detailLabels": { "goal": "연구개발 목표", "contents": "세부사업내용", "category": "사업유형", "department": "주관부처", "budget": "총사업규모" }
   },
   "services": {
-    "title": "용역과제 수행 이력",
-    "subtitleTemplate": "{count}건의 용역과제, {partners}개 파트너 기관과 협업",
+    "title": "시스템개발 수행 이력",
+    "subtitleTemplate": "{count}건의 시스템개발, {partners}개 파트너 기관과 협업",
     "tableHeaders": { "client": "기업(기관명)", "period": "기간", "content": "수행내용" },
-    "ctaText": "용역과제 협업에 관심이 있으신가요?",
+    "ctaText": "시스템개발 협업에 관심이 있으신가요?",
     "ctaButton": "문의하기"
   }
 }
