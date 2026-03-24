@@ -7,9 +7,7 @@ export default function ProductLayout({
 }) {
   return (
     <>
-      <div className="pt-16">
-        <ProductNav />
-      </div>
+      <ProductNav />
       {children}
     </>
   );

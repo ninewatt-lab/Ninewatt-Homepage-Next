@@ -1,4 +1,10 @@
 {
+  "nav": {
+    "coreSolutions": "Solutions principales",
+    "cases": "Études de cas",
+    "rnd": "Projets R&D",
+    "services": "Projets de services"
+  },
   "overview": {
     "title": "Solutions",
     "subtitle": "Des solutions couvrant l'ensemble du processus de gestion énergétique des bâtiments, de la collecte de données à l'analyse par IA",
@@ -50,6 +56,8 @@
     "categories": { "public": "Institutions publiques", "local": "Collectivités locales", "corporate": "Entreprises", "overseas": "International" },
     "items": [
       { "title": "건설기술연구원 - Plateforme de neutralité carbone", "category": "Institutions publiques", "desc": "Visualisation des émissions carbone et de transport à l'échelle des bâtiments et des routes, avec simulation de rénovation énergétique régionale" },
+      { "title": "에너지기술연구원 - Plateforme d'énergie renouvelable pour zones industrielles", "category": "Institutions publiques", "desc": "Conception optimale basée sur la simulation et évaluation économique automatisée de multiples ressources d'énergie renouvelable à l'échelle des zones industrielles" },
+      { "title": "에너지기술연구원 - Algorithme IA pour la pré-vérification des cellules dégradées de batteries UPS", "category": "Institutions publiques", "desc": "Technologie automatisée de prédiction des performances des batteries lithium basée sur l'IA" },
       { "title": "강남구 - Carte 3D de l'énergie urbaine", "category": "Collectivités locales", "desc": "Suivi de l'empreinte carbone des installations publiques pour définir des objectifs clairs de réduction des gaz à effet de serre" },
       { "title": "경기도 - Simulation de rénovation verte de la plateforme climat Gyeonggi", "category": "Collectivités locales", "desc": "Analyse de la vétusté, de l'énergie et du site des bâtiments basée sur les données immobilières, avec aide à la décision de rénovation" },
       { "title": "경기도 - Système de gestion intégrée ESS", "category": "Collectivités locales", "desc": "Monitoring de l'état des ESS et système de gestion intégrée des ressources à l'échelle de la province" },

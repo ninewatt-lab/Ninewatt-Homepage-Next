@@ -7,9 +7,7 @@ export default function SolutionsLayout({
 }) {
   return (
     <>
-      <div className="pt-16">
-        <SolutionsNav />
-      </div>
+      <SolutionsNav />
       {children}
     </>
   );

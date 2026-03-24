@@ -63,23 +63,23 @@ export default async function PatentsPage({
           <dl className="flex flex-wrap gap-x-12 gap-y-4 text-sm">
             <div>
               <dt className="text-muted">{t("patents.totalPatents")}</dt>
-              <dd className="text-2xl font-bold">{totalPatents}</dd>
+              <dd className="text-4xl font-bold">{totalPatents}</dd>
             </div>
             <div>
               <dt className="text-muted">{t("patents.domestic")}</dt>
-              <dd className="text-2xl font-bold">{domesticPatentsAll.length}</dd>
+              <dd className="text-4xl font-bold">{domesticPatentsAll.length}</dd>
             </div>
             <div>
               <dt className="text-muted">{t("patents.international")}</dt>
-              <dd className="text-2xl font-bold">{internationalPatents.length}</dd>
+              <dd className="text-4xl font-bold">{internationalPatents.length}</dd>
             </div>
             <div>
               <dt className="text-muted">{t("patents.trademarks")}</dt>
-              <dd className="text-2xl font-bold">{allTrademarks.length}</dd>
+              <dd className="text-4xl font-bold">{allTrademarks.length}</dd>
             </div>
             <div>
               <dt className="text-muted">{t("patents.certifications")}</dt>
-              <dd className="text-2xl font-bold">{certifications.length}</dd>
+              <dd className="text-4xl font-bold">{certifications.length}</dd>
             </div>
           </dl>
         </div>

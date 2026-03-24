@@ -56,6 +56,8 @@
     "categories": { "public": "Public Institutions", "local": "Local Government", "corporate": "Corporate", "overseas": "Overseas" },
     "items": [
       { "title": "건설기술연구원 - Carbon Neutrality Platform", "category": "Public Institutions", "desc": "Visualizing carbon and transportation emissions at building and road levels, supporting regional energy analysis and retrofit simulations" },
+      { "title": "에너지기술연구원 - Industrial Complex Renewable Energy Platform", "category": "Public Institutions", "desc": "Simulation-based optimal design and automated economic evaluation of multiple renewable energy resources at industrial complex scale" },
+      { "title": "에너지기술연구원 - AI Algorithm for UPS Battery Degraded Cell Pre-verification", "category": "Public Institutions", "desc": "AI-based automated lithium battery performance prediction technology" },
       { "title": "강남구 - Urban Energy 3D Map", "category": "Local Government", "desc": "Tracking carbon footprints of public facilities to set clear greenhouse gas reduction targets" },
       { "title": "경기도 - Gyeonggi Climate Platform Green Remodeling Simulation", "category": "Local Government", "desc": "Building aging, energy, and site analysis based on real estate data, with remodeling decision support services" },
       { "title": "경기도 - ESS Integrated Management System", "category": "Local Government", "desc": "Province-wide ESS status monitoring and integrated resource management system" },

@@ -46,13 +46,13 @@ export function ProductTrackRecord({
                 {grouped[year].map((item, i) => (
                   <li key={i} className="text-sm">
                     <div className="flex flex-wrap items-start gap-2">
-                      <span className="inline-block shrink-0 rounded border border-border px-1.5 py-0.5 text-xs text-muted">
+                      <span className="inline-block shrink-0 min-w-16 rounded border border-border px-1.5 py-0.5 text-center text-xs text-muted">
                         {item.type}
                       </span>
                       <span className="leading-relaxed">{item.name}</span>
                     </div>
                     {(item.period || item.department || item.org) && (
-                      <div className="mt-1 flex flex-wrap gap-x-4 text-xs text-muted">
+                      <div className="mt-1 ml-18 flex flex-wrap gap-x-4 text-xs text-muted">
                         {item.period && (
                           <span>{t("trackRecord.period")}: {item.period}</span>
                         )}

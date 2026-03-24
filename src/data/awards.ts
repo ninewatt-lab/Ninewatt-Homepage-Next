@@ -6,6 +6,7 @@ export interface Award {
   date: string;
   year: number;
   thumbnailUrl?: string;
+  linkUrl?: string;
 }
 
 export const awards: Award[] = [
@@ -24,18 +25,18 @@ export const awards: Award[] = [
   { id: 13, name: "전력데이터 활용 신서비스 개발 경진대회", organization: "한국전력공사", grade: "우수상", date: "2020.08.20", year: 2020, thumbnailUrl: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/documents/awards/thumbnails/%EC%A0%84%EB%A0%A5%EB%8D%B0%EC%9D%B4%ED%84%B0_%ED%99%9C%EC%9A%A9_%EC%8B%A0%EC%84%9C%EB%B9%84%EC%8A%A4_%EA%B0%9C%EB%B0%9C_%EA%B2%BD%EC%A7%84%EB%8C%80%ED%9A%8C.jpg" },
   { id: 14, name: "7회 대한민국 SW융합 해커톤 대회", organization: "과학기술정보통신부", grade: "우수상", date: "2020.12.06", year: 2020, thumbnailUrl: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/documents/awards/thumbnails/7%ED%9A%8C_%EB%8C%80%ED%95%9C%EB%AF%BC%EA%B5%AD_SW%EC%9C%B5%ED%95%A9_%ED%95%B4%EC%BB%A4%ED%86%A4_%EB%8C%80%ED%9A%8C-%EC%9A%B0%EC%88%98%EC%83%81.jpg" },
   { id: 15, name: "데이터비즈 인포그래픽 공모전", organization: "한국디자인진흥원", grade: "특선", date: "2020.12.09", year: 2020, thumbnailUrl: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/documents/awards/thumbnails/%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%B9%84%EC%A6%88_%EC%9D%B8%ED%8F%AC%EA%B7%B8%EB%9E%98%ED%94%BD_%EA%B3%B5%EB%AA%A8%EC%A0%84_-_%ED%8A%B9%EC%84%A0.jpg" },
-  { id: 16, name: "8회 대한민국 SW융합 해커톤 대회", organization: "과학기술정보통신부, 정보통신산업진흥원", grade: "우수상", date: "2021.10.31", year: 2021, thumbnailUrl: "https://ninewatt0212.sharepoint.com/:u:/s/msteams_e3b388/IQD-yBA1O8ECQ5W2Kn_OBtX4AbQighMa0fSgDZ0watx4x_8?e=toALMI" },
+  { id: 16, name: "8회 대한민국 SW융합 해커톤 대회", organization: "과학기술정보통신부, 정보통신산업진흥원", grade: "우수상", date: "2021.10.31", year: 2021 },
   { id: 17, name: "2021 스마트건설 창업 아이디어 공모전", organization: "국토교통부, 한국건설기술연구원", grade: "대상", date: "2021.11.17", year: 2021, thumbnailUrl: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/documents/awards/thumbnails/2021_%EC%8A%A4%EB%A7%88%ED%8A%B8%EA%B1%B4%EC%84%A4_%EC%B0%BD%EC%97%85_%EC%95%84%EC%9D%B4%EB%94%94%EC%96%B4_%EA%B3%B5%EB%AA%A8%EC%A0%84_%EB%8C%80%EC%83%81.jpg" },
   { id: 18, name: "2021 DATA-Stars(데이터 활용 사업화 지원)", organization: "과학기술정보통신부, 한국데이터산업진흥원", grade: "최우수상", date: "2021.11.17", year: 2021, thumbnailUrl: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/documents/awards/thumbnails/2021-DATA-Stars(%EB%8D%B0%EC%9D%B4%ED%84%B0_%ED%99%9C%EC%9A%A9_%EC%82%AC%EC%97%85%ED%99%94_%EC%A7%80%EC%9B%90).jpg" },
   { id: 19, name: "제 6회 공간정보 활용 창업 아이디어 공모전", organization: "국토교통부, 한국국토정보공사", grade: "대상(창업기업부문)", date: "2021.12.23", year: 2021, thumbnailUrl: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/documents/awards/thumbnails/2021.%EC%A0%9C6%ED%9A%8C_%EA%B3%B5%EA%B0%84%EC%A0%95%EB%B3%B4_%ED%99%9C%EC%9A%A9_%EC%B0%BD%EC%97%85_%EC%95%84%EC%9D%B4%EB%94%94%EC%96%B4_%EA%B3%B5%EB%AA%A8%EC%A0%84.jpg" },
   { id: 20, name: "제 4회 스마트시티 창업기업 성과발표대회", organization: "국토교통부", grade: "우수상(장관상)", date: "2022.08.31", year: 2022, thumbnailUrl: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/documents/awards/thumbnails/%EC%A0%9C4%ED%9A%8C_%EC%8A%A4%EB%A7%88%ED%8A%B8%EC%8B%9C%ED%8B%B0_%EC%B0%BD%EC%97%85%EA%B8%B0%EC%97%85_%EA%B5%AD%ED%86%A0%EB%B6%80%EC%9E%A5%EA%B4%80%EC%83%81_%EB%82%98%EC%9D%B8%EC%99%80%ED%8A%B8.jpg" },
-  { id: 21, name: "공간빅데이터 경진대회", organization: "국토교통부", grade: "장려상", date: "2022.11.03", year: 2022, thumbnailUrl: "https://ninewatt0212.sharepoint.com/:u:/s/msteams_e3b388/IQCXkRg5tf-3T5oLfP-_4cTLAXXAeQ9t5EwH59vkVHbgUjQ?e=QI8Cgw" },
+  { id: 21, name: "공간빅데이터 경진대회", organization: "국토교통부", grade: "장려상", date: "2022.11.03", year: 2022 },
   { id: 22, name: "D.CAMP 11월 디데이 X 글로벌리그", organization: "D.CAMP", grade: "우승", date: "2022.11", year: 2022 },
   { id: 23, name: "ICT기금 지원사업", organization: "한국방송통신전파진흥원", grade: "진흥원 원장상", date: "2022.11.23", year: 2022, thumbnailUrl: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/documents/awards/thumbnails/4._ICT%EA%B8%B0%EA%B8%88_%EC%A7%80%EC%9B%90%EC%82%AC%EC%97%85_%EC%88%98%EC%83%81.jpg" },
   { id: 24, name: "대스타 해결사 플랫폼 4차산업분야", organization: "서울창조경제혁신센터", grade: "2위", date: "2022.12.07", year: 2022, thumbnailUrl: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/documents/awards/thumbnails/3._2022_%EB%8C%80%EC%8A%A4%ED%83%80%ED%95%B4%EA%B2%B0%EC%82%AC_%ED%94%8C%EB%9E%AB%ED%8F%BC_4%EC%B0%A8%EC%82%B0%EC%97%85%EB%B6%84%EC%95%BC_2%EC%9C%84.jpg" },
   { id: 25, name: "인천 라이징 스타", organization: "인천테크노파크", grade: "대상(인천시장상)", date: "2022.12.30", year: 2022, thumbnailUrl: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/documents/awards/thumbnails/%EC%9D%B8%EC%B2%9C%EB%9D%BC%EC%9D%B4%EC%A7%95%EC%8A%A4%ED%83%80_%EC%9D%B8%EC%B2%9C%EC%8B%9C%EC%9E%A5%EC%83%81.jpg" },
   { id: 26, name: "신한오픈이노베이션 7기 우수협업", organization: "신한오픈이노베이션", grade: "우수협업", date: "2023.07", year: 2023 },
   { id: 27, name: "오픈AI 글로벌 기업 협력 프로그램", organization: "OpenAI", grade: "선정", date: "2024.05", year: 2024 },
-  { id: 28, name: "2025 경기도 기후테크 컨퍼런스", organization: "경기환경에너지진흥원", grade: "우수상", date: "2025.10.24", year: 2025, thumbnailUrl: "https://ninewatt0212.sharepoint.com/:i:/s/msteams_e3b388/IQC8NoelUhMGRYjHsmFIJkegAcI8E0iXUZ_4VhwETcUmlbk?e=kYy2QA" },
-  { id: 29, name: "CES 2026 Innovation Awards (OPTI)", organization: "CES", grade: "Honoree", date: "2026.01", year: 2026, thumbnailUrl: "https://www.ces.tech/ces-innovation-awards/2026/opti-ai-energy-advisor-for-buildings/" },
+  { id: 28, name: "2025 경기도 기후테크 컨퍼런스", organization: "경기환경에너지진흥원", grade: "우수상", date: "2025.10.24", year: 2025 },
+  { id: 29, name: "CES 2026 Innovation Awards (OPTI)", organization: "CES", grade: "Honoree", date: "2026.01", year: 2026, linkUrl: "https://www.ces.tech/ces-innovation-awards/2026/opti-ai-energy-advisor-for-buildings/" },
 ];

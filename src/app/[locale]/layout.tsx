@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist_Mono } from "next/font/google";
 import "pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css";
+import "pretendard-jp/dist/web/variable/pretendardvariable-jp-dynamic-subset.css";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
@@ -47,7 +48,7 @@ export default async function LocaleLayout({
         <NextIntlClientProvider locale={locale}>
           <ThemeProvider>
             <Header />
-            <main>{children}</main>
+            <main className="pt-16">{children}</main>
             <Footer />
           </ThemeProvider>
         </NextIntlClientProvider>

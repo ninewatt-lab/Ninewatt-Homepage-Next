@@ -7,7 +7,7 @@ export default function VideoHero() {
   const t = useTranslations("home");
 
   return (
-    <section className="relative h-dvh w-full overflow-hidden">
+    <section className="relative -mt-16 h-dvh w-full overflow-hidden">
       {/* Background video */}
       <video
         autoPlay
