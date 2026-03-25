@@ -43,7 +43,7 @@ export default async function CareerPage({
   return (
     <>
       {/* Hero */}
-      <section className="border-b border-border px-6 pb-16 pt-16">
+      <section className="border-b border-border px-6 py-20">
         <div className="mx-auto max-w-5xl">
           <h1 className="text-4xl font-bold tracking-tight md:text-5xl">{t("career.title")}</h1>
           <p className="mt-4 max-w-2xl text-lg text-muted">
@@ -53,7 +53,7 @@ export default async function CareerPage({
       </section>
 
       {/* Culture */}
-      <section className="border-b border-border px-6 py-20">
+      <section className="border-b border-border bg-surface px-6 py-20">
         <div className="mx-auto max-w-5xl">
           <h2 className="text-sm font-semibold uppercase tracking-widest text-primary">
             Culture
@@ -80,7 +80,7 @@ export default async function CareerPage({
             {careerData.talentSubtitle || t("career.talentSubtitle")}
           </p>
 
-          <div className="mt-12 grid gap-6 sm:grid-cols-3">
+          <div className="mt-10 grid gap-6 sm:grid-cols-3">
             {values.map((v, i) => (
               <div
                 key={v.title}
@@ -98,28 +98,27 @@ export default async function CareerPage({
       </section>
 
       {/* Benefits */}
-      <section className="border-b border-border px-6 py-20">
+      <section className="border-b border-border bg-surface px-6 py-20">
         <div className="mx-auto max-w-5xl">
           <h2 className="text-sm font-semibold uppercase tracking-widest text-primary">
             Benefits
           </h2>
           <h3 className="mt-2 text-3xl font-bold tracking-tight">{t("career.benefitsTitle")}</h3>
 
-          <div className="mt-12 space-y-12">
+          <div className="mt-8 space-y-6">
             {benefitCategories.map((group) => (
               <div key={group.category}>
-                <h4 className="mb-4 text-sm font-semibold uppercase tracking-widest text-muted/70">
+                <h4 className="mb-3 text-sm font-bold">
                   {group.category}
                 </h4>
-                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                <div className="flex flex-wrap gap-2">
                   {(group.items ?? []).map((item) => (
-                    <div
+                    <span
                       key={item.title}
-                      className="rounded-xl border border-border p-5"
+                      className="rounded-full border border-border bg-white px-4 py-1.5 text-sm dark:bg-white/5"
                     >
-                      <h5 className="font-semibold">{item.title}</h5>
-                      <p className="mt-1 text-sm text-muted">{item.desc}</p>
-                    </div>
+                      {item.title}
+                    </span>
                   ))}
                 </div>
               </div>
@@ -136,16 +135,13 @@ export default async function CareerPage({
           </h2>
           <h3 className="mt-2 text-3xl font-bold tracking-tight">{t("career.recruitTitle")}</h3>
 
-          <div className="mt-12 flex flex-col gap-6 sm:flex-row sm:items-start">
-            {steps.map((s, i) => (
-              <div key={s.step} className="flex flex-1 items-start gap-4 sm:flex-col sm:items-center sm:text-center">
-                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-primary text-lg font-bold text-white">
+          <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-3">
+            {steps.map((s) => (
+              <div key={s.step} className="flex items-start gap-4 sm:flex-col sm:items-center sm:text-center">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-bold text-white">
                   {s.step}
                 </div>
-                {i < steps.length - 1 && (
-                  <div className="hidden h-0.5 flex-1 self-center bg-border sm:block" />
-                )}
-                <div className="sm:mt-4">
+                <div className="sm:mt-3">
                   <h4 className="font-semibold">{s.title}</h4>
                   <p className="mt-1 text-sm text-muted">{s.desc}</p>
                 </div>
@@ -156,7 +152,7 @@ export default async function CareerPage({
       </section>
 
       {/* CTA */}
-      <section className="px-6 py-20">
+      <section className="bg-surface px-6 py-20">
         <div className="mx-auto max-w-5xl text-center">
           <h3 className="text-2xl font-bold tracking-tight">
             {t("career.ctaTitle")}
@@ -166,14 +162,17 @@ export default async function CareerPage({
           </p>
           <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
             <a
-              href="mailto:ninewatt@ninewatt.com"
+              href="https://www.saramin.co.kr/zf_user/company-info/view?csn=K2w0aUxjR2J5VE9PeCtGaXdxWCtTUT09&popup_yn=y"
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center gap-2 rounded-full bg-primary px-8 py-3 text-sm font-medium text-white transition-colors hover:bg-primary-dark"
             >
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-4 w-4">
-                <path d="M3 8l9 6 9-6" />
-                <rect x="3" y="5" width="18" height="14" rx="2" />
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                <polyline points="15 3 21 3 21 9" />
+                <line x1="10" y1="14" x2="21" y2="3" />
               </svg>
-              ninewatt@ninewatt.com
+              {t("career.saraminButton")}
             </a>
             <Link
               href="/contact"

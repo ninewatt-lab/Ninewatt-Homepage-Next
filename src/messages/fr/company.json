@@ -91,22 +91,50 @@
     "benefitsTitle": "Avantages sociaux",
     "benefitCategories": [
       {
-        "category": "Environnement de travail",
+        "category": "Aides et assurances",
         "items": [
-          { "title": "Horaires flexibles", "desc": "Arrivee libre entre 8h et 10h par tranches de 10 minutes" },
-          { "title": "Conges flexibles", "desc": "Aucune approbation prealable requise ; vacances de 10 jours et plus encouragees" },
-          { "title": "Conges selon l'anciennete", "desc": "1 jour/mois la premiere annee, 15 jours/an a partir de la deuxieme annee" },
-          { "title": "Conge d'anniversaire", "desc": "Jour de conge paye pour votre anniversaire, sans decompte de vos conges" }
+          { "title": "Bilan de sante", "desc": "Prise en charge d'un bilan de sante complet" },
+          { "title": "Allocation culture", "desc": "Subventions pour activites culturelles et loisirs" },
+          { "title": "Allocation communication", "desc": "Frais de communication professionnels couverts" },
+          { "title": "Plan d'epargne salarie", "desc": "Programme d'epargne cofinance par l'Etat" }
         ]
       },
       {
-        "category": "Soutien et recompenses",
+        "category": "Remuneration",
         "items": [
-          { "title": "Indemnite repas", "desc": "Repas et collations fournis" },
-          { "title": "Bilan de sante", "desc": "Prise en charge d'un bilan de sante complet" },
-          { "title": "Formation et livres", "desc": "Soutien au developpement professionnel et personnel" },
-          { "title": "Primes de performance", "desc": "Recompenses liees aux KPI et aux contributions aux projets" },
-          { "title": "Equipement de bureau", "desc": "Ordinateurs portables, ecrans et equipements de travail fournis" }
+          { "title": "Retraite complementaire", "desc": "Gestion stable des actifs de retraite" },
+          { "title": "Primes", "desc": "Versement regulier de primes" },
+          { "title": "Recompense anciennete", "desc": "Reconnaissance des employes de longue date" },
+          { "title": "Recompense excellence", "desc": "Distinction des meilleurs performeurs" },
+          { "title": "Indemnite de depart", "desc": "Indemnite de fin de contrat" },
+          { "title": "Prime de performance", "desc": "Incentives basees sur la performance" },
+          { "title": "Heures supplementaires", "desc": "Remuneration des heures supplementaires" },
+          { "title": "Travail les jours feries", "desc": "Compensation pour le travail les jours feries" },
+          { "title": "Conges non utilises", "desc": "Compensation des conges annuels non pris" },
+          { "title": "Allocation certifications", "desc": "Allocation pour certifications professionnelles" },
+          { "title": "Allocation anciennete", "desc": "Allocation supplementaire pour anciennete" },
+          { "title": "Quatre assurances majeures", "desc": "Retraite, sante, emploi et accidents du travail" }
+        ]
+      },
+      {
+        "category": "Environnement de travail",
+        "items": [
+          { "title": "Salon de detente", "desc": "Espace de repos confortable" },
+          { "title": "Salle de repos", "desc": "Espace dedie a la sieste et au repos" },
+          { "title": "Salles de reunion", "desc": "Espaces de reunion bien equipes" },
+          { "title": "Cafeteria", "desc": "Cafeteria interne" },
+          { "title": "Jardin interieur", "desc": "Jardin d'entreprise ecologique" },
+          { "title": "Ordinateur portable", "desc": "Ordinateur portable fourni" },
+          { "title": "Badge employe", "desc": "Badge d'identification delivre" }
+        ]
+      },
+      {
+        "category": "Horaires et trajets",
+        "items": [
+          { "title": "Transport de nuit", "desc": "Prise en charge du transport en cas de travail tardif" },
+          { "title": "Horaires flexibles", "desc": "Amenagement flexible du temps de travail" },
+          { "title": "Semaine de 40 heures", "desc": "Politique standard de 40 heures hebdomadaires" },
+          { "title": "Travail autonome", "desc": "Arrivee flexible entre 8h et 10h" }
         ]
       }
     ],
@@ -117,7 +145,8 @@
       { "step": "03", "title": "Offre", "desc": "Negociation de la remuneration et integration" }
     ],
     "ctaTitle": "Pret a rejoindre Ninewatt ?",
-    "ctaDesc": "Pour toute question relative au recrutement, veuillez nous contacter par e-mail ci-dessous",
+    "ctaDesc": "Consultez nos offres d'emploi et postulez sur Saramin",
+    "saraminButton": "Postuler sur Saramin",
     "ctaButton": "Nous contacter"
   },
   "global": {

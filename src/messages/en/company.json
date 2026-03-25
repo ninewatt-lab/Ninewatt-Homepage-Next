@@ -91,22 +91,50 @@
     "benefitsTitle": "Benefits",
     "benefitCategories": [
       {
-        "category": "Work Environment",
+        "category": "Allowances & Insurance",
         "items": [
-          { "title": "Flexible Hours", "desc": "Choose your start time between 8–10 AM in 10-min increments" },
-          { "title": "Flexible PTO", "desc": "No prior approval needed; 10+ day vacations encouraged" },
-          { "title": "Annual Leave by Tenure", "desc": "1 day/month in first year, 15 days/year from second year" },
-          { "title": "Birthday Leave", "desc": "Paid birthday leave without using PTO" }
+          { "title": "Health Checkup", "desc": "Comprehensive health examination support" },
+          { "title": "Culture Allowance", "desc": "Cultural and leisure activity subsidies" },
+          { "title": "Communication Allowance", "desc": "Work-related communication costs covered" },
+          { "title": "Tomorrow Savings Plan", "desc": "Government co-funded employee savings program" }
         ]
       },
       {
-        "category": "Support & Rewards",
+        "category": "Compensation",
         "items": [
-          { "title": "Meal Allowance", "desc": "Meals and snacks provided" },
-          { "title": "Health Checkup", "desc": "Comprehensive health examination support" },
-          { "title": "Education & Books", "desc": "Professional development and self-improvement support" },
-          { "title": "Performance Bonus", "desc": "Rewards linked to KPIs and project contributions" },
-          { "title": "Office Equipment", "desc": "Laptops, monitors, and work equipment provided" }
+          { "title": "Retirement Pension", "desc": "Stable retirement asset management" },
+          { "title": "Bonuses", "desc": "Regular bonus payments" },
+          { "title": "Long-Service Award", "desc": "Recognition for long-tenure employees" },
+          { "title": "Outstanding Employee Award", "desc": "Top performer recognition" },
+          { "title": "Severance Pay", "desc": "Severance pay provided" },
+          { "title": "Performance Pay", "desc": "Performance-based incentives" },
+          { "title": "Overtime Pay", "desc": "Overtime compensation" },
+          { "title": "Holiday Work Pay", "desc": "Holiday work compensation" },
+          { "title": "Unused Leave Pay", "desc": "Compensation for unused annual leave" },
+          { "title": "Certification Allowance", "desc": "Allowance for job-related certifications" },
+          { "title": "Long-Service Allowance", "desc": "Additional allowance for long tenure" },
+          { "title": "Four Major Insurances", "desc": "National pension, health, employment, and industrial accident insurance" }
+        ]
+      },
+      {
+        "category": "Work Environment",
+        "items": [
+          { "title": "Lounge", "desc": "Comfortable break area" },
+          { "title": "Nap Room", "desc": "Dedicated rest and nap space" },
+          { "title": "Meeting Rooms", "desc": "Well-equipped meeting spaces" },
+          { "title": "Cafeteria", "desc": "In-house cafeteria" },
+          { "title": "Office Garden", "desc": "Nature-friendly office garden" },
+          { "title": "Laptop", "desc": "Work laptop provided" },
+          { "title": "Employee ID", "desc": "Employee ID card issued" }
+        ]
+      },
+      {
+        "category": "Commute & Hours",
+        "items": [
+          { "title": "Night Transport Allowance", "desc": "Transportation support for late-night work" },
+          { "title": "Flexible Work Hours", "desc": "Flexible working time arrangements" },
+          { "title": "40-Hour Workweek", "desc": "Standard 40-hour workweek policy" },
+          { "title": "Autonomous Work System", "desc": "Flexible start time between 8–10 AM" }
         ]
       }
     ],
@@ -117,7 +145,8 @@
       { "step": "03", "title": "Offer", "desc": "Compensation negotiation and onboarding" }
     ],
     "ctaTitle": "Ready to Join Ninewatt?",
-    "ctaDesc": "For recruitment inquiries, please contact us via email below",
+    "ctaDesc": "View job openings and apply on Saramin",
+    "saraminButton": "Apply on Saramin",
     "ctaButton": "Contact Us"
   },
   "global": {
