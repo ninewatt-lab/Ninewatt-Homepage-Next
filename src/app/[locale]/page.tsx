@@ -1,6 +1,5 @@
 import { Link } from "@/i18n/navigation";
 import { getTranslations } from "next-intl/server";
-import { getHomeStats } from "@/lib/cms";
 import {
   SmesAndStartups,
   SeoulMetropolitanGov,
@@ -41,11 +40,19 @@ export default async function Home({
   const { locale } = await params;
   const t = await getTranslations("home");
 
-  const homeStatsData = await getHomeStats(locale);
-  const stats = ((homeStatsData.stats ?? []) as Array<{ value?: string | null; label?: string | null }>).map((s) => ({
-    value: s.value ?? "",
-    label: s.label ?? "",
-  }));
+  const investmentByLocale: Record<string, string> = {
+    ko: "48억",
+    en: "$3.3M",
+    ja: "5.2億円",
+    fr: "3M€",
+  };
+  const stats = [
+    { value: "30+", label: t("stats.employees") },
+    { value: "60+", label: t("stats.projects") },
+    { value: "96.81%", label: t("stats.growth") },
+    { value: investmentByLocale[locale] ?? "$3.3M", label: t("stats.investment") },
+    { value: "33", label: t("stats.patents") },
+  ];
 
   return (
     <>
@@ -159,7 +166,7 @@ export default async function Home({
       {/* Numbers */}
       <ScrollReveal>
         <section className="border-y border-border px-6 py-14">
-          <div className="mx-auto grid max-w-5xl grid-cols-3 gap-y-10 md:grid-cols-6">
+          <div className="mx-auto grid max-w-5xl grid-cols-3 justify-items-center gap-y-10 md:grid-cols-5">
             {stats.map((stat) => (
               <div key={stat.label}>
                 <CountUp value={stat.value} className="text-2xl font-bold md:text-3xl" />
