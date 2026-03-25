@@ -83,13 +83,17 @@
     "completed": "완료",
     "count": "건",
     "tableHeaders": { "agency": "중앙행정기관", "research": "연구개발과제명", "lead": "주관기관", "period": "기간" },
-    "detailLabels": { "goal": "연구개발 목표", "contents": "세부사업내용", "category": "사업유형", "department": "주관부처", "budget": "총사업규모" }
+    "detailLabels": { "goal": "연구개발 목표", "contents": "세부사업내용", "category": "사업유형", "department": "주관부처", "budget": "총사업규모" },
+    "ctaTitle": "R&D 의뢰 및 협업을 제안해 주세요",
+    "ctaDesc": "나인와트의 에너지 AI 기술력을 활용한 공동연구·위탁과제를 함께 수행합니다.",
+    "ctaButton": "의뢰 / 협업 제안"
   },
   "services": {
     "title": "시스템개발 수행 이력",
     "subtitleTemplate": "{count}건의 시스템개발, {partners}개 파트너 기관과 협업",
     "tableHeaders": { "client": "기업(기관명)", "period": "기간", "content": "수행내용" },
+    "ctaTitle": "시스템 개발 의뢰 및 협업을 제안해 주세요",
     "ctaText": "시스템개발 협업에 관심이 있으신가요?",
-    "ctaButton": "문의하기"
+    "ctaButton": "의뢰 / 협업 제안"
   }
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Link } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
 
 interface RndProject {
@@ -28,7 +29,7 @@ function ProjectRow({ project, labels }: { project: RndProject; labels: { goal: 
         className={`border-b border-border ${hasDetail ? "cursor-pointer hover:bg-secondary/30 transition-colors" : ""}`}
         onClick={() => hasDetail && setOpen(!open)}
       >
-        <td className="py-3 pr-4 text-muted">{project.agency}</td>
+        <td className="py-3 pl-2 pr-8 text-muted">{project.agency}</td>
         <td className="py-3 pr-4">
           <span className="flex items-center gap-2">
             {project.research}
@@ -102,10 +103,16 @@ function ProjectRow({ project, labels }: { project: RndProject; labels: { goal: 
 function ProjectTable({ projects, headerLabels, detailLabels }: { projects: RndProject[]; headerLabels: { agency: string; research: string; lead: string; period: string }; detailLabels: { goal: string; contents: string; category: string; department: string; budget: string } }) {
   return (
     <div className="overflow-x-auto">
-      <table className="w-full min-w-[700px] text-sm">
+      <table className="w-full min-w-[700px] table-fixed text-sm">
+        <colgroup>
+          <col className="w-[18%]" />
+          <col className="w-[53%]" />
+          <col className="w-[14%]" />
+          <col className="w-[15%]" />
+        </colgroup>
         <thead>
           <tr className="border-b border-border text-left">
-            <th className="py-3 pr-4 font-semibold text-muted">{headerLabels.agency}</th>
+            <th className="py-3 pl-2 pr-8 font-semibold text-muted">{headerLabels.agency}</th>
             <th className="py-3 pr-4 font-semibold text-muted">{headerLabels.research}</th>
             <th className="py-3 pr-4 font-semibold text-muted">{headerLabels.lead}</th>
             <th className="py-3 font-semibold text-muted">{headerLabels.period}</th>
@@ -166,6 +173,25 @@ export function RndContent({ projects }: { projects: RndProject[] }) {
           <div className="mt-6">
             <ProjectTable projects={completed} headerLabels={headerLabels} detailLabels={detailLabels} />
           </div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="border-t border-border px-6 py-20">
+        <div className="mx-auto flex max-w-5xl flex-col items-center text-center">
+          <h2 className="text-2xl font-bold tracking-tight">{t("rnd.ctaTitle")}</h2>
+          <p className="mt-3 text-muted">
+            {t("rnd.ctaDesc")}
+          </p>
+          <Link
+            href="/contact"
+            className="mt-8 inline-flex items-center gap-2 rounded-lg bg-primary px-8 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary/90"
+          >
+            {t("rnd.ctaButton")}
+            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </Link>
         </div>
       </section>
     </>

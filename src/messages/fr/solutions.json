@@ -83,13 +83,17 @@
     "completed": "Terminé",
     "count": "projets",
     "tableHeaders": { "agency": "Organisme gouvernemental", "research": "Nom du projet R&D", "lead": "Organisation responsable", "period": "Période" },
-    "detailLabels": { "goal": "Objectif R&D", "contents": "Détails du projet", "category": "Type de projet", "department": "Ministère de tutelle", "budget": "Budget total" }
+    "detailLabels": { "goal": "Objectif R&D", "contents": "Détails du projet", "category": "Type de projet", "department": "Ministère de tutelle", "budget": "Budget total" },
+    "ctaTitle": "Proposez un partenariat R&D",
+    "ctaDesc": "Collaborez avec Ninewatt sur des projets de recherche conjoints grâce à notre expertise en IA énergétique.",
+    "ctaButton": "Proposer un partenariat"
   },
   "services": {
     "title": "Historique de développement de systèmes",
     "subtitleTemplate": "{count} projets de développement de systèmes en collaboration avec {partners} organisations partenaires",
     "tableHeaders": { "client": "Client (Organisation)", "period": "Période", "content": "Périmètre des travaux" },
+    "ctaTitle": "Proposez un partenariat en développement de systèmes",
     "ctaText": "Intéressé par une collaboration en développement de systèmes ?",
-    "ctaButton": "Nous contacter"
+    "ctaButton": "Proposer un partenariat"
   }
 }

@@ -83,13 +83,17 @@
     "completed": "完了",
     "count": "件",
     "tableHeaders": { "agency": "中央行政機関", "research": "研究開発課題名", "lead": "主管機関", "period": "期間" },
-    "detailLabels": { "goal": "研究開発目標", "contents": "詳細事業内容", "category": "事業類型", "department": "主管省庁", "budget": "総事業規模" }
+    "detailLabels": { "goal": "研究開発目標", "contents": "詳細事業内容", "category": "事業類型", "department": "主管省庁", "budget": "総事業規模" },
+    "ctaTitle": "R&D依頼・協業をご提案ください",
+    "ctaDesc": "ナインワットのエネルギーAI技術を活用した共同研究・委託課題を共に遂行します。",
+    "ctaButton": "依頼 / 協業提案"
   },
   "services": {
     "title": "システム開発実績",
     "subtitleTemplate": "{count}件のシステム開発、{partners}のパートナー機関と協業",
     "tableHeaders": { "client": "企業（機関名）", "period": "期間", "content": "遂行内容" },
+    "ctaTitle": "システム開発の依頼・協業をご提案ください",
     "ctaText": "システム開発の協業にご関心がおありですか？",
-    "ctaButton": "お問い合わせ"
+    "ctaButton": "依頼 / 協業提案"
   }
 }

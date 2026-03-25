@@ -69,15 +69,21 @@ export default async function ServicesPage() {
         </div>
       </section>
 
-      {/* CTA — inline with content */}
-      <section className="border-t border-border px-6 py-14">
-        <div className="mx-auto max-w-5xl md:flex md:items-center md:justify-between">
-          <p className="text-sm text-muted">{t("services.ctaText")}</p>
+      {/* CTA */}
+      <section className="border-t border-border px-6 py-20">
+        <div className="mx-auto flex max-w-5xl flex-col items-center text-center">
+          <h2 className="text-2xl font-bold tracking-tight">{t("services.ctaTitle")}</h2>
+          <p className="mt-3 text-muted">
+            {t("services.ctaText")}
+          </p>
           <Link
             href="/contact"
-            className="mt-4 inline-block text-sm font-semibold text-primary underline underline-offset-4 hover:text-primary/80 md:mt-0"
+            className="mt-8 inline-flex items-center gap-2 rounded-lg bg-primary px-8 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary/90"
           >
             {t("services.ctaButton")}
+            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
           </Link>
         </div>
       </section>
