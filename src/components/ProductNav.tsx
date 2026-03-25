@@ -10,7 +10,7 @@ export default function ProductNav() {
   const visible = useScrollDirection();
 
   const subPages = [
-    { href: "/product", label: t("nav.product") },
+    { href: "/product", label: t("productMenu.overview") },
     { href: "/product/opti", label: "Opti" },
     { href: "/product/watti", label: "Watti" },
     { href: "/product/greenplanner", label: "GreenPlanner" },

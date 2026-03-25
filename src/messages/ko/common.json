@@ -15,6 +15,7 @@
     "viewAllCompany": "회사 전체보기"
   },
   "productMenu": {
+    "overview": "전체 보기",
     "platform": "플랫폼",
     "appsAndServices": "앱 & 서비스",
     "optiDesc": "AI 기반 건물 에너지 어드바이저",

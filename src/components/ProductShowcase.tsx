@@ -339,8 +339,14 @@ function MediaBlock({ product, isActive }: { product: Product; isActive?: boolea
 
 export default function ProductShowcase() {
   const [activeIndex, setActiveIndex] = useState(0);
+  const prevIndexRef = useRef(0);
+  const direction = activeIndex >= prevIndexRef.current ? 1 : -1;
   const sectionRefs = useRef<(HTMLDivElement | null)[]>([]);
   const t = useTranslations("home");
+
+  useEffect(() => {
+    prevIndexRef.current = activeIndex;
+  }, [activeIndex]);
 
   useEffect(() => {
     const observers: IntersectionObserver[] = [];
@@ -414,47 +420,82 @@ export default function ProductShowcase() {
                 ))}
               </div>
 
-              {/* Active product info — crossfade */}
+              {/* Active product info — staggered crossfade */}
               <div className="relative min-h-[300px]">
-                {products.map((product, i) => (
-                  <div
-                    key={product.id}
-                    className={`transition-all duration-700 ease-out ${
-                      activeIndex === i
-                        ? "relative opacity-100 translate-y-0"
-                        : "absolute inset-0 opacity-0 translate-y-6 pointer-events-none"
-                    }`}
-                  >
-                    <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
-                      {product.label}
-                    </p>
-                    <h2 className="mt-4 text-3xl font-bold leading-snug tracking-tight whitespace-pre-line lg:text-4xl">
-                      {t(product.titleKey)}
-                    </h2>
-                    <p className="mt-5 text-base leading-relaxed text-muted">
-                      {t(product.descriptionKey)}
-                    </p>
-                    <Link
-                      href={product.href}
-                      className="group mt-8 inline-flex items-center gap-2 rounded-full border border-border px-6 py-2.5 text-sm font-semibold text-foreground transition-colors hover:border-primary/30 hover:text-primary"
+                {products.map((product, i) => {
+                  const isActive = activeIndex === i;
+                  const offsetY = isActive ? 0 : direction > 0 ? 24 : -24;
+                  return (
+                    <div
+                      key={product.id}
+                      className={`${
+                        isActive
+                          ? "relative pointer-events-auto"
+                          : "absolute inset-0 pointer-events-none"
+                      }`}
+                      style={{
+                        opacity: isActive ? 1 : 0,
+                        transform: `translateY(${offsetY}px)`,
+                        transition: "opacity 600ms ease-out, transform 600ms ease-out",
+                      }}
                     >
-                      {t(product.linkTextKey)}
-                      <svg
-                        className="h-4 w-4 transition-transform group-hover:translate-x-0.5"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        strokeWidth={2}
+                      <p
+                        className="text-xs font-semibold uppercase tracking-[0.2em] text-primary"
+                        style={{
+                          opacity: isActive ? 1 : 0,
+                          transform: `translateY(${isActive ? 0 : 12}px)`,
+                          transition: "opacity 500ms ease-out 0ms, transform 500ms ease-out 0ms",
+                        }}
                       >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M9 5l7 7-7 7"
-                        />
-                      </svg>
-                    </Link>
-                  </div>
-                ))}
+                        {product.label}
+                      </p>
+                      <h2
+                        className="mt-4 text-3xl font-bold leading-snug tracking-tight whitespace-pre-line lg:text-4xl"
+                        style={{
+                          opacity: isActive ? 1 : 0,
+                          transform: `translateY(${isActive ? 0 : 12}px)`,
+                          transition: "opacity 500ms ease-out 80ms, transform 500ms ease-out 80ms",
+                        }}
+                      >
+                        {t(product.titleKey)}
+                      </h2>
+                      <p
+                        className="mt-5 text-base leading-relaxed text-muted"
+                        style={{
+                          opacity: isActive ? 1 : 0,
+                          transform: `translateY(${isActive ? 0 : 12}px)`,
+                          transition: "opacity 500ms ease-out 160ms, transform 500ms ease-out 160ms",
+                        }}
+                      >
+                        {t(product.descriptionKey)}
+                      </p>
+                      <Link
+                        href={product.href}
+                        className="group mt-12 inline-flex items-center gap-2 rounded-full border border-border px-6 py-2.5 text-sm font-semibold text-foreground transition-colors hover:border-primary/30 hover:text-primary"
+                        style={{
+                          opacity: isActive ? 1 : 0,
+                          transform: `translateY(${isActive ? 0 : 12}px)`,
+                          transition: "opacity 500ms ease-out 240ms, transform 500ms ease-out 240ms",
+                        }}
+                      >
+                        {t(product.linkTextKey)}
+                        <svg
+                          className="h-4 w-4 transition-transform group-hover:translate-x-0.5"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                          strokeWidth={2}
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M9 5l7 7-7 7"
+                          />
+                        </svg>
+                      </Link>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </div>
@@ -471,20 +512,27 @@ export default function ProductShowcase() {
               >
                 <div className="w-full">
                   <div
-                    className={`transition-all duration-700 ease-out ${
-                      activeIndex === i
-                        ? "opacity-100 scale-100"
-                        : "opacity-30 scale-[0.96]"
-                    }`}
+                    style={{
+                      opacity: activeIndex === i ? 1 : 0.2,
+                      transform: activeIndex === i
+                        ? "scale(1) translateY(0)"
+                        : `scale(0.95) translateY(${i > activeIndex ? "20px" : "-20px"})`,
+                      filter: activeIndex === i ? "blur(0)" : "blur(2px)",
+                      transition: "opacity 700ms ease-out, transform 700ms ease-out, filter 700ms ease-out",
+                    }}
                   >
                     <MediaBlock product={product} isActive={activeIndex === i} />
                   </div>
 
                   {/* Inline label under each media */}
                   <p
-                    className={`mt-4 text-center text-xs font-medium tracking-wider uppercase transition-all duration-500 ${
-                      activeIndex === i ? "text-primary opacity-100" : "text-muted opacity-0"
-                    }`}
+                    className="mt-4 text-center text-xs font-medium tracking-wider uppercase"
+                    style={{
+                      color: activeIndex === i ? "var(--color-primary)" : "var(--color-muted)",
+                      opacity: activeIndex === i ? 1 : 0,
+                      transform: `translateY(${activeIndex === i ? 0 : 8}px)`,
+                      transition: "opacity 500ms ease-out 200ms, transform 500ms ease-out 200ms, color 500ms ease-out",
+                    }}
                   >
                     {product.label}
                   </p>

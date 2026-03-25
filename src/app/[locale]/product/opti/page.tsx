@@ -59,7 +59,7 @@ export default async function OptiPage() {
                 href={serviceUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="rounded-full border border-border px-8 py-3.5 text-sm font-semibold transition-colors hover:bg-surface"
+                className="rounded-full border border-primary/30 bg-primary/5 px-8 py-3.5 text-sm font-semibold text-primary transition-colors hover:bg-primary/10"
               >
                 {t("opti.goToService")} &rarr;
               </a>

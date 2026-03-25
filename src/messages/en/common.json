@@ -15,6 +15,7 @@
     "viewAllCompany": "View all company"
   },
   "productMenu": {
+    "overview": "Overview",
     "platform": "Platform",
     "appsAndServices": "Apps & Services",
     "optiDesc": "AI-powered building energy advisor",

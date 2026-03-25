@@ -15,6 +15,7 @@
     "viewAllCompany": "Voir toute l'entreprise"
   },
   "productMenu": {
+    "overview": "Aperçu",
     "platform": "Plateforme",
     "appsAndServices": "Applications & Services",
     "optiDesc": "Conseiller énergétique bâtiment alimenté par IA",

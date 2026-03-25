@@ -15,6 +15,7 @@
     "viewAllCompany": "会社情報一覧を見る"
   },
   "productMenu": {
+    "overview": "一覧",
     "platform": "プラットフォーム",
     "appsAndServices": "アプリ＆サービス",
     "optiDesc": "AI搭載ビルエネルギーアドバイザー",
