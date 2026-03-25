@@ -378,7 +378,7 @@ export default function Header() {
               : "bg-transparent"
         }`}
       >
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
+        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6 overflow-hidden">
           <Link href="/" className={`transition-colors ${isTransparent ? "text-white" : "text-foreground"}`}>
             <NinewattLogo height={36} width="auto" />
           </Link>
@@ -680,7 +680,7 @@ export default function Header() {
               ))}
 
               {/* Mobile Language Switcher */}
-              <div className="mt-2 flex gap-2 px-3">
+              <div className="mt-2 flex flex-wrap gap-2 px-3">
                 {routing.locales.map((loc) => (
                   <button
                     key={loc}
