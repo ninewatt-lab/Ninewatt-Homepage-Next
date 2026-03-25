@@ -14,7 +14,8 @@ interface Product {
   linkTextKey: string;
   media:
     | { type: "video"; src: string }
-    | { type: "image"; src: string; alt: string };
+    | { type: "image"; src: string; alt: string }
+    | { type: "imageSlider"; images: { src: string; alt: string }[] };
 }
 
 const products: Product[] = [
@@ -74,9 +75,12 @@ const products: Product[] = [
     href: "/product/solar-site",
     linkTextKey: "showcase.solarScope.linkText",
     media: {
-      type: "image",
-      src: "/images/SolarScope/SolarScope_Image_2.png",
-      alt: "SolarScope",
+      type: "imageSlider",
+      images: [
+        { src: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/SolarScope/SolarScope_1.png", alt: "SolarScope Map Analysis Dashboard" },
+        { src: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/SolarScope/SolarScope_7.png", alt: "SolarScope Nationwide Grid Analysis" },
+        { src: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/SolarScope/SolarScope_8.png", alt: "SolarScope 3D Roof Analysis" },
+      ],
     },
   },
   {
@@ -87,8 +91,15 @@ const products: Product[] = [
     href: "/product/pv-intelligence",
     linkTextKey: "showcase.pvIntelligence.linkText",
     media: {
-      type: "video",
-      src: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/videos/pv-intelligence-scene.mp4",
+      type: "imageSlider",
+      images: [
+        { src: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/PVIntelligence/PV_Intelligence_2.png", alt: "PV Intelligence Dashboard" },
+        { src: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/PVIntelligence/PV_Intelligence_3.png", alt: "PV Intelligence Site Map" },
+        { src: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/PVIntelligence/PV_Intelligence_4.png", alt: "PV Intelligence Cross-Site Analysis" },
+        { src: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/PVIntelligence/PV_Intelligence_5.png", alt: "PV Intelligence Revenue Analysis" },
+        { src: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/PVIntelligence/PV_Intelligence_6.png", alt: "PV Intelligence AI Alerts" },
+        { src: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/PVIntelligence/PV_Intelligence_1.png", alt: "PV Intelligence String Layout" },
+      ],
     },
   },
 ];
@@ -187,13 +198,128 @@ const productUrls: Record<string, string> = {
   "pv-intelligence": "app.ninewatt.com/pv-intelligence",
 };
 
+const SLIDE_DURATION = 4000;
+
+function ImageSlider({ images }: { images: { src: string; alt: string }[] }) {
+  const [current, setCurrent] = useState(0);
+  const [prev, setPrev] = useState<number | null>(null);
+  const [progress, setProgress] = useState(0);
+
+  // Auto-advance with progress tracking
+  useEffect(() => {
+    if (images.length <= 1) return;
+
+    const start = Date.now();
+    let raf: number;
+
+    const tick = () => {
+      const elapsed = Date.now() - start;
+      setProgress(Math.min(elapsed / SLIDE_DURATION, 1));
+      if (elapsed < SLIDE_DURATION) {
+        raf = requestAnimationFrame(tick);
+      }
+    };
+    raf = requestAnimationFrame(tick);
+
+    const timer = setTimeout(() => {
+      setPrev(current);
+      setCurrent((p) => (p + 1) % images.length);
+      setProgress(0);
+    }, SLIDE_DURATION);
+
+    return () => {
+      clearTimeout(timer);
+      cancelAnimationFrame(raf);
+    };
+  }, [current, images.length]);
+
+  // Clear prev after transition completes
+  useEffect(() => {
+    if (prev === null) return;
+    const t = setTimeout(() => setPrev(null), 1200);
+    return () => clearTimeout(t);
+  }, [prev]);
+
+  const goTo = (i: number) => {
+    if (i === current) return;
+    setPrev(current);
+    setCurrent(i);
+    setProgress(0);
+  };
+
+  return (
+    <div className="relative aspect-video overflow-hidden bg-black">
+      {images.map((img, i) => {
+        const isActive = i === current;
+        const isLeaving = i === prev;
+        return (
+          <div
+            key={img.src}
+            className="absolute inset-0"
+            style={{
+              opacity: isActive ? 1 : isLeaving ? 0 : 0,
+              zIndex: isActive ? 2 : isLeaving ? 1 : 0,
+              transition: "opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1)",
+            }}
+          >
+            <Image
+              src={img.src}
+              alt={img.alt}
+              fill
+              className="object-cover object-top"
+              style={{
+                transform: isActive ? "scale(1.08)" : "scale(1)",
+                transition: `transform ${SLIDE_DURATION + 1200}ms cubic-bezier(0.25, 0, 0.15, 1)`,
+              }}
+            />
+          </div>
+        );
+      })}
+
+      {/* Bottom gradient for dots visibility */}
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-16 bg-gradient-to-t from-black/50 to-transparent" />
+
+      {/* Progress indicator */}
+      <div className="absolute bottom-3 left-1/2 z-10 flex -translate-x-1/2 gap-2">
+        {images.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => goTo(i)}
+            aria-label={`Slide ${i + 1}`}
+            className="group relative h-1 w-8 overflow-hidden rounded-full bg-white/20"
+          >
+            <div
+              className="absolute inset-y-0 left-0 rounded-full bg-white transition-[width]"
+              style={{
+                width:
+                  i === current
+                    ? `${progress * 100}%`
+                    : i < current || (current === 0 && prev === images.length - 1 && i !== 0)
+                      ? "100%"
+                      : "0%",
+                transition: i === current ? "none" : "width 0.3s ease",
+              }}
+            />
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function MediaBlock({ product, isActive }: { product: Product; isActive?: boolean }) {
-  const content =
-    product.media.type === "video" ? (
+  let content: React.ReactNode;
+
+  if (product.media.type === "video") {
+    content = (
       <video className="h-auto w-full" autoPlay loop muted playsInline>
         <source src={product.media.src} type="video/mp4" />
       </video>
-    ) : (
+    );
+  } else if (product.media.type === "imageSlider") {
+    content = <ImageSlider images={product.media.images} />;
+  } else {
+    content = (
       <Image
         src={product.media.src}
         alt={product.media.alt}
@@ -202,6 +328,7 @@ function MediaBlock({ product, isActive }: { product: Product; isActive?: boolea
         className="h-auto w-full"
       />
     );
+  }
 
   return (
     <BrowserFrame url={productUrls[product.id] ?? "app.ninewatt.com"} isActive={isActive}>

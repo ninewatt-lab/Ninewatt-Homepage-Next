@@ -19,7 +19,8 @@ const ImageLogo = ({
     alt={alt}
     width={width}
     height={height}
-    className={`h-9 w-auto object-contain ${className}`}
+    className={`object-contain ${className}`}
+    style={{ height: 36, width: "auto" }}
     unoptimized
   />
 );

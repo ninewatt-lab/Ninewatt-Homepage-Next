@@ -63,89 +63,77 @@ export default async function SolarSitePage() {
       {/* Product Screenshots */}
       <section className="px-6 py-20">
         <div className="mx-auto max-w-5xl space-y-16">
-          {/* Dashboard */}
-          <div className="grid items-center gap-10 md:grid-cols-[2fr_3fr]">
-            <div>
-              <h2 className="text-2xl font-bold">{t("solarScope.dashboard")}</h2>
-              <p className="mt-3 text-sm leading-relaxed text-muted">
-                {t("solarScope.dashboardDesc")}
-              </p>
-            </div>
-            <div className="group/img overflow-hidden rounded-2xl border border-border bg-neutral-900 shadow-2xl transition-shadow hover:shadow-primary/10">
-              <div className="flex items-center gap-2 border-b border-white/10 px-4 py-3">
-                <span className="h-3 w-3 rounded-full bg-white/20" />
-                <span className="h-3 w-3 rounded-full bg-white/20" />
-                <span className="h-3 w-3 rounded-full bg-white/20" />
+          {/* Row 1: Wide screenshots — 4-column */}
+          <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-4">
+            {([
+              { key: "dashboard" as const, src: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/SolarScope/SolarScope_1.png", alt: "SolarScope Map Analysis Dashboard" },
+              { key: "nationwideGrid" as const, src: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/SolarScope/SolarScope_7.png", alt: "SolarScope Nationwide Grid Capacity Heatmap" },
+              { key: "roofAnalysis3d" as const, src: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/SolarScope/SolarScope_8.png", alt: "SolarScope 3D Roof Analysis" },
+              { key: "feasibility" as const, src: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/SolarScope/SolarScope_6.png", alt: "SolarScope Detailed Feasibility Review" },
+            ] as const).map((item) => (
+              <div key={item.key}>
+                <div className="group/img overflow-hidden rounded-xl border border-border bg-neutral-900 shadow-xl transition-shadow hover:shadow-primary/10">
+                  <div className="flex items-center gap-1.5 border-b border-white/10 px-3 py-2">
+                    <span className="h-2 w-2 rounded-full bg-white/20" />
+                    <span className="h-2 w-2 rounded-full bg-white/20" />
+                    <span className="h-2 w-2 rounded-full bg-white/20" />
+                  </div>
+                  <div className="aspect-video overflow-hidden">
+                    <Image
+                      src={item.src}
+                      alt={item.alt}
+                      width={640}
+                      height={360}
+                      className="h-full w-full object-cover object-top transition-transform duration-500 ease-out group-hover/img:scale-105"
+                    />
+                  </div>
+                </div>
+                <h3 className="mt-3 text-base font-bold">{t(`solarScope.${item.key}`)}</h3>
+                <p className="mt-1 text-xs leading-relaxed text-muted">
+                  {t(`solarScope.${item.key}Desc`)}
+                </p>
               </div>
-              <div className="overflow-hidden">
-                <Image
-                  src="/images/SolarScope/SolarScope_Image_2.png"
-                  alt="SolarScope Dashboard"
-                  width={1200}
-                  height={675}
-                  className="h-auto w-full transition-transform duration-500 ease-out group-hover/img:scale-105"
-                />
-              </div>
-            </div>
+            ))}
           </div>
 
-          {/* Detailed Analysis */}
-          <div className="grid items-center gap-10 md:grid-cols-[3fr_2fr]">
-            <div className="group/img overflow-hidden rounded-2xl border border-border bg-neutral-900 shadow-2xl transition-shadow hover:shadow-primary/10 md:order-1">
-              <div className="flex items-center gap-2 border-b border-white/10 px-4 py-3">
-                <span className="h-3 w-3 rounded-full bg-white/20" />
-                <span className="h-3 w-3 rounded-full bg-white/20" />
-                <span className="h-3 w-3 rounded-full bg-white/20" />
+          {/* Row 2: Detail panels — 3-column */}
+          <div className="grid gap-6 md:grid-cols-3">
+            {([
+              { key: "siteAnalysis" as const, src: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/SolarScope/SolarScope_3.png", alt: "SolarScope Site Analysis & Grid Capacity" },
+              { key: "irradiance" as const, src: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/SolarScope/SolarScope_4.png", alt: "SolarScope Irradiance & Energy Yield" },
+              { key: "profitability" as const, src: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/SolarScope/SolarScope_5.png", alt: "SolarScope Profitability Analysis" },
+            ] as const).map((item) => (
+              <div key={item.key}>
+                <div className="group/img overflow-hidden rounded-xl border border-border bg-neutral-900 shadow-xl transition-shadow hover:shadow-primary/10">
+                  <div className="flex items-center gap-1.5 border-b border-white/10 px-3 py-2">
+                    <span className="h-2 w-2 rounded-full bg-white/20" />
+                    <span className="h-2 w-2 rounded-full bg-white/20" />
+                    <span className="h-2 w-2 rounded-full bg-white/20" />
+                  </div>
+                  <div className="aspect-2/3 overflow-hidden">
+                    <Image
+                      src={item.src}
+                      alt={item.alt}
+                      width={720}
+                      height={1080}
+                      className="h-full w-full object-cover object-top transition-transform duration-500 ease-out group-hover/img:scale-105"
+                    />
+                  </div>
+                </div>
+                <h3 className="mt-4 text-lg font-bold">{t(`solarScope.${item.key}`)}</h3>
+                <p className="mt-1.5 text-sm leading-relaxed text-muted">
+                  {t(`solarScope.${item.key}Desc`)}
+                </p>
               </div>
-              <div className="overflow-hidden">
-                <Image
-                  src="/images/SolarScope/SolarScope_Image_3.png"
-                  alt="SolarScope Detail Analysis"
-                  width={1200}
-                  height={675}
-                  className="h-auto w-full transition-transform duration-500 ease-out group-hover/img:scale-105"
-                />
-              </div>
-            </div>
-            <div className="md:order-2">
-              <h2 className="text-2xl font-bold">{t("solarScope.detailAnalysis")}</h2>
-              <p className="mt-3 text-sm leading-relaxed text-muted">
-                {t("solarScope.detailAnalysisDesc")}
-              </p>
-            </div>
-          </div>
-
-          {/* Financial Analysis */}
-          <div className="grid items-center gap-10 md:grid-cols-[2fr_3fr]">
-            <div>
-              <h2 className="text-2xl font-bold">{t("solarScope.feasibility")}</h2>
-              <p className="mt-3 text-sm leading-relaxed text-muted">
-                {t("solarScope.feasibilityDesc")}
-              </p>
-            </div>
-            <div className="group/img overflow-hidden rounded-2xl border border-border bg-neutral-900 shadow-2xl transition-shadow hover:shadow-primary/10">
-              <div className="flex items-center gap-2 border-b border-white/10 px-4 py-3">
-                <span className="h-3 w-3 rounded-full bg-white/20" />
-                <span className="h-3 w-3 rounded-full bg-white/20" />
-                <span className="h-3 w-3 rounded-full bg-white/20" />
-              </div>
-              <div className="overflow-hidden">
-                <Image
-                  src="/images/SolarScope/SolarScope_Image_1.png"
-                  alt="SolarScope Feasibility"
-                  width={1200}
-                  height={675}
-                  className="h-auto w-full transition-transform duration-500 ease-out group-hover/img:scale-105"
-                />
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
       {/* Target users */}
       <section className="border-b border-border px-6 py-10">
-        <div className="mx-auto flex max-w-5xl flex-wrap gap-6 text-sm text-muted">
+        <div className="mx-auto flex max-w-5xl flex-wrap items-center gap-6 text-sm text-muted">
+          <span className="font-semibold text-foreground">{t("solarScope.targetUsersLabel")}</span>
           {targetUsers.map((user, i) => (
             <span key={i}>
               {i > 0 && <span className="text-border mr-6">|</span>}
