@@ -8,7 +8,7 @@
     "saveEDesc": "Identify optimal rate plans through 15-minute interval power consumption analysis, with building energy group management and cost management capabilities.",
     "reparkDesc": "QR code-based facility management. From citizen fault reports to administrator status tracking and contractor work order management.",
     "solarScopeDesc": "Perform integrated analysis of regulations, setback distances, distribution grid capacity, energy yield, and financial viability for solar installation candidate sites — using just an address.",
-    "pvIntelligenceDesc": "Collect on-site data via proprietary RTUs and deliver real-time monitoring through AI-powered operational analytics — all on a single platform."
+    "pvIntelligenceDesc": "Beyond showing generation numbers — AI detects anomalies, calculates loss amounts, and maximizes revenue. A Solar AI platform proven at our own power plants."
   },
   "opti": {
     "heroSubtitle": "AI Energy Advisor for Buildings",
@@ -267,34 +267,108 @@
     "ctaDemo": "Request Demo"
   },
   "pvIntelligence": {
-    "heroSubtitle": "Integrated Solar Plant Monitoring and Control System",
-    "heroDesc": "A web-based integrated monitoring platform for solar plant operators. Install our proprietary RTU equipment on-site to collect inverter data, then access real-time monitoring, analytics, and control from the cloud.",
+    "heroSubtitle": "Beyond showing numbers — AI that makes you earn more",
+    "heroDesc": "Conventional monitoring systems only display generation numbers. PV Intelligence goes further: AI detects anomalies, diagnoses causes, recommends actions, and calculates loss amounts. Proven at Ninewatt's own solar plants.",
     "requestDemo": "Request Demo",
     "goToService": "Go to Service",
-    "systemArch": "System Architecture",
-    "systemArchDesc": "The data pipeline from on-site inverters to the cloud",
-    "archSteps": [
-      { "label": "Inverter", "sub": "RS-485 Modbus" },
-      { "label": "Proprietary RTU", "sub": "LTE Cat.M1" },
-      { "label": "PV Intelligence Cloud", "sub": "Monitoring / Analytics / AI" }
+    "downloadPdf": "Download PDF",
+
+    "problemTitle": "Limitations of Current Monitoring",
+    "problemDesc": "Does your current monitoring system have these issues?",
+    "problemItems": [
+      "It shows generation numbers but never explains why output dropped.",
+      "When something goes wrong, you have to visit the site in person to check.",
+      "Operating multiple plants? There's no way to compare which one has the problem.",
+      "You can't tell if a drop is due to weather or equipment failure.",
+      "Without knowing the loss amount, you can't judge how urgent it is."
     ],
-    "keyFeatures": "Key Features",
-    "featureItems": [
-      { "title": "Real-Time Dashboard", "desc": "View generation output by plant, monitor RTU communication status, and check inverter-level output, efficiency, and operational status at a glance." },
-      { "title": "Inverter Detailed Analysis", "desc": "Provides DC/AC voltage and current data, MPPT and string channel-level data, performance radar charts, and Health Scores." },
-      { "title": "Statistical Analysis", "desc": "Supports monthly generation trend tracking, actual vs. rated efficiency comparison, efficiency gap alerts, and carbon reduction equivalent calculations." },
-      { "title": "Fault & History Management", "desc": "Records and tracks communication error and connection fault alarm histories, including fault timestamps and error types per inverter." },
-      { "title": "AI Operations Advisor", "desc": "Offers AI-powered natural language Q&A with real-time data integration, and provides revenue analysis based on SMP/REC pricing." }
+
+    "diffTitle": "PV Intelligence Is Different",
+    "diffSubtitle": "Not just monitoring — your AI operations partner",
+    "diffItems": [
+      { "title": "AI Anomaly Detection + Root Cause Analysis + Action Guidance", "desc": "Not just alerts — it tells you \"why output dropped, what to do, and how much you'll lose if you don't act.\"" },
+      { "title": "Multi-Site Cross Comparison", "desc": "Same day, same region, but only one site drops? It's not weather — it's equipment. An independent detection method that doesn't rely on weather data alone." },
+      { "title": "3D Map-Based Multi-Site Dashboard", "desc": "See all your plants on a map at a glance. Normal/Warning/Critical status identified instantly through color coding and pulse animations." },
+      { "title": "Revenue Optimization Recommendations", "desc": "SMP/REC sell timing, self-consumption rate optimization, curtailment subsidy maximization, panel cleaning ROI analysis — AI suggests concrete ways to increase revenue." },
+      { "title": "Proven with Our Own Plants", "desc": "\"AI prevented ₩XX million in monthly losses\" — verified results from Ninewatt's own solar plants (5–10 sites, ~100kW each), available as documented proof." }
     ],
-    "equipment": "Supported Equipment",
-    "inverter": "Inverter",
-    "inverterDesc": "Major brands including Hyosung, Huawei, Hyundai, and more",
-    "rtu": "RTU",
-    "rtuDesc": "Proprietary RTU (LTE Cat.M1, RS-485 Modbus RTU)",
-    "collectionCycle": "Data Collection Interval",
-    "collectionCycleDesc": "5 minutes (configurable)",
-    "ctaTitle": "Monitor Your Solar Plants Intelligently",
-    "ctaDesc": "See how PV Intelligence transforms integrated plant monitoring with a demo.",
-    "ctaDemo": "Request Demo"
+
+    "howItWorksTitle": "How It Works",
+    "howItWorksSubtitle": "Fully automated pipeline from on-site inverters to AI analysis",
+    "howItWorksSteps": [
+      { "step": "01", "title": "Data Collection", "desc": "Our proprietary RTU (LTE Cat.M1) transmits inverter data to the cloud every 5 minutes. Supports major brands including Hyosung, Huawei, and Hyundai via RS-485 Modbus." },
+      { "step": "02", "title": "Cross-Comparison Analysis", "desc": "Compares capacity-to-output ratios across all sites for the same time window. Sites falling below -20%p from the median are automatically flagged as anomaly candidates." },
+      { "step": "03", "title": "AI Root Cause Analysis", "desc": "When an anomaly is detected, AI synthesizes weather data, per-inverter output, and historical patterns to estimate the cause and provide natural language action guidance." },
+      { "step": "04", "title": "Loss Calculation & Alerts", "desc": "Automatically calculates daily/monthly estimated loss amounts and sends instant alerts via KakaoTalk (with SMS fallback)." }
+    ],
+
+    "aiDetectionTitle": "Sound familiar?",
+    "aiDetectionSubtitle": "Here's how PV Intelligence catches the problems that actually happen in the field.",
+    "aiDetectionScenarios": [
+      { "situation": "One out of seven plants just stopped producing", "what": "The other six are running fine, but the Cheongna warehouse site has been at 13% efficiency since morning. It's not the weather.", "action": "AI flags a likely grid interconnection issue and recommends checking the MCCB. Left alone, that's roughly ₩1.38M lost per month." },
+      { "situation": "One inverter keeps dropping output every afternoon", "what": "Mornings are fine, but from 2 PM onward inverter #2 loses 30% output. The site next door is unaffected.", "action": "Hourly cross-comparison pinpoints afternoon shading or string contamination as likely causes, and tells you exactly what to check on-site." },
+      { "situation": "Revenue is quietly shrinking and nobody noticed", "what": "Day to day it looks normal, but over the past month average efficiency across all sites has slipped 3%p.", "action": "Flags that panel cleaning is overdue, and shows that spending ₩150K on cleaning could recover about ₩530K/month in lost revenue." }
+    ],
+
+    "revenueTitle": "Revenue Optimization",
+    "revenueSubtitle": "Beyond protecting generation — maximizing your revenue",
+    "revenueItems": [
+      { "title": "Real-Time SMP Analysis", "desc": "Analyzes hourly SMP (System Marginal Price) trends and optimizes generation weight during peak pricing hours." },
+      { "title": "REC Sell Timing", "desc": "AI analyzes REC (Renewable Energy Certificate) spot price trends and recommends optimal sell timing." },
+      { "title": "Curtailment Subsidy Maximization", "desc": "With curtailment subsidies taking full effect in 2026, AI predicts curtailment likelihood and optimizes self-generation plan submissions to maximize subsidies." },
+      { "title": "Self-Consumption Optimization", "desc": "For self-consumption model plants, analyzes hourly generation vs. consumption to find the 70–80% optimal self-consumption rate for maximum economic benefit." },
+      { "title": "Maintenance ROI Analysis", "desc": "Quantitatively analyzes the cost-vs-recovery impact of maintenance activities like panel cleaning and inverter inspection, prioritizing investments." }
+    ],
+
+    "dashboardTitle": "Dashboard Overview",
+    "dashboardSubtitle": "Integrated control screen for multi-site operators",
+    "dashboardFeatures": [
+      { "title": "Overview", "desc": "Today's total generation, estimated revenue, operating sites, and AI alerts at a glance. Anomalous sites highlighted in red for instant identification." },
+      { "title": "3D Map", "desc": "Mapbox-based dark theme map with color-coded status markers per site. Critical sites draw attention with pulse animations." },
+      { "title": "Site Comparison", "desc": "Ranks sites by efficiency on the same day in the same region, with AI automatically generating cross-analysis results." },
+      { "title": "Revenue Analysis", "desc": "Monthly estimated revenue ranking by site, loss amounts from anomalies, and AI optimization recommendations — all in one view." },
+      { "title": "AI Alert Center", "desc": "Alerts organized by Critical/Warning/Info levels. Each includes AI analysis report, estimated cause, recommended action, and projected loss." }
+    ],
+
+    "impactTitle": "Expected Impact",
+    "impactItems": [
+      { "value": "₩1.38M/mo", "label": "Monthly loss prevented from a single site anomaly case" },
+      { "value": "10 min", "label": "Time from anomaly detection to alert notification" },
+      { "value": "94%", "label": "AI anomaly root cause analysis confidence" },
+      { "value": "3.4 days", "label": "Panel cleaning investment payback period (ROI)" }
+    ],
+
+    "targetTitle": "Who It's For",
+    "targetItems": [
+      { "title": "Small-Scale Solar Operators", "desc": "Operators running 1–10 plants (~100kW each) who want systematic management without dedicated staff." },
+      { "title": "Building Solar Self-Consumption", "desc": "Building owners looking to optimize rooftop solar self-consumption rates and maximize economics of self-use vs. grid export." },
+      { "title": "Solar O&M Companies", "desc": "Companies managing multiple clients' plants seeking AI-based preventive maintenance and differentiated reporting." },
+      { "title": "Curtailment-Eligible Operators", "desc": "Operators looking to maximize subsidies under the 2026 curtailment compensation program." }
+    ],
+
+    "proofTitle": "Proven at Our Own Plants",
+    "proofSubtitle": "Validated first at Ninewatt's own solar power plants",
+    "proofDesc": "Ninewatt operates 5–10 of its own solar plant sites (~100kW each). Every PV Intelligence feature is validated at our own plants before being offered to customers.",
+    "proofPoints": [
+      "AI models continuously trained on our own plant operational data",
+      "\"AI prevented ₩XX million in monthly losses\" — real results provided as documented proof",
+      "AI gets smarter over time — detection accuracy improves as data accumulates",
+      "Validated internally first, then deployed to customer plants for guaranteed stability"
+    ],
+
+    "techTitle": "Technical Specifications",
+    "techItems": [
+      { "label": "RTU", "value": "Proprietary RTU, LTE Cat.M1, RS-485 Modbus RTU" },
+      { "label": "Collection Interval", "value": "5 minutes (configurable)" },
+      { "label": "Supported Inverters", "value": "Hyosung, Huawei, Hyundai, and other major brands" },
+      { "label": "AI Engine", "value": "Cross-comparison anomaly detection + natural language analysis reports" },
+      { "label": "Alert Channels", "value": "KakaoTalk (SMS fallback)" },
+      { "label": "Dashboard", "value": "Web-based, 3D map, responsive (mobile supported)" }
+    ],
+
+    "ctaTitle": "Stop just watching numbers — let AI boost your revenue",
+    "ctaDesc": "See how PV Intelligence detects anomalies and calculates loss amounts in a live demo. We'll walk you through with real data from our own plants.",
+    "ctaDemo": "Request Demo",
+    "ctaBrochure": "PDF Brochure"
   }
 }

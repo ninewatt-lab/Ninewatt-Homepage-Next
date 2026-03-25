@@ -8,7 +8,7 @@
     "saveEDesc": "Identifiez le tarif optimal grâce à l'analyse de la consommation électrique par tranche de 15 minutes, avec gestion groupée de l'énergie et suivi des coûts.",
     "reparkDesc": "Gestion des installations par QR code : du signalement citoyen au suivi par le gestionnaire, jusqu'au compte rendu d'intervention des prestataires.",
     "solarScopeDesc": "Analysez en une seule saisie d'adresse la réglementation, les distances d'éloignement, le réseau de distribution, le productible et la rentabilité d'un site solaire.",
-    "pvIntelligenceDesc": "Collecte de données terrain via nos propres RTU, monitoring en temps réel et analyse opérationnelle par IA, le tout sur une seule plateforme."
+    "pvIntelligenceDesc": "Au-delà de l'affichage de la production — l'IA détecte les anomalies, calcule les pertes et maximise les revenus. Une plateforme Solar AI éprouvée sur nos propres centrales."
   },
   "opti": {
     "heroSubtitle": "Conseiller IA en énergie pour les bâtiments",
@@ -411,49 +411,108 @@
     "ctaDemo": "Demander une démo"
   },
   "pvIntelligence": {
-    "heroSubtitle": "Système de supervision intégrée de centrales photovoltaïques",
-    "heroDesc": "Plateforme web de supervision intégrée destinée aux exploitants de centrales photovoltaïques. Nos RTU propriétaires sont installés sur site pour collecter les données des onduleurs, tandis que le cloud assure le monitoring, l'analyse et le pilotage en temps réel.",
+    "heroSubtitle": "Au-delà des chiffres — une IA qui augmente vos revenus",
+    "heroDesc": "Les systèmes de monitoring classiques ne font qu'afficher la production. PV Intelligence va plus loin : l'IA détecte les anomalies, diagnostique les causes, guide les actions et calcule les montants de perte. Technologie éprouvée sur les propres centrales de Ninewatt.",
     "requestDemo": "Demander une démonstration",
     "goToService": "Accéder au service",
-    "systemArch": "Architecture du système",
-    "systemArchDesc": "Le parcours des données, de l'onduleur sur site jusqu'au cloud",
-    "archSteps": [
-      { "label": "Onduleur", "sub": "RS-485 Modbus" },
-      { "label": "RTU propriétaire", "sub": "LTE Cat.M1" },
-      { "label": "Cloud PV Intelligence", "sub": "Monitoring · Analyse · IA" }
+    "downloadPdf": "Télécharger le PDF",
+
+    "problemTitle": "Les limites du monitoring actuel",
+    "problemDesc": "Votre système de monitoring actuel présente-t-il ces problèmes ?",
+    "problemItems": [
+      "Il affiche les chiffres de production mais n'explique jamais pourquoi elle a baissé.",
+      "En cas de problème, il faut se déplacer sur site pour vérifier.",
+      "Avec plusieurs centrales, impossible de comparer laquelle a un problème.",
+      "Impossible de distinguer si une baisse est due à la météo ou à une panne d'équipement.",
+      "Sans connaître le montant de la perte, impossible de juger l'urgence."
     ],
-    "keyFeatures": "Fonctionnalités principales",
-    "featureItems": [
-      {
-        "title": "Tableau de bord en temps réel",
-        "desc": "Consultation du productible par centrale, surveillance de l'état de communication des RTU, visualisation de la puissance, de l'efficacité et de l'état de fonctionnement de chaque onduleur."
-      },
-      {
-        "title": "Analyse détaillée des onduleurs",
-        "desc": "Tensions et courants DC/AC, données par canal MPPT et string, radar de performance et Health Score."
-      },
-      {
-        "title": "Analyse statistique",
-        "desc": "Évolution mensuelle du productible, comparaison rendement réel vs rendement de référence, alertes d'écart de rendement et conversion en réduction carbone."
-      },
-      {
-        "title": "Gestion des incidents et de l'historique",
-        "desc": "Historique des alarmes de communication et de connexion, suivi des instants de défaillance et des types d'erreur par onduleur."
-      },
-      {
-        "title": "Conseiller opérationnel IA",
-        "desc": "Questions-réponses en langage naturel alimentées par l'IA, connectées aux données en temps réel, avec analyse de revenus basée sur les tarifs SMP/REC."
-      }
+
+    "diffTitle": "PV Intelligence est différent",
+    "diffSubtitle": "Pas un simple monitoring — votre partenaire IA d'exploitation",
+    "diffItems": [
+      { "title": "Détection IA + Analyse des causes + Guide d'action", "desc": "Pas de simples alertes — on vous dit « pourquoi la production a baissé, quoi faire, et combien vous perdez si vous n'agissez pas »." },
+      { "title": "Comparaison croisée multi-sites", "desc": "Même jour, même région, mais un seul site baisse ? Ce n'est pas la météo — c'est un problème d'équipement. Une méthode de détection indépendante des données météo." },
+      { "title": "Tableau de bord multi-sites sur carte 3D", "desc": "Visualisez l'état de toutes vos centrales sur une carte. Normal/Attention/Critique identifié instantanément par code couleur et animations pulsées." },
+      { "title": "Recommandations d'optimisation des revenus", "desc": "Timing de vente SMP/REC, optimisation du taux d'autoconsommation, maximisation des subventions d'écrêtement, analyse ROI du nettoyage des panneaux — l'IA propose des moyens concrets d'augmenter vos revenus." },
+      { "title": "Données de terrain de nos propres centrales", "desc": "« L'IA a évité XX k€ de pertes mensuelles » — résultats vérifiés sur les propres centrales de Ninewatt (5–10 sites, ~100 kW chacune), disponibles comme preuves documentées." }
     ],
-    "equipment": "Équipements compatibles",
-    "inverter": "Onduleur",
-    "inverterDesc": "Principales marques : Hyosung, Huawei, Hyundai, etc.",
-    "rtu": "RTU",
-    "rtuDesc": "RTU propriétaire (LTE Cat.M1, RS-485 Modbus RTU)",
-    "collectionCycle": "Cycle de collecte des données",
-    "collectionCycleDesc": "5 minutes (paramétrable)",
-    "ctaTitle": "Supervisez vos centrales solaires intelligemment",
-    "ctaDesc": "Découvrez à travers une démonstration de PV Intelligence comment la supervision intégrée se transforme.",
-    "ctaDemo": "Demander une démo"
+
+    "howItWorksTitle": "Comment ça marche",
+    "howItWorksSubtitle": "Pipeline entièrement automatisé, de l'onduleur sur site à l'analyse IA",
+    "howItWorksSteps": [
+      { "step": "01", "title": "Collecte de données", "desc": "Notre RTU propriétaire (LTE Cat.M1) transmet les données onduleur au cloud toutes les 5 minutes. Compatible avec Hyosung, Huawei, Hyundai et d'autres marques majeures via RS-485 Modbus." },
+      { "step": "02", "title": "Analyse comparative croisée", "desc": "Compare les ratios capacité/production de tous les sites pour la même fenêtre temporelle. Les sites chutant sous -20 %p par rapport à la médiane sont automatiquement signalés comme candidats à anomalie." },
+      { "step": "03", "title": "Analyse IA des causes", "desc": "Lorsqu'une anomalie est détectée, l'IA synthétise données météo, production par onduleur et historiques pour estimer la cause et fournir un guide d'action en langage naturel." },
+      { "step": "04", "title": "Calcul des pertes et alertes", "desc": "Calcule automatiquement les pertes estimées quotidiennes/mensuelles et envoie des alertes instantanées via KakaoTalk (avec fallback SMS)." }
+    ],
+
+    "aiDetectionTitle": "Ça vous dit quelque chose ?",
+    "aiDetectionSubtitle": "Voici comment PV Intelligence détecte les problèmes courants sur le terrain.",
+    "aiDetectionScenarios": [
+      { "situation": "Une centrale sur sept s'est brusquement arrêtée de produire", "what": "Les six autres fonctionnent normalement, mais le site de l'entrepôt Cheongna affiche 13 % d'efficacité depuis ce matin. Ce n'est pas la météo.", "action": "L'IA identifie un probable problème de raccordement réseau et recommande de vérifier le MCCB. Sans intervention, environ 1,38 M₩ de perte par mois." },
+      { "situation": "Un onduleur perd systématiquement de la puissance l'après-midi", "what": "Le matin, tout va bien, mais à partir de 14h l'onduleur #2 perd 30 % de sa puissance. Le site voisin fonctionne normalement.", "action": "La comparaison croisée horaire identifie un ombrage l'après-midi ou une contamination de string, et indique précisément ce qu'il faut vérifier sur place." },
+      { "situation": "Le chiffre d'affaires baisse doucement sans que personne ne s'en aperçoive", "what": "Au jour le jour ça semble normal, mais sur un mois l'efficacité moyenne de tous les sites a glissé de 3 %p.", "action": "Signale que le nettoyage des panneaux est dû, et montre qu'une dépense de 150 k₩ en nettoyage pourrait récupérer environ 530 k₩/mois de revenus perdus." }
+    ],
+
+    "revenueTitle": "Optimisation des revenus",
+    "revenueSubtitle": "Au-delà de la protection de la production — maximiser vos revenus",
+    "revenueItems": [
+      { "title": "Analyse SMP en temps réel", "desc": "Analyse les tendances horaires du SMP (prix marginal du système) et optimise la pondération de production pendant les heures de pointe." },
+      { "title": "Timing de vente REC", "desc": "L'IA analyse les tendances du prix spot des REC (Certificats d'énergie renouvelable) et recommande le moment optimal de vente." },
+      { "title": "Maximisation des subventions d'écrêtement", "desc": "Avec les subventions d'écrêtement prenant plein effet en 2026, l'IA prédit la probabilité d'écrêtement et optimise les soumissions de plans d'autoproduction pour maximiser les subventions." },
+      { "title": "Optimisation de l'autoconsommation", "desc": "Pour les centrales en modèle d'autoconsommation, analyse la production vs consommation horaire pour trouver le taux optimal de 70–80 % et maximiser le bénéfice économique." },
+      { "title": "Analyse ROI de maintenance", "desc": "Analyse quantitativement le rapport coût/récupération des opérations de maintenance comme le nettoyage des panneaux et l'inspection des onduleurs, pour prioriser les investissements." }
+    ],
+
+    "dashboardTitle": "Aperçu du tableau de bord",
+    "dashboardSubtitle": "Écran de contrôle intégré pour les opérateurs multi-sites",
+    "dashboardFeatures": [
+      { "title": "Vue d'ensemble", "desc": "Production totale du jour, revenus estimés, nombre de sites en exploitation et alertes IA en un coup d'œil. Sites anormaux surlignés en rouge pour identification immédiate." },
+      { "title": "Carte 3D", "desc": "Carte thème sombre Mapbox avec marqueurs colorés par statut de site. Les sites critiques attirent l'attention avec des animations pulsées." },
+      { "title": "Comparaison de sites", "desc": "Classement des sites par efficacité le même jour dans la même région, avec résultats d'analyse croisée générés automatiquement par l'IA." },
+      { "title": "Analyse des revenus", "desc": "Classement des revenus mensuels estimés par site, montants de perte liés aux anomalies et recommandations d'optimisation IA — le tout en une seule vue." },
+      { "title": "Centre d'alertes IA", "desc": "Alertes organisées par niveaux Critique/Attention/Info. Chacune inclut un rapport d'analyse IA, cause estimée, action recommandée et perte projetée." }
+    ],
+
+    "impactTitle": "Impact attendu",
+    "impactItems": [
+      { "value": "1,38 M₩/mois", "label": "Perte mensuelle évitée — cas d'anomalie sur un seul site" },
+      { "value": "10 min", "label": "Délai entre détection d'anomalie et notification d'alerte" },
+      { "value": "94 %", "label": "Fiabilité de l'analyse IA des causes d'anomalie" },
+      { "value": "3,4 jours", "label": "Période de retour sur investissement du nettoyage (ROI)" }
+    ],
+
+    "targetTitle": "Pour qui ?",
+    "targetItems": [
+      { "title": "Exploitants solaires de petite taille", "desc": "Exploitants gérant 1 à 10 centrales (~100 kW chacune) souhaitant une gestion systématique sans personnel dédié." },
+      { "title": "Autoconsommation solaire en bâtiment", "desc": "Propriétaires de bâtiments cherchant à optimiser le taux d'autoconsommation du solaire en toiture et maximiser l'économie entre autoconsommation et injection réseau." },
+      { "title": "Entreprises d'O&M solaire", "desc": "Entreprises gérant les centrales de multiples clients, cherchant une maintenance préventive IA et un reporting différenciant." },
+      { "title": "Exploitants soumis à l'écrêtement", "desc": "Exploitants souhaitant maximiser les subventions dans le cadre du programme de compensation d'écrêtement 2026." }
+    ],
+
+    "proofTitle": "Éprouvé sur nos propres centrales",
+    "proofSubtitle": "Validé d'abord sur les centrales solaires de Ninewatt",
+    "proofDesc": "Ninewatt exploite 5 à 10 sites de centrales solaires propres (~100 kW chacune). Chaque fonctionnalité de PV Intelligence est validée sur nos propres centrales avant d'être proposée aux clients.",
+    "proofPoints": [
+      "Modèles IA continuellement entraînés sur les données d'exploitation de nos propres centrales",
+      "« L'IA a évité XX k€ de pertes mensuelles » — résultats réels fournis comme preuves documentées",
+      "L'IA s'améliore avec le temps — la précision de détection augmente avec l'accumulation des données",
+      "Validé en interne d'abord, puis déployé chez les clients pour une stabilité garantie"
+    ],
+
+    "techTitle": "Spécifications techniques",
+    "techItems": [
+      { "label": "RTU", "value": "RTU propriétaire, LTE Cat.M1, RS-485 Modbus RTU" },
+      { "label": "Intervalle de collecte", "value": "5 minutes (paramétrable)" },
+      { "label": "Onduleurs compatibles", "value": "Hyosung, Huawei, Hyundai et autres marques majeures" },
+      { "label": "Moteur IA", "value": "Détection d'anomalies par comparaison croisée + rapports d'analyse en langage naturel" },
+      { "label": "Canaux d'alerte", "value": "KakaoTalk (fallback SMS)" },
+      { "label": "Tableau de bord", "value": "Web, carte 3D, responsive (mobile supporté)" }
+    ],
+
+    "ctaTitle": "Arrêtez de simplement regarder les chiffres — laissez l'IA booster vos revenus",
+    "ctaDesc": "Découvrez dans une démo live comment PV Intelligence détecte les anomalies et calcule les pertes. Nous vous guiderons avec les données réelles de nos propres centrales.",
+    "ctaDemo": "Demander une démo",
+    "ctaBrochure": "Brochure PDF"
   }
 }
