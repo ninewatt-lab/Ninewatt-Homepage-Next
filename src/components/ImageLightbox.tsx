@@ -107,6 +107,63 @@ export function ExpandableTrigger({ children, className }: { children: React.Rea
   );
 }
 
+/** Expandable card for grouped trademarks — click name to reveal registrations + images. */
+export function TrademarkGroupCard({
+  name,
+  items,
+}: {
+  name: string;
+  items: { date: string; number: string; thumbnailUrl?: string }[];
+}) {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div className="border-b border-border">
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        className="group/thumb flex w-full items-center justify-between py-3 text-left cursor-pointer hover:text-primary transition-colors"
+      >
+        <span className="font-medium">{name}</span>
+        <span className="flex items-center gap-2">
+          <span className="text-xs text-muted">{items.length}건</span>
+          <svg
+            className={`h-4 w-4 text-muted transition-transform duration-200 ${open ? "rotate-90" : ""}`}
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+          </svg>
+        </span>
+      </button>
+      {open && (
+        <div className="flex gap-4 overflow-x-auto scrollbar-hide pb-4">
+          {items.map((item, i) => (
+            <div key={i} className="shrink-0">
+              {item.thumbnailUrl && (
+                <Image
+                  src={item.thumbnailUrl}
+                  alt={`${name} - ${item.number}`}
+                  width={200}
+                  height={283}
+                  className="h-auto max-h-56 w-auto rounded-lg border border-border object-contain shadow-sm"
+                  unoptimized
+                />
+              )}
+              <div className="mt-2 text-xs text-muted">
+                <p>{item.date}</p>
+                <p className="tabular-nums">{item.number}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function ImageIcon({ className }: { className?: string }) {
   return (
     <svg

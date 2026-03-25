@@ -1,6 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { getPatents, getCertifications, getTrademarks } from "@/lib/cms";
-import { InlineExpandImage, ExpandableRow, ExpandableTrigger } from "@/components/ImageLightbox";
+import { InlineExpandImage, ExpandableRow, ExpandableTrigger, TrademarkGroupCard } from "@/components/ImageLightbox";
 
 export async function generateMetadata() {
   const t = await getTranslations("company");
@@ -35,6 +35,12 @@ export default async function PatentsPage({
   const totalPatents = domesticPatentsAll.length + internationalPatents.length;
   const domesticTrademarks = allTrademarks.filter((tm) => tm.country === "국내");
   const internationalTrademarks = allTrademarks.filter((tm) => tm.country !== "국내");
+
+  // Group domestic trademarks by name
+  const domesticTrademarkGroups = domesticTrademarks.reduce<Record<string, typeof domesticTrademarks>>((acc, tm) => {
+    (acc[tm.name] ??= []).push(tm);
+    return acc;
+  }, {});
 
   return (
     <>
@@ -179,27 +185,14 @@ export default async function PatentsPage({
           <h2 className="text-xl font-bold">
             {t("patents.domesticTrademarks")} <span className="text-muted">({domesticTrademarks.length}건)</span>
           </h2>
-          <div className="mt-4 overflow-x-auto">
-            <table className="w-full min-w-150 text-sm">
-              <thead>
-                <tr className="border-b border-border text-left">
-                  <th className="w-12 py-3 pr-3 font-semibold text-muted">{t("patents.tableNo")}</th>
-                  <th className="w-28 py-3 pr-3 font-semibold text-muted">{t("patents.regDate")}</th>
-                  <th className="w-44 py-3 pr-3 font-semibold text-muted">{t("patents.regNo")}</th>
-                  <th className="py-3 font-semibold text-muted">{t("patents.trademarkName")}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {domesticTrademarks.map((tm, i) => (
-                  <ExpandableRow key={tm.id} thumbnailUrl={tm.thumbnailUrl} alt={tm.name} colSpan={4}>
-                    <td className="py-3 pr-3 text-muted">{i + 1}</td>
-                    <td className="py-3 pr-3 whitespace-nowrap text-muted">{tm.date}</td>
-                    <td className="py-3 pr-3 tabular-nums text-xs text-muted">{tm.number}</td>
-                    <td className="py-3 font-medium"><ExpandableTrigger>{tm.name}</ExpandableTrigger></td>
-                  </ExpandableRow>
-                ))}
-              </tbody>
-            </table>
+          <div className="mt-4">
+            {Object.entries(domesticTrademarkGroups).map(([name, items]) => (
+              <TrademarkGroupCard
+                key={name}
+                name={name}
+                items={items.map((tm) => ({ date: tm.date, number: tm.number, thumbnailUrl: tm.thumbnailUrl }))}
+              />
+            ))}
           </div>
 
           {internationalTrademarks.length > 0 && (
