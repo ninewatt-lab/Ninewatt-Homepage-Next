@@ -1,11 +1,13 @@
 "use client";
 
 import { Link, usePathname } from "@/i18n/navigation";
+import { useScrollDirection } from "@/hooks/useScrollDirection";
 import { useTranslations } from "next-intl";
 
 export default function SolutionsNav() {
   const pathname = usePathname();
   const t = useTranslations("common");
+  const visible = useScrollDirection();
 
   const subPages = [
     { href: "/solutions", label: t("solutionsMenu.coreSolutions") },
@@ -15,7 +17,7 @@ export default function SolutionsNav() {
   ];
 
   return (
-    <nav className="border-b border-border bg-surface">
+    <nav className={`sticky top-16 z-40 border-b border-border bg-surface/95 backdrop-blur-md transition-transform duration-300 ${visible ? "translate-y-0" : "-translate-y-full"}`}>
       <div className="mx-auto flex max-w-7xl gap-1 overflow-x-auto px-6">
         {subPages.map((page) => {
           const isActive = pathname === page.href;
