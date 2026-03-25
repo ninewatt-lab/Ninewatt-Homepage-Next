@@ -51,18 +51,6 @@
       { "name": "Meter Integration", "desc": "스마트 미터 데이터 자동 연동" },
       { "name": "Report Automation", "desc": "M&V 리포트 자동 생성" }
     ],
-    "pricing": "가격",
-    "pricingDesc": "모듈형 구독 요금제. BEMS & ESCO 플랫폼에 OEM/API로 통합할 수 있습니다.",
-    "planHeader": "플랜",
-    "monthlyHeader": "월 요금",
-    "annualHeader": "연 요금",
-    "descHeader": "설명",
-    "plans": [
-      { "name": "Standard", "monthly": "$700", "annual": "$7,000", "desc": "단일 사이트 핵심 인사이트" },
-      { "name": "Professional", "monthly": "$1,200", "annual": "$12,000", "desc": "고급 분석 및 ROI 리포트" },
-      { "name": "Business", "monthly": "$2,500", "annual": "$30,000", "desc": "API, 대시보드, 최대 5개 건물" },
-      { "name": "Enterprise", "monthly": "별도 문의", "annual": "", "desc": "화이트라벨 / 통합 / 멀티사이트" }
-    ],
     "ctaTitle": "직접 확인해보세요",
     "ctaDesc": "데모를 통해 Opti가 건물 에너지 관리에 어떤 변화를 만드는지 보여드립니다.",
     "ctaDemo": "데모 요청",

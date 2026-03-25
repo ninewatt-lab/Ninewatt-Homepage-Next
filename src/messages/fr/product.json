@@ -72,18 +72,6 @@
       { "name": "Meter Integration", "desc": "Intégration automatique des données de compteurs intelligents" },
       { "name": "Report Automation", "desc": "Génération automatique de rapports M&V" }
     ],
-    "pricing": "Tarification",
-    "pricingDesc": "Abonnement modulaire. Intégration possible en OEM/API aux plateformes BEMS et ESCO.",
-    "planHeader": "Formule",
-    "monthlyHeader": "Mensuel",
-    "annualHeader": "Annuel",
-    "descHeader": "Description",
-    "plans": [
-      { "name": "Standard", "monthly": "$700", "annual": "$7,000", "desc": "Analyses essentielles pour un site unique" },
-      { "name": "Professional", "monthly": "$1,200", "annual": "$12,000", "desc": "Analyses avancées et rapports ROI" },
-      { "name": "Business", "monthly": "$2,500", "annual": "$30,000", "desc": "API, tableau de bord, jusqu'à 5 bâtiments" },
-      { "name": "Enterprise", "monthly": "Sur devis", "annual": "", "desc": "Marque blanche / intégration / multi-sites" }
-    ],
     "ctaTitle": "Constatez par vous-même",
     "ctaDesc": "Découvrez à travers une démonstration comment Opti transforme la gestion énergétique des bâtiments.",
     "ctaDemo": "Demander une démo",

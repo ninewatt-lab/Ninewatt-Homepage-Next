@@ -51,18 +51,6 @@
       { "name": "Meter Integration", "desc": "Automated smart meter data integration" },
       { "name": "Report Automation", "desc": "Automated M&V report generation" }
     ],
-    "pricing": "Pricing",
-    "pricingDesc": "Modular subscription plans. Available for OEM/API integration with BEMS and ESCO platforms.",
-    "planHeader": "Plan",
-    "monthlyHeader": "Monthly",
-    "annualHeader": "Annual",
-    "descHeader": "Description",
-    "plans": [
-      { "name": "Standard", "monthly": "$700", "annual": "$7,000", "desc": "Core insights for a single site" },
-      { "name": "Professional", "monthly": "$1,200", "annual": "$12,000", "desc": "Advanced analytics and ROI reports" },
-      { "name": "Business", "monthly": "$2,500", "annual": "$30,000", "desc": "API, dashboard, up to 5 buildings" },
-      { "name": "Enterprise", "monthly": "Contact us", "annual": "", "desc": "White-label / integration / multi-site" }
-    ],
     "ctaTitle": "See It in Action",
     "ctaDesc": "Schedule a demo to see how Opti transforms building energy management.",
     "ctaDemo": "Request Demo",
