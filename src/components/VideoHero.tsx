@@ -2,21 +2,39 @@
 
 import { Link } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
+import { useState, useCallback } from "react";
+
+const VIDEO_URL = "/intro-optimized.mp4";
+const POSTER_URL = "/intro-poster.jpg";
 
 export default function VideoHero() {
   const t = useTranslations("home");
+  const [videoReady, setVideoReady] = useState(false);
+
+  const handleCanPlay = useCallback(() => {
+    setVideoReady(true);
+  }, []);
 
   return (
-    <section className="relative -mt-16 h-dvh w-full overflow-hidden">
+    <section className="relative -mt-16 h-dvh w-full overflow-hidden bg-gray-900">
+      {/* Poster fallback — shown while video loads */}
+      <div
+        className={`absolute inset-0 bg-cover bg-center transition-opacity duration-700 ${videoReady ? "opacity-0" : "opacity-100"}`}
+        style={{ backgroundImage: `url(${POSTER_URL})` }}
+      />
+
       {/* Background video */}
       <video
         autoPlay
         muted
         loop
         playsInline
-        className="absolute inset-0 h-full w-full object-cover"
+        preload="auto"
+        poster={POSTER_URL}
+        onCanPlay={handleCanPlay}
+        className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ${videoReady ? "opacity-100" : "opacity-0"}`}
       >
-        <source src="https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/videos/intro.mp4" type="video/mp4" />
+        <source src={VIDEO_URL} type="video/mp4" />
       </video>
 
       {/* Dark overlay gradient */}
