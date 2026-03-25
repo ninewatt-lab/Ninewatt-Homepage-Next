@@ -70,51 +70,71 @@ export default async function Home({
               {/* Large card */}
               <Link
                 href="/product/opti"
-                className="group md:col-span-3 rounded-2xl border border-border p-8 transition-colors hover:border-primary/30"
+                className="group relative md:col-span-3 rounded-2xl border border-border p-8 transition-all duration-300 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5"
               >
                 <p className="text-xs font-medium uppercase tracking-wider text-muted">
                   Product
                 </p>
-                <h3 className="mt-4 text-2xl font-bold tracking-tight group-hover:text-primary transition-colors">
+                <h3 className="mt-4 text-2xl font-bold tracking-tight transition-colors group-hover:text-primary">
                   {t("cards.optiTitle")}
                 </h3>
                 <p className="mt-3 text-sm leading-relaxed text-muted">
                   {t("cards.optiDesc")}
                 </p>
-                <span className="mt-5 inline-flex items-center gap-1 text-sm font-medium text-primary">
-                  {t("cards.optiLink")} &rarr;
+                <span className="mt-5 inline-flex items-center gap-1.5 text-sm font-medium text-primary">
+                  {t("cards.optiLink")}
+                  <svg className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                  </svg>
                 </span>
+                <div className="pointer-events-none absolute right-6 top-1/2 -translate-y-1/2 rounded-full bg-primary/10 p-3 opacity-0 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 -translate-x-2">
+                  <svg className="h-5 w-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                  </svg>
+                </div>
               </Link>
 
               {/* Stacked small cards */}
               <div className="md:col-span-2 flex flex-col gap-6">
                 <Link
                   href="/solutions"
-                  className="group flex-1 rounded-2xl border border-border p-8 transition-colors hover:border-primary/30"
+                  className="group relative flex-1 rounded-2xl border border-border p-8 transition-all duration-300 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5"
                 >
                   <p className="text-xs font-medium uppercase tracking-wider text-muted">
                     Solutions
                   </p>
-                  <h3 className="mt-4 text-lg font-bold group-hover:text-primary transition-colors">
+                  <h3 className="mt-4 text-lg font-bold transition-colors group-hover:text-primary">
                     {t("cards.solutionsTitle")}
                   </h3>
                   <p className="mt-2 text-sm text-muted">
                     {t("cards.solutionsDesc")}
                   </p>
+                  <div className="mt-4 flex items-center gap-1.5 text-sm font-medium text-primary opacity-0 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 -translate-x-2">
+                    {t("cards.explore")}
+                    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                    </svg>
+                  </div>
                 </Link>
                 <Link
                   href="/company/global"
-                  className="group flex-1 rounded-2xl border border-border p-8 transition-colors hover:border-primary/30"
+                  className="group relative flex-1 rounded-2xl border border-border p-8 transition-all duration-300 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5"
                 >
                   <p className="text-xs font-medium uppercase tracking-wider text-muted">
                     Global
                   </p>
-                  <h3 className="mt-4 text-lg font-bold group-hover:text-primary transition-colors">
+                  <h3 className="mt-4 text-lg font-bold transition-colors group-hover:text-primary">
                     {t("cards.globalTitle")}
                   </h3>
                   <p className="mt-2 text-sm text-muted">
                     {t("cards.globalDesc")}
                   </p>
+                  <div className="mt-4 flex items-center gap-1.5 text-sm font-medium text-primary opacity-0 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 -translate-x-2">
+                    {t("cards.explore")}
+                    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                    </svg>
+                  </div>
                 </Link>
               </div>
             </div>
