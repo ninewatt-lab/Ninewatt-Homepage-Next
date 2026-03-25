@@ -3,15 +3,69 @@
 import { Link } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
 
+type FooterLink = {
+  label: string;
+  href: string;
+  isLiteral?: boolean;
+};
+
+type FooterSection = {
+  titleKey: string;
+  href: string;
+  links: FooterLink[];
+};
+
+const footerSections: FooterSection[] = [
+  {
+    titleKey: "nav.product",
+    href: "/product",
+    links: [
+      { label: "Opti", href: "/product/opti", isLiteral: true },
+      { label: "Watti", href: "/product/watti", isLiteral: true },
+      { label: "Save-E", href: "/product/save-e", isLiteral: true },
+      { label: "GreenPlanner", href: "/product/greenplanner", isLiteral: true },
+      { label: "RE:park", href: "/product/repark", isLiteral: true },
+      { label: "SolarScope", href: "/product/solar-site", isLiteral: true },
+      {
+        label: "PV Intelligence",
+        href: "/product/pv-intelligence",
+        isLiteral: true,
+      },
+    ],
+  },
+  {
+    titleKey: "nav.solutions",
+    href: "/solutions",
+    links: [
+      { label: "solutionsMenu.cases", href: "/solutions/cases" },
+      { label: "solutionsMenu.rnd", href: "/solutions/rnd" },
+      { label: "solutionsMenu.services", href: "/solutions/services" },
+    ],
+  },
+  {
+    titleKey: "nav.company",
+    href: "/company",
+    links: [
+      { label: "companyMenu.global", href: "/company/global" },
+      { label: "companyMenu.media", href: "/company/media" },
+      { label: "companyMenu.awards", href: "/company/awards" },
+      { label: "companyMenu.history", href: "/company/history" },
+      { label: "companyMenu.patents", href: "/company/patents" },
+      { label: "companyMenu.career", href: "/company/career" },
+      { label: "nav.contact", href: "/contact" },
+    ],
+  },
+];
+
 export default function Footer() {
   const t = useTranslations("common");
 
   return (
     <footer className="border-t border-border bg-surface">
-      <div className="mx-auto max-w-7xl px-6 py-12">
-        <div className="grid gap-8 md:grid-cols-4">
+      <div className="mx-auto max-w-7xl px-6 py-16">
+        <div className="flex flex-col gap-10 lg:flex-row lg:justify-between">
           {/* Company Info */}
-          <div className="md:col-span-2">
+          <div className="lg:max-w-xl shrink-0">
             <p className="text-xl font-bold text-foreground">Ninewatt</p>
             <p className="mt-3 text-sm leading-relaxed text-muted whitespace-pre-line">
               {t("footer.tagline")}
@@ -61,24 +115,31 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Quick Links */}
-          <div>
-            <p className="font-semibold text-foreground">{t("footer.quickLinks")}</p>
-            <div className="mt-3 flex flex-col gap-2 text-sm text-muted">
-              <Link href="/product" className="transition-colors hover:text-foreground">Product</Link>
-              <Link href="/solutions" className="transition-colors hover:text-foreground">Solutions</Link>
-              <Link href="/company" className="transition-colors hover:text-foreground">Company</Link>
-              <Link href="/contact" className="transition-colors hover:text-foreground">Contact Us</Link>
+          {/* Navigation Columns */}
+          <div className="grid grid-cols-2 gap-x-10 gap-y-8 sm:grid-cols-3">
+          {footerSections.map((section) => (
+            <div key={section.href}>
+              <Link
+                href={section.href}
+                className="font-semibold text-foreground transition-colors hover:text-accent"
+              >
+                {t(section.titleKey)}
+              </Link>
+              {section.links.length > 0 && (
+                <div className="mt-4 flex flex-col gap-2.5 text-sm text-muted">
+                  {section.links.map((link) => (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      className="transition-colors hover:text-foreground"
+                    >
+                      {link.isLiteral ? link.label : t(link.label)}
+                    </Link>
+                  ))}
+                </div>
+              )}
             </div>
-          </div>
-
-          <div>
-            <p className="font-semibold text-foreground">{t("footer.more")}</p>
-            <div className="mt-3 flex flex-col gap-2 text-sm text-muted">
-              <Link href="/company/patents" className="transition-colors hover:text-foreground">{t("footer.patentsAndCerts")}</Link>
-              <Link href="/company/global" className="transition-colors hover:text-foreground">{t("footer.globalBiz")}</Link>
-              <Link href="/company/awards" className="transition-colors hover:text-foreground">{t("footer.awardsLink")}</Link>
-            </div>
+          ))}
           </div>
         </div>
 
@@ -87,7 +148,8 @@ export default function Footer() {
             대표자 : 김영록 | 사업자등록번호 : 107-88-42750
           </p>
           <p className="mt-1 text-sm text-muted">
-            &copy; {new Date().getFullYear()} NINEWATT Co., Ltd. All rights reserved.
+            &copy; {new Date().getFullYear()} NINEWATT Co., Ltd. All rights
+            reserved.
           </p>
         </div>
       </div>
