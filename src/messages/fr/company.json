@@ -191,5 +191,17 @@
         ]
       }
     ]
+  },
+  "media": {
+    "title": "Médias",
+    "subtitle": "Actualités, communiqués de presse et contenus vidéo liés à Ninewatt",
+    "news": "Actualités",
+    "videos": "Vidéos",
+    "card": "Carte",
+    "table": "Tableau",
+    "date": "Date",
+    "articleTitle": "Titre",
+    "source": "Source",
+    "noImage": "Pas d'image"
   }
 }

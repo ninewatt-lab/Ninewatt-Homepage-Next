@@ -1,10 +1,17 @@
 import { getMedia } from "@/lib/cms";
+import { getTranslations } from "next-intl/server";
 import MediaContent from "./MediaSection";
 
-export async function generateMetadata() {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "company" });
   return {
-    title: "Media - Ninewatt",
-    description: "나인와트 관련 뉴스, 보도자료 및 영상 콘텐츠",
+    title: `${t("media.title")} - Ninewatt`,
+    description: t("media.subtitle"),
   };
 }
 
@@ -14,6 +21,7 @@ export default async function MediaPage({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
+  const t = await getTranslations("company");
   const { news, videos } = await getMedia(locale);
 
   return (
@@ -21,9 +29,9 @@ export default async function MediaPage({
       {/* Hero */}
       <section className="border-b border-border px-6 pb-16 pt-16">
         <div className="mx-auto max-w-5xl">
-          <h1 className="text-4xl font-bold tracking-tight md:text-5xl">Media</h1>
+          <h1 className="text-4xl font-bold tracking-tight md:text-5xl">{t("media.title")}</h1>
           <p className="mt-4 max-w-2xl text-lg text-muted">
-            나인와트 관련 뉴스, 보도자료 및 영상 콘텐츠
+            {t("media.subtitle")}
           </p>
         </div>
       </section>

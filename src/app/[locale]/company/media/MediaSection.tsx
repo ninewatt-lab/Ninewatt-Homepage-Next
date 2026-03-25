@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import type { MediaItem } from "@/data/media";
 
 /* ── Icons ── */
@@ -27,7 +28,7 @@ function TableIcon() {
 
 /* ── View Toggle ── */
 
-function ViewToggle({ view, onChange }: { view: "card" | "table"; onChange: (v: "card" | "table") => void }) {
+function ViewToggle({ view, onChange, labels }: { view: "card" | "table"; onChange: (v: "card" | "table") => void; labels: { card: string; table: string } }) {
   return (
     <div className="flex rounded-lg border border-border">
       <button
@@ -39,7 +40,7 @@ function ViewToggle({ view, onChange }: { view: "card" | "table"; onChange: (v: 
         }`}
       >
         <CardIcon />
-        카드
+        {labels.card}
       </button>
       <button
         onClick={() => onChange("table")}
@@ -50,7 +51,7 @@ function ViewToggle({ view, onChange }: { view: "card" | "table"; onChange: (v: 
         }`}
       >
         <TableIcon />
-        테이블
+        {labels.table}
       </button>
     </div>
   );
@@ -58,7 +59,7 @@ function ViewToggle({ view, onChange }: { view: "card" | "table"; onChange: (v: 
 
 /* ── Cards ── */
 
-function VideoCard({ item }: { item: MediaItem }) {
+function VideoCard({ item, noImageLabel }: { item: MediaItem; noImageLabel: string }) {
   return (
     <a
       href={item.link}
@@ -76,7 +77,7 @@ function VideoCard({ item }: { item: MediaItem }) {
             unoptimized
           />
         ) : (
-          <div className="flex h-full items-center justify-center text-sm text-muted">No Image</div>
+          <div className="flex h-full items-center justify-center text-sm text-muted">{noImageLabel}</div>
         )}
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="flex h-12 w-12 items-center justify-center rounded-full bg-black/60 text-white transition-transform group-hover:scale-110">
@@ -94,7 +95,7 @@ function VideoCard({ item }: { item: MediaItem }) {
   );
 }
 
-function NewsCard({ item }: { item: MediaItem }) {
+function NewsCard({ item, noImageLabel }: { item: MediaItem; noImageLabel: string }) {
   return (
     <a
       href={item.link}
@@ -112,7 +113,7 @@ function NewsCard({ item }: { item: MediaItem }) {
             unoptimized
           />
         ) : (
-          <div className="flex h-full items-center justify-center text-sm text-muted">No Image</div>
+          <div className="flex h-full items-center justify-center text-sm text-muted">{noImageLabel}</div>
         )}
       </div>
       <div className="p-4">
@@ -125,16 +126,16 @@ function NewsCard({ item }: { item: MediaItem }) {
 
 /* ── Table ── */
 
-function MediaTable({ items }: { items: MediaItem[] }) {
+function MediaTable({ items, labels }: { items: MediaItem[]; labels: { date: string; title: string; source: string } }) {
   return (
     <div className="overflow-x-auto">
-      <table className="w-full min-w-150 text-sm">
+      <table className="w-full min-w-150 table-fixed text-sm">
         <thead>
           <tr className="border-b border-border text-left">
-            <th className="py-3 pr-3 font-semibold text-muted">No.</th>
-            <th className="py-3 pr-3 font-semibold text-muted">날짜</th>
-            <th className="py-3 pr-3 font-semibold text-muted">제목</th>
-            <th className="py-3 font-semibold text-muted">출처</th>
+            <th className="w-[5%] py-3 pr-3 font-semibold text-muted">No.</th>
+            <th className="w-[12%] py-3 pr-3 font-semibold text-muted">{labels.date}</th>
+            <th className="w-[68%] py-3 pr-3 font-semibold text-muted">{labels.title}</th>
+            <th className="w-[15%] py-3 font-semibold text-muted">{labels.source}</th>
           </tr>
         </thead>
         <tbody>
@@ -168,8 +169,11 @@ type Tab = "news" | "videos";
 export default function MediaContent({ news, videos }: { news: MediaItem[]; videos: MediaItem[] }) {
   const [tab, setTab] = useState<Tab>("news");
   const [view, setView] = useState<"card" | "table">("card");
+  const t = useTranslations("company");
 
   const items = tab === "news" ? news : videos;
+  const noImageLabel = t("media.noImage");
+  const tableLabels = { date: t("media.date"), title: t("media.articleTitle"), source: t("media.source") };
 
   return (
     <section className="px-6 py-20">
@@ -186,7 +190,7 @@ export default function MediaContent({ news, videos }: { news: MediaItem[]; vide
                   : "text-muted hover:text-foreground"
               }`}
             >
-              News <span className="text-xs opacity-60">({news.length})</span>
+              {t("media.news")} <span className="text-xs opacity-60">({news.length})</span>
             </button>
             <button
               onClick={() => setTab("videos")}
@@ -196,12 +200,12 @@ export default function MediaContent({ news, videos }: { news: MediaItem[]; vide
                   : "text-muted hover:text-foreground"
               }`}
             >
-              Videos <span className="text-xs opacity-60">({videos.length})</span>
+              {t("media.videos")} <span className="text-xs opacity-60">({videos.length})</span>
             </button>
           </div>
 
           {/* View toggle */}
-          <ViewToggle view={view} onChange={setView} />
+          <ViewToggle view={view} onChange={setView} labels={{ card: t("media.card"), table: t("media.table") }} />
         </div>
 
         {/* Content */}
@@ -210,14 +214,14 @@ export default function MediaContent({ news, videos }: { news: MediaItem[]; vide
             <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {items.map((item) =>
                 tab === "videos" ? (
-                  <VideoCard key={item.link} item={item} />
+                  <VideoCard key={item.link} item={item} noImageLabel={noImageLabel} />
                 ) : (
-                  <NewsCard key={item.link} item={item} />
+                  <NewsCard key={item.link} item={item} noImageLabel={noImageLabel} />
                 )
               )}
             </div>
           ) : (
-            <MediaTable items={items} />
+            <MediaTable items={items} labels={tableLabels} />
           )}
         </div>
       </div>

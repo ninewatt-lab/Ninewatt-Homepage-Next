@@ -191,5 +191,17 @@
         ]
       }
     ]
+  },
+  "media": {
+    "title": "Media",
+    "subtitle": "나인와트 관련 뉴스, 보도자료 및 영상 콘텐츠",
+    "news": "뉴스",
+    "videos": "영상",
+    "card": "카드",
+    "table": "테이블",
+    "date": "날짜",
+    "articleTitle": "제목",
+    "source": "출처",
+    "noImage": "이미지 없음"
   }
 }

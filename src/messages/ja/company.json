@@ -191,5 +191,17 @@
         ]
       }
     ]
+  },
+  "media": {
+    "title": "メディア",
+    "subtitle": "Ninewatt関連のニュース、プレスリリース、動画コンテンツ",
+    "news": "ニュース",
+    "videos": "動画",
+    "card": "カード",
+    "table": "テーブル",
+    "date": "日付",
+    "articleTitle": "タイトル",
+    "source": "出典",
+    "noImage": "画像なし"
   }
 }
