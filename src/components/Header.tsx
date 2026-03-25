@@ -300,6 +300,8 @@ export default function Header() {
   const [langOpen, setLangOpen] = useState(false);
   const { theme, toggleTheme } = useTheme();
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const switchMenuRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const mousePosRef = useRef<{ x: number; y: number; t: number }[]>([]);
   const headerRef = useRef<HTMLElement>(null);
   const langRef = useRef<HTMLDivElement>(null);
   const t = useTranslations("common");
@@ -336,12 +338,56 @@ export default function Header() {
     return () => window.removeEventListener("click", onClick);
   }, []);
 
-  const handleMouseEnter = useCallback((label: string) => {
-    if (timeoutRef.current) clearTimeout(timeoutRef.current);
-    setActiveMenu(label);
+  // Track mouse positions for trajectory-based intent detection
+  useEffect(() => {
+    const onMouseMove = (e: MouseEvent) => {
+      const now = Date.now();
+      const positions = mousePosRef.current;
+      positions.push({ x: e.clientX, y: e.clientY, t: now });
+      // Keep only last 150ms of positions
+      while (positions.length > 1 && now - positions[0].t > 150) {
+        positions.shift();
+      }
+    };
+    window.addEventListener("mousemove", onMouseMove, { passive: true });
+    return () => window.removeEventListener("mousemove", onMouseMove);
   }, []);
 
+  // Check if mouse trajectory is aimed toward the dropdown area
+  const isMovingTowardDropdown = useCallback(() => {
+    const positions = mousePosRef.current;
+    if (positions.length < 2) return false;
+
+    const oldest = positions[0];
+    const latest = positions[positions.length - 1];
+    const dy = latest.y - oldest.y;
+    const dx = Math.abs(latest.x - oldest.x);
+
+    // Moving downward and the downward component is significant relative to horizontal
+    return dy > 3 && dy > dx * 0.4;
+  }, []);
+
+  const handleMouseEnter = useCallback((label: string) => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    if (switchMenuRef.current) clearTimeout(switchMenuRef.current);
+
+    // If a dropdown is already open and user enters a different button,
+    // check if they're moving toward the dropdown (diagonal motion)
+    if (activeMenu && activeMenu !== label) {
+      if (isMovingTowardDropdown()) {
+        // Moving toward dropdown — delay and re-check
+        switchMenuRef.current = setTimeout(() => {
+          // After delay, if still on this button it's intentional
+          setActiveMenu(label);
+        }, 300);
+        return;
+      }
+    }
+    setActiveMenu(label);
+  }, [activeMenu, isMovingTowardDropdown]);
+
   const handleMouseLeave = useCallback(() => {
+    if (switchMenuRef.current) clearTimeout(switchMenuRef.current);
     timeoutRef.current = setTimeout(() => {
       setActiveMenu(null);
     }, 150);
@@ -349,6 +395,7 @@ export default function Header() {
 
   const handleDropdownEnter = useCallback(() => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    if (switchMenuRef.current) clearTimeout(switchMenuRef.current);
   }, []);
 
   const switchLocale = useCallback((newLocale: string) => {
@@ -534,7 +581,7 @@ export default function Header() {
                     {item.sections.map((section, sIdx) => (
                       <div
                         key={sIdx}
-                        className={`min-w-60 pr-10 ${
+                        className={`w-72 shrink-0 pr-10 ${
                           sIdx < item.sections.length - 1
                             ? "mr-10 border-r border-border"
                             : ""
@@ -580,7 +627,7 @@ export default function Header() {
                     ))}
 
                     {/* Right side: Overview link with divider */}
-                    <div className="ml-auto flex items-center border-l border-border pl-10">
+                    <div className="ml-auto flex items-start border-l border-border pl-10 pt-3">
                       <Link
                         href={item.href}
                         onClick={() => setActiveMenu(null)}
