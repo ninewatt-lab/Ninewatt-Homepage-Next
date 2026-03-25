@@ -19,6 +19,7 @@ export default function Footer() {
             <div className="mt-4 space-y-1 text-sm text-muted">
               <p>{t("footer.hq")}</p>
               <p>{t("footer.rnd")}</p>
+              <p>{t("footer.gyeonggi")}</p>
               <p>Tel. 070-8866-7226</p>
               <p>Email. ninewatt@ninewatt.com</p>
             </div>
