@@ -44,12 +44,25 @@ interface PatentDoc {
   applicant: string;
   country?: string;
   thumbnailUrl?: string;
+  imageUrls?: string[];
+}
+
+function generateImageUrls(thumbnailUrl: string | undefined, pageCount: number | undefined): string[] | undefined {
+  if (!thumbnailUrl || !pageCount) return undefined;
+  const pagesBase = thumbnailUrl.replace("/thumbnails/", "/pages/").replace(/\.jpg$/, "");
+  // pdftoppm pads based on total pages: 1-9 pages → "page-1", 10-99 → "page-01", 100+ → "page-001"
+  const digits = pageCount >= 100 ? 3 : pageCount >= 10 ? 2 : 1;
+  return Array.from({ length: pageCount }, (_, i) => {
+    const num = String(i + 1).padStart(digits, "0");
+    return `${pagesBase}/page-${num}.jpg`;
+  });
 }
 
 export async function getPatents(_locale: string, type?: "domestic" | "international"): Promise<{ docs: PatentDoc[] }> {
   const domestic: PatentDoc[] = domesticPatents.map((p) => ({
     ...p,
     type: "domestic" as const,
+    imageUrls: generateImageUrls(p.thumbnailUrl, p.pageCount),
   }));
   const international: PatentDoc[] = internationalPatents.map((p) => ({
     id: p.id,
