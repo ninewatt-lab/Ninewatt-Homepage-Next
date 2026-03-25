@@ -1,6 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { getAwards } from "@/lib/cms";
-import { ThumbnailButton } from "@/components/ImageLightbox";
+import { InlineExpandImage } from "@/components/ImageLightbox";
 
 export async function generateMetadata() {
   const t = await getTranslations("company");
@@ -62,9 +62,9 @@ export default async function AwardsPage({
                           {award.name}
                         </a>
                       ) : award.thumbnailUrl ? (
-                        <ThumbnailButton src={award.thumbnailUrl} alt={award.name} className="shrink-0 text-sm font-medium">
+                        <InlineExpandImage src={award.thumbnailUrl} alt={award.name} className="shrink-0 text-sm font-medium">
                           {award.name}
-                        </ThumbnailButton>
+                        </InlineExpandImage>
                       ) : (
                         <span className="shrink-0 text-sm font-medium">
                           {award.name}
