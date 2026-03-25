@@ -4,6 +4,10 @@
     "subtitle": "Leading the realization of GX through energy technology, contributing to smart cities and a carbon-neutral society.",
     "vision": "Vision",
     "visionDesc": "Led by our CEO, an expert in urban and building energy diagnostics, we are driving R&D of AI/big data-based building energy platforms as our core business. We are building a sustainable future through smart city solutions and building energy reduction technologies.",
+    "affiliations": [
+      { "label": "Family Company", "items": ["KICT (Korea Institute of Civil Engineering and Building Technology)", "KIER (Korea Institute of Energy Research)", "KERI (Korea Electrotechnology Research Institute)"] },
+      { "label": "Excellent Partner", "items": ["KEPCO (Korea Electric Power Corporation)"] }
+    ],
     "companyInfo": [
       { "label": "Founded", "value": "Feb 12, 2019" },
       { "label": "Employees", "value": "30+" },
@@ -37,6 +41,8 @@
     "hqAddress": "104, Insta 2, 204 Convensia-daero, Yeonsu-gu, Incheon, Korea",
     "rndLabel": "R&D Center (Seoul Branch)",
     "rndAddress": "2F & 4F, 22 Gangnam-daero 162-gil, Gangnam-gu, Seoul, Korea",
+    "ggLabel": "Gyeonggi Branch",
+    "ggAddress": "6F 604-d154, 158, Gimpohangang 8-ro, Gimpo-si, Gyeonggi-do",
     "ctaTitle": "Looking for Partners to Grow Together",
     "ctaDesc": "Whether it's energy solutions, partnerships, or recruitment — we welcome all inquiries.",
     "ctaButton": "Contact Us"

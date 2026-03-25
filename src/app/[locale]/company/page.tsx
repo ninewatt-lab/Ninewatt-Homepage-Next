@@ -69,6 +69,24 @@ export default async function CompanyPage({
               </div>
             ))}
           </dl>
+
+          <div className="mt-10 space-y-3">
+            {(t.raw("about.affiliations") as Array<{ label: string; items: string[] }>).map((group) => (
+              <div key={group.label} className="flex items-baseline gap-x-3">
+                <span className="w-24 shrink-0 text-xs font-semibold text-foreground">{group.label}</span>
+                <div className="flex flex-wrap gap-1.5">
+                  {group.items.map((item) => (
+                    <span
+                      key={item}
+                      className="inline-flex items-center rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-xs text-primary"
+                    >
+                      {item}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -130,6 +148,10 @@ export default async function CompanyPage({
               <tr className="border-b border-border">
                 <td className="py-4 pr-6 font-semibold align-top whitespace-nowrap">{t("about.rndLabel")}</td>
                 <td className="py-4 text-muted">{companyInfoData.rndAddress || t("about.rndAddress")}</td>
+              </tr>
+              <tr className="border-b border-border">
+                <td className="py-4 pr-6 font-semibold align-top whitespace-nowrap">{t("about.ggLabel")}</td>
+                <td className="py-4 text-muted">{t("about.ggAddress")}</td>
               </tr>
             </tbody>
           </table>

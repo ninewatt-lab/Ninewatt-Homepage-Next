@@ -23,6 +23,7 @@ import {
   Toltek,
   Ucl,
   JohnsonControls,
+  Azbil,
   ThurrockCouncil,
   BluepointPartners,
 } from "@/components/logos/partners";
@@ -174,6 +175,7 @@ export default async function Home({
                   <Toltek key="toltek" />,
                   <Ucl key="ucl" />,
                   <JohnsonControls key="jc" />,
+                  <Azbil key="azbil" />,
                   <ThurrockCouncil key="thurrock" />,
                   <BluepointPartners key="bluepoint" />,
                 ]}

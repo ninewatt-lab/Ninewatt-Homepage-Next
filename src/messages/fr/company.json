@@ -4,6 +4,10 @@
     "subtitle": "Par nos technologies energetiques au service de la transition verte (GX), nous contribuons aux villes intelligentes et a une societe neutre en carbone.",
     "vision": "Vision",
     "visionDesc": "Sous la direction de notre PDG, expert en diagnostic energetique urbain et des batiments, nous menons la R&D de plateformes energetiques pour les batiments basees sur l'IA et le big data. Nous batissons un avenir durable grace a nos solutions de villes intelligentes et de reduction de la consommation energetique des batiments.",
+    "affiliations": [
+      { "label": "Entreprise familiale", "items": ["KICT (Institut coréen de recherche en génie civil)", "KIER (Institut coréen de recherche en énergie)", "KERI (Institut coréen de recherche en électrotechnologie)"] },
+      { "label": "Partenaire d'excellence", "items": ["KEPCO (Korea Electric Power Corporation)"] }
+    ],
     "companyInfo": [
       { "label": "Date de creation", "value": "12 fev. 2019" },
       { "label": "Effectifs", "value": "30+" },
@@ -37,6 +41,8 @@
     "hqAddress": "104, Insta 2, 204 Convensia-daero, Yeonsu-gu, Incheon, Coree du Sud",
     "rndLabel": "Centre de R&D (Bureau de Seoul)",
     "rndAddress": "2F & 4F, 22 Gangnam-daero 162-gil, Gangnam-gu, Seoul, Coree du Sud",
+    "ggLabel": "Succursale Gyeonggi",
+    "ggAddress": "6F 604-d154, 158, Gimpohangang 8-ro, Gimpo-si, Gyeonggi-do",
     "ctaTitle": "Nous recherchons des partenaires pour grandir ensemble",
     "ctaDesc": "Solutions energetiques, partenariats, recrutement — toute demande est la bienvenue.",
     "ctaButton": "Nous contacter"

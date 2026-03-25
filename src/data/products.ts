@@ -1,6 +1,6 @@
 export const products = {
   items: [
-    { slug: "opti", serviceUrl: "https://opti-bi.com" },
-    { slug: "greenplanner", serviceUrl: "https://greenplanner.co.kr/map" },
+    { slug: "opti", serviceUrl: "https://opti-bi.com/#Contact" },
+    { slug: "greenplanner", serviceUrl: "https://greenplanner.app.ninewatt.com" },
   ],
 };

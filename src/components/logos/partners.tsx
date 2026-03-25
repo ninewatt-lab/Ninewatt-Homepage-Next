@@ -84,6 +84,10 @@ export const JohnsonControls = () => (
   <ImageLogo src="/logos/johnson-controls.png" alt="Johnson Controls" width={150} />
 );
 
+export const Azbil = () => (
+  <ImageLogo src="/logos/azbil.svg" alt="Azbil" />
+);
+
 // 해외 파트너 — 텍스트 플레이스홀더 (로고 파일 미확보)
 export const Toltek = () => <TextLogo text="Toltek" width={100} />;
 export const Ucl = () => (
