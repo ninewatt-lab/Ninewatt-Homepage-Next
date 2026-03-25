@@ -19,7 +19,7 @@ export default async function OptiPage() {
   const steps = t.raw("opti.steps") as { title: string; desc: string }[];
   const impactItems = t.raw("opti.impactItems") as { value: string; label: string }[];
   const modules = t.raw("opti.modules") as { name: string; desc: string }[];
-  const plans = t.raw("opti.plans") as { name: string; monthly: string; annual: string; desc: string }[];
+
   const problemItems = t.raw("opti.problemItems") as string[];
 
   return (
@@ -159,38 +159,6 @@ export default async function OptiPage() {
                 <span className="text-xs text-muted">{m.desc}</span>
               </div>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Pricing */}
-      <section className="border-t border-border px-6 py-24">
-        <div className="mx-auto max-w-5xl">
-          <h2 className="text-2xl font-bold">{t("opti.pricing")}</h2>
-          <p className="mt-2 text-muted">
-            {t("opti.pricingDesc")}
-          </p>
-          <div className="mt-10 overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-border text-left">
-                  <th className="pb-3 pr-8 font-semibold">{t("opti.planHeader")}</th>
-                  <th className="pb-3 pr-8 font-semibold">{t("opti.monthlyHeader")}</th>
-                  <th className="pb-3 pr-8 font-semibold">{t("opti.annualHeader")}</th>
-                  <th className="pb-3 font-semibold">{t("opti.descHeader")}</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border">
-                {plans.map((plan) => (
-                  <tr key={plan.name}>
-                    <td className="py-3 pr-8 font-medium">{plan.name}</td>
-                    <td className={`py-3 pr-8${!plan.annual ? " text-muted" : ""}`} colSpan={!plan.annual ? 2 : 1}>{plan.monthly}</td>
-                    {plan.annual && <td className="py-3 pr-8">{plan.annual}</td>}
-                    <td className="py-3 text-muted">{plan.desc}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
           </div>
         </div>
       </section>
