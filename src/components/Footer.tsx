@@ -62,8 +62,8 @@ export default function Footer() {
 
   return (
     <footer className="border-t border-border bg-surface">
-      <div className="mx-auto max-w-7xl px-6 py-16">
-        <div className="flex flex-col gap-10 lg:flex-row lg:justify-between">
+      <div className="mx-auto max-w-7xl px-6 py-10">
+        <div className="flex flex-col gap-6 lg:flex-row lg:justify-between">
           {/* Company Info */}
           <div className="lg:max-w-xl shrink-0">
             <p className="text-xl font-bold text-foreground">Ninewatt</p>
@@ -74,8 +74,7 @@ export default function Footer() {
               <p>{t("footer.hq")}</p>
               <p>{t("footer.rnd")}</p>
               <p>{t("footer.gyeonggi")}</p>
-              <p>Tel. 070-8866-7226</p>
-              <p>Email. ninewatt@ninewatt.com</p>
+              <p>Tel. 070-8866-7226 | Email. ninewatt@ninewatt.com</p>
             </div>
             <div className="mt-4 flex gap-3">
               <a
@@ -126,7 +125,7 @@ export default function Footer() {
                 {t(section.titleKey)}
               </Link>
               {section.links.length > 0 && (
-                <div className="mt-4 flex flex-col gap-2.5 text-sm text-muted">
+                <div className="mt-2 flex flex-col gap-1.5 text-sm text-muted">
                   {section.links.map((link) => (
                     <Link
                       key={link.href}
@@ -143,7 +142,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-10 border-t border-border pt-8">
+        <div className="mt-6 border-t border-border pt-4">
           <p className="text-sm text-muted">
             대표자 : 김영록 | 사업자등록번호 : 107-88-42750
           </p>
