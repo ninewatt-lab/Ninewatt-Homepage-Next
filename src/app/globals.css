@@ -59,9 +59,11 @@ html[lang="ja"] body {
   font-family: "Pretendard JP Variable", "Pretendard JP", var(--font-sans), Arial, Helvetica, sans-serif;
 }
 
-/* Smooth scroll */
-html {
-  scroll-behavior: smooth;
+/* Smooth scroll — only for same-page anchor links via :target */
+@media (prefers-reduced-motion: no-preference) {
+  html:has(:target) {
+    scroll-behavior: smooth;
+  }
 }
 
 /* Selection color */
