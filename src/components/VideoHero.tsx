@@ -103,22 +103,22 @@ export default function VideoHero() {
         </div>
 
         {/* Trust bar */}
-        <div className="hero-fade-in absolute bottom-8 left-0 flex w-full items-center justify-center gap-x-8 gap-y-3 px-6 sm:bottom-12" style={{ animationDelay: "1.5s" }}>
-          <div className="flex items-center gap-3">
+        <div className="hero-fade-in absolute bottom-6 left-0 flex w-full flex-col items-center justify-center gap-3 px-6 sm:bottom-12 sm:flex-row sm:gap-x-8" style={{ animationDelay: "1.5s" }}>
+          <div className="flex flex-col items-center gap-1 sm:flex-row sm:gap-3">
             <span className="text-[11px] font-medium uppercase tracking-widest text-white/40">
               {t("hero.familyLabel")}
             </span>
-            <span className="text-[13px] text-white/60">
-              KICT · KIER · KERI
+            <span className="text-center text-[12px] leading-relaxed text-white/60 sm:text-[13px]">
+              한국건설기술연구원 · 한국에너지기술연구원 · 한국전기연구원
             </span>
           </div>
           <div className="hidden h-3 w-px bg-white/20 sm:block" />
-          <div className="flex items-center gap-3">
+          <div className="flex flex-col items-center gap-1 sm:flex-row sm:gap-3">
             <span className="text-[11px] font-medium uppercase tracking-widest text-white/40">
               {t("hero.partnerLabel")}
             </span>
-            <span className="text-[13px] text-white/60">
-              KEPCO
+            <span className="text-[12px] text-white/60 sm:text-[13px]">
+              한국전력공사
             </span>
           </div>
         </div>
