@@ -92,7 +92,8 @@ export async function getPatents(_locale: string, type?: "domestic" | "internati
 }
 
 export async function getTechnologyTransfers(_locale: string) {
-  return { docs: technologyTransfers };
+  const sorted = [...technologyTransfers].sort((a, b) => b.transferDate.localeCompare(a.transferDate));
+  return { docs: sorted };
 }
 
 export async function getPartners(_locale: string) {

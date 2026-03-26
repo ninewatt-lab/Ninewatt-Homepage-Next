@@ -111,7 +111,7 @@ export default async function PatentsPage({
                   const row = (
                     <>
                       <td className="py-3 pr-3 text-muted">{i + 1}</td>
-                      <td className="py-3 pr-3 whitespace-nowrap text-muted">{tt.transferDate || "—"}</td>
+                      <td className="py-3 pr-3 whitespace-nowrap tabular-nums text-muted">{tt.transferDate || "—"}</td>
                       <td className="py-3 pr-3">
                         {tt.detail ? (
                           <DetailTrigger>{tt.title}</DetailTrigger>
@@ -165,7 +165,7 @@ export default async function PatentsPage({
                 {domesticRegistered.map((p, i) => (
                   <ExpandableRow key={p.id} accordionKey={`dr-${p.id}`} thumbnailUrl={p.thumbnailUrl} imageUrls={p.imageUrls} alt={p.title} colSpan={5}>
                     <td className="py-3 pr-3 text-muted">{i + 1}</td>
-                    <td className="py-3 pr-3 whitespace-nowrap text-muted">{p.date}</td>
+                    <td className="py-3 pr-3 whitespace-nowrap tabular-nums text-muted">{p.date}</td>
                     <td className="py-3 pr-3 tabular-nums text-xs text-muted">{p.number}</td>
                     <td className="py-3 pr-3"><ExpandableTrigger>{p.title}</ExpandableTrigger></td>
                     <td className="py-3 text-muted line-clamp-2">{p.applicant}</td>
@@ -195,7 +195,7 @@ export default async function PatentsPage({
                   {domesticPending.map((p, i) => (
                     <ExpandableRow key={p.id} accordionKey={`dp-${p.id}`} thumbnailUrl={p.thumbnailUrl} imageUrls={p.imageUrls} alt={p.title} colSpan={5}>
                       <td className="py-3 pr-3 text-muted">{i + 1}</td>
-                      <td className="py-3 pr-3 whitespace-nowrap text-muted">{p.date}</td>
+                      <td className="py-3 pr-3 whitespace-nowrap tabular-nums text-muted">{p.date}</td>
                       <td className="py-3 pr-3 tabular-nums text-xs text-muted">{p.number}</td>
                       <td className="py-3 pr-3"><ExpandableTrigger>{p.title}</ExpandableTrigger></td>
                       <td className="py-3 text-muted line-clamp-2">{p.applicant}</td>
@@ -227,7 +227,7 @@ export default async function PatentsPage({
                   {internationalPatents.map((p, i) => (
                     <ExpandableRow key={p.id} accordionKey={`ip-${p.id}`} thumbnailUrl={p.thumbnailUrl} imageUrls={p.imageUrls} alt={p.title} colSpan={6}>
                       <td className="py-3 pr-3 text-muted">{i + 1}</td>
-                      <td className="py-3 pr-3 whitespace-nowrap text-muted">{p.date}</td>
+                      <td className="py-3 pr-3 whitespace-nowrap tabular-nums text-muted">{p.date}</td>
                       <td className="py-3 pr-3 tabular-nums text-xs text-muted">{p.number}</td>
                       <td className="py-3 pr-3"><ExpandableTrigger>{p.title}</ExpandableTrigger></td>
                       <td className="py-3 pr-3 text-muted">{p.titleEn}</td>
@@ -276,7 +276,7 @@ export default async function PatentsPage({
                     {internationalTrademarks.map((tm, i) => (
                       <ExpandableRow key={tm.id} accordionKey={`itm-${tm.id}`} thumbnailUrl={tm.thumbnailUrl} alt={tm.name} colSpan={4}>
                         <td className="py-3 pr-3 text-muted">{i + 1}</td>
-                        <td className="py-3 pr-3 whitespace-nowrap text-muted">{tm.date}</td>
+                        <td className="py-3 pr-3 whitespace-nowrap tabular-nums text-muted">{tm.date}</td>
                         <td className="py-3 pr-3 whitespace-nowrap text-muted">{tm.country}</td>
                         <td className="py-3 font-medium"><ExpandableTrigger>{tm.name}</ExpandableTrigger></td>
                       </ExpandableRow>
