@@ -3,7 +3,69 @@
 import { useState, useCallback, useEffect, createContext, useContext } from "react";
 import Image from "next/image";
 
-/** Clickable label that expands an inline image preview below the text (for non-table use). */
+// ─── Accordion Context (one-open-at-a-time per table body) ───
+
+const AccordionContext = createContext<{
+  openKey: string | null;
+  setOpenKey: (key: string | null) => void;
+} | null>(null);
+
+/** Wraps <tbody> and ensures only one row is expanded at a time. */
+export function AccordionTableBody({ children }: { children: React.ReactNode }) {
+  const [openKey, setOpenKey] = useState<string | null>(null);
+  return (
+    <AccordionContext.Provider value={{ openKey, setOpenKey }}>
+      <tbody>{children}</tbody>
+    </AccordionContext.Provider>
+  );
+}
+
+function useAccordion(key: string) {
+  const ctx = useContext(AccordionContext);
+  const [localOpen, setLocalOpen] = useState(false);
+
+  if (ctx) {
+    return {
+      open: ctx.openKey === key,
+      toggle: () => ctx.setOpenKey(ctx.openKey === key ? null : key),
+    };
+  }
+
+  return { open: localOpen, toggle: () => setLocalOpen((v) => !v) };
+}
+
+/** Ensures first-open animation works: mounts with 0fr, then switches to 1fr in the next frame. */
+function useAnimatedMount(open: boolean) {
+  const [mounted, setMounted] = useState(false);
+  const [animateOpen, setAnimateOpen] = useState(false);
+
+  useEffect(() => {
+    if (open) {
+      if (!mounted) {
+        setMounted(true);
+        // Double rAF ensures the 0fr state paints before transitioning to 1fr
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            setAnimateOpen(true);
+          });
+        });
+      } else {
+        setAnimateOpen(true);
+      }
+    } else {
+      setAnimateOpen(false);
+    }
+  }, [open, mounted]);
+
+  return { mounted, animateOpen };
+}
+
+// ─── Row-level expand context (for trigger icons inside row cells) ───
+
+const ExpandableContext = createContext<{ toggle: () => void; open: boolean } | null>(null);
+
+// ─── InlineExpandImage (non-table, unchanged) ───
+
 export function InlineExpandImage({
   src,
   alt,
@@ -43,46 +105,56 @@ export function InlineExpandImage({
   );
 }
 
-const ExpandableContext = createContext<{ toggle: () => void; open: boolean } | null>(null);
+// ─── ExpandableRow (image-based, accordion + animation) ───
 
-/** Expandable table row — use ExpandableTrigger inside children to toggle image. */
 export function ExpandableRow({
+  accordionKey,
   thumbnailUrl,
   imageUrls,
   alt,
   colSpan,
   children,
 }: {
+  accordionKey: string;
   thumbnailUrl?: string;
   imageUrls?: string[];
   alt: string;
   colSpan: number;
   children: React.ReactNode;
 }) {
-  const [open, setOpen] = useState(false);
+  const { open, toggle } = useAccordion(accordionKey);
+  const { mounted, animateOpen } = useAnimatedMount(open);
   const urls = imageUrls && imageUrls.length > 0 ? imageUrls : thumbnailUrl ? [thumbnailUrl] : [];
-  const hasImage = urls.length > 0;
+  const hasContent = urls.length > 0;
 
   return (
-    <ExpandableContext.Provider value={{ toggle: () => setOpen((v) => !v), open }}>
-      <tr className={`border-b border-border ${open ? "border-b-0!" : ""}`}>
+    <ExpandableContext.Provider value={{ toggle, open }}>
+      <tr className={`border-b border-border ${animateOpen ? "border-b-0!" : ""}`}>
         {children}
       </tr>
-      {open && hasImage && (
-        <tr className="border-b border-border bg-accent/20">
-          <td colSpan={colSpan} className="px-3 py-3">
-            <div className="flex gap-3 overflow-x-auto scrollbar-hide">
-              {urls.map((url, i) => (
-                <Image
-                  key={i}
-                  src={url}
-                  alt={`${alt} - ${i + 1}/${urls.length}`}
-                  width={400}
-                  height={566}
-                  className="h-auto max-h-80 w-auto shrink-0 rounded-lg border border-border object-contain shadow-sm"
-                  unoptimized
-                />
-              ))}
+      {hasContent && mounted && (
+        <tr className={animateOpen ? "border-b border-border" : ""}>
+          <td colSpan={colSpan} className="p-0!">
+            <div
+              className={`grid transition-[grid-template-rows] duration-300 ease-out ${
+                animateOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+              }`}
+            >
+              <div className="overflow-hidden">
+                <div className="px-3 py-3 flex gap-3 overflow-x-auto scrollbar-hide bg-accent/20">
+                  {urls.map((url, i) => (
+                    <Image
+                      key={i}
+                      src={url}
+                      alt={`${alt} - ${i + 1}/${urls.length}`}
+                      width={400}
+                      height={566}
+                      className="h-auto max-h-80 w-auto shrink-0 rounded-lg border border-border object-contain shadow-sm"
+                      unoptimized
+                    />
+                  ))}
+                </div>
+              </div>
             </div>
           </td>
         </tr>
@@ -91,7 +163,8 @@ export function ExpandableRow({
   );
 }
 
-/** Clickable trigger for ExpandableRow — renders text + image icon. */
+// ─── ExpandableTrigger (image icon trigger) ───
+
 export function ExpandableTrigger({ children, className }: { children: React.ReactNode; className?: string }) {
   const ctx = useContext(ExpandableContext);
   if (!ctx) return <span className={className}>{children}</span>;
@@ -107,7 +180,74 @@ export function ExpandableTrigger({ children, className }: { children: React.Rea
   );
 }
 
-/** Expandable card for grouped trademarks — click name to reveal registrations + images. */
+// ─── DetailExpandableRow (text-based, accordion + animation) ───
+
+export function DetailExpandableRow({
+  accordionKey,
+  colSpan,
+  detail,
+  children,
+}: {
+  accordionKey: string;
+  colSpan: number;
+  detail: React.ReactNode;
+  children: React.ReactNode;
+}) {
+  const { open, toggle } = useAccordion(accordionKey);
+  const { mounted, animateOpen } = useAnimatedMount(open);
+
+  return (
+    <ExpandableContext.Provider value={{ toggle, open }}>
+      <tr
+        className={`border-b border-border cursor-pointer hover:bg-secondary/30 transition-colors ${animateOpen ? "border-b-0!" : ""}`}
+        onClick={toggle}
+      >
+        {children}
+      </tr>
+      {mounted && (
+        <tr className={animateOpen ? "border-b border-border" : ""}>
+          <td colSpan={colSpan} className="p-0!">
+            <div
+              className={`grid transition-[grid-template-rows] duration-300 ease-out ${
+                animateOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+              }`}
+            >
+              <div className="overflow-hidden">
+                <div className="px-4 py-5 bg-secondary/20">
+                  {detail}
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>
+      )}
+    </ExpandableContext.Provider>
+  );
+}
+
+// ─── DetailTrigger (chevron down icon trigger) ───
+
+export function DetailTrigger({ children, className }: { children: React.ReactNode; className?: string }) {
+  const ctx = useContext(ExpandableContext);
+  if (!ctx) return <span className={className}>{children}</span>;
+  return (
+    <span className={`flex items-center gap-2 ${className ?? ""}`}>
+      {children}
+      <svg
+        className={`w-4 h-4 shrink-0 text-muted transition-transform duration-200 ${ctx.open ? "rotate-180" : ""}`}
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        strokeWidth={2}
+      >
+        <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+      </svg>
+    </span>
+  );
+}
+
+// ─── TrademarkGroupCard (unchanged) ───
+
 export function TrademarkGroupCard({
   name,
   items,
@@ -164,6 +304,8 @@ export function TrademarkGroupCard({
   );
 }
 
+// ─── Icons ───
+
 function ImageIcon({ className }: { className?: string }) {
   return (
     <svg
@@ -182,7 +324,8 @@ function ImageIcon({ className }: { className?: string }) {
   );
 }
 
-/** Clickable thumbnail that opens a fullscreen lightbox on click. */
+// ─── ThumbnailButton (fullscreen lightbox, unchanged) ───
+
 export function ThumbnailButton({
   src,
   alt,

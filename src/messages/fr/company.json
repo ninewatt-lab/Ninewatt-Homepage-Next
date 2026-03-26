@@ -80,7 +80,13 @@
     "domesticTrademarks": "Marques nationales",
     "internationalTrademarks": "Marques internationales",
     "trademarkName": "Nom de la marque",
-    "tmStatus": "Statut"
+    "tmStatus": "Statut",
+    "technologyTransfers": "Transferts de technologie",
+    "techTransferName": "Nom de la technologie",
+    "transferDate": "Date de transfert",
+    "transferType": "Type de transfert",
+    "transferInstitution": "Institution",
+    "transferPeriod": "Periode"
   },
   "career": {
     "title": "Recrutement",

@@ -80,7 +80,13 @@
     "domesticTrademarks": "국내 상표",
     "internationalTrademarks": "해외 상표",
     "trademarkName": "상표명",
-    "tmStatus": "상태"
+    "tmStatus": "상태",
+    "technologyTransfers": "기술이전",
+    "techTransferName": "기술명",
+    "transferDate": "이전일",
+    "transferType": "이전유형",
+    "transferInstitution": "이전기관",
+    "transferPeriod": "기간"
   },
   "career": {
     "title": "채용안내",

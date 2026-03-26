@@ -80,7 +80,13 @@
     "domesticTrademarks": "国内商標",
     "internationalTrademarks": "海外商標",
     "trademarkName": "商標名",
-    "tmStatus": "状態"
+    "tmStatus": "状態",
+    "technologyTransfers": "技術移転",
+    "techTransferName": "技術名",
+    "transferDate": "移転日",
+    "transferType": "移転類型",
+    "transferInstitution": "移転機関",
+    "transferPeriod": "期間"
   },
   "career": {
     "title": "採用情報",

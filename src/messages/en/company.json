@@ -80,7 +80,13 @@
     "domesticTrademarks": "Domestic Trademarks",
     "internationalTrademarks": "International Trademarks",
     "trademarkName": "Trademark",
-    "tmStatus": "Status"
+    "tmStatus": "Status",
+    "technologyTransfers": "Technology Transfers",
+    "techTransferName": "Technology Name",
+    "transferDate": "Transfer Date",
+    "transferType": "Transfer Type",
+    "transferInstitution": "Institution",
+    "transferPeriod": "Period"
   },
   "career": {
     "title": "Careers",

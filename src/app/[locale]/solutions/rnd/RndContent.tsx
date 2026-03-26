@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, createContext, useContext } from "react";
 import { Link } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
 
@@ -19,16 +19,61 @@ interface RndProject {
   };
 }
 
-function ProjectRow({ project, labels }: { project: RndProject; labels: { goal: string; contents: string; category: string; department: string; budget: string } }) {
-  const [open, setOpen] = useState(false);
+// ─── Accordion Context ───
+
+const RndAccordionContext = createContext<{
+  openKey: string | null;
+  setOpenKey: (key: string | null) => void;
+} | null>(null);
+
+function RndAccordionBody({ children }: { children: React.ReactNode }) {
+  const [openKey, setOpenKey] = useState<string | null>(null);
+  return (
+    <RndAccordionContext.Provider value={{ openKey, setOpenKey }}>
+      <tbody>{children}</tbody>
+    </RndAccordionContext.Provider>
+  );
+}
+
+function ProjectRow({ project, index, labels }: { project: RndProject; index: number; labels: { goal: string; contents: string; category: string; department: string; budget: string } }) {
+  const accordion = useContext(RndAccordionContext);
+  const key = `rnd-${index}`;
   const hasDetail = !!project.detail;
+
+  const open = accordion ? accordion.openKey === key : false;
+  const toggle = () => {
+    if (!hasDetail) return;
+    if (accordion) {
+      accordion.setOpenKey(open ? null : key);
+    }
+  };
+
+  const [mounted, setMounted] = useState(false);
+  const [animateOpen, setAnimateOpen] = useState(false);
+
+  useEffect(() => {
+    if (open) {
+      if (!mounted) {
+        setMounted(true);
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            setAnimateOpen(true);
+          });
+        });
+      } else {
+        setAnimateOpen(true);
+      }
+    } else {
+      setAnimateOpen(false);
+    }
+  }, [open, mounted]);
 
   return (
     <>
       <tr
-        className={`border-b border-border ${hasDetail ? "cursor-pointer hover:bg-secondary/30 transition-colors" : ""}`}
-        onClick={() => hasDetail && setOpen(!open)}
-      >
+        className={`border-b border-border ${hasDetail ? "cursor-pointer hover:bg-secondary/30 transition-colors" : ""} ${animateOpen ? "border-b-0!" : ""}`}
+        onClick={toggle}
+>
         <td className="py-3 pl-2 pr-8 text-muted">{project.agency}</td>
         <td className="py-3 pr-4">
           <span className="flex items-center gap-2">
@@ -49,47 +94,57 @@ function ProjectRow({ project, labels }: { project: RndProject; labels: { goal: 
         <td className="py-3 pr-4 text-muted">{project.lead}</td>
         <td className="py-3 whitespace-nowrap text-muted">{project.period}</td>
       </tr>
-      {hasDetail && open && (
-        <tr className="border-b border-border bg-secondary/20">
-          <td colSpan={4} className="px-4 py-5">
-            <div className="grid gap-4 md:grid-cols-2 text-sm">
-              <div className="md:col-span-2">
-                <h4 className="font-semibold text-xs uppercase tracking-wider text-muted mb-1.5">
-                  {labels.goal}
-                </h4>
-                <p className="text-foreground/90 leading-relaxed">
-                  {project.detail!.goal}
-                </p>
-              </div>
+      {hasDetail && mounted && (
+        <tr className={animateOpen ? "border-b border-border" : ""}>
+          <td colSpan={4} className="p-0!">
+            <div
+              className={`grid transition-[grid-template-rows] duration-300 ease-out ${
+                animateOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+              }`}
+            >
+              <div className="overflow-hidden">
+                <div className="px-4 py-5 bg-secondary/20">
+                  <div className="grid gap-4 md:grid-cols-2 text-sm">
+                    <div className="md:col-span-2">
+                      <h4 className="font-semibold text-xs uppercase tracking-wider text-muted mb-1.5">
+                        {labels.goal}
+                      </h4>
+                      <p className="text-foreground/90 leading-relaxed">
+                        {project.detail!.goal}
+                      </p>
+                    </div>
 
-              {project.detail!.contents.length > 0 && (
-                <div className="md:col-span-2">
-                  <h4 className="font-semibold text-xs uppercase tracking-wider text-muted mb-1.5">
-                    {labels.contents}
-                  </h4>
-                  <ul className="space-y-1">
-                    {project.detail!.contents.map((c, i) => (
-                      <li key={i} className="flex gap-2 text-foreground/90 leading-relaxed">
-                        <span className="text-muted shrink-0">{i + 1}.</span>
-                        {c}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
+                    {project.detail!.contents.length > 0 && (
+                      <div className="md:col-span-2">
+                        <h4 className="font-semibold text-xs uppercase tracking-wider text-muted mb-1.5">
+                          {labels.contents}
+                        </h4>
+                        <ul className="space-y-1">
+                          {project.detail!.contents.map((c, i) => (
+                            <li key={i} className="flex gap-2 text-foreground/90 leading-relaxed">
+                              <span className="text-muted shrink-0">{i + 1}.</span>
+                              {c}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
 
-              <div className="flex flex-wrap gap-x-8 gap-y-2 md:col-span-2 pt-2 border-t border-border/50">
-                <div>
-                  <span className="text-xs text-muted">{labels.category}</span>
-                  <p className="text-foreground/90">{project.detail!.category}</p>
-                </div>
-                <div>
-                  <span className="text-xs text-muted">{labels.department}</span>
-                  <p className="text-foreground/90">{project.detail!.department}</p>
-                </div>
-                <div>
-                  <span className="text-xs text-muted">{labels.budget}</span>
-                  <p className="text-foreground/90">{project.detail!.budget}</p>
+                    <div className="flex flex-wrap gap-x-8 gap-y-2 md:col-span-2 pt-2 border-t border-border/50">
+                      <div>
+                        <span className="text-xs text-muted">{labels.category}</span>
+                        <p className="text-foreground/90">{project.detail!.category}</p>
+                      </div>
+                      <div>
+                        <span className="text-xs text-muted">{labels.department}</span>
+                        <p className="text-foreground/90">{project.detail!.department}</p>
+                      </div>
+                      <div>
+                        <span className="text-xs text-muted">{labels.budget}</span>
+                        <p className="text-foreground/90">{project.detail!.budget}</p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -103,7 +158,7 @@ function ProjectRow({ project, labels }: { project: RndProject; labels: { goal: 
 function ProjectTable({ projects, headerLabels, detailLabels }: { projects: RndProject[]; headerLabels: { agency: string; research: string; lead: string; period: string }; detailLabels: { goal: string; contents: string; category: string; department: string; budget: string } }) {
   return (
     <div className="overflow-x-auto">
-      <table className="w-full min-w-[700px] table-fixed text-sm">
+      <table className="w-full min-w-175 table-fixed text-sm">
         <colgroup>
           <col className="w-[18%]" />
           <col className="w-[53%]" />
@@ -118,11 +173,11 @@ function ProjectTable({ projects, headerLabels, detailLabels }: { projects: RndP
             <th className="py-3 font-semibold text-muted">{headerLabels.period}</th>
           </tr>
         </thead>
-        <tbody>
+        <RndAccordionBody>
           {projects.map((p, i) => (
-            <ProjectRow key={i} project={p} labels={detailLabels} />
+            <ProjectRow key={i} project={p} index={i} labels={detailLabels} />
           ))}
-        </tbody>
+        </RndAccordionBody>
       </table>
     </div>
   );

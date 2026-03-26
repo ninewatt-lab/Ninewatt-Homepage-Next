@@ -3,6 +3,7 @@ import { certifications } from "@/data/certifications";
 import { history } from "@/data/history";
 import { domesticPatents, internationalPatents } from "@/data/patents";
 import { trademarks } from "@/data/trademarks";
+import { technologyTransfers } from "@/data/technologyTransfers";
 import { rndProjects } from "@/data/rndProjects";
 import { companyInfo } from "@/data/companyInfo";
 import { homeStats } from "@/data/homeStats";
@@ -88,6 +89,10 @@ export async function getPatents(_locale: string, type?: "domestic" | "internati
 
   docs.sort((a, b) => b.date.localeCompare(a.date));
   return { docs };
+}
+
+export async function getTechnologyTransfers(_locale: string) {
+  return { docs: technologyTransfers };
 }
 
 export async function getPartners(_locale: string) {

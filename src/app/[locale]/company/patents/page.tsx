@@ -1,6 +1,7 @@
 import { getTranslations } from "next-intl/server";
-import { getPatents, getCertifications, getTrademarks } from "@/lib/cms";
-import { InlineExpandImage, ExpandableRow, ExpandableTrigger, TrademarkGroupCard } from "@/components/ImageLightbox";
+import { getPatents, getCertifications, getTrademarks, getTechnologyTransfers } from "@/lib/cms";
+import { InlineExpandImage, ExpandableRow, ExpandableTrigger, TrademarkGroupCard, DetailExpandableRow, DetailTrigger, AccordionTableBody } from "@/components/ImageLightbox";
+import type { TechnologyTransfer } from "@/data/technologyTransfers";
 
 export async function generateMetadata() {
   const t = await getTranslations("company");
@@ -23,11 +24,13 @@ export default async function PatentsPage({
     { docs: internationalPatents },
     { docs: certifications },
     { docs: allTrademarks },
+    { docs: techTransfers },
   ] = await Promise.all([
     getPatents(locale, "domestic"),
     getPatents(locale, "international"),
     getCertifications(locale),
     getTrademarks(locale),
+    getTechnologyTransfers(locale),
   ]);
 
   const domesticRegistered = domesticPatentsAll.filter((p) => p.status === "등록");
@@ -57,7 +60,11 @@ export default async function PatentsPage({
       {/* Stats */}
       <section className="px-6 py-16">
         <div className="mx-auto max-w-5xl">
-          <dl className="flex flex-wrap gap-x-12 gap-y-4 text-sm">
+          <dl className="grid grid-cols-3 gap-x-8 gap-y-6 text-sm md:grid-cols-6">
+            <div>
+              <dt className="text-muted">{t("patents.technologyTransfers")}</dt>
+              <dd className="text-4xl font-bold">{techTransfers.length}</dd>
+            </div>
             <div>
               <dt className="text-muted">{t("patents.totalPatents")}</dt>
               <dd className="text-4xl font-bold">{totalPatents}</dd>
@@ -82,6 +89,61 @@ export default async function PatentsPage({
         </div>
       </section>
 
+      {/* Technology Transfers */}
+      <section className="border-t border-border px-6 py-20">
+        <div className="mx-auto max-w-5xl">
+          <h2 className="text-xl font-bold">
+            {t("patents.technologyTransfers")} <span className="text-muted">({techTransfers.length}건)</span>
+          </h2>
+          <div className="mt-4 overflow-x-auto">
+            <table className="w-full min-w-175 text-sm">
+              <thead>
+                <tr className="border-b border-border text-left">
+                  <th className="w-12 py-3 pr-3 font-semibold text-muted">{t("patents.tableNo")}</th>
+                  <th className="w-28 py-3 pr-3 font-semibold text-muted">{t("patents.transferDate")}</th>
+                  <th className="py-3 pr-3 font-semibold text-muted">{t("patents.techTransferName")}</th>
+                  <th className="w-44 py-3 pr-3 font-semibold text-muted">{t("patents.transferType")}</th>
+                  <th className="w-48 py-3 font-semibold text-muted">{t("patents.transferInstitution")}</th>
+                </tr>
+              </thead>
+              <AccordionTableBody>
+                {techTransfers.map((tt, i) => {
+                  const row = (
+                    <>
+                      <td className="py-3 pr-3 text-muted">{i + 1}</td>
+                      <td className="py-3 pr-3 whitespace-nowrap text-muted">{tt.transferDate || "—"}</td>
+                      <td className="py-3 pr-3">
+                        {tt.detail ? (
+                          <DetailTrigger>{tt.title}</DetailTrigger>
+                        ) : (
+                          tt.title
+                        )}
+                      </td>
+                      <td className="py-3 pr-3 text-muted">{tt.transferType}</td>
+                      <td className="py-3 text-muted">{tt.institution || "—"}</td>
+                    </>
+                  );
+
+                  if (tt.detail) {
+                    return (
+                      <DetailExpandableRow key={tt.id} accordionKey={`tt-${tt.id}`} colSpan={5} detail={<TechTransferDetailView transfer={tt} />}>
+                        {row}
+                      </DetailExpandableRow>
+                    );
+                  }
+
+                  return (
+                    <tr key={tt.id} className="border-b border-border/50">
+                      {row}
+                    </tr>
+                  );
+                })}
+              </AccordionTableBody>
+            </table>
+          </div>
+        </div>
+      </section>
+
       {/* Domestic Patents - Registered */}
       <section className="border-t border-border px-6 py-20">
         <div className="mx-auto max-w-5xl">
@@ -99,9 +161,9 @@ export default async function PatentsPage({
                   <th className="w-48 py-3 font-semibold text-muted">{t("patents.applicant")}</th>
                 </tr>
               </thead>
-              <tbody>
+              <AccordionTableBody>
                 {domesticRegistered.map((p, i) => (
-                  <ExpandableRow key={p.id} thumbnailUrl={p.thumbnailUrl} imageUrls={p.imageUrls} alt={p.title} colSpan={5}>
+                  <ExpandableRow key={p.id} accordionKey={`dr-${p.id}`} thumbnailUrl={p.thumbnailUrl} imageUrls={p.imageUrls} alt={p.title} colSpan={5}>
                     <td className="py-3 pr-3 text-muted">{i + 1}</td>
                     <td className="py-3 pr-3 whitespace-nowrap text-muted">{p.date}</td>
                     <td className="py-3 pr-3 tabular-nums text-xs text-muted">{p.number}</td>
@@ -109,7 +171,7 @@ export default async function PatentsPage({
                     <td className="py-3 text-muted line-clamp-2">{p.applicant}</td>
                   </ExpandableRow>
                 ))}
-              </tbody>
+              </AccordionTableBody>
             </table>
           </div>
 
@@ -129,9 +191,9 @@ export default async function PatentsPage({
                     <th className="w-48 py-3 font-semibold text-muted">{t("patents.applicant")}</th>
                   </tr>
                 </thead>
-                <tbody>
+                <AccordionTableBody>
                   {domesticPending.map((p, i) => (
-                    <ExpandableRow key={p.id} thumbnailUrl={p.thumbnailUrl} imageUrls={p.imageUrls} alt={p.title} colSpan={5}>
+                    <ExpandableRow key={p.id} accordionKey={`dp-${p.id}`} thumbnailUrl={p.thumbnailUrl} imageUrls={p.imageUrls} alt={p.title} colSpan={5}>
                       <td className="py-3 pr-3 text-muted">{i + 1}</td>
                       <td className="py-3 pr-3 whitespace-nowrap text-muted">{p.date}</td>
                       <td className="py-3 pr-3 tabular-nums text-xs text-muted">{p.number}</td>
@@ -139,7 +201,7 @@ export default async function PatentsPage({
                       <td className="py-3 text-muted line-clamp-2">{p.applicant}</td>
                     </ExpandableRow>
                   ))}
-                </tbody>
+                </AccordionTableBody>
               </table>
             </div>
           </div>
@@ -161,9 +223,9 @@ export default async function PatentsPage({
                     <th className="py-3 font-semibold text-muted">{t("patents.country")}</th>
                   </tr>
                 </thead>
-                <tbody>
+                <AccordionTableBody>
                   {internationalPatents.map((p, i) => (
-                    <ExpandableRow key={p.id} thumbnailUrl={p.thumbnailUrl} imageUrls={p.imageUrls} alt={p.title} colSpan={6}>
+                    <ExpandableRow key={p.id} accordionKey={`ip-${p.id}`} thumbnailUrl={p.thumbnailUrl} imageUrls={p.imageUrls} alt={p.title} colSpan={6}>
                       <td className="py-3 pr-3 text-muted">{i + 1}</td>
                       <td className="py-3 pr-3 whitespace-nowrap text-muted">{p.date}</td>
                       <td className="py-3 pr-3 tabular-nums text-xs text-muted">{p.number}</td>
@@ -172,7 +234,7 @@ export default async function PatentsPage({
                       <td className="py-3 whitespace-nowrap text-muted">{p.country}</td>
                     </ExpandableRow>
                   ))}
-                </tbody>
+                </AccordionTableBody>
               </table>
             </div>
           </div>
@@ -210,16 +272,16 @@ export default async function PatentsPage({
                       <th className="py-3 font-semibold text-muted">{t("patents.trademarkName")}</th>
                     </tr>
                   </thead>
-                  <tbody>
+                  <AccordionTableBody>
                     {internationalTrademarks.map((tm, i) => (
-                      <ExpandableRow key={tm.id} thumbnailUrl={tm.thumbnailUrl} alt={tm.name} colSpan={4}>
+                      <ExpandableRow key={tm.id} accordionKey={`itm-${tm.id}`} thumbnailUrl={tm.thumbnailUrl} alt={tm.name} colSpan={4}>
                         <td className="py-3 pr-3 text-muted">{i + 1}</td>
                         <td className="py-3 pr-3 whitespace-nowrap text-muted">{tm.date}</td>
                         <td className="py-3 pr-3 whitespace-nowrap text-muted">{tm.country}</td>
                         <td className="py-3 font-medium"><ExpandableTrigger>{tm.name}</ExpandableTrigger></td>
                       </ExpandableRow>
                     ))}
-                  </tbody>
+                  </AccordionTableBody>
                 </table>
               </div>
             </div>
@@ -253,5 +315,47 @@ export default async function PatentsPage({
         </div>
       </section>
     </>
+  );
+}
+
+function TechTransferDetailView({ transfer }: { transfer: TechnologyTransfer }) {
+  const detail = transfer.detail!;
+
+  return (
+    <div className="grid gap-4 md:grid-cols-2 text-sm">
+      {detail.abstract && (
+        <div className="md:col-span-2">
+          <h4 className="font-semibold text-xs uppercase tracking-wider text-muted mb-1.5">요약</h4>
+          <p className="text-foreground/90 leading-relaxed">{detail.abstract}</p>
+        </div>
+      )}
+
+      <div className="flex flex-wrap gap-x-8 gap-y-2 md:col-span-2 pt-2 border-t border-border/50">
+        <div>
+          <span className="text-xs text-muted">출원번호(일자)</span>
+          <p className="text-foreground/90">{detail.applicationNo ? `${detail.applicationNo} (${detail.applicationDate})` : "—"}</p>
+        </div>
+        <div>
+          <span className="text-xs text-muted">출원인</span>
+          <p className="text-foreground/90">{detail.applicant || "—"}</p>
+        </div>
+        {detail.registrationNo && (
+          <div>
+            <span className="text-xs text-muted">등록번호(일자)</span>
+            <p className="text-foreground/90">{detail.registrationNo} ({detail.registrationDate})</p>
+          </div>
+        )}
+        <div>
+          <span className="text-xs text-muted">법적상태</span>
+          <p className="text-foreground/90">{detail.legalStatus || "—"}</p>
+        </div>
+        {transfer.period && (
+          <div>
+            <span className="text-xs text-muted">계약기간</span>
+            <p className="text-foreground/90">{transfer.period}</p>
+          </div>
+        )}
+      </div>
+    </div>
   );
 }
