@@ -2,10 +2,12 @@
   "hero": {
     "badge": "CES 2026 Innovation Awards",
     "headline": "Make buildings",
-    "headlineHighlight": "speak energy",
+    "headlineHighlight": "speak <accent>energy</accent>",
     "subtitle": "We measure building energy, analyze it with AI, and drive carbon neutrality.",
     "ctaContact": "Contact Us",
-    "ctaProducts": "View Products"
+    "ctaProducts": "View Products",
+    "familyLabel": "Family Corp.",
+    "partnerLabel": "Key Partner"
   },
   "showcase": {
     "label": "Our Products",

@@ -1,11 +1,13 @@
 {
   "hero": {
     "badge": "CES 2026 Innovation Awards",
-    "headline": "건물이 에너지를",
+    "headline": "건물이 <accent>에너지</accent>를",
     "headlineHighlight": "말하게 하다",
     "subtitle": "건물 에너지를 측정하고, AI로 분석하고, 탄소중립을 실행합니다.",
     "ctaContact": "문의하기",
-    "ctaProducts": "제품 보기"
+    "ctaProducts": "제품 보기",
+    "familyLabel": "패밀리기업",
+    "partnerLabel": "우수협력기업"
   },
   "showcase": {
     "label": "Our Products",

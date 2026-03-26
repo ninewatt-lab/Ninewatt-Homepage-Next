@@ -1,11 +1,13 @@
 {
   "hero": {
     "badge": "CES 2026 Innovation Awards",
-    "headline": "ビルにエネルギーを",
+    "headline": "ビルに<accent>エネルギー</accent>を",
     "headlineHighlight": "語らせる",
     "subtitle": "ビルエネルギーを計測し、AIで分析し、カーボンニュートラルを実現します。",
     "ctaContact": "お問い合わせ",
-    "ctaProducts": "製品を見る"
+    "ctaProducts": "製品を見る",
+    "familyLabel": "ファミリー企業",
+    "partnerLabel": "優秀協力企業"
   },
   "showcase": {
     "label": "Our Products",
