@@ -8,7 +8,8 @@
     "saveEDesc": "Identify optimal rate plans through 15-minute interval power consumption analysis, with building energy group management and cost management capabilities.",
     "reparkDesc": "QR code-based facility management. From citizen fault reports to administrator status tracking and contractor work order management.",
     "solarScopeDesc": "Perform integrated analysis of regulations, setback distances, distribution grid capacity, energy yield, and financial viability for solar installation candidate sites — using just an address.",
-    "pvIntelligenceDesc": "Beyond showing generation numbers — AI detects anomalies, calculates loss amounts, and maximizes revenue. A Solar AI platform proven at our own power plants."
+    "pvIntelligenceDesc": "Beyond showing generation numbers — AI detects anomalies, calculates loss amounts, and maximizes revenue. A Solar AI platform proven at our own power plants.",
+    "sharedEssDesc": "A new business model where multiple buildings share a single large-scale ESS connected to the distribution grid. Reduces electricity costs through virtual net metering and supplies grid flexibility."
   },
   "opti": {
     "heroSubtitle": "AI Energy Advisor for Buildings",
@@ -381,5 +382,107 @@
     "ctaDesc": "See how PV Intelligence detects anomalies and calculates loss amounts in a live demo. We'll walk you through with real data from our own plants.",
     "ctaDemo": "Request Demo",
     "ctaBrochure": "PDF Brochure"
+  },
+
+  "sharedEss": {
+    "heroLabel": "Shared ESS",
+    "heroTitle": "Shared ESS",
+    "heroSubtitle": "Shared ESS — Grid Flexibility Resource",
+    "heroDesc": "A new ESS business model that connects large-scale energy storage to the distribution grid at a single site, enabling multiple remote consumers to benefit from electricity cost savings through virtual net metering while providing grid stabilization when needed.",
+    "requestDemo": "Contact Us",
+
+    "comparisonColCategory": "Category",
+    "comparisonColIndividual": "Individual Building ESS",
+    "comparisonColShared": "Shared ESS",
+    "projectParticipantsLabel": "Participants",
+    "projectGoalsLabel": "Project Goals",
+    "projectBuildLabel": "Construction Details",
+
+    "background": "Background",
+    "backgroundDesc": "The Seoul metropolitan area (Gyeonggi Province) faces insufficient power supply relative to high electricity demand, and grid expansion is difficult due to public acceptance issues. Demand-side ESS deployment has stalled due to lack of policies and low economic viability.",
+    "backgroundItems": [
+      { "title": "Concentrated power demand", "desc": "Gyeonggi Yongin cluster alone forecasts 14.7GW demand by 2053. National peak demand expected to reach 202.0GW by 2051" },
+      { "title": "Grid expansion difficulties", "desc": "Major transmission line construction delayed 66–150 months due to public acceptance issues" },
+      { "title": "Lack of demand-side ESS", "desc": "New installation market disappeared after special rate expiration in 2019. Utilization of existing ESS also remains low" }
+    ],
+
+    "concept": "What is Shared ESS?",
+    "conceptDesc": "A new ESS business model that connects large-scale energy storage to the distribution grid at a single site, enabling multiple remote consumers to receive electricity cost savings through virtual net metering while providing grid stabilization as needed",
+    "conceptAdvantages": [
+      { "title": "Flexibility Supply", "desc": "Provides power resources when distribution grid stabilization is needed" },
+      { "title": "Enhanced Acceptance", "desc": "Fire prevention and reduced operating costs through professional operator management" },
+      { "title": "Improved Profitability", "desc": "Participation in various revenue markets including virtual net metering, NWAs benefits, and VPP" }
+    ],
+
+    "comparison": "Individual ESS vs. Shared ESS",
+    "comparisonItems": [
+      { "category": "Installation location", "individual": "Inside building", "shared": "Outside building, near distribution lines" },
+      { "category": "Initial investment", "individual": "High — individual building batteries and construction costs", "shared": "Low — bulk battery purchase and single-site construction" },
+      { "category": "Revenue generation", "individual": "Low — only basic rate and energy savings", "shared": "High — rate savings + flexibility provision during line overload" },
+      { "category": "Payback period", "individual": "~27 years (100kWh basis: ₩100M investment, ₩3.7M annual revenue)", "shared": "~13 years (100kWh basis: ₩65M investment, ₩6.11M annual revenue)" },
+      { "category": "O&M", "individual": "On-site staff management, difficult without experts", "shared": "Professional ESS operator maintenance, cost reduction and expertise" },
+      { "category": "Future BM", "individual": "Difficult to expand", "shared": "DR, VPP, stored electricity sales and more" }
+    ],
+
+    "operation": "Operation Plan",
+    "operationNormal": "Normal Operation — Virtual Net Metering",
+    "operationNormalItems": [
+      "Recruit consumers and analyze power patterns",
+      "Sign shared ESS subscription contract (ESS operator ↔ consumer)",
+      "Pattern-based ESS charge/discharge control",
+      "Bill subscription fee based on savings (ESS operator → customer)"
+    ],
+    "operationGrid": "Grid Flexibility Supply",
+    "operationGridItems": [
+      "Analyze distribution grid load patterns",
+      "Sign flexibility supply contract (ESS operator ↔ grid operator)",
+      "Execute dispatch orders and supply",
+      "Settlement and compensation for supply performance (NWAs)"
+    ],
+
+    "nwas": "Non-Wires Alternatives (NWAs)",
+    "nwasDesc": "A compensation system that pays operators who provide technology to replace or defer new distribution line construction under short-term, intermittent conditions, covering costs for the period the line construction was avoided or delayed.",
+    "vnm": "Virtual Net Metering (VNM)",
+    "vnmDesc": "Customers benefit from electricity cost savings without owning ESS equipment — charge/discharge power from ESS installed at a third-party site is allocated and offset by time period, providing equivalent rate reduction effects.",
+
+    "alliance": "Demonstration Alliance",
+    "allianceDesc": "A public-private integrated demonstration alliance has been formed to verify the entire process of shared ESS technology, regulation, and operation.",
+    "allianceMembers": [
+      { "name": "Gyeonggi Province", "role": "Lead local government", "items": ["Active administrative support and inter-department cooperation", "Distributed energy activation policy development", "ESS expansion strategy for provincial public institutions"] },
+      { "name": "Goyang Special City", "role": "Lead local government", "items": ["Administrative permit support for demonstration sites", "Public land provision coordination", "Community acceptance and conflict prevention"] },
+      { "name": "KEPCO", "role": "Grid operator", "items": ["Virtual net metering platform development and operation", "Flexible resource benefit compensation system design", "Overloaded line selection and dispatch cooperation"] },
+      { "name": "Goyang Urban Management Corp.", "role": "Shared ESS equity investor", "items": ["ESS construction site management and quality inspection", "ESS inspection and safety management", "ESS incident response system"] },
+      { "name": "LS Electric", "role": "Technical advisory", "items": ["ESS operation and safety management expertise", "Dispatch response logic advancement", "ESS monitoring and accident prevention advisory"] },
+      { "name": "Ninewatt", "role": "Project lead", "items": ["ESS management platform development", "Demonstration project execution", "Consumer recruitment and subscription service model design"] }
+    ],
+
+    "project": "Project Overview",
+    "projectName": "Shared ESS Construction and Virtual Net Metering Transaction Demonstration for Metropolitan Distribution Grid Flexibility",
+    "projectParticipants": "Goyang Urban Management Corp. (57%), Ninewatt (43%)",
+    "projectGoals": [
+      "Reduce electricity costs for consumers (buildings) through virtual net metering during normal operation",
+      "Demonstrate public institution ESS installation obligation compliance through virtual net metering",
+      "Revenue from distribution line reinforcement avoidance through grid stabilization contribution"
+    ],
+    "projectHw": "ESS 0.25MW/1MWh + ESS 1MW/4MWh construction",
+    "projectSw": "ESS optimal operation algorithm development, virtual net metering settlement system development",
+
+    "roadmap": "Expansion Roadmap",
+    "roadmapSteps": [
+      { "phase": "Phase 1 ('25)", "title": "Infrastructure & Institutionalization", "items": ["Install 5MWh shared ESS", "Build real-time operation control system", "Improve public institution ESS mandate acceptance", "Establish NWAs settlement criteria"] },
+      { "phase": "Phase 2 ('26)", "title": "Demonstration", "items": ["Demonstrate shared ESS subscription service", "Demonstrate ESS mandate compliance via virtual net metering", "Demonstrate grid-linked flexibility supply", "Establish revenue model foundation"], "scale": "141MWh (~₩70B)" },
+      { "phase": "Phase 3 ('27~)", "title": "Expansion", "items": ["Prioritize metropolitan overloaded lines", "Provide operation guides for expansion to other cities", "Attract private ESS operators through market opening", "Build standard model for shared ESS expansion"], "scale": "6,300MWh (~₩3T)" }
+    ],
+
+    "impact": "Expected Impact",
+    "impactItems": [
+      { "value": "~40%", "label": "Initial investment cost reduction" },
+      { "value": "13 yrs", "label": "Payback period (half of individual ESS)" },
+      { "value": "5MWh", "label": "Phase 1 ESS installation scale" }
+    ],
+
+    "ctaTitle": "Want to learn more about Shared ESS?",
+    "ctaDesc": "We provide detailed consultation on shared ESS construction and virtual net metering transaction demonstration.",
+    "ctaContact": "Contact Us"
   }
 }

@@ -24,7 +24,12 @@
     "greenplannerDesc": "Application de simulation de rénovation verte",
     "reparkDesc": "Système de gestion intelligente des installations par QR",
     "solarScopeDesc": "Analyse intégrée de faisabilité de sites solaires",
-    "pvIntelligenceDesc": "Système de supervision intégrée de centrales solaires"
+    "pvIntelligenceDesc": "Système de supervision intégrée de centrales solaires",
+    "sharedEssDesc": "Système de stockage d'énergie partagé connecté au réseau",
+    "pvEss": "PV & ESS",
+    "sharedEssLabel": "ESS Partagé",
+    "pvRtuLabel": "PV RTU",
+    "solarScopeLabel": "Analyse de Sites Solaires"
   },
   "solutionsMenu": {
     "capabilities": "Compétences",

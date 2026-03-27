@@ -101,23 +101,38 @@ const productNav: NavItemWithChildren = {
             </svg>
           ),
         },
+      ],
+    },
+    {
+      titleKey: "productMenu.pvEss",
+      items: [
         {
-          href: "/product/solar-site",
-          labelKey: "SolarScope",
-          descKey: "productMenu.solarScopeDesc",
+          href: "/product/shared-ess",
+          labelKey: "productMenu.sharedEssLabel",
+          descKey: "productMenu.sharedEssDesc",
           icon: (
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
-              <circle cx="12" cy="12" r="5" /><path d="M12 1v2m0 18v2m-8.66-3.34l1.42-1.42m12.48-12.48l1.42-1.42M1 12h2m18 0h2m-3.34 8.66l-1.42-1.42M4.76 4.76L3.34 3.34" />
+              <rect x="3" y="7" width="8" height="14" rx="1" /><rect x="13" y="7" width="8" height="14" rx="1" /><path d="M7 7V5a5 5 0 0 1 10 0v2" /><path d="M7 14h10" />
             </svg>
           ),
         },
         {
           href: "/product/pv-intelligence",
-          labelKey: "PV Intelligence",
+          labelKey: "productMenu.pvRtuLabel",
           descKey: "productMenu.pvIntelligenceDesc",
           icon: (
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
               <path d="M2 12h4l3-9 6 18 3-9h4" />
+            </svg>
+          ),
+        },
+        {
+          href: "/product/solar-site",
+          labelKey: "productMenu.solarScopeLabel",
+          descKey: "productMenu.solarScopeDesc",
+          icon: (
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
+              <circle cx="12" cy="12" r="5" /><path d="M12 1v2m0 18v2m-8.66-3.34l1.42-1.42m12.48-12.48l1.42-1.42M1 12h2m18 0h2m-3.34 8.66l-1.42-1.42M4.76 4.76L3.34 3.34" />
             </svg>
           ),
         },

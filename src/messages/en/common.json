@@ -24,7 +24,12 @@
     "greenplannerDesc": "Green retrofit simulation app",
     "reparkDesc": "QR-based smart facility management system",
     "solarScopeDesc": "Integrated solar site feasibility analysis",
-    "pvIntelligenceDesc": "Solar power plant integrated monitoring system"
+    "pvIntelligenceDesc": "Solar power plant integrated monitoring system",
+    "sharedEssDesc": "Grid-connected shared energy storage system",
+    "pvEss": "PV & ESS",
+    "sharedEssLabel": "Shared ESS",
+    "pvRtuLabel": "PV RTU",
+    "solarScopeLabel": "Solar Site Analysis"
   },
   "solutionsMenu": {
     "capabilities": "Capabilities",

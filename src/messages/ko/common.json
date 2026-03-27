@@ -24,7 +24,12 @@
     "greenplannerDesc": "그린리모델링 시뮬레이션 앱",
     "reparkDesc": "QR 기반 스마트 시설 관리 시스템",
     "solarScopeDesc": "태양광 후보지 통합 타당성 분석",
-    "pvIntelligenceDesc": "태양광 발전소 통합 관제 시스템"
+    "pvIntelligenceDesc": "태양광 발전소 통합 관제 시스템",
+    "sharedEssDesc": "배전망 연계 공유형 에너지저장장치",
+    "pvEss": "PV & ESS",
+    "sharedEssLabel": "공유형 ESS",
+    "pvRtuLabel": "PV RTU",
+    "solarScopeLabel": "태양광 적지분석"
   },
   "solutionsMenu": {
     "capabilities": "역량",

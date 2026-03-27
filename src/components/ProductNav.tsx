@@ -22,8 +22,9 @@ export default function ProductNav() {
     { href: "/product/greenplanner", label: "GreenPlanner" },
     { href: "/product/save-e", label: "Save-E" },
     { href: "/product/repark", label: "RE:park" },
-    { href: "/product/solar-site", label: "SolarScope" },
-    { href: "/product/pv-intelligence", label: "PV Intelligence" },
+    { href: "/product/shared-ess", label: t("productMenu.sharedEssLabel") },
+    { href: "/product/pv-intelligence", label: t("productMenu.pvRtuLabel") },
+    { href: "/product/solar-site", label: t("productMenu.solarScopeLabel") },
   ];
 
   return (

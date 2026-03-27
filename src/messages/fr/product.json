@@ -8,7 +8,8 @@
     "saveEDesc": "Identifiez le tarif optimal grâce à l'analyse de la consommation électrique par tranche de 15 minutes, avec gestion groupée de l'énergie et suivi des coûts.",
     "reparkDesc": "Gestion des installations par QR code : du signalement citoyen au suivi par le gestionnaire, jusqu'au compte rendu d'intervention des prestataires.",
     "solarScopeDesc": "Analysez en une seule saisie d'adresse la réglementation, les distances d'éloignement, le réseau de distribution, le productible et la rentabilité d'un site solaire.",
-    "pvIntelligenceDesc": "Au-delà de l'affichage de la production — l'IA détecte les anomalies, calcule les pertes et maximise les revenus. Une plateforme Solar AI éprouvée sur nos propres centrales."
+    "pvIntelligenceDesc": "Au-delà de l'affichage de la production — l'IA détecte les anomalies, calcule les pertes et maximise les revenus. Une plateforme Solar AI éprouvée sur nos propres centrales.",
+    "sharedEssDesc": "Un nouveau modèle d'affaires où plusieurs bâtiments partagent un seul ESS de grande capacité connecté au réseau de distribution. Réduit les coûts d'électricité par compensation virtuelle et fournit la flexibilité au réseau."
   },
   "opti": {
     "heroSubtitle": "Conseiller IA en énergie pour les bâtiments",
@@ -525,5 +526,107 @@
     "ctaDesc": "Découvrez dans une démo live comment PV Intelligence détecte les anomalies et calcule les pertes. Nous vous guiderons avec les données réelles de nos propres centrales.",
     "ctaDemo": "Demander une démo",
     "ctaBrochure": "Brochure PDF"
+  },
+
+  "sharedEss": {
+    "heroLabel": "Shared ESS",
+    "heroTitle": "ESS Partagé",
+    "heroSubtitle": "ESS Partagé — Ressource de Flexibilité du Réseau",
+    "heroDesc": "Un nouveau modèle d'affaires ESS qui connecte un stockage d'énergie de grande capacité au réseau de distribution sur un seul site, permettant à de nombreux consommateurs distants de bénéficier de réductions de coûts d'électricité via la compensation virtuelle tout en stabilisant le réseau électrique selon les besoins.",
+    "requestDemo": "Nous contacter",
+
+    "comparisonColCategory": "Catégorie",
+    "comparisonColIndividual": "ESS individuel par bâtiment",
+    "comparisonColShared": "ESS Partagé",
+    "projectParticipantsLabel": "Participants",
+    "projectGoalsLabel": "Objectifs du projet",
+    "projectBuildLabel": "Détails de construction",
+
+    "background": "Contexte",
+    "backgroundDesc": "La région métropolitaine de Séoul (province de Gyeonggi) fait face à une offre électrique insuffisante par rapport à une forte demande, et l'extension du réseau est difficile en raison de problèmes d'acceptabilité publique. Le déploiement d'ESS côté demande stagne faute de politiques et de rentabilité.",
+    "backgroundItems": [
+      { "title": "Demande électrique concentrée", "desc": "Le cluster de Yongin à Gyeonggi seul prévoit 14,7 GW de demande d'ici 2053. La demande nationale de pointe devrait atteindre 202,0 GW d'ici 2051" },
+      { "title": "Difficultés d'extension du réseau", "desc": "Retard de 66 à 150 mois dans la construction des principales lignes de transport en raison de l'acceptabilité publique" },
+      { "title": "Absence d'ESS côté demande", "desc": "Le marché des nouvelles installations a disparu après l'expiration du tarif spécial en 2019. Le taux d'utilisation des ESS existants reste également faible" }
+    ],
+
+    "concept": "Qu'est-ce que l'ESS Partagé ?",
+    "conceptDesc": "Un nouveau modèle d'affaires ESS qui connecte un stockage d'énergie de grande capacité au réseau de distribution sur un seul site, permettant à de nombreux consommateurs distants de bénéficier de réductions via la compensation virtuelle tout en stabilisant le réseau selon les besoins",
+    "conceptAdvantages": [
+      { "title": "Fourniture de flexibilité", "desc": "Fournit des ressources électriques lorsque la stabilisation du réseau de distribution est nécessaire" },
+      { "title": "Acceptabilité renforcée", "desc": "Prévention des incendies et réduction des coûts d'exploitation grâce à la gestion par un opérateur professionnel" },
+      { "title": "Rentabilité améliorée", "desc": "Participation à divers marchés de revenus : compensation virtuelle, avantages NWAs, VPP" }
+    ],
+
+    "comparison": "ESS Individuel vs. ESS Partagé",
+    "comparisonItems": [
+      { "category": "Lieu d'installation", "individual": "À l'intérieur du bâtiment", "shared": "À l'extérieur, près des lignes de distribution" },
+      { "category": "Investissement initial", "individual": "Élevé — batteries individuelles et coûts de construction", "shared": "Faible — achat groupé de batteries et construction sur un seul site" },
+      { "category": "Génération de revenus", "individual": "Faible — uniquement économies sur les tarifs de base", "shared": "Élevé — économies tarifaires + fourniture de flexibilité en cas de surcharge" },
+      { "category": "Période de retour", "individual": "~27 ans (base 100 kWh : investissement 100M₩, revenus annuels 3,7M₩)", "shared": "~13 ans (base 100 kWh : investissement 65M₩, revenus annuels 6,11M₩)" },
+      { "category": "Exploitation", "individual": "Gestion par le personnel sur site, difficile sans experts", "shared": "Maintenance par un opérateur ESS professionnel, réduction des coûts et expertise" },
+      { "category": "BM futur", "individual": "Expansion difficile", "shared": "DR, VPP, vente d'électricité stockée et plus encore" }
+    ],
+
+    "operation": "Plan d'exploitation",
+    "operationNormal": "Fonctionnement normal — Compensation virtuelle",
+    "operationNormalItems": [
+      "Recrutement des consommateurs et analyse des profils de consommation",
+      "Signature du contrat d'abonnement ESS partagé (opérateur ESS ↔ consommateur)",
+      "Contrôle charge/décharge ESS basé sur les profils",
+      "Facturation de l'abonnement basée sur les économies (opérateur ESS → client)"
+    ],
+    "operationGrid": "Fourniture de flexibilité au réseau",
+    "operationGridItems": [
+      "Analyse des profils de charge du réseau de distribution",
+      "Signature du contrat de fourniture de flexibilité (opérateur ESS ↔ gestionnaire de réseau)",
+      "Exécution des ordres de dispatch et fourniture",
+      "Compensation et règlement des performances (NWAs)"
+    ],
+
+    "nwas": "Alternatives Non-Filaires (NWAs)",
+    "nwasDesc": "Un système de compensation qui rémunère les opérateurs fournissant une technologie de remplacement ou de report de la construction de nouvelles lignes de distribution dans des conditions ponctuelles, couvrant les coûts pour la période d'évitement ou de report.",
+    "vnm": "Compensation Virtuelle (VNM)",
+    "vnmDesc": "Les clients bénéficient d'économies d'électricité sans posséder d'équipement ESS — l'énergie chargée/déchargée d'un ESS installé sur un site tiers est répartie et compensée par tranche horaire, offrant un effet de réduction tarifaire équivalent.",
+
+    "alliance": "Alliance de Démonstration",
+    "allianceDesc": "Une alliance de démonstration intégrée public-privé a été formée pour vérifier l'ensemble du processus technologique, réglementaire et opérationnel de l'ESS partagé.",
+    "allianceMembers": [
+      { "name": "Province de Gyeonggi", "role": "Collectivité pilote", "items": ["Soutien administratif actif et coopération inter-services", "Développement de politiques d'énergie distribuée", "Stratégie d'expansion ESS pour les institutions publiques provinciales"] },
+      { "name": "Ville spéciale de Goyang", "role": "Collectivité pilote", "items": ["Soutien aux autorisations administratives", "Coordination de mise à disposition de terrains publics", "Acceptabilité communautaire et prévention des conflits"] },
+      { "name": "KEPCO", "role": "Gestionnaire de réseau", "items": ["Développement et exploitation de la plateforme de compensation virtuelle", "Conception du système de compensation des ressources flexibles", "Sélection des lignes surchargées et coopération au dispatch"] },
+      { "name": "Goyang Urban Management Corp.", "role": "Investisseur ESS partagé", "items": ["Gestion de chantier et contrôle qualité ESS", "Inspection et gestion de la sécurité ESS", "Système de réponse aux incidents ESS"] },
+      { "name": "LS Electric", "role": "Conseil technique", "items": ["Expertise en exploitation et sécurité ESS", "Avancement de la logique de réponse au dispatch", "Conseil en surveillance et prévention des accidents ESS"] },
+      { "name": "Ninewatt", "role": "Direction du projet", "items": ["Développement de la plateforme de gestion ESS", "Gestion de l'exécution du projet pilote", "Recrutement des consommateurs et conception du modèle d'abonnement"] }
+    ],
+
+    "project": "Aperçu du Projet",
+    "projectName": "Construction d'ESS Partagé et Démonstration de Transactions par Compensation Virtuelle pour la Flexibilité du Réseau de Distribution Métropolitain",
+    "projectParticipants": "Goyang Urban Management Corp. (57 %), Ninewatt (43 %)",
+    "projectGoals": [
+      "Réduire les coûts d'électricité des consommateurs via la compensation virtuelle en fonctionnement normal",
+      "Démontrer la conformité à l'obligation d'installation ESS des institutions publiques via la compensation virtuelle",
+      "Revenus issus de l'évitement du renforcement des lignes grâce à la stabilisation du réseau"
+    ],
+    "projectHw": "Construction ESS 0,25 MW/1 MWh + ESS 1 MW/4 MWh",
+    "projectSw": "Développement d'algorithme d'exploitation optimale ESS, développement du système de règlement de compensation virtuelle",
+
+    "roadmap": "Feuille de Route d'Expansion",
+    "roadmapSteps": [
+      { "phase": "Phase 1 ('25)", "title": "Infrastructure et Institutionnalisation", "items": ["Installation de 5 MWh d'ESS partagé", "Mise en place du système de contrôle en temps réel", "Amélioration de l'acceptabilité du mandat ESS public", "Établissement des critères de règlement NWAs"] },
+      { "phase": "Phase 2 ('26)", "title": "Démonstration", "items": ["Démonstration du service d'abonnement ESS partagé", "Démonstration de la conformité ESS via compensation virtuelle", "Démonstration de la fourniture de flexibilité réseau", "Établissement des bases du modèle de revenus"], "scale": "141 MWh (~70 Mrd ₩)" },
+      { "phase": "Phase 3 ('27~)", "title": "Expansion", "items": ["Priorisation des lignes métropolitaines en surcharge", "Fourniture de guides opérationnels pour l'expansion", "Attraction d'opérateurs ESS privés par l'ouverture du marché", "Construction d'un modèle standard pour l'expansion de l'ESS partagé"], "scale": "6 300 MWh (~3 000 Mrd ₩)" }
+    ],
+
+    "impact": "Impact Attendu",
+    "impactItems": [
+      { "value": "~40 %", "label": "Réduction de l'investissement initial" },
+      { "value": "13 ans", "label": "Période de retour (moitié de l'ESS individuel)" },
+      { "value": "5 MWh", "label": "Échelle d'installation ESS Phase 1" }
+    ],
+
+    "ctaTitle": "Envie d'en savoir plus sur l'ESS Partagé ?",
+    "ctaDesc": "Nous vous proposons un accompagnement détaillé sur la construction d'ESS partagé et la démonstration de compensation virtuelle.",
+    "ctaContact": "Nous contacter"
   }
 }
