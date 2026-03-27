@@ -1,6 +1,5 @@
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
-import { getCareer } from "@/lib/cms";
 
 export async function generateMetadata() {
   const t = await getTranslations("company");
@@ -10,21 +9,15 @@ export async function generateMetadata() {
   };
 }
 
-export default async function CareerPage({
-  params,
-}: {
-  params: Promise<{ locale: string }>;
-}) {
-  const { locale } = await params;
+export default async function CareerPage() {
   const t = await getTranslations("company");
-  const careerData = await getCareer(locale);
 
-  const values = (careerData.values ?? []) as Array<{ title: string; desc?: string | null }>;
-  const benefitCategories = (careerData.benefitCategories ?? []) as Array<{
+  const values = t.raw("career.values") as Array<{ title: string; desc: string }>;
+  const benefitCategories = t.raw("career.benefitCategories") as Array<{
     category: string;
-    items?: Array<{ title: string; desc?: string | null }> | null;
+    items: Array<{ title: string; desc: string }>;
   }>;
-  const steps = (careerData.steps ?? []) as Array<{ step: string; title: string; desc?: string | null }>;
+  const steps = t.raw("career.steps") as Array<{ step: string; title: string; desc: string }>;
 
   const valueIcons = [
     <svg key="growth" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-6 w-6">
@@ -59,10 +52,10 @@ export default async function CareerPage({
             Culture
           </h2>
           <h3 className="mt-2 text-3xl font-bold tracking-tight">
-            {careerData.cultureTitle || t("career.cultureTitle")}
+            {t("career.cultureTitle")}
           </h3>
           <p className="mt-4 max-w-2xl text-muted leading-relaxed">
-            {careerData.cultureDesc || t("career.cultureDesc")}
+            {t("career.cultureDesc")}
           </p>
         </div>
       </section>
@@ -74,10 +67,10 @@ export default async function CareerPage({
             Talent
           </h2>
           <h3 className="mt-2 text-3xl font-bold tracking-tight">
-            {careerData.talentTitle || t("career.talentTitle")}
+            {t("career.talentTitle")}
           </h3>
           <p className="mt-4 max-w-2xl text-muted">
-            {careerData.talentSubtitle || t("career.talentSubtitle")}
+            {t("career.talentSubtitle")}
           </p>
 
           <div className="mt-10 grid gap-6 sm:grid-cols-3">
