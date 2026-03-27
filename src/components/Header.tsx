@@ -417,12 +417,12 @@ export default function Header() {
     <>
       <header
         ref={headerRef}
-        className={`fixed top-0 z-50 w-full transition-all duration-200 ${
+        className={`fixed top-0 z-50 w-full border-b transition-all duration-200 ${
           activeMenu
-            ? "bg-background/95 backdrop-blur-xl border-b border-border shadow-lg shadow-black/5"
+            ? "bg-background/95 backdrop-blur-xl border-border shadow-lg shadow-black/5"
             : scrolled || mobileOpen
-              ? "bg-background/80 border-b border-border backdrop-blur-xl"
-              : "bg-transparent"
+              ? "bg-background/80 border-border backdrop-blur-xl"
+              : "bg-transparent border-transparent"
         }`}
       >
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">

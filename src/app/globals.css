@@ -48,9 +48,15 @@
   --font-mono: var(--font-geist-mono);
 }
 
-body {
-  overscroll-behavior: none;
+html {
   background: var(--background);
+}
+
+html, body {
+  overscroll-behavior: none;
+}
+
+body {
   color: var(--foreground);
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
   word-break: keep-all;
@@ -63,6 +69,7 @@ html[lang="ja"] body {
 /* Hide header bottom border when sub-navigation is visible */
 body.subnav-visible header {
   border-bottom-color: transparent !important;
+  box-shadow: none !important;
 }
 
 /* Smooth scroll — only for same-page anchor links via :target */
