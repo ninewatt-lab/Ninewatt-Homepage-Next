@@ -3,7 +3,7 @@ import { getTranslations } from "next-intl/server";
 export async function generateMetadata() {
   const t = await getTranslations("solutions");
   return {
-    title: "수행사례 - Ninewatt",
+    title: `${t("cases.title")} - Ninewatt`,
     description: t("cases.subtitle"),
   };
 }

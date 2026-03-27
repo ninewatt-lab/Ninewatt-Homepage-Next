@@ -4,29 +4,21 @@ import { getTranslations } from "next-intl/server";
 export async function generateMetadata() {
   const t = await getTranslations("solutions");
   return {
-    title: "시스템개발 - Ninewatt",
+    title: `${t("services.title")} - Ninewatt`,
     description: t("services.title"),
   };
 }
 
-const serviceProjects = [
-  { client: "한국에너지기술연구원", period: "2025.07~2025.11", title: "산업단지 재생에너지 플랫폼 구축사업" },
-  { client: "한국건설기술연구원", period: "2025.06~2025.10", title: "지역 단위 탄소배출량 가시화 시스템 고도화" },
-  { client: "주식회사 네오스텍", period: "2025.06~2025.11", title: "스마트 조명 운영 데이터 최적화 서비스" },
-  { client: "국토교통과학기술진흥원", period: "2025.05~2025.12", title: "경기도 스마트 ESS 통합자원관리시스템 고도화" },
-  { client: "국토안전관리원", period: "2025.05~2025.12", title: "그린리모델링 최신기술 활용 기획 및 시범사업(GRAI)" },
-  { client: "엘에스일렉트릭(주)", period: "2024.11~2024.12", title: "AI를 활용한 분석 보고서 생성" },
-  { client: "경기연구원", period: "2024.09~2025.08", title: "경기도 광역 도시생태현황지도 및 RE100 플랫폼 서비스 구축" },
-  { client: "엘에스일렉트릭(주)", period: "2024.07~2024.07", title: "피크저감형 ESS 최적제어 알고리즘 개발" },
-  { client: "한국건설기술연구원", period: "2024.06~2024.11", title: "지역 단위 탄소배출량 가시화 시스템 개발" },
-  { client: "엘에스일렉트릭(주)", period: "2024.01~2024.12", title: "고도화된 에너지 분석 레포팅 Service(ver2.0)" },
-  { client: "현대엔지비주식회사", period: "2023.12~2024.06", title: "미래 모빌리티 허브 에너지 효율화 알고리즘 및 시뮬레이션 개발" },
-  { client: "엘에스일렉트릭(주)", period: "2023.04~2023.08", title: "스마트진단 MVP3.0 내 Energy Reporting Service 고도화" },
-];
+interface ServiceProject {
+  client: string;
+  period: string;
+  title: string;
+}
 
 export default async function ServicesPage() {
   const t = await getTranslations("solutions");
   const headers = t.raw("services.tableHeaders") as { client: string; period: string; content: string };
+  const serviceProjects = t.raw("services.projects") as ServiceProject[];
 
   return (
     <>

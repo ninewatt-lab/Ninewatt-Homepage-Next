@@ -1,5 +1,4 @@
 import { getTranslations } from "next-intl/server";
-import { getGlobalBusiness } from "@/lib/cms";
 
 export async function generateMetadata() {
   const t = await getTranslations("company");
@@ -9,18 +8,12 @@ export async function generateMetadata() {
   };
 }
 
-export default async function GlobalPage({
-  params,
-}: {
-  params: Promise<{ locale: string }>;
-}) {
-  const { locale } = await params;
+export default async function GlobalPage() {
   const t = await getTranslations("company");
-  const globalData = await getGlobalBusiness(locale);
-  const countries = (globalData.countries ?? []) as Array<{
+  const countries = t.raw("global.countries") as Array<{
     country: string;
     flag: string;
-    items?: Array<{ text: string }> | null;
+    items: string[];
   }>;
 
   return (
@@ -45,12 +38,12 @@ export default async function GlobalPage({
                 <span className="text-sm font-normal text-muted">{c.flag}</span>
               </h2>
               <ul className="mt-4 space-y-2">
-                {(c.items ?? []).map((item, i) => (
+                {c.items.map((item, i) => (
                   <li
                     key={i}
                     className="text-sm leading-relaxed text-muted"
                   >
-                    {typeof item === "string" ? item : item.text}
+                    {item}
                   </li>
                 ))}
               </ul>
