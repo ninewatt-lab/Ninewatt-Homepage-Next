@@ -11,52 +11,7 @@ export async function generateMetadata() {
 
 const categories = [
   {
-    titleKey: "productMenu.platform" as const,
-    products: [
-      {
-        href: "/product/opti" as const,
-        name: "Opti",
-        badge: "CES 2026",
-        tagline: "AI Energy Advisor",
-        descKey: "list.optiDesc" as const,
-      },
-      {
-        href: "/product/watti" as const,
-        name: "Watti",
-        badge: null,
-        tagline: "3D Building Energy Platform",
-        descKey: "list.wattiDesc" as const,
-      },
-      {
-        href: "/product/save-e" as const,
-        name: "Save-E",
-        badge: null,
-        tagline: "Smart Energy Insight",
-        descKey: "list.saveEDesc" as const,
-      },
-    ],
-  },
-  {
-    titleKey: "productMenu.appsAndServices" as const,
-    products: [
-      {
-        href: "/product/greenplanner" as const,
-        name: "GreenPlanner",
-        badge: null,
-        tagline: "Green Remodeling Planner",
-        descKey: "list.greenplannerDesc" as const,
-      },
-      {
-        href: "/product/repark" as const,
-        name: "RE:park",
-        badge: null,
-        tagline: "Smart Facility Management",
-        descKey: "list.reparkDesc" as const,
-      },
-    ],
-  },
-  {
-    titleKey: "productMenu.pvEss" as const,
+    titleKey: "productMenu.energy" as const,
     products: [
       {
         href: "/product/shared-ess" as const,
@@ -78,6 +33,25 @@ const categories = [
         badge: null,
         tagline: "Solar Site Analysis Platform",
         descKey: "list.solarScopeDesc" as const,
+      },
+    ],
+  },
+  {
+    titleKey: "productMenu.platform" as const,
+    products: [
+      {
+        href: "/product/greenplanner" as const,
+        name: "GreenPlanner",
+        badge: null,
+        tagline: "Green Remodeling Planner",
+        descKey: "list.greenplannerDesc" as const,
+      },
+      {
+        href: "/product/repark" as const,
+        name: "RE:park",
+        badge: null,
+        tagline: "Smart Facility Management",
+        descKey: "list.reparkDesc" as const,
       },
     ],
   },

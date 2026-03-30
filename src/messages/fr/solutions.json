@@ -46,6 +46,9 @@
         "items": ["Analyse d'aptitude à l'installation PV (solaire)", "Simulation de capacité et d'exploitation ESS", "Analyse des espaces disponibles, toitures et ensoleillement", "Visualisation 3D des effets d'installation"]
       }
     ],
+    "platformTitle": "Plateforme",
+    "platformDesc": "Les plateformes principales de gestion énergétique basées sur l'IA de Ninewatt",
+    "learnMore": "En savoir plus",
     "ctaTitle": "Vous recherchez une solution énergétique sur mesure ?",
     "ctaDesc": "Nos experts vous proposent une solution optimisée pour votre organisation.",
     "ctaButton": "Nous contacter"

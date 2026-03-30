@@ -17,12 +17,22 @@ type FooterSection = {
 
 const footerSections: FooterSection[] = [
   {
+    titleKey: "nav.solutions",
+    href: "/solutions",
+    links: [
+      { label: "Opti", href: "/solutions/opti", isLiteral: true },
+      { label: "Watti", href: "/solutions/watti", isLiteral: true },
+      { label: "Save-E", href: "/solutions/save-e", isLiteral: true },
+      { label: "solutionsMenu.cases", href: "/solutions/cases" },
+      { label: "solutionsMenu.rnd", href: "/solutions/rnd" },
+      { label: "solutionsMenu.services", href: "/solutions/services" },
+      { label: "companyMenu.global", href: "/company/global" },
+    ],
+  },
+  {
     titleKey: "nav.product",
     href: "/product",
     links: [
-      { label: "Opti", href: "/product/opti", isLiteral: true },
-      { label: "Watti", href: "/product/watti", isLiteral: true },
-      { label: "Save-E", href: "/product/save-e", isLiteral: true },
       { label: "GreenPlanner", href: "/product/greenplanner", isLiteral: true },
       { label: "RE:park", href: "/product/repark", isLiteral: true },
       { label: "SolarScope", href: "/product/solar-site", isLiteral: true },
@@ -34,19 +44,9 @@ const footerSections: FooterSection[] = [
     ],
   },
   {
-    titleKey: "nav.solutions",
-    href: "/solutions",
-    links: [
-      { label: "solutionsMenu.cases", href: "/solutions/cases" },
-      { label: "solutionsMenu.rnd", href: "/solutions/rnd" },
-      { label: "solutionsMenu.services", href: "/solutions/services" },
-    ],
-  },
-  {
     titleKey: "nav.company",
     href: "/company",
     links: [
-      { label: "companyMenu.global", href: "/company/global" },
       { label: "companyMenu.media", href: "/company/media" },
       { label: "companyMenu.awards", href: "/company/awards" },
       { label: "companyMenu.history", href: "/company/history" },

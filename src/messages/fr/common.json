@@ -27,11 +27,13 @@
     "pvIntelligenceDesc": "Système de supervision intégrée de centrales solaires",
     "sharedEssDesc": "Système de stockage d'énergie partagé connecté au réseau",
     "pvEss": "PV & ESS",
+    "energy": "Energy",
     "sharedEssLabel": "ESS Partagé",
     "pvRtuLabel": "PV RTU",
     "solarScopeLabel": "Analyse de Sites Solaires"
   },
   "solutionsMenu": {
+    "solutions": "Solutions",
     "capabilities": "Compétences",
     "trackRecord": "Références",
     "coreSolutions": "Solutions clés",

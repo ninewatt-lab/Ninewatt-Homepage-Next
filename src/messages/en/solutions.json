@@ -46,6 +46,9 @@
         "items": ["PV (solar) installation suitability analysis", "ESS capacity and operation simulation", "Idle space, rooftop, and solar irradiance analysis", "3D visualization of installation effects"]
       }
     ],
+    "platformTitle": "Platform",
+    "platformDesc": "Ninewatt's AI-powered core energy management platforms",
+    "learnMore": "Learn more",
     "ctaTitle": "Need a tailored energy solution?",
     "ctaDesc": "Our experts will propose a solution optimized for your organization.",
     "ctaButton": "Contact Us"

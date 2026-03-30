@@ -70,7 +70,7 @@ export default async function Home({
             <div className="grid gap-6 md:grid-cols-5">
               {/* Large card */}
               <Link
-                href="/product/opti"
+                href="/solutions/opti"
                 className="group relative md:col-span-3 rounded-2xl border border-border p-8 transition-all duration-300 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5"
               >
                 <p className="text-xs font-medium uppercase tracking-wider text-muted">

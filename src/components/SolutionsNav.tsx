@@ -17,9 +17,13 @@ export default function SolutionsNav() {
 
   const subPages = [
     { href: "/solutions", label: t("solutionsMenu.coreSolutions") },
+    { href: "/solutions/opti", label: "Opti" },
+    { href: "/solutions/watti", label: "Watti" },
+    { href: "/solutions/save-e", label: "Save-E" },
     { href: "/solutions/cases", label: t("solutionsMenu.cases") },
     { href: "/solutions/rnd", label: t("solutionsMenu.rnd") },
     { href: "/solutions/services", label: t("solutionsMenu.services") },
+    { href: "/company/global", label: t("companyMenu.global") },
   ];
 
   return (

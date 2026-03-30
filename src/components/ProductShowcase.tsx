@@ -24,7 +24,7 @@ const products: Product[] = [
     label: "Opti",
     titleKey: "showcase.opti.title",
     descriptionKey: "showcase.opti.description",
-    href: "/product/opti",
+    href: "/solutions/opti",
     linkTextKey: "showcase.opti.linkText",
     media: {
       type: "video",
@@ -48,7 +48,7 @@ const products: Product[] = [
     label: "Watti",
     titleKey: "showcase.watti.title",
     descriptionKey: "showcase.watti.description",
-    href: "/product/watti",
+    href: "/solutions/watti",
     linkTextKey: "showcase.watti.linkText",
     media: {
       type: "video",

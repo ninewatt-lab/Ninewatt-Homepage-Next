@@ -39,72 +39,7 @@ const productNav: NavItemWithChildren = {
   menuNamespace: "productMenu",
   sections: [
     {
-      titleKey: "productMenu.platform",
-      items: [
-        {
-          href: "/product/opti",
-          labelKey: "Opti",
-          descKey: "productMenu.optiDesc",
-          icon: (
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
-              <path d="M12 2a4 4 0 0 1 4 4c0 1.95-1.4 3.58-3.25 3.93L12 22l-.75-12.07A4.001 4.001 0 0 1 12 2z" />
-              <circle cx="12" cy="6" r="1.5" fill="currentColor" stroke="none" />
-            </svg>
-          ),
-        },
-        {
-          href: "/product/watti",
-          labelKey: "Watti",
-          descKey: "productMenu.wattiDesc",
-          icon: (
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
-              <path d="M12 3L2 9l10 6 10-6-10-6z" /><path d="M2 17l10 6 10-6" /><path d="M2 13l10 6 10-6" />
-            </svg>
-          ),
-        },
-        {
-          href: "/product/save-e",
-          labelKey: "Save-E",
-          descKey: "productMenu.saveEDesc",
-          icon: (
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
-              <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
-            </svg>
-          ),
-        },
-      ],
-    },
-    {
-      titleKey: "productMenu.appsAndServices",
-      items: [
-        {
-          href: "/product/greenplanner",
-          labelKey: "GreenPlanner",
-          descKey: "productMenu.greenplannerDesc",
-          icon: (
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
-              <path d="M17 8C17 5.24 14.76 3 12 3S7 5.24 7 8c0 3.53 5 9 5 9s5-5.47 5-9z" />
-              <path d="M12 11V8m0 0l-1.5 1.5M12 8l1.5 1.5" />
-              <path d="M5 21h14" />
-            </svg>
-          ),
-        },
-        {
-          href: "/product/repark",
-          labelKey: "RE:park",
-          descKey: "productMenu.reparkDesc",
-          icon: (
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
-              <rect x="3" y="3" width="7" height="7" rx="1" /><rect x="14" y="3" width="7" height="7" rx="1" />
-              <rect x="3" y="14" width="7" height="7" rx="1" /><rect x="14" y="14" width="3" height="3" />
-              <rect x="18" y="18" width="3" height="3" />
-            </svg>
-          ),
-        },
-      ],
-    },
-    {
-      titleKey: "productMenu.pvEss",
+      titleKey: "productMenu.energy",
       items: [
         {
           href: "/product/shared-ess",
@@ -138,6 +73,35 @@ const productNav: NavItemWithChildren = {
         },
       ],
     },
+    {
+      titleKey: "productMenu.platform",
+      items: [
+        {
+          href: "/product/greenplanner",
+          labelKey: "GreenPlanner",
+          descKey: "productMenu.greenplannerDesc",
+          icon: (
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
+              <path d="M17 8C17 5.24 14.76 3 12 3S7 5.24 7 8c0 3.53 5 9 5 9s5-5.47 5-9z" />
+              <path d="M12 11V8m0 0l-1.5 1.5M12 8l1.5 1.5" />
+              <path d="M5 21h14" />
+            </svg>
+          ),
+        },
+        {
+          href: "/product/repark",
+          labelKey: "RE:park",
+          descKey: "productMenu.reparkDesc",
+          icon: (
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
+              <rect x="3" y="3" width="7" height="7" rx="1" /><rect x="14" y="3" width="7" height="7" rx="1" />
+              <rect x="3" y="14" width="7" height="7" rx="1" /><rect x="14" y="14" width="3" height="3" />
+              <rect x="18" y="18" width="3" height="3" />
+            </svg>
+          ),
+        },
+      ],
+    },
   ],
 };
 
@@ -148,7 +112,7 @@ const solutionsNav: NavItemWithChildren = {
   menuNamespace: "solutionsMenu",
   sections: [
     {
-      titleKey: "solutionsMenu.capabilities",
+      titleKey: "solutionsMenu.solutions",
       items: [
         {
           href: "/solutions",
@@ -157,6 +121,37 @@ const solutionsNav: NavItemWithChildren = {
           icon: (
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
               <circle cx="12" cy="12" r="3" /><path d="M12 1v4m0 14v4m-8.66-15l3.46 2m10.4 6l3.46 2M1.34 15l3.46-2m10.4-6l3.46-2M1.34 9l3.46 2m10.4 6l3.46 2m-14.32 0l3.46-2m10.4-6l3.46-2" />
+            </svg>
+          ),
+        },
+        {
+          href: "/solutions/opti",
+          labelKey: "Opti",
+          descKey: "productMenu.optiDesc",
+          icon: (
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
+              <path d="M12 2a4 4 0 0 1 4 4c0 1.95-1.4 3.58-3.25 3.93L12 22l-.75-12.07A4.001 4.001 0 0 1 12 2z" />
+              <circle cx="12" cy="6" r="1.5" fill="currentColor" stroke="none" />
+            </svg>
+          ),
+        },
+        {
+          href: "/solutions/watti",
+          labelKey: "Watti",
+          descKey: "productMenu.wattiDesc",
+          icon: (
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
+              <path d="M12 3L2 9l10 6 10-6-10-6z" /><path d="M2 17l10 6 10-6" /><path d="M2 13l10 6 10-6" />
+            </svg>
+          ),
+        },
+        {
+          href: "/solutions/save-e",
+          labelKey: "Save-E",
+          descKey: "productMenu.saveEDesc",
+          icon: (
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
+              <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
             </svg>
           ),
         },
@@ -198,6 +193,16 @@ const solutionsNav: NavItemWithChildren = {
             </svg>
           ),
         },
+        {
+          href: "/company/global",
+          labelKey: "companyMenu.global",
+          descKey: "companyMenu.globalDesc",
+          icon: (
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
+              <circle cx="12" cy="12" r="10" /><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z" />
+            </svg>
+          ),
+        },
       ],
     },
   ],
@@ -223,12 +228,13 @@ const companyNav: NavItemWithChildren = {
           ),
         },
         {
-          href: "/company/history",
-          labelKey: "companyMenu.history",
-          descKey: "companyMenu.historyDesc",
+          href: "/company/media",
+          labelKey: "companyMenu.media",
+          descKey: "companyMenu.mediaDesc",
           icon: (
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
-              <circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" />
+              <path d="M19 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V5a2 2 0 00-2-2z" />
+              <path d="M10 9l5 3-5 3V9z" />
             </svg>
           ),
         },
@@ -248,16 +254,6 @@ const companyNav: NavItemWithChildren = {
       titleKey: "companyMenu.achievements",
       items: [
         {
-          href: "/company/global",
-          labelKey: "companyMenu.global",
-          descKey: "companyMenu.globalDesc",
-          icon: (
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
-              <circle cx="12" cy="12" r="10" /><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z" />
-            </svg>
-          ),
-        },
-        {
           href: "/company/awards",
           labelKey: "companyMenu.awards",
           descKey: "companyMenu.awardsDesc",
@@ -265,6 +261,16 @@ const companyNav: NavItemWithChildren = {
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
               <path d="M8 21h8m-4-4v4m-4.5-9.25L7 8.5V3h10v5.5l-.5 3.25" />
               <path d="M5 3h14" /><path d="M7 8.5H5a2 2 0 00-2 2c0 2.5 2 4 4 4.5m10-6.5h2a2 2 0 012 2c0 2.5-2 4-4 4.5" />
+            </svg>
+          ),
+        },
+        {
+          href: "/company/history",
+          labelKey: "companyMenu.history",
+          descKey: "companyMenu.historyDesc",
+          icon: (
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
+              <circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" />
             </svg>
           ),
         },
@@ -278,23 +284,12 @@ const companyNav: NavItemWithChildren = {
             </svg>
           ),
         },
-        {
-          href: "/company/media",
-          labelKey: "companyMenu.media",
-          descKey: "companyMenu.mediaDesc",
-          icon: (
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
-              <path d="M19 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V5a2 2 0 00-2-2z" />
-              <path d="M10 9l5 3-5 3V9z" />
-            </svg>
-          ),
-        },
       ],
     },
   ],
 };
 
-const megaMenuItems: NavItemWithChildren[] = [productNav, solutionsNav, companyNav];
+const megaMenuItems: NavItemWithChildren[] = [solutionsNav, productNav, companyNav];
 
 const localeLabels: Record<string, { short: string; native: string }> = {
   ko: { short: "KO", native: "한국어" },

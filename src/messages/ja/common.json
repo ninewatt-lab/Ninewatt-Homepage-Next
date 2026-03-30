@@ -4,7 +4,7 @@
     "description": "AI駆動型ビルエネルギー分析・最適化プラットフォーム"
   },
   "nav": {
-    "product": "製品",
+    "product": "製品一覧",
     "solutions": "ソリューション",
     "company": "会社情報",
     "contact": "お問い合わせ",
@@ -27,11 +27,13 @@
     "pvIntelligenceDesc": "太陽光発電所統合監視システム",
     "sharedEssDesc": "配電網連携型共有エネルギー貯蔵システム",
     "pvEss": "PV & ESS",
+    "energy": "Energy",
     "sharedEssLabel": "共有型ESS",
     "pvRtuLabel": "PV RTU",
     "solarScopeLabel": "太陽光適地分析"
   },
   "solutionsMenu": {
+    "solutions": "ソリューション",
     "capabilities": "ケイパビリティ",
     "trackRecord": "実績",
     "coreSolutions": "コアソリューション",

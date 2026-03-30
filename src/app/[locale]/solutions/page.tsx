@@ -11,8 +11,33 @@ export async function generateMetadata() {
   };
 }
 
+const platformProducts = [
+  {
+    href: "/solutions/opti" as const,
+    name: "Opti",
+    badge: "CES 2026",
+    tagline: "AI Energy Advisor",
+    descKey: "optiDesc" as const,
+  },
+  {
+    href: "/solutions/watti" as const,
+    name: "Watti",
+    badge: null,
+    tagline: "3D Building Energy Platform",
+    descKey: "wattiDesc" as const,
+  },
+  {
+    href: "/solutions/save-e" as const,
+    name: "Save-E",
+    badge: null,
+    tagline: "Smart Energy Insight",
+    descKey: "saveEDesc" as const,
+  },
+];
+
 export default async function SolutionsPage() {
   const t = await getTranslations("solutions");
+  const tp = await getTranslations("product");
   const solutions = t.raw("overview.solutions") as Array<{
     id: string;
     title: string;
@@ -33,6 +58,44 @@ export default async function SolutionsPage() {
           </p>
         </div>
       </section>
+
+      {/* Platform Products */}
+      <ScrollReveal>
+        <section className="border-b border-border px-6 py-16">
+          <div className="mx-auto max-w-5xl">
+            <h2 className="text-2xl font-bold">{t("overview.platformTitle")}</h2>
+            <p className="mt-2 text-sm text-muted">{t("overview.platformDesc")}</p>
+            <div className="mt-8 grid gap-6 sm:grid-cols-3">
+              {platformProducts.map((product) => (
+                <Link
+                  key={product.href}
+                  href={product.href}
+                  className="group relative rounded-xl border border-border p-6 transition-all duration-300 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5"
+                >
+                  {product.badge && (
+                    <span className="absolute right-4 top-4 rounded-full bg-primary/10 px-2.5 py-0.5 text-[10px] font-bold text-primary">
+                      {product.badge}
+                    </span>
+                  )}
+                  <p className="text-xs font-semibold uppercase tracking-wider text-primary">
+                    {product.name}
+                  </p>
+                  <p className="mt-1 text-[11px] text-muted">{product.tagline}</p>
+                  <p className="mt-3 text-sm leading-relaxed text-muted">
+                    {tp(`list.${product.descKey}`)}
+                  </p>
+                  <span className="mt-4 inline-flex items-center gap-1 text-xs font-semibold text-primary opacity-0 transition-opacity group-hover:opacity-100">
+                    {t("overview.learnMore")}
+                    <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                    </svg>
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      </ScrollReveal>
 
       {/* Pipeline Flow Indicator */}
       <ScrollReveal>

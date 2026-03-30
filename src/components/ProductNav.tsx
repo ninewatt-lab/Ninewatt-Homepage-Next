@@ -17,14 +17,11 @@ export default function ProductNav() {
 
   const subPages = [
     { href: "/product", label: t("productMenu.overview") },
-    { href: "/product/opti", label: "Opti" },
-    { href: "/product/watti", label: "Watti" },
-    { href: "/product/greenplanner", label: "GreenPlanner" },
-    { href: "/product/save-e", label: "Save-E" },
-    { href: "/product/repark", label: "RE:park" },
     { href: "/product/shared-ess", label: t("productMenu.sharedEssLabel") },
     { href: "/product/pv-intelligence", label: t("productMenu.pvRtuLabel") },
     { href: "/product/solar-site", label: t("productMenu.solarScopeLabel") },
+    { href: "/product/greenplanner", label: "GreenPlanner" },
+    { href: "/product/repark", label: "RE:park" },
   ];
 
   return (

@@ -4,7 +4,7 @@
     "description": "AI-powered building energy analytics and optimization platform"
   },
   "nav": {
-    "product": "Product",
+    "product": "Products",
     "solutions": "Solutions",
     "company": "Company",
     "contact": "Contact Us",
@@ -27,11 +27,13 @@
     "pvIntelligenceDesc": "Solar power plant integrated monitoring system",
     "sharedEssDesc": "Grid-connected shared energy storage system",
     "pvEss": "PV & ESS",
+    "energy": "Energy",
     "sharedEssLabel": "Shared ESS",
     "pvRtuLabel": "PV RTU",
     "solarScopeLabel": "Solar Site Analysis"
   },
   "solutionsMenu": {
+    "solutions": "Solutions",
     "capabilities": "Capabilities",
     "trackRecord": "Track Record",
     "coreSolutions": "Core Solutions",

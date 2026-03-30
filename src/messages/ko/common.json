@@ -4,7 +4,7 @@
     "description": "Ninewatt 공식 홈페이지"
   },
   "nav": {
-    "product": "Product",
+    "product": "Products",
     "solutions": "Solutions",
     "company": "Company",
     "contact": "문의하기",
@@ -27,11 +27,13 @@
     "pvIntelligenceDesc": "태양광 발전소 통합 관제 시스템",
     "sharedEssDesc": "배전망 연계 공유형 에너지저장장치",
     "pvEss": "PV & ESS",
+    "energy": "Energy",
     "sharedEssLabel": "공유형 ESS",
     "pvRtuLabel": "PV RTU",
     "solarScopeLabel": "태양광 적지분석"
   },
   "solutionsMenu": {
+    "solutions": "솔루션",
     "capabilities": "역량",
     "trackRecord": "실적",
     "coreSolutions": "핵심 솔루션",
