@@ -56,6 +56,7 @@
   "cases": {
     "title": "実績紹介",
     "subtitle": "国内の公共機関・自治体及び海外パートナー向けに多数のソリューションを提供",
+    "clickHint": "▸マーク付きの項目をクリックすると詳細を確認できます",
     "categories": { "public": "公共機関", "local": "自治体", "corporate": "企業", "overseas": "海外" },
     "items": [
       { "title": "韓国建設技術研究院 (KICT, 건설기술연구원) - カーボンニュートラルプラットフォーム", "category": "公共機関", "desc": "建物・道路単位の炭素・交通排出量を可視化し、地域のエネルギー分析及び省エネリモデリングシミュレーションに対応" },
@@ -64,7 +65,7 @@
       { "title": "江南区 (강남구) - 都市エネルギー3D Map", "category": "自治体", "desc": "公共施設のカーボンフットプリントを追跡し、温室効果ガス削減目標を明確に設定" },
       { "title": "京畿道 (경기도) - 京畿気候プラットフォーム グリーンリモデリングシミュレーション", "category": "自治体", "desc": "不動産情報に基づく建物の老朽度・エネルギー・敷地分析及びリモデリング意思決定支援サービス" },
       { "title": "京畿道 (경기도) - ESS統合管理システム", "category": "自治体", "desc": "京畿道全域のESS現況モニタリング及び統合資源管理システム" },
-      { "title": "京畿道 (경기도) - 中小企業気候経営支援サービス", "category": "自治体", "desc": "GHG排出量算定、エネルギー診断、PV・ESS分析、削減提案までワンストップで対応" },
+      { "title": "京畿道 (경기도) - 中小企業気候経営支援サービス", "category": "自治体", "desc": "GHG排出量算定、エネルギー診断、PV・ESS分析、削減提案までワンストップで対応", "detail": { "description": "中小企業の炭素経営をワンクリックで支援するサービスで、Scope別炭素排出量算定、電力使用量分析・ヒートマップ、ESS設置シミュレーション、PV分析、自動レポート生成までワンストップで提供します。", "images": ["https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/projects/SME-Climate_4.png", "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/projects/SME-Climate_1.png", "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/projects/SME-Climate_2.png", "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/projects/SME-Climate_3.png"], "link": "https://climate.gg.go.kr/cbss/main/index.do" } },
       { "title": "LS Electric Global R&D Campus - SAVE-E", "category": "企業", "desc": "エネルギーソリューションの提供及び自動診断レポートシステムの構築" },
       { "title": "LS Electric - Smart Energy Insight System", "category": "企業", "desc": "顧客企業向けエネルギーソリューションの提供及び営業ツールとしての活用" },
       { "title": "津南町 - 脱炭素プロジェクト", "category": "海外", "desc": "シナネンホールディングスと共に新潟県津南町自治体向けスマートシティ実証プロジェクト" },
@@ -94,13 +95,14 @@
   "services": {
     "title": "システム開発実績",
     "subtitleTemplate": "{count}件のシステム開発、{partners}のパートナー機関と協業",
+    "clickHint": "▸マーク付きの項目をクリックすると詳細を確認できます",
     "tableHeaders": { "client": "企業（機関名）", "period": "期間", "content": "遂行内容" },
     "projects": [
       { "client": "韓国エネルギー技術研究院 (KIER, 한국에너지기술연구원)", "period": "2025.07~2025.11", "title": "産業団地再生可能エネルギープラットフォーム構築事業" },
       { "client": "韓国建設技術研究院 (KICT, 한국건설기술연구원)", "period": "2025.06~2025.10", "title": "地域単位炭素排出量可視化システムの高度化" },
       { "client": "ネオステック株式会社 (네오스텍)", "period": "2025.06~2025.11", "title": "スマート照明運用データ最適化サービス" },
-      { "client": "国土交通科学技術振興院 (KAIA, 국토교통과학기술진흥원)", "period": "2025.05~2025.12", "title": "京畿道スマートESS統合資源管理システムの高度化" },
-      { "client": "国土安全管理院 (KALIS, 국토안전관리원)", "period": "2025.05~2025.12", "title": "グリーンリモデリング最新技術活用企画及びパイロット事業（GRAI）" },
+      { "client": "国土交通科学技術振興院 (KAIA, 국토교통과학기술진흥원)", "period": "2025.05~2025.12", "title": "京畿道スマートESS統合資源管理システムの高度化", "detail": { "description": "京畿道内300箇所以上のESS設備をリアルタイムで監視・統合管制するシステムで、総合状況ダッシュボード・現況地図・3D施設ビューを通じてピーク削減、再生可能エネルギー連携などエネルギー資源を効率的に管理します。", "images": ["https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/projects/ESS-IRMS_1.png", "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/projects/ESS-IRMS_2.png", "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/projects/ESS-IRMS_3.png", "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/projects/ESS-IRMS_4.png"], "link": "http://27.96.135.152:8080" } },
+      { "client": "国土安全管理院 (KALIS, 국토안전관리원)", "period": "2025.05~2025.12", "title": "グリーンリモデリング最新技術活用企画及びパイロット事業（GRAI）", "detail": { "description": "公共建築物対象のグリーンリモデリング（GR）シミュレーションプラットフォームで、ダッシュボード・分析地図・3D建築物ビューを通じてエネルギー・炭素現況分析、GR優先順位算定、シナリオ別シミュレーション及びAI基盤の建築物外皮分析を提供します。", "images": ["https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/projects/GRAI_1.png", "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/projects/GRAI_2.png", "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/projects/GRAI_3.png", "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/projects/GRAI_4.png"], "link": "https://grai.ibed.cloud" } },
       { "client": "LSエレクトリック株式会社", "period": "2024.11~2024.12", "title": "AI活用分析レポート生成" },
       { "client": "京畿研究院 (경기연구원)", "period": "2024.09~2025.08", "title": "京畿道広域都市生態現況地図及びRE100プラットフォームサービス構築" },
       { "client": "LSエレクトリック株式会社", "period": "2024.07~2024.07", "title": "ピーク削減型ESS最適制御アルゴリズム開発" },

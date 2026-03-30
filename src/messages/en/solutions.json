@@ -56,6 +56,7 @@
   "cases": {
     "title": "Case Studies",
     "subtitle": "Proven track record delivering solutions to domestic public institutions, local governments, and international partners",
+    "clickHint": "Click items with ▸ to view details",
     "categories": { "public": "Public Institutions", "local": "Local Government", "corporate": "Corporate", "overseas": "Overseas" },
     "items": [
       { "title": "KICT (건설기술연구원) - Carbon Neutrality Platform", "category": "Public Institutions", "desc": "Visualizing carbon and transportation emissions at building and road levels, supporting regional energy analysis and retrofit simulations" },
@@ -64,7 +65,7 @@
       { "title": "Gangnam-gu (강남구) - Urban Energy 3D Map", "category": "Local Government", "desc": "Tracking carbon footprints of public facilities to set clear greenhouse gas reduction targets" },
       { "title": "Gyeonggi Province (경기도) - Gyeonggi Climate Platform Green Remodeling Simulation", "category": "Local Government", "desc": "Building aging, energy, and site analysis based on real estate data, with remodeling decision support services" },
       { "title": "Gyeonggi Province (경기도) - ESS Integrated Management System", "category": "Local Government", "desc": "Province-wide ESS status monitoring and integrated resource management system" },
-      { "title": "Gyeonggi Province (경기도) - SME Climate Management Support Service", "category": "Local Government", "desc": "One-stop solution for GHG emission calculation, energy diagnostics, PV and ESS analysis, and reduction proposals" },
+      { "title": "Gyeonggi Province (경기도) - SME Climate Management Support Service", "category": "Local Government", "desc": "One-stop solution for GHG emission calculation, energy diagnostics, PV and ESS analysis, and reduction proposals", "detail": { "description": "A one-click carbon management service for SMEs, providing Scope-level carbon emission calculation, power usage analysis with heatmaps, ESS installation simulation, PV analysis, and automated report generation.", "images": ["https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/projects/SME-Climate_4.png", "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/projects/SME-Climate_1.png", "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/projects/SME-Climate_2.png", "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/projects/SME-Climate_3.png"], "link": "https://climate.gg.go.kr/cbss/main/index.do" } },
       { "title": "LS Electric Global R&D Campus - SAVE-E", "category": "Corporate", "desc": "Energy solution delivery and automated diagnostic reporting system" },
       { "title": "LS Electric - Smart Energy Insight System", "category": "Corporate", "desc": "Energy solutions for enterprise clients with integrated sales tools" },
       { "title": "Tsunan Town, Japan (津南町) - Decarbonization Project", "category": "Overseas", "desc": "Smart city pilot project for Tsunan Town (津南町), Niigata Prefecture (新潟県), in partnership with Sinanen Holdings (シナネンホールディングス)" },
@@ -94,13 +95,14 @@
   "services": {
     "title": "System Development Track Record",
     "subtitleTemplate": "{count} system development projects in collaboration with {partners} partner organizations",
+    "clickHint": "Click items with ▸ to view details",
     "tableHeaders": { "client": "Client (Organization)", "period": "Period", "content": "Scope of Work" },
     "projects": [
       { "client": "KIER (한국에너지기술연구원)", "period": "2025.07~2025.11", "title": "Industrial Complex Renewable Energy Platform Development" },
       { "client": "KICT (한국건설기술연구원)", "period": "2025.06~2025.10", "title": "Regional Carbon Emission Visualization System Enhancement" },
       { "client": "Neostech Co., Ltd. (네오스텍)", "period": "2025.06~2025.11", "title": "Smart Lighting Operational Data Optimization Service" },
-      { "client": "KAIA (국토교통과학기술진흥원)", "period": "2025.05~2025.12", "title": "Gyeonggi Province Smart ESS Integrated Resource Management System Enhancement" },
-      { "client": "KALIS (국토안전관리원)", "period": "2025.05~2025.12", "title": "Green Remodeling Advanced Technology Planning and Pilot Project (GRAI)" },
+      { "client": "KAIA (국토교통과학기술진흥원)", "period": "2025.05~2025.12", "title": "Gyeonggi Province Smart ESS Integrated Resource Management System Enhancement", "detail": { "description": "A real-time monitoring and integrated management system for 300+ ESS facilities across Gyeonggi Province, featuring a comprehensive dashboard, status map, and 3D facility views for efficient energy resource management including peak reduction and renewable energy integration.", "images": ["https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/projects/ESS-IRMS_1.png", "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/projects/ESS-IRMS_2.png", "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/projects/ESS-IRMS_3.png", "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/projects/ESS-IRMS_4.png"], "link": "http://27.96.135.152:8080" } },
+      { "client": "KALIS (국토안전관리원)", "period": "2025.05~2025.12", "title": "Green Remodeling Advanced Technology Planning and Pilot Project (GRAI)", "detail": { "description": "A Green Remodeling (GR) simulation platform for public buildings, providing energy and carbon status analysis, GR prioritization, scenario-based simulation, and AI-powered building envelope analysis through dashboards, analysis maps, and 3D building views.", "images": ["https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/projects/GRAI_1.png", "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/projects/GRAI_2.png", "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/projects/GRAI_3.png", "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/projects/GRAI_4.png"], "link": "https://grai.ibed.cloud" } },
       { "client": "LS Electric Co., Ltd.", "period": "2024.11~2024.12", "title": "AI-Powered Analysis Report Generation" },
       { "client": "Gyeonggi Research Institute (경기연구원)", "period": "2024.09~2025.08", "title": "Gyeonggi Province Urban Ecological Map and RE100 Platform Service Development" },
       { "client": "LS Electric Co., Ltd.", "period": "2024.07~2024.07", "title": "Peak Reduction ESS Optimal Control Algorithm Development" },

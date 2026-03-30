@@ -33,6 +33,8 @@ export default async function RndPage({
           budget: p.detail.budget ?? "",
           department: p.detail.department ?? "",
           category: p.detail.category ?? "",
+          images: (p.detail as Record<string, unknown>).images as string[] | undefined,
+          link: (p.detail as Record<string, unknown>).link as string | undefined,
         }
       : undefined,
   }));

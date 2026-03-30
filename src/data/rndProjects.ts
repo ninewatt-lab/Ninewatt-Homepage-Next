@@ -141,6 +141,8 @@ export const rndProjects = [
       budget: "11.4억원 (총 14.25억원)",
       department: "중소벤처기업부",
       category: "중소기업기술혁신개발(스케일업 TIPS)",
+      images: ["https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/projects/Vertiport_4.png", "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/projects/Vertiport_1.png", "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/projects/Vertiport_3.png", "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/projects/Vertiport_2.png"],
+      link: "http://43.203.43.5/",
     },
   },
   {

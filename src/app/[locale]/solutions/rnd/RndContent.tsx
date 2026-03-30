@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, createContext, useContext } from "react";
+import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
 
@@ -16,6 +17,8 @@ interface RndProject {
     budget: string;
     department: string;
     category: string;
+    images?: string[];
+    link?: string;
   };
 }
 
@@ -50,6 +53,7 @@ function ProjectRow({ project, index, labels }: { project: RndProject; index: nu
 
   const [mounted, setMounted] = useState(false);
   const [animateOpen, setAnimateOpen] = useState(false);
+  const [activeImage, setActiveImage] = useState(0);
 
   useEffect(() => {
     if (open) {
@@ -67,6 +71,12 @@ function ProjectRow({ project, index, labels }: { project: RndProject; index: nu
       setAnimateOpen(false);
     }
   }, [open, mounted]);
+
+  useEffect(() => {
+    if (!open) setActiveImage(0);
+  }, [open]);
+
+  const images = project.detail?.images;
 
   return (
     <>
@@ -104,6 +114,41 @@ function ProjectRow({ project, index, labels }: { project: RndProject; index: nu
             >
               <div className="overflow-hidden">
                 <div className="px-4 py-5 bg-secondary/20">
+                  {/* Image gallery */}
+                  {images && images.length > 0 && (
+                    <div className="mb-5">
+                      <div className="relative aspect-[16/9] w-full max-w-3xl overflow-hidden rounded-lg border border-border/50 bg-black/5 dark:bg-white/5">
+                        <Image
+                          src={images[activeImage]}
+                          alt={project.research}
+                          fill
+                          sizes="(max-width: 768px) 100vw, 768px"
+                          className="object-contain"
+                        />
+                      </div>
+                      {images.length > 1 && (
+                        <div className="mt-3 flex gap-2">
+                          {images.map((img, i) => (
+                            <button
+                              key={i}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setActiveImage(i);
+                              }}
+                              className={`relative h-14 w-24 overflow-hidden rounded border-2 transition-all ${
+                                i === activeImage
+                                  ? "border-primary ring-1 ring-primary/30"
+                                  : "border-border/50 opacity-60 hover:opacity-100"
+                              }`}
+                            >
+                              <Image src={img} alt={`${project.research} ${i + 1}`} fill sizes="96px" className="object-contain" />
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )}
+
                   <div className="grid gap-4 md:grid-cols-2 text-sm">
                     <div className="md:col-span-2">
                       <h4 className="font-semibold text-xs uppercase tracking-wider text-muted mb-1.5">
@@ -144,6 +189,27 @@ function ProjectRow({ project, index, labels }: { project: RndProject; index: nu
                         <p className="text-foreground/90">{project.detail!.budget}</p>
                       </div>
                     </div>
+
+                    {project.detail!.link && (
+                      <div className="md:col-span-2 pt-2">
+                        <a
+                          href={project.detail!.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={(e) => e.stopPropagation()}
+                          className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
+                        >
+                          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101" />
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M10.172 13.828a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.102 1.101" />
+                          </svg>
+                          시스템 바로가기
+                          <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                          </svg>
+                        </a>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
