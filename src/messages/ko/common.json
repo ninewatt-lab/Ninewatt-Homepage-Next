@@ -33,6 +33,7 @@
     "solarScopeLabel": "태양광 적지분석"
   },
   "solutionsMenu": {
+    "overview": "전체 보기",
     "solutions": "솔루션",
     "capabilities": "역량",
     "trackRecord": "실적",

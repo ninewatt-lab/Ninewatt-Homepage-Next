@@ -33,6 +33,7 @@
     "solarScopeLabel": "太陽光適地分析"
   },
   "solutionsMenu": {
+    "overview": "全体を見る",
     "solutions": "ソリューション",
     "capabilities": "ケイパビリティ",
     "trackRecord": "実績",

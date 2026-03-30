@@ -115,16 +115,6 @@ const solutionsNav: NavItemWithChildren = {
       titleKey: "solutionsMenu.solutions",
       items: [
         {
-          href: "/solutions",
-          labelKey: "solutionsMenu.coreSolutions",
-          descKey: "solutionsMenu.coreSolutionsDesc",
-          icon: (
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
-              <circle cx="12" cy="12" r="3" /><path d="M12 1v4m0 14v4m-8.66-15l3.46 2m10.4 6l3.46 2M1.34 15l3.46-2m10.4-6l3.46-2M1.34 9l3.46 2m10.4 6l3.46 2m-14.32 0l3.46-2m10.4-6l3.46-2" />
-            </svg>
-          ),
-        },
-        {
           href: "/solutions/opti",
           labelKey: "Opti",
           descKey: "productMenu.optiDesc",

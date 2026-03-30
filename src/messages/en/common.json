@@ -33,6 +33,7 @@
     "solarScopeLabel": "Solar Site Analysis"
   },
   "solutionsMenu": {
+    "overview": "Overview",
     "solutions": "Solutions",
     "capabilities": "Capabilities",
     "trackRecord": "Track Record",
