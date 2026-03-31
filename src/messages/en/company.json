@@ -30,11 +30,28 @@
       "details": ["M.S. in u-City Engineering, Sungkyunkwan University", "B.S. in Architectural Engineering, Kyung Hee University", "Deep Learning-based AI system architecture"]
     },
     "organization": "Organization",
+    "orgSubtitle": "Our four departments in business, development, and research work closely together to drive the research, development, and commercialization of energy technology.",
     "orgItems": [
-      { "name": "Business Div. 1", "desc": "Energy consulting, green remodeling" },
-      { "name": "Business Div. 2", "desc": "Global business, platform services" },
-      { "name": "Development Dept.", "desc": "Full-stack development, AI backend" },
-      { "name": "R&D Dept.", "desc": "Energy analysis, big data research" }
+      {
+        "name": "Business Div. 1",
+        "desc": "Oversees domestic building energy-saving consulting and green remodeling projects. Provides end-to-end services from energy audits of public and private buildings to energy reduction planning and BEMS implementation.",
+        "tags": ["Energy Consulting", "Green Remodeling", "Building Energy Audit", "BEMS"]
+      },
+      {
+        "name": "Business Div. 2",
+        "desc": "Manages overseas market expansion in Japan, UK, France, and the US, along with smart city platform operations. Executes localization and PoC projects based on global partnerships.",
+        "tags": ["Global Business", "Smart City Platform", "B2G/B2B Development"]
+      },
+      {
+        "name": "Development Dept.",
+        "desc": "Designs and implements the full spectrum of our products (Watti, Opti, etc.) — from web and app frontends to AI backends, data pipelines, and cloud infrastructure.",
+        "tags": ["Web/App Full-stack", "AI Backend", "Data Pipeline", "Cloud Infra"]
+      },
+      {
+        "name": "R&D Dept.",
+        "desc": "Conducts building energy big data analysis and AI/ML model research, and leads core technology patent filings and academic paper publications.",
+        "tags": ["Energy Data Analysis", "Big Data Research", "AI/ML Modeling", "Patents & Papers"]
+      }
     ],
     "location": "Directions",
     "hqLabel": "Headquarters",
@@ -123,6 +140,27 @@
     "transferType": "Transfer Type",
     "transferInstitution": "Institution",
     "transferPeriod": "Period"
+  },
+  "papers": {
+    "title": "Papers",
+    "subtitle": "Academic papers and research achievements in energy AI and big data",
+    "tableNo": "No.",
+    "paperTitle": "Title",
+    "authors": "Authors",
+    "journal": "Journal / Conference",
+    "date": "Date",
+    "total": "Total Papers",
+    "sci": "SCI Papers",
+    "international": "International Conference Papers",
+    "domestic": "Domestic Conference Papers",
+    "volume": "Vol. (Issue)",
+    "pages": "Pages",
+    "articleNo": "Article No.",
+    "status": "Status",
+    "underReview": "Under Review",
+    "published": "Published",
+    "searchScholar": "Search on Google Scholar",
+    "empty": "No papers registered yet."
   },
   "career": {
     "title": "Careers",

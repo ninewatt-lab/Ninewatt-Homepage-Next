@@ -1,6 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
-import { getExecutives, getOrganization, getCompanyInfo } from "@/lib/cms";
+import { getOrganization, getCompanyInfo } from "@/lib/cms";
 
 export async function generateMetadata() {
   const t = await getTranslations("company");
@@ -18,8 +18,7 @@ export default async function CompanyPage({
   const { locale } = await params;
   const t = await getTranslations("company");
 
-  const [executivesData, orgData, companyInfoData] = await Promise.all([
-    getExecutives(locale),
+  const [orgData, companyInfoData] = await Promise.all([
     getOrganization(locale),
     getCompanyInfo(locale),
   ]);
@@ -29,16 +28,10 @@ export default async function CompanyPage({
     value: string;
   }>;
 
-  const executives = (executivesData.members ?? []) as Array<{
-    role?: string | null;
-    name?: string | null;
-    team?: string | null;
-    description?: string | null;
-    details?: Array<{ item?: string | null }> | null;
-  }>;
-  const orgItems = (orgData.departments ?? []) as Array<{
-    name?: string | null;
-    description?: string | null;
+  const orgTranslations = t.raw("about.orgItems") as Array<{
+    name: string;
+    desc: string;
+    tags?: string[];
   }>;
 
   return (
@@ -61,56 +54,22 @@ export default async function CompanyPage({
             {t("about.visionDesc")}
           </p>
 
-          <dl className="mt-10 grid grid-cols-2 gap-x-8 gap-y-4 text-sm md:grid-cols-4">
+          <dl className="mt-12 grid grid-cols-2 gap-x-6 gap-y-6 text-sm md:flex md:justify-between">
             {companyInfo.map((item) => (
               <div key={item.label}>
-                <dt className="font-medium text-muted">{item.label}</dt>
+                <dt className="text-xs text-muted">{item.label}</dt>
                 <dd className="mt-1 font-semibold">{item.value}</dd>
               </div>
             ))}
           </dl>
 
-          <div className="mt-10 space-y-3">
-            {(t.raw("about.affiliations") as Array<{ label: string; items: string[] }>).map((group) => (
-              <div key={group.label} className="flex items-baseline gap-x-3">
-                <span className="w-24 shrink-0 text-xs font-semibold text-foreground">{group.label}</span>
-                <div className="flex flex-wrap gap-1.5">
-                  {group.items.map((item) => (
-                    <span
-                      key={item}
-                      className="inline-flex items-center rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-xs text-primary"
-                    >
-                      {item}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+          <hr className="my-10 border-border" />
 
-      {/* Executives */}
-      <section className="border-t border-border px-6 py-20">
-        <div className="mx-auto max-w-5xl">
-          <h2 className="text-2xl font-bold">{t("about.executives")}</h2>
-          <div className="mt-8 space-y-8">
-            {executives.map((exec) => (
-              <div key={exec.name} className="border-l-2 border-primary pl-6">
-                <p className="text-xs font-medium text-muted">{exec.role} · {exec.team}</p>
-                <p className="mt-1 text-lg font-bold">{exec.name}</p>
-                <p className="mt-2 text-sm leading-relaxed text-muted">
-                  {exec.description}
-                </p>
-                {exec.details && (
-                  <ul className="mt-3 space-y-1">
-                    {(exec.details as Array<{ item?: string }>).map((d, i) => (
-                      <li key={i} className="text-sm text-muted">
-                        · {typeof d === "string" ? d : d.item}
-                      </li>
-                    ))}
-                  </ul>
-                )}
+          <div className="space-y-3">
+            {(t.raw("about.affiliations") as Array<{ label: string; items: string[] }>).map((group) => (
+              <div key={group.label} className="flex flex-col gap-2 sm:flex-row sm:items-baseline sm:gap-4">
+                <span className="w-28 shrink-0 text-xs font-semibold">{group.label}</span>
+                <p className="text-sm text-muted">{group.items.join(" · ")}</p>
               </div>
             ))}
           </div>
@@ -121,14 +80,22 @@ export default async function CompanyPage({
       <section className="border-t border-border px-6 py-20">
         <div className="mx-auto max-w-5xl">
           <h2 className="text-2xl font-bold">{t("about.organization")}</h2>
-          <div className="mt-8 space-y-4">
-            {orgItems.map((org) => (
-              <div
-                key={org.name}
-                className="border-l-2 border-border pl-6"
-              >
-                <p className="font-semibold">{org.name}</p>
-                <p className="mt-0.5 text-sm text-muted">{org.description}</p>
+          <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted">
+            {t("about.orgSubtitle")}
+          </p>
+
+          <div className="mt-10 grid gap-px overflow-hidden rounded-lg border border-border bg-border sm:grid-cols-2">
+            {orgTranslations.map((org) => (
+              <div key={org.name} className="bg-background p-6">
+                <h3 className="font-semibold">{org.name}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-muted">
+                  {org.desc}
+                </p>
+                {org.tags && org.tags.length > 0 && (
+                  <p className="mt-3 text-xs text-muted/70">
+                    {org.tags.join(" · ")}
+                  </p>
+                )}
               </div>
             ))}
           </div>

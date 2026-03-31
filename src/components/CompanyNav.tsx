@@ -33,6 +33,7 @@ export default function CompanyNav() {
         { href: "/company/history", label: t("companyMenu.history") },
         { href: "/company/awards", label: t("companyMenu.awards") },
         { href: "/company/patents", label: t("companyMenu.patents") },
+        { href: "/company/papers", label: t("companyMenu.papers") },
       ],
     },
   ];

@@ -30,11 +30,28 @@
       "details": ["Master en ingenierie u-City, Universite Sungkyunkwan", "Licence en genie architectural, Universite Kyung Hee", "Conception de systemes IA bases sur le Deep Learning"]
     },
     "organization": "Organisation",
+    "orgSubtitle": "Nos quatre departements — commercial, developpement et recherche — collaborent etroitement pour piloter la recherche, le developpement et la commercialisation des technologies energetiques.",
     "orgItems": [
-      { "name": "Division commerciale 1", "desc": "Conseil energetique, renovation verte" },
-      { "name": "Division commerciale 2", "desc": "Activites internationales, services de plateforme" },
-      { "name": "Departement developpement", "desc": "Developpement full-stack, backend IA" },
-      { "name": "Departement R&D", "desc": "Analyse energetique, recherche big data" }
+      {
+        "name": "Division commerciale 1",
+        "desc": "Supervise le conseil en economies d'energie des batiments et les projets de renovation verte au niveau national. Fournit des services de bout en bout, du diagnostic energetique des batiments publics et prives a la planification de reduction et a la mise en place de BEMS.",
+        "tags": ["Conseil energetique", "Renovation verte", "Diagnostic energetique", "BEMS"]
+      },
+      {
+        "name": "Division commerciale 2",
+        "desc": "Gere l'expansion sur les marches internationaux au Japon, au Royaume-Uni, en France et aux Etats-Unis, ainsi que les operations de plateforme de ville intelligente. Realise des projets de localisation et de PoC bases sur des partenariats mondiaux.",
+        "tags": ["Activites internationales", "Plateforme Smart City", "Developpement B2G/B2B"]
+      },
+      {
+        "name": "Departement developpement",
+        "desc": "Concoit et implemente l'ensemble de nos produits (Watti, Opti, etc.) — du frontend web et mobile au backend IA, pipelines de donnees et infrastructure cloud.",
+        "tags": ["Web/App Full-stack", "Backend IA", "Pipeline de donnees", "Infra Cloud"]
+      },
+      {
+        "name": "Departement R&D",
+        "desc": "Mene des analyses de big data energetique des batiments et des recherches sur les modeles IA/ML, et dirige les depots de brevets et publications academiques des technologies cles.",
+        "tags": ["Analyse de donnees energetiques", "Recherche Big Data", "Modelisation IA/ML", "Brevets et publications"]
+      }
     ],
     "location": "Acces",
     "hqLabel": "Siege social",
@@ -123,6 +140,27 @@
     "transferType": "Type de transfert",
     "transferInstitution": "Institution",
     "transferPeriod": "Periode"
+  },
+  "papers": {
+    "title": "Publications",
+    "subtitle": "Articles academiques et resultats de recherche en IA energetique et big data",
+    "tableNo": "No.",
+    "paperTitle": "Titre",
+    "authors": "Auteurs",
+    "journal": "Revue / Conference",
+    "date": "Date",
+    "total": "Total publications",
+    "sci": "Articles SCI",
+    "international": "Communications internationales",
+    "domestic": "Communications nationales",
+    "volume": "Vol. (No.)",
+    "pages": "Pages",
+    "articleNo": "N° d'article",
+    "status": "Statut",
+    "underReview": "En revision",
+    "published": "Publie",
+    "searchScholar": "Rechercher sur Google Scholar",
+    "empty": "Aucune publication enregistree."
   },
   "career": {
     "title": "Recrutement",

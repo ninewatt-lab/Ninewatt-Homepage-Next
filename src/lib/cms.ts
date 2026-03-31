@@ -13,8 +13,14 @@ import { career } from "@/data/career";
 import { globalBusiness } from "@/data/globalBusiness";
 import { products } from "@/data/products";
 import { newsArticles, videos } from "@/data/media";
+import { papers } from "@/data/papers";
 
 // Collections
+
+export async function getPapers(_locale: string) {
+  const sorted = [...papers].sort((a, b) => b.year - a.year);
+  return { docs: sorted };
+}
 
 export async function getAwards(_locale: string) {
   const sorted = [...awards].sort((a, b) => b.year - a.year);
