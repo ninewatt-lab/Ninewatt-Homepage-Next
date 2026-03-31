@@ -46,6 +46,14 @@
         "items": ["PV(태양광) 설치 적합도 분석", "ESS 설치 용량·운영 시뮬레이션", "유휴공간·옥상·일사량 분석", "설치 효과 3D 가시화"]
       }
     ],
+    "serviceLinksTitle": "사업 영역",
+    "serviceLinksDesc": "에너지 AI 기술력을 바탕으로 다양한 영역에서 성과를 만들고 있습니다",
+    "serviceLinks": [
+      { "label": "수행사례", "href": "/solutions/cases", "icon": "cases", "desc": "공공기관·지자체·기업·해외 파트너 대상 60건 이상의 프로젝트 수행 실적" },
+      { "label": "연구개발(R&D)", "href": "/solutions/rnd", "icon": "rnd", "desc": "정부 R&D 과제 수행을 통한 에너지 AI 핵심 기술 확보 및 고도화" },
+      { "label": "시스템개발", "href": "/solutions/services", "icon": "services", "desc": "고객 맞춤형 에너지 관리 시스템 설계·개발·구축·운영 서비스" },
+      { "label": "글로벌 사업", "href": "/company/global", "icon": "global", "desc": "일본·프랑스·영국 등 해외 파트너와 함께 글로벌 시장 진출" }
+    ],
     "platformTitle": "플랫폼",
     "platformDesc": "나인와트의 AI 기반 에너지 관리 핵심 플랫폼",
     "learnMore": "자세히 보기",

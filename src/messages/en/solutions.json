@@ -46,6 +46,14 @@
         "items": ["PV (solar) installation suitability analysis", "ESS capacity and operation simulation", "Idle space, rooftop, and solar irradiance analysis", "3D visualization of installation effects"]
       }
     ],
+    "serviceLinksTitle": "Business Areas",
+    "serviceLinksDesc": "Delivering results across diverse domains powered by energy AI expertise",
+    "serviceLinks": [
+      { "label": "Case Studies", "href": "/solutions/cases", "icon": "cases", "desc": "60+ projects delivered for public institutions, local governments, enterprises, and overseas partners" },
+      { "label": "R&D", "href": "/solutions/rnd", "icon": "rnd", "desc": "Core energy AI technology development through government-funded R&D projects" },
+      { "label": "System Development", "href": "/solutions/services", "icon": "services", "desc": "Custom energy management system design, development, deployment, and operation" },
+      { "label": "Global Business", "href": "/company/global", "icon": "global", "desc": "Expanding into global markets with partners in Japan, France, UK, and beyond" }
+    ],
     "platformTitle": "Platform",
     "platformDesc": "Ninewatt's AI-powered core energy management platforms",
     "learnMore": "Learn more",
