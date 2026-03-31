@@ -3,6 +3,16 @@ import { getPatents, getCertifications, getTrademarks, getTechnologyTransfers } 
 import { InlineExpandImage, ExpandableRow, ExpandableTrigger, TrademarkGroupCard, DetailExpandableRow, DetailTrigger, AccordionTableBody } from "@/components/ImageLightbox";
 import type { TechnologyTransfer } from "@/data/technologyTransfers";
 
+/** Google Patents 링크 생성 — 등록 특허는 직접 링크, 출원/공개 특허는 검색 링크 */
+function patentUrl(number: string, status: string, title: string): string {
+  if (status === "등록") {
+    // 등록번호 1024763030000 → KR102476303B1 (뒤 4자리 제거 + B1)
+    const regNo = number.replace(/0{4}$/, "");
+    return `https://patents.google.com/patent/KR${regNo}B1/ko`;
+  }
+  return `https://patents.google.com/?q=${encodeURIComponent(title)}&assignee=${encodeURIComponent("나인와트")}&country=KR`;
+}
+
 export async function generateMetadata() {
   const t = await getTranslations("company");
   return {
@@ -34,7 +44,7 @@ export default async function PatentsPage({
   ]);
 
   const domesticRegistered = domesticPatentsAll.filter((p) => p.status === "등록");
-  const domesticPending = domesticPatentsAll.filter((p) => p.status === "출원");
+  const domesticPending = domesticPatentsAll.filter((p) => p.status === "출원" || p.status === "공개");
   const totalPatents = domesticPatentsAll.length + internationalPatents.length;
   const domesticTrademarks = allTrademarks.filter((tm) => tm.country === "국내");
   const internationalTrademarks = allTrademarks.filter((tm) => tm.country !== "국내");
@@ -163,7 +173,7 @@ export default async function PatentsPage({
               </thead>
               <AccordionTableBody>
                 {domesticRegistered.map((p, i) => (
-                  <ExpandableRow key={p.id} accordionKey={`dr-${p.id}`} thumbnailUrl={p.thumbnailUrl} imageUrls={p.imageUrls} alt={p.title} colSpan={5}>
+                  <ExpandableRow key={p.id} accordionKey={`dr-${p.id}`} thumbnailUrl={p.thumbnailUrl} imageUrls={p.imageUrls} alt={p.title} colSpan={5} footer={<PatentLink number={p.number} status={p.status} title={p.title} />}>
                     <td className="py-3 pr-3 text-muted">{i + 1}</td>
                     <td className="py-3 pr-3 whitespace-nowrap tabular-nums text-muted">{p.date}</td>
                     <td className="py-3 pr-3 tabular-nums text-xs text-muted">{p.number}</td>
@@ -193,11 +203,14 @@ export default async function PatentsPage({
                 </thead>
                 <AccordionTableBody>
                   {domesticPending.map((p, i) => (
-                    <ExpandableRow key={p.id} accordionKey={`dp-${p.id}`} thumbnailUrl={p.thumbnailUrl} imageUrls={p.imageUrls} alt={p.title} colSpan={5}>
+                    <ExpandableRow key={p.id} accordionKey={`dp-${p.id}`} thumbnailUrl={p.thumbnailUrl} imageUrls={p.imageUrls} alt={p.title} colSpan={5} footer={<PatentLink number={p.number} status={p.status} title={p.title} />}>
                       <td className="py-3 pr-3 text-muted">{i + 1}</td>
                       <td className="py-3 pr-3 whitespace-nowrap tabular-nums text-muted">{p.date}</td>
                       <td className="py-3 pr-3 tabular-nums text-xs text-muted">{p.number}</td>
-                      <td className="py-3 pr-3"><ExpandableTrigger>{p.title}</ExpandableTrigger></td>
+                      <td className="py-3 pr-3">
+                        <ExpandableTrigger>{p.title}</ExpandableTrigger>
+                        {p.status === "공개" && <span className="ml-2 rounded bg-gray-100 px-1.5 py-0.5 text-xs text-gray-600 dark:bg-gray-800 dark:text-gray-400">공개</span>}
+                      </td>
                       <td className="py-3 text-muted line-clamp-2">{p.applicant}</td>
                     </ExpandableRow>
                   ))}
@@ -315,6 +328,19 @@ export default async function PatentsPage({
         </div>
       </section>
     </>
+  );
+}
+
+function PatentLink({ number, status, title }: { number: string; status: string; title: string }) {
+  return (
+    <a
+      href={patentUrl(number, status, title)}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="inline-flex items-center gap-1 text-xs text-blue-600 hover:underline"
+    >
+      Google Patents에서 보기 &rarr;
+    </a>
   );
 }
 

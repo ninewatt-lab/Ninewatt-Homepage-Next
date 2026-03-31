@@ -114,6 +114,7 @@ export function ExpandableRow({
   alt,
   colSpan,
   children,
+  footer,
 }: {
   accordionKey: string;
   thumbnailUrl?: string;
@@ -121,11 +122,12 @@ export function ExpandableRow({
   alt: string;
   colSpan: number;
   children: React.ReactNode;
+  footer?: React.ReactNode;
 }) {
   const { open, toggle } = useAccordion(accordionKey);
   const { mounted, animateOpen } = useAnimatedMount(open);
   const urls = imageUrls && imageUrls.length > 0 ? imageUrls : thumbnailUrl ? [thumbnailUrl] : [];
-  const hasContent = urls.length > 0;
+  const hasContent = urls.length > 0 || footer;
 
   return (
     <ExpandableContext.Provider value={{ toggle, open }}>
@@ -141,19 +143,26 @@ export function ExpandableRow({
               }`}
             >
               <div className="overflow-hidden">
-                <div className="px-3 py-3 flex gap-3 overflow-x-auto scrollbar-hide bg-accent/20">
-                  {urls.map((url, i) => (
-                    <Image
-                      key={i}
-                      src={url}
-                      alt={`${alt} - ${i + 1}/${urls.length}`}
-                      width={400}
-                      height={566}
-                      className="h-auto max-h-80 w-auto shrink-0 rounded-lg border border-border object-contain shadow-sm"
-                      unoptimized
-                    />
-                  ))}
-                </div>
+                {urls.length > 0 && (
+                  <div className="px-3 py-3 flex gap-3 overflow-x-auto scrollbar-hide bg-accent/20">
+                    {urls.map((url, i) => (
+                      <Image
+                        key={i}
+                        src={url}
+                        alt={`${alt} - ${i + 1}/${urls.length}`}
+                        width={400}
+                        height={566}
+                        className="h-auto max-h-80 w-auto shrink-0 rounded-lg border border-border object-contain shadow-sm"
+                        unoptimized
+                      />
+                    ))}
+                  </div>
+                )}
+                {footer && (
+                  <div className="px-3 pb-3 pt-1 bg-accent/20">
+                    {footer}
+                  </div>
+                )}
               </div>
             </div>
           </td>

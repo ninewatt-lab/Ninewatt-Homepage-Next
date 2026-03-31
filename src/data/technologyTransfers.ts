@@ -29,7 +29,7 @@ export const technologyTransfers: TechnologyTransfer[] = [
     applicationNo: "10-2022-0126960",
     transferDate: "2022.12.01",
     registrationNo: "",
-    transferType: "기술이전 및 나인와트 출원인 변경",
+    transferType: "기술이전",
     institution: "인천대학교산학협력단",
     period: "",
     detail: {
@@ -49,7 +49,7 @@ export const technologyTransfers: TechnologyTransfer[] = [
     applicationNo: "10-2018-0052360",
     transferDate: "2022.04.18",
     registrationNo: "10-2063552",
-    transferType: "통상 실시권 양도",
+    transferType: "통상실시권",
     institution: "한국건설기술연구원",
     period: "",
     detail: {
@@ -69,7 +69,7 @@ export const technologyTransfers: TechnologyTransfer[] = [
     applicationNo: "10-2019-0166336",
     transferDate: "2022.04.18",
     registrationNo: "10-2093316",
-    transferType: "통상 실시권 아님",
+    transferType: "통상실시권",
     institution: "한국건설기술연구원",
     period: "",
     detail: {
@@ -89,7 +89,7 @@ export const technologyTransfers: TechnologyTransfer[] = [
     applicationNo: "10-2017-0070503",
     transferDate: "2024.12.24",
     registrationNo: "10-1910344",
-    transferType: "기술사용 계약",
+    transferType: "통상실시권",
     institution: "한국동서발전",
     period: "",
     detail: {
@@ -109,7 +109,7 @@ export const technologyTransfers: TechnologyTransfer[] = [
     applicationNo: "10-2021-0024197",
     transferDate: "2024.12.26",
     registrationNo: "10-2549968",
-    transferType: "기술사용 계약",
+    transferType: "통상실시권",
     institution: "한국중부발전",
     period: "2024.12.26~2027.12.25",
     detail: {
@@ -120,6 +120,26 @@ export const technologyTransfers: TechnologyTransfer[] = [
       registrationDate: "2023.06.29",
       legalStatus: "등록",
       abstract: "점검 또는 보수가 요구되는 설비의 위치를 설비조작자에게 정확하게 안내하여 오판을 방지하는 장치이다. 길안내부, 스마트 리드 태그, 스마트 네임 플레이트, 단말기로 구성되어 인적 실수를 제거하고 안전사고를 예방한다.",
+    },
+  },
+  {
+    id: 6,
+    title: "사용자 위치정보와 거주 기후 조건하에서 심층 강화 학습 알고리즘을 적용한 공기조화기 예비 냉난방 에너지절약 학습 시스템 및 그 방법",
+    region: "국내",
+    applicationNo: "10-2019-0168167",
+    transferDate: "",
+    registrationNo: "10-2131414",
+    transferType: "통상실시권",
+    institution: "한국산업기술시험원",
+    period: "계약체결일~2033.12.27",
+    detail: {
+      applicationNo: "1020190168167",
+      applicationDate: "2019.12.16",
+      applicant: "한국산업기술시험원",
+      registrationNo: "1021314140000",
+      registrationDate: "",
+      legalStatus: "등록",
+      abstract: "사용자 위치정보와 거주 기후 조건하에서 심층 강화 학습 알고리즘을 적용한 공기조화기 예비 냉난방 에너지절약 학습 시스템 및 그 방법이다.",
     },
   },
 ];

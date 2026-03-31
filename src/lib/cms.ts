@@ -66,7 +66,8 @@ function generateImageUrls(thumbnailUrl: string | undefined, pageCount: number |
 }
 
 export async function getPatents(_locale: string, type?: "domestic" | "international"): Promise<{ docs: PatentDoc[] }> {
-  const domestic: PatentDoc[] = domesticPatents.map((p) => ({
+  const visibleDomestic = domesticPatents.filter((p) => p.visible !== false);
+  const domestic: PatentDoc[] = visibleDomestic.map((p) => ({
     ...p,
     type: "domestic" as const,
     imageUrls: generateImageUrls(p.thumbnailUrl, p.pageCount),
