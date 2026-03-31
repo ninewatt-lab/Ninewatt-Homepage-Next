@@ -127,11 +127,11 @@ export const technologyTransfers: TechnologyTransfer[] = [
     title: "사용자 위치정보와 거주 기후 조건하에서 심층 강화 학습 알고리즘을 적용한 공기조화기 예비 냉난방 에너지절약 학습 시스템 및 그 방법",
     region: "국내",
     applicationNo: "10-2019-0168167",
-    transferDate: "",
+    transferDate: "2025.11.20",
     registrationNo: "10-2131414",
     transferType: "통상실시권",
     institution: "한국산업기술시험원",
-    period: "계약체결일~2033.12.27",
+    period: "2025.11.20~2033.12.27",
     detail: {
       applicationNo: "1020190168167",
       applicationDate: "2019.12.16",

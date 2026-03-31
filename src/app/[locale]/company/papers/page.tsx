@@ -166,6 +166,20 @@ interface PaperLabels {
   searchScholar: string;
 }
 
+/** 나인와트 소속 저자 목록 */
+const NINEWATT_AUTHORS = new Set([
+  "Yi, D. H.",
+  "Kim, R.",
+  "Jeun, W.",
+  "Ko, Y. D.",
+  "Lee, D. H.",
+  "Kim, Y. R.",
+  "유성호",
+  "이동혁",
+  "김랑",
+  "김영록",
+]);
+
 function PaperDetail({ paper, labels }: { paper: Paper; labels: PaperLabels }) {
   const volumeDisplay = paper.volume
     ? paper.issue
@@ -183,7 +197,7 @@ function PaperDetail({ paper, labels }: { paper: Paper; labels: PaperLabels }) {
             <span
               key={i}
               className={`inline-flex rounded-full border px-2.5 py-0.5 text-xs ${
-                i === 0
+                NINEWATT_AUTHORS.has(author)
                   ? "border-primary/30 bg-primary/5 font-medium text-primary"
                   : "border-border text-foreground/80"
               }`}
