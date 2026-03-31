@@ -174,6 +174,7 @@ const NINEWATT_AUTHORS = new Set([
   "Ko, Y. D.",
   "Lee, D. H.",
   "Kim, Y. R.",
+  "Park, S. L.",
   "유성호",
   "이동혁",
   "김랑",
