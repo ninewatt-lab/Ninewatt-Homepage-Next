@@ -59,7 +59,7 @@
     "clickHint": "▸マーク付きの項目をクリックすると詳細を確認できます",
     "categories": { "public": "公共機関", "local": "自治体", "corporate": "企業", "overseas": "海外" },
     "items": [
-      { "title": "韓国建設技術研究院 (KICT, 건설기술연구원) - カーボンニュートラルプラットフォーム", "category": "公共機関", "desc": "建物・道路単位の炭素・交通排出量を可視化し、地域のエネルギー分析及び省エネリモデリングシミュレーションに対応" },
+      { "title": "韓国建設技術研究院 (KICT, 건설기술연구원) - カーボンニュートラルプラットフォーム", "category": "公共機関", "desc": "建物・道路単位の炭素・交通排出量を可視化し、地域のエネルギー分析及び省エネリモデリングシミュレーションに対応", "detail": { "description": "建物・道路単位の炭素及び交通排出量を3Dマップで可視化し、シナリオ別エネルギー使用量予測・炭素排出削減率分析・エネルギー性能診断・グリーンリモデリングシミュレーションまで提供する炭素総合地図プラットフォームです。", "images": ["https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/projects/Carbon-Neutral_1.png", "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/projects/Carbon-Neutral_2.png", "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/projects/Carbon-Neutral_4.png", "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/projects/Carbon-Neutral_3.png"] } },
       { "title": "韓国エネルギー技術研究院 (KIER, 에너지기술연구원) - 産業団地再生可能エネルギープラットフォーム", "category": "公共機関", "desc": "産業団地単位のシミュレーションに基づく複数再生可能エネルギー資源の最適設計及び経済性評価の自動化" },
       { "title": "韓国エネルギー技術研究院 (KIER, 에너지기술연구원) - UPSバッテリー劣化セル事前検証用AIアルゴリズム", "category": "公共機関", "desc": "AIベースのリチウムバッテリー性能事前予測自動化技術" },
       { "title": "江南区 (강남구) - 都市エネルギー3D Map", "category": "自治体", "desc": "公共施設のカーボンフットプリントを追跡し、温室効果ガス削減目標を明確に設定" },
