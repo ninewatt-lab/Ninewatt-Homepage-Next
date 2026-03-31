@@ -30,7 +30,7 @@ export const technologyTransfers: TechnologyTransfer[] = [
     transferDate: "2022.12.01",
     registrationNo: "",
     transferType: "기술이전",
-    institution: "인천대학교산학협력단",
+    institution: "인천대학교산학협력단, 나인와트",
     period: "",
     detail: {
       applicationNo: "1020220126960",
