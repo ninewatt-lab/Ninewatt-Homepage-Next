@@ -274,6 +274,16 @@ const companyNav: NavItemWithChildren = {
             </svg>
           ),
         },
+        {
+          href: "/company/papers",
+          labelKey: "companyMenu.papers",
+          descKey: "companyMenu.papersDesc",
+          icon: (
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
+              <path d="M4 4h16v16H4z" /><path d="M8 8h8M8 12h8M8 16h5" />
+            </svg>
+          ),
+        },
       ],
     },
   ],
