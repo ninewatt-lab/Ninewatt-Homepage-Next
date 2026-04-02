@@ -105,6 +105,69 @@ export function InlineExpandImage({
   );
 }
 
+// ─── LightboxImage (opens image in overlay, no layout shift) ───
+
+export function LightboxImage({
+  src,
+  alt,
+  children,
+  className,
+}: {
+  src: string;
+  alt: string;
+  children: React.ReactNode;
+  className?: string;
+}) {
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setOpen(false); };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [open]);
+
+  return (
+    <>
+      <button
+        type="button"
+        onClick={() => setOpen(true)}
+        className={`group/thumb inline text-left hover:text-primary transition-colors cursor-pointer ${className ?? ""}`}
+      >
+        {children}
+        <ImageIcon className="" />
+      </button>
+      {open && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
+          onClick={() => setOpen(false)}
+        >
+          <div
+            className="relative max-h-[85vh] max-w-[90vw]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <Image
+              src={src}
+              alt={alt}
+              width={600}
+              height={849}
+              className="h-auto max-h-[85vh] w-auto rounded-lg object-contain shadow-xl"
+              unoptimized
+            />
+            <button
+              type="button"
+              onClick={() => setOpen(false)}
+              className="absolute -top-3 -right-3 flex h-8 w-8 items-center justify-center rounded-full bg-white text-gray-800 shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700"
+            >
+              ✕
+            </button>
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
+
 // ─── ExpandableRow (image-based, accordion + animation) ───
 
 export function ExpandableRow({

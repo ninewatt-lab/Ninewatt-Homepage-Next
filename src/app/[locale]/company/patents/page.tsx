@@ -304,30 +304,40 @@ export default async function PatentsPage({
       </section>
 
       {/* Certifications */}
-      <section className="border-t border-border px-6 py-20">
-        <div className="mx-auto max-w-5xl">
-          <h2 className="text-xl font-bold">
-            {t("patents.certList")} <span className="text-muted">({certifications.length}건)</span>
-          </h2>
-          <div className="mt-6 space-y-3">
-            {certifications.map((c) => (
-              <div
-                key={c.id}
-                className="border-l-2 border-border pl-4"
-              >
-                {c.thumbnailUrl ? (
-                  <InlineExpandImage src={c.thumbnailUrl} alt={c.name} className="text-sm font-semibold">
-                    {c.name}
-                  </InlineExpandImage>
-                ) : (
-                  <p className="text-sm font-semibold">{c.name}</p>
-                )}
-                <p className="text-xs text-muted">{c.issuer}</p>
+      {(() => {
+        const achievements = certifications.filter((c) => c.category === "achievement");
+        const registrations = certifications.filter((c) => c.category === "registration");
+        return (
+          <section className="border-t border-border px-6 py-20">
+            <div className="mx-auto max-w-5xl">
+              <h2 className="text-xl font-bold">
+                {t("patents.certList")} <span className="text-muted">({certifications.length}건)</span>
+              </h2>
+
+              {/* 주요 인증 및 선정 */}
+              <h3 className="mt-10 text-lg font-semibold">
+                {t("patents.certAchievement")} <span className="text-muted">({achievements.length}건)</span>
+              </h3>
+              <p className="mt-1 text-sm text-muted">{t("patents.certAchievementDesc")}</p>
+              <div className="mt-6 grid grid-cols-1 items-start gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {achievements.map((c) => (
+                  <CertCard key={c.id} cert={c} />
+                ))}
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
+
+              {/* 등록 및 신고 */}
+              <h3 className="mt-14 text-lg font-semibold text-muted">
+                {t("patents.certRegistration")} <span className="text-muted/70">({registrations.length}건)</span>
+              </h3>
+              <div className="mt-6 grid grid-cols-1 items-start gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {registrations.map((c) => (
+                  <CertCard key={c.id} cert={c} />
+                ))}
+              </div>
+            </div>
+          </section>
+        );
+      })()}
     </>
   );
 }
@@ -383,6 +393,21 @@ function TechTransferDetailView({ transfer }: { transfer: TechnologyTransfer }) 
           </div>
         )}
       </div>
+    </div>
+  );
+}
+
+function CertCard({ cert: c }: { cert: { id: number; name: string; issuer: string; thumbnailUrl?: string } }) {
+  return (
+    <div className="rounded-lg border border-border bg-card p-5 transition-shadow hover:shadow-md">
+      <p className="truncate text-sm font-semibold">{c.name}</p>
+      {c.thumbnailUrl ? (
+        <InlineExpandImage src={c.thumbnailUrl} alt={c.name} className="text-xs text-muted leading-6">
+          <span>{c.issuer}</span>
+        </InlineExpandImage>
+      ) : (
+        <p className="text-xs text-muted leading-6">{c.issuer}</p>
+      )}
     </div>
   );
 }
