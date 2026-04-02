@@ -46,6 +46,15 @@ export const domesticPatents: Patent[] = [
   { id: 21, status: "출원", date: "2025.12.05", number: "1020250190997", title: "모빌리티 허브 에너지 운영 장치 및 방법", applicant: "주식회사 나인와트", thumbnailUrl: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/documents/patents/thumbnails/%EB%AA%A8%EB%B9%8C%EB%A6%AC%ED%8B%B0+%ED%97%88%EB%B8%8C+%EC%97%90%EB%84%88%EC%A7%80+%EC%9A%B4%EC%98%81+%EC%9E%A5%EC%B9%98+%EB%B0%8F+%EB%B0%A9%EB%B2%95.jpg" , pageCount: 66, visible: false },
   { id: 22, status: "출원", date: "2025.12.02", number: "1020250187779", title: "전력 시계열 데이터 적응형 청킹 방법 및 장치", applicant: "주식회사 나인와트", thumbnailUrl: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/documents/patents/thumbnails/%EC%A0%84%EB%A0%A5+%EC%8B%9C%EA%B3%84%EC%97%B4+%EB%8D%B0%EC%9D%B4%ED%84%B0+%EC%A0%81%EC%9D%91%ED%98%95+%EC%B2%AD%ED%82%B9+%EB%B0%A9%EB%B2%95+%EB%B0%8F+%EC%9E%A5%EC%B9%98.jpg" , pageCount: 59, visible: false },
   { id: 23, status: "출원", date: "2025.12.02", number: "1020250187780", title: "전력 시스템 상황 기반 계층적 LLM 에이전트 라우팅 방법 및 장치", applicant: "주식회사 나인와트", thumbnailUrl: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/documents/patents/thumbnails/%EC%A0%84%EB%A0%A5+%EC%8B%9C%EC%8A%A4%ED%85%9C+%EC%83%81%ED%99%A9+%EA%B8%B0%EB%B0%98+%EA%B3%84%EC%B8%B5%EC%A0%81+LLM+%EC%97%90%EC%9D%B4%EC%A0%84%ED%8A%B8+%EB%9D%BC%EC%9A%B0%ED%8C%85+%EB%B0%A9%EB%B2%95+%EB%B0%8F+%EC%9E%A5%EC%B9%98.jpg" , pageCount: 49, visible: false },
+  { id: 24, status: "공개", date: "2019.12.13", number: "1020190166870", title: "냉난방 제어 시스템", applicant: "주식회사 나인와트" },
+  { id: 25, status: "공개", date: "2023.10.26", number: "1020230144966", title: "시설물 관리 시스템 및 이를 이용한 관리 방법", applicant: "주식회사 나인와트" },
+  { id: 26, status: "공개", date: "2023.10.05", number: "1020230132755", title: "건물 에너지 데이터 관리 방법 및 장치", applicant: "주식회사 나인와트" },
+  { id: 27, status: "공개", date: "2021.04.07", number: "1020210045425", title: "전력 관리 시스템", applicant: "주식회사 나인와트" },
+  { id: 28, status: "공개", date: "2021.04.14", number: "1020210048402", title: "전기 자동차 충전 시스템", applicant: "주식회사 나인와트" },
+  { id: 29, status: "공개", date: "2019.11.29", number: "1020190156627", title: "에너지 사용량 표시 시스템", applicant: "주식회사 나인와트" },
+  { id: 30, status: "공개", date: "2020.09.23", number: "1020200122767", title: "정수기를 이용한 음용량 측정 시스템, 방법 및 이를 위한 장치", applicant: "주식회사 나인와트" },
+  { id: 31, status: "공개", date: "2019.08.29", number: "1020190106579", title: "건물 에너지 관리 시스템", applicant: "주식회사 나인와트" },
+  { id: 32, status: "공개", date: "2019.08.29", number: "1020190106576", title: "학교의 내실 정보 및 스케줄 정보에 기반한 전력 관리 시스템", applicant: "주식회사 나인와트" },
 ];
 
 export const internationalPatents: InternationalPatent[] = [
