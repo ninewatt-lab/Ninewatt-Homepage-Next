@@ -500,45 +500,58 @@ export default function ProductShowcase() {
             </div>
           </div>
 
-          {/* Right — Scrolling media */}
-          <div className="flex flex-col">
-            {products.map((product, i) => (
-              <div
-                key={product.id}
-                ref={(el) => {
-                  sectionRefs.current[i] = el;
-                }}
-                className="flex min-h-[80vh] scroll-mt-[10vh] items-center py-8"
-              >
-                <div className="w-full">
+          {/* Right — Sticky stacking media */}
+          <div className="relative flex flex-col">
+            {products.map((product, i) => {
+              const isActive = activeIndex === i;
+              const isPast = i < activeIndex;
+              return (
+                <div
+                  key={product.id}
+                  ref={(el) => {
+                    sectionRefs.current[i] = el;
+                  }}
+                  className="scroll-mt-[10vh]"
+                  style={{ minHeight: "80vh" }}
+                >
                   <div
+                    className="sticky w-full"
                     style={{
-                      opacity: activeIndex === i ? 1 : 0.2,
-                      transform: activeIndex === i
-                        ? "scale(1) translateY(0)"
-                        : `scale(0.95) translateY(${i > activeIndex ? "20px" : "-20px"})`,
-                      filter: activeIndex === i ? "blur(0)" : "blur(2px)",
-                      transition: "opacity 700ms ease-out, transform 700ms ease-out, filter 700ms ease-out",
+                      top: "25vh",
+                      zIndex: i + 1,
                     }}
                   >
-                    <MediaBlock product={product} isActive={activeIndex === i} />
-                  </div>
+                    <div
+                      style={{
+                        opacity: isActive ? 1 : isPast ? 0.4 : 0.2,
+                        transform: isActive
+                          ? "scale(1)"
+                          : isPast
+                            ? `scale(${0.95 - (activeIndex - i) * 0.02})`
+                            : "scale(0.95) translateY(20px)",
+                        filter: isActive ? "blur(0)" : isPast ? "blur(1px)" : "blur(2px)",
+                        transition: "opacity 700ms ease-out, transform 700ms ease-out, filter 700ms ease-out",
+                      }}
+                    >
+                      <MediaBlock product={product} isActive={isActive} />
+                    </div>
 
-                  {/* Inline label under each media */}
-                  <p
-                    className="mt-4 text-center text-xs font-medium tracking-wider uppercase"
-                    style={{
-                      color: activeIndex === i ? "var(--color-primary)" : "var(--color-muted)",
-                      opacity: activeIndex === i ? 1 : 0,
-                      transform: `translateY(${activeIndex === i ? 0 : 8}px)`,
-                      transition: "opacity 500ms ease-out 200ms, transform 500ms ease-out 200ms, color 500ms ease-out",
-                    }}
-                  >
-                    {product.label}
-                  </p>
+                    {/* Inline label under each media */}
+                    <p
+                      className="mt-4 text-center text-xs font-medium tracking-wider uppercase"
+                      style={{
+                        color: isActive ? "var(--color-primary)" : "var(--color-muted)",
+                        opacity: isActive ? 1 : 0,
+                        transform: `translateY(${isActive ? 0 : 8}px)`,
+                        transition: "opacity 500ms ease-out 200ms, transform 500ms ease-out 200ms, color 500ms ease-out",
+                      }}
+                    >
+                      {product.label}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
 
