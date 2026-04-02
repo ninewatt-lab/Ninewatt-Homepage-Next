@@ -234,24 +234,27 @@ export function DetailExpandableRow({
   );
 }
 
-// ─── DetailTrigger (chevron down icon trigger) ───
+// ─── DetailTrigger (text wrapper, no icon) ───
 
 export function DetailTrigger({ children, className }: { children: React.ReactNode; className?: string }) {
+  return <span className={className}>{children}</span>;
+}
+
+// ─── DetailTriggerChevron (standalone chevron for No column) ───
+
+export function DetailTriggerChevron() {
   const ctx = useContext(ExpandableContext);
-  if (!ctx) return <span className={className}>{children}</span>;
+  if (!ctx) return null;
   return (
-    <span className={`flex items-center gap-2 ${className ?? ""}`}>
-      {children}
-      <svg
-        className={`w-4 h-4 shrink-0 text-muted transition-transform duration-200 ${ctx.open ? "rotate-180" : ""}`}
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-        strokeWidth={2}
-      >
-        <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-      </svg>
-    </span>
+    <svg
+      className={`w-3.5 h-3.5 shrink-0 text-muted transition-transform duration-200 ${ctx.open ? "rotate-180" : ""}`}
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      strokeWidth={2}
+    >
+      <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+    </svg>
   );
 }
 

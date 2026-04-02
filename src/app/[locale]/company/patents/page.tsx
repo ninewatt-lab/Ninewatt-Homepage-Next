@@ -1,6 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { getPatents, getCertifications, getTrademarks, getTechnologyTransfers } from "@/lib/cms";
-import { InlineExpandImage, ExpandableRow, ExpandableTrigger, TrademarkGroupCard, DetailExpandableRow, DetailTrigger, AccordionTableBody } from "@/components/ImageLightbox";
+import { InlineExpandImage, ExpandableRow, ExpandableTrigger, TrademarkGroupCard, DetailExpandableRow, DetailTriggerChevron, AccordionTableBody } from "@/components/ImageLightbox";
 import type { TechnologyTransfer } from "@/data/technologyTransfers";
 
 /** Google Patents 링크 생성 — 등록 특허는 직접 링크, 출원/공개 특허는 검색 링크 */
@@ -111,9 +111,10 @@ export default async function PatentsPage({
                 <tr className="border-b border-border text-left">
                   <th className="w-12 py-3 pr-3 font-semibold text-muted">{t("patents.tableNo")}</th>
                   <th className="w-28 py-3 pr-3 font-semibold text-muted">{t("patents.transferDate")}</th>
+                  <th className="w-44 py-3 pr-3 font-semibold text-muted">{t("patents.regNo")}</th>
                   <th className="py-3 pr-3 font-semibold text-muted">{t("patents.techTransferName")}</th>
-                  <th className="w-44 py-3 pr-3 font-semibold text-muted">{t("patents.transferType")}</th>
-                  <th className="w-48 py-3 font-semibold text-muted">{t("patents.transferInstitution")}</th>
+                  <th className="whitespace-nowrap py-3 pr-3 font-semibold text-muted">{t("patents.transferType")}</th>
+                  <th className="w-48 whitespace-nowrap py-3 font-semibold text-muted">{t("patents.transferInstitution")}</th>
                 </tr>
               </thead>
               <AccordionTableBody>
@@ -122,21 +123,21 @@ export default async function PatentsPage({
                     <>
                       <td className="py-3 pr-3 text-muted">{i + 1}</td>
                       <td className="py-3 pr-3 whitespace-nowrap tabular-nums text-muted">{tt.transferDate || "—"}</td>
+                      <td className="py-3 pr-3 tabular-nums text-xs text-muted">{tt.registrationNo || "—"}</td>
                       <td className="py-3 pr-3">
-                        {tt.detail ? (
-                          <DetailTrigger>{tt.title}</DetailTrigger>
-                        ) : (
-                          tt.title
-                        )}
+                        <span className="flex items-center justify-between gap-2">
+                          <span>{tt.title}</span>
+                          {tt.detail && <DetailTriggerChevron />}
+                        </span>
                       </td>
-                      <td className="py-3 pr-3 text-muted">{tt.transferType}</td>
-                      <td className="py-3 text-muted">{tt.institution || "—"}</td>
+                      <td className="whitespace-nowrap py-3 pr-3 text-muted">{tt.transferType}</td>
+                      <td className="whitespace-nowrap py-3 text-muted">{tt.institution || "—"}</td>
                     </>
                   );
 
                   if (tt.detail) {
                     return (
-                      <DetailExpandableRow key={tt.id} accordionKey={`tt-${tt.id}`} colSpan={5} detail={<TechTransferDetailView transfer={tt} />}>
+                      <DetailExpandableRow key={tt.id} accordionKey={`tt-${tt.id}`} colSpan={6} detail={<TechTransferDetailView transfer={tt} />}>
                         {row}
                       </DetailExpandableRow>
                     );
