@@ -11,7 +11,7 @@ export async function generateMetadata() {
 
 const categories = [
   {
-    titleKey: "productMenu.energy" as const,
+    titleKey: "productMenu.ess" as const,
     products: [
       {
         href: "/product/shared-ess" as const,
@@ -20,6 +20,18 @@ const categories = [
         tagline: "Shared ESS for Grid Flexibility",
         descKey: "list.sharedEssDesc" as const,
       },
+      {
+        href: "/product/peak-ess" as const,
+        nameKey: "productMenu.peakEssLabel" as const,
+        badge: null,
+        tagline: "AI-based Peak Shaving ESS Control",
+        descKey: "list.peakEssDesc" as const,
+      },
+    ],
+  },
+  {
+    titleKey: "productMenu.pv" as const,
+    products: [
       {
         href: "/product/pv-intelligence" as const,
         nameKey: "productMenu.pvRtuLabel" as const,

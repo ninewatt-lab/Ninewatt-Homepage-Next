@@ -27,8 +27,11 @@
     "pvIntelligenceDesc": "太陽光発電所統合監視システム",
     "sharedEssDesc": "配電網連携型共有エネルギー貯蔵システム",
     "pvEss": "PV & ESS",
-    "energy": "Energy",
+    "ess": "ESS",
+    "pv": "PV",
     "sharedEssLabel": "共有型ESS",
+    "peakEssLabel": "ピーク低減型ESS",
+    "peakEssDesc": "AI基盤ピーク電力低減ESS最適制御システム",
     "pvRtuLabel": "PV RTU",
     "solarScopeLabel": "太陽光適地分析"
   },
