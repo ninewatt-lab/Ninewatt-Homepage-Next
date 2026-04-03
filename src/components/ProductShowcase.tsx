@@ -77,9 +77,18 @@ const products: Product[] = [
     media: {
       type: "imageSlider",
       images: [
-        { src: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/SolarScope/SolarScope_1.png", alt: "SolarScope Map Analysis Dashboard" },
-        { src: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/SolarScope/SolarScope_7.png", alt: "SolarScope Nationwide Grid Analysis" },
-        { src: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/SolarScope/SolarScope_8.png", alt: "SolarScope 3D Roof Analysis" },
+        {
+          src: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/SolarScope/SolarScope_1.png",
+          alt: "SolarScope Map Analysis Dashboard",
+        },
+        {
+          src: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/SolarScope/SolarScope_7.png",
+          alt: "SolarScope Nationwide Grid Analysis",
+        },
+        {
+          src: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/SolarScope/SolarScope_8.png",
+          alt: "SolarScope 3D Roof Analysis",
+        },
       ],
     },
   },
@@ -93,12 +102,30 @@ const products: Product[] = [
     media: {
       type: "imageSlider",
       images: [
-        { src: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/PVIntelligence/PV_Intelligence_2.png", alt: "PV Intelligence Dashboard" },
-        { src: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/PVIntelligence/PV_Intelligence_3.png", alt: "PV Intelligence Site Map" },
-        { src: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/PVIntelligence/PV_Intelligence_4.png", alt: "PV Intelligence Cross-Site Analysis" },
-        { src: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/PVIntelligence/PV_Intelligence_5.png", alt: "PV Intelligence Revenue Analysis" },
-        { src: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/PVIntelligence/PV_Intelligence_6.png", alt: "PV Intelligence AI Alerts" },
-        { src: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/PVIntelligence/PV_Intelligence_1.png", alt: "PV Intelligence String Layout" },
+        {
+          src: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/PVIntelligence/PV_Intelligence_2.png",
+          alt: "PV Intelligence Dashboard",
+        },
+        {
+          src: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/PVIntelligence/PV_Intelligence_3.png",
+          alt: "PV Intelligence Site Map",
+        },
+        {
+          src: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/PVIntelligence/PV_Intelligence_4.png",
+          alt: "PV Intelligence Cross-Site Analysis",
+        },
+        {
+          src: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/PVIntelligence/PV_Intelligence_5.png",
+          alt: "PV Intelligence Revenue Analysis",
+        },
+        {
+          src: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/PVIntelligence/PV_Intelligence_6.png",
+          alt: "PV Intelligence AI Alerts",
+        },
+        {
+          src: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/PVIntelligence/PV_Intelligence_1.png",
+          alt: "PV Intelligence String Layout",
+        },
       ],
     },
   },
@@ -136,7 +163,9 @@ function BrowserFrame({
   const handleMouseLeave = useCallback(() => {
     const el = frameRef.current;
     const glow = glowRef.current;
-    if (el) el.style.transform = "perspective(800px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)";
+    if (el)
+      el.style.transform =
+        "perspective(800px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)";
     if (glow) glow.style.opacity = "0";
   }, []);
 
@@ -146,7 +175,10 @@ function BrowserFrame({
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       className="relative flex flex-col overflow-hidden rounded-xl bg-[#1a1a2e] shadow-2xl ring-1 ring-white/10"
-      style={{ transition: "transform 0.3s ease-out", transformStyle: "preserve-3d" }}
+      style={{
+        transition: "transform 0.3s ease-out",
+        transformStyle: "preserve-3d",
+      }}
     >
       {/* Mouse-following glow overlay */}
       <div
@@ -294,7 +326,8 @@ function ImageSlider({ images }: { images: { src: string; alt: string }[] }) {
                 width:
                   i === current
                     ? `${progress * 100}%`
-                    : i < current || (current === 0 && prev === images.length - 1 && i !== 0)
+                    : i < current ||
+                        (current === 0 && prev === images.length - 1 && i !== 0)
                       ? "100%"
                       : "0%",
                 transition: i === current ? "none" : "width 0.3s ease",
@@ -307,7 +340,13 @@ function ImageSlider({ images }: { images: { src: string; alt: string }[] }) {
   );
 }
 
-function MediaBlock({ product, isActive }: { product: Product; isActive?: boolean }) {
+function MediaBlock({
+  product,
+  isActive,
+}: {
+  product: Product;
+  isActive?: boolean;
+}) {
   let content: React.ReactNode;
 
   if (product.media.type === "video") {
@@ -331,7 +370,10 @@ function MediaBlock({ product, isActive }: { product: Product; isActive?: boolea
   }
 
   return (
-    <BrowserFrame url={productUrls[product.id] ?? "app.ninewatt.com"} isActive={isActive}>
+    <BrowserFrame
+      url={productUrls[product.id] ?? "app.ninewatt.com"}
+      isActive={isActive}
+    >
       {content}
     </BrowserFrame>
   );
@@ -339,14 +381,16 @@ function MediaBlock({ product, isActive }: { product: Product; isActive?: boolea
 
 export default function ProductShowcase() {
   const [activeIndex, setActiveIndex] = useState(0);
-  const prevIndexRef = useRef(0);
-  const direction = activeIndex >= prevIndexRef.current ? 1 : -1;
+  const [direction, setDirection] = useState(1);
   const sectionRefs = useRef<(HTMLDivElement | null)[]>([]);
   const t = useTranslations("home");
 
-  useEffect(() => {
-    prevIndexRef.current = activeIndex;
-  }, [activeIndex]);
+  const handleActiveIndex = useCallback((newIndex: number) => {
+    setActiveIndex((prev) => {
+      setDirection(newIndex >= prev ? 1 : -1);
+      return newIndex;
+    });
+  }, []);
 
   useEffect(() => {
     const observers: IntersectionObserver[] = [];
@@ -357,10 +401,10 @@ export default function ProductShowcase() {
       const observer = new IntersectionObserver(
         ([entry]) => {
           if (entry.isIntersecting) {
-            setActiveIndex(index);
+            handleActiveIndex(index);
           }
         },
-        { threshold: 0.3, rootMargin: "-20% 0px -20% 0px" }
+        { threshold: 0.3, rootMargin: "-20% 0px -20% 0px" },
       );
 
       observer.observe(el);
@@ -368,7 +412,7 @@ export default function ProductShowcase() {
     });
 
     return () => observers.forEach((o) => o.disconnect());
-  }, []);
+  }, [handleActiveIndex]);
 
   return (
     <section className="px-6 py-32">
@@ -436,7 +480,8 @@ export default function ProductShowcase() {
                       style={{
                         opacity: isActive ? 1 : 0,
                         transform: `translateY(${offsetY}px)`,
-                        transition: "opacity 600ms ease-out, transform 600ms ease-out",
+                        transition:
+                          "opacity 600ms ease-out, transform 600ms ease-out",
                       }}
                     >
                       <p
@@ -444,7 +489,8 @@ export default function ProductShowcase() {
                         style={{
                           opacity: isActive ? 1 : 0,
                           transform: `translateY(${isActive ? 0 : 12}px)`,
-                          transition: "opacity 500ms ease-out 0ms, transform 500ms ease-out 0ms",
+                          transition:
+                            "opacity 500ms ease-out 0ms, transform 500ms ease-out 0ms",
                         }}
                       >
                         {product.label}
@@ -454,7 +500,8 @@ export default function ProductShowcase() {
                         style={{
                           opacity: isActive ? 1 : 0,
                           transform: `translateY(${isActive ? 0 : 12}px)`,
-                          transition: "opacity 500ms ease-out 80ms, transform 500ms ease-out 80ms",
+                          transition:
+                            "opacity 500ms ease-out 80ms, transform 500ms ease-out 80ms",
                         }}
                       >
                         {t(product.titleKey)}
@@ -464,7 +511,8 @@ export default function ProductShowcase() {
                         style={{
                           opacity: isActive ? 1 : 0,
                           transform: `translateY(${isActive ? 0 : 12}px)`,
-                          transition: "opacity 500ms ease-out 160ms, transform 500ms ease-out 160ms",
+                          transition:
+                            "opacity 500ms ease-out 160ms, transform 500ms ease-out 160ms",
                         }}
                       >
                         {t(product.descriptionKey)}
@@ -475,7 +523,8 @@ export default function ProductShowcase() {
                         style={{
                           opacity: isActive ? 1 : 0,
                           transform: `translateY(${isActive ? 0 : 12}px)`,
-                          transition: "opacity 500ms ease-out 240ms, transform 500ms ease-out 240ms",
+                          transition:
+                            "opacity 500ms ease-out 240ms, transform 500ms ease-out 240ms",
                         }}
                       >
                         {t(product.linkTextKey)}
@@ -529,8 +578,13 @@ export default function ProductShowcase() {
                           : isPast
                             ? `scale(${0.95 - (activeIndex - i) * 0.02})`
                             : "scale(0.95) translateY(20px)",
-                        filter: isActive ? "blur(0)" : isPast ? "blur(1px)" : "blur(2px)",
-                        transition: "opacity 700ms ease-out, transform 700ms ease-out, filter 700ms ease-out",
+                        filter: isActive
+                          ? "blur(0)"
+                          : isPast
+                            ? "blur(1px)"
+                            : "blur(2px)",
+                        transition:
+                          "opacity 700ms ease-out, transform 700ms ease-out, filter 700ms ease-out",
                       }}
                     >
                       <MediaBlock product={product} isActive={isActive} />
@@ -540,10 +594,13 @@ export default function ProductShowcase() {
                     <p
                       className="mt-4 text-center text-xs font-medium tracking-wider uppercase"
                       style={{
-                        color: isActive ? "var(--color-primary)" : "var(--color-muted)",
+                        color: isActive
+                          ? "var(--color-primary)"
+                          : "var(--color-muted)",
                         opacity: isActive ? 1 : 0,
                         transform: `translateY(${isActive ? 0 : 8}px)`,
-                        transition: "opacity 500ms ease-out 200ms, transform 500ms ease-out 200ms, color 500ms ease-out",
+                        transition:
+                          "opacity 500ms ease-out 200ms, transform 500ms ease-out 200ms, color 500ms ease-out",
                       }}
                     >
                       {product.label}
