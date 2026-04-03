@@ -28,12 +28,14 @@
     "sharedEssDesc": "Grid-connected shared energy storage system",
     "pvEss": "PV & ESS",
     "ess": "ESS",
-    "pv": "PV",
+    "pv": "EMS",
     "sharedEssLabel": "Shared ESS",
     "peakEssLabel": "Peak Shaving ESS",
     "peakEssDesc": "AI-based peak power reduction ESS optimal control system",
-    "pvRtuLabel": "PV RTU",
-    "solarScopeLabel": "Solar Site Analysis"
+    "pvRtuLabel": "PV REMS",
+    "solarScopeLabel": "Solar Site Analysis",
+    "bemsLabel": "BEMS",
+    "bemsDesc": "Building Energy Management System"
   },
   "solutionsMenu": {
     "overview": "Overview",

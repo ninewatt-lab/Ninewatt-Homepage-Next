@@ -34,8 +34,8 @@ export default function ProductNav() {
     {
       label: t("productMenu.pv"),
       items: [
+        { href: "/product/bems", label: "BEMS" },
         { href: "/product/pv-intelligence", label: t("productMenu.pvRtuLabel") },
-        { href: "/product/solar-site", label: t("productMenu.solarScopeLabel") },
       ],
     },
     {
@@ -43,6 +43,7 @@ export default function ProductNav() {
       items: [
         { href: "/product/greenplanner", label: "GreenPlanner" },
         { href: "/product/repark", label: "RE:park" },
+        { href: "/product/solar-site", label: "SolarScope" },
       ],
     },
   ];

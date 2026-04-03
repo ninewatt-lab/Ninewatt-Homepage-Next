@@ -28,12 +28,14 @@
     "sharedEssDesc": "Système de stockage d'énergie partagé connecté au réseau",
     "pvEss": "PV & ESS",
     "ess": "ESS",
-    "pv": "PV",
+    "pv": "EMS",
     "sharedEssLabel": "ESS Partagé",
     "peakEssLabel": "ESS Écrêtement de Pointe",
     "peakEssDesc": "Système de contrôle optimal ESS pour la réduction des pics de puissance par IA",
-    "pvRtuLabel": "PV RTU",
-    "solarScopeLabel": "Analyse de Sites Solaires"
+    "pvRtuLabel": "PV REMS",
+    "solarScopeLabel": "Analyse de Sites Solaires",
+    "bemsLabel": "BEMS",
+    "bemsDesc": "Système de gestion de l'énergie du bâtiment"
   },
   "solutionsMenu": {
     "overview": "Vue d'ensemble",

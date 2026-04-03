@@ -28,12 +28,14 @@
     "sharedEssDesc": "配電網連携型共有エネルギー貯蔵システム",
     "pvEss": "PV & ESS",
     "ess": "ESS",
-    "pv": "PV",
+    "pv": "EMS",
     "sharedEssLabel": "共有型ESS",
     "peakEssLabel": "ピーク低減型ESS",
     "peakEssDesc": "AI基盤ピーク電力低減ESS最適制御システム",
-    "pvRtuLabel": "PV RTU",
-    "solarScopeLabel": "太陽光適地分析"
+    "pvRtuLabel": "PV REMS",
+    "solarScopeLabel": "太陽光適地分析",
+    "bemsLabel": "BEMS",
+    "bemsDesc": "ビルエネルギー管理システム"
   },
   "solutionsMenu": {
     "overview": "全体を見る",

@@ -10,7 +10,8 @@
     "solarScopeDesc": "Perform integrated analysis of regulations, setback distances, distribution grid capacity, energy yield, and financial viability for solar installation candidate sites — using just an address.",
     "pvIntelligenceDesc": "Beyond showing generation numbers — AI detects anomalies, calculates loss amounts, and maximizes revenue. A Solar AI platform proven at our own power plants.",
     "sharedEssDesc": "A new business model where multiple buildings share a single large-scale ESS connected to the distribution grid. Reduces electricity costs through virtual net metering and supplies grid flexibility.",
-    "peakEssDesc": "AI learns building power usage patterns to predict peak times and optimally control ESS charge/discharge. Significantly reduces demand charges and optimizes contracted power capacity."
+    "peakEssDesc": "AI learns building power usage patterns to predict peak times and optimally control ESS charge/discharge. Significantly reduces demand charges and optimizes contracted power capacity.",
+    "bemsDesc": "Collect and analyze building energy data in real time, visualizing consumption by source, purpose, and zone. Reduce energy costs with AI forecasting and automated control."
   },
   "opti": {
     "heroSubtitle": "AI Energy Advisor for Buildings",
@@ -640,6 +641,172 @@
 
     "ctaTitle": "Learn about Peak Shaving ESS Optimal Control",
     "ctaDesc": "Reduce demand charges and optimize power operations with AI-based ESS optimal control.",
+    "ctaContact": "Contact Us"
+  },
+
+  "bems": {
+    "heroSubtitle": "See building energy as data, manage it as cost",
+    "heroDesc": "Collect and analyze building energy consumption data in real time, visualizing energy usage by source, purpose, and zone. Reduce energy costs and carbon emissions with AI-based forecasting and automated control integration.",
+    "requestDemo": "Contact Us",
+
+    "coreFeatures": [
+      {
+        "title": "Data Display & Monitoring",
+        "desc": "Display real-time energy data in SI units and trigger instant alarms when thresholds are exceeded.",
+        "items": [
+          "Real-time building energy consumption data display (SI units)",
+          "Operator-defined thresholds and operating ranges",
+          "Baseline vs. actual performance comparison",
+          "Automatic alarm when thresholds or ranges are exceeded"
+        ]
+      },
+      {
+        "title": "Query & Comparison",
+        "desc": "View daily, weekly, monthly, and annual data in tables and graphs with cross-period comparison.",
+        "items": [
+          "Period-based data query (tables, graphs)",
+          "Daily, weekly, monthly, annual views",
+          "Multi-period comparison (e.g., last year vs. this year)"
+        ]
+      },
+      {
+        "title": "Consumption Analysis",
+        "desc": "Multi-dimensional energy consumption analysis by source, purpose, and zone.",
+        "items": [
+          "Energy source analysis (electricity, gas, district heating, etc.)",
+          "Primary energy conversion (TOE units)",
+          "Purpose-based analysis (cooling, heating, hot water, lighting, ventilation, plug loads)",
+          "Zone-based analysis (floor, area, tenant unit)",
+          "CO₂ emission analysis (carbon emission factor applied)",
+          "Energy Use Intensity (EUI) analysis (per area, per person)",
+          "Peak power demand analysis",
+          "Building energy efficiency assessment",
+          "Energy savings amount and rate analysis"
+        ]
+      },
+      {
+        "title": "Performance & Environmental Info",
+        "desc": "Monitor equipment status and provide integrated indoor/outdoor environmental data.",
+        "items": [
+          "Equipment operating status (ON/OFF, valve position, etc.)",
+          "Equipment performance & efficiency (COP, etc.)",
+          "Outdoor temperature and humidity",
+          "Indoor temperature and humidity",
+          "Indoor CO₂ concentration",
+          "Indoor illuminance (sensor-linked)"
+        ]
+      },
+      {
+        "title": "Forecasting & Cost Analysis",
+        "desc": "Pattern-based energy consumption forecasting and tariff-specific cost analysis.",
+        "items": [
+          "Energy consumption forecasting (historical pattern-based)",
+          "Energy saving and operation guidelines",
+          "Tariff plan selection",
+          "Energy unit cost adjustment (rate change response)",
+          "Period-based energy cost inquiry",
+          "Estimated energy cost inquiry"
+        ]
+      },
+      {
+        "title": "Control Integration",
+        "desc": "Automated control through native control or BAS integration.",
+        "items": [
+          "Native or BAS-linked automatic control",
+          "Schedule-based operation control",
+          "Optimal start/stop control"
+        ]
+      }
+    ],
+
+    "dataTitle": "Data Processing Pipeline",
+    "dataSubtitle": "From sensors to dashboard — a 4-stage data processing architecture",
+    "dataAcquisition": [
+      {
+        "title": "Data Acquisition",
+        "items": [
+          "Direct communication with meters & sensors",
+          "FMS (Facility Management System) interface",
+          "BAS (Building Automation System) interface",
+          "AMR (Automatic Meter Reading) interface"
+        ]
+      },
+      {
+        "title": "Data Transmission",
+        "items": [
+          "Fieldbus (BACnet, LonWorks, Modbus)",
+          "USN wireless network (Zigbee, etc.)",
+          "Network equipment (Gateway, Router)",
+          "TCP/IP-based network"
+        ]
+      },
+      {
+        "title": "Data Collection",
+        "items": [
+          "Central server delivery and collection",
+          "Communication error check (transmission verification)"
+        ]
+      },
+      {
+        "title": "Management & Utilization",
+        "items": [
+          "Stored data available at all times",
+          "Processed at 15min/30min/1hr intervals",
+          "Data processed into actionable information"
+        ]
+      }
+    ],
+
+    "classTitle": "Energy Use Classification",
+    "classSubtitle": "Building energy is categorized by use for precise analysis",
+    "energyCategories": [
+      {
+        "category": "HVAC & Hot Water",
+        "items": [
+          { "name": "Heating", "desc": "Energy for building heating including humidification" },
+          { "name": "Cooling", "desc": "Energy for building cooling including dehumidification" },
+          { "name": "Ventilation & Air Circulation", "desc": "AHU, fan coil, heat recovery ventilator, exhaust fan, etc." },
+          { "name": "Hot Water", "desc": "Energy for hot water supply (bathing, laundry, washing)" }
+        ]
+      },
+      {
+        "category": "Lighting & Plug Loads",
+        "items": [
+          { "name": "Lighting", "desc": "Interior and exterior lighting energy" },
+          { "name": "Plug Loads", "desc": "PCs, office equipment, appliances, etc." },
+          { "name": "Building Transport", "desc": "Elevators, escalators, and other transport systems" }
+        ]
+      },
+      {
+        "category": "Other Uses",
+        "items": [
+          { "name": "Auxiliary Equipment", "desc": "Water supply/drainage pumps, sewage treatment, etc." },
+          { "name": "Cooking", "desc": "Gas/electricity for kitchen and food preparation" },
+          { "name": "Refrigeration", "desc": "Food storage and refrigeration equipment" },
+          { "name": "IT Systems", "desc": "Server rooms, data centers, precision cooling, etc." },
+          { "name": "Special Purpose", "desc": "Medical equipment, swimming pool facilities, etc." }
+        ]
+      }
+    ],
+
+    "benefitTitle": "Expected Benefits",
+    "benefitItems": [
+      { "value": "15–30%", "label": "Energy cost reduction" },
+      { "value": "Real-time", "label": "Anomaly detection & alerting" },
+      { "value": "CO₂", "label": "Quantitative carbon management" },
+      { "value": "24/7", "label": "Non-stop energy monitoring" }
+    ],
+
+    "targetTitle": "Ideal for these buildings",
+    "targetItems": [
+      { "title": "Large Commercial Buildings", "desc": "Office buildings, shopping malls, and mixed-use complexes with high energy consumption" },
+      { "title": "Public Facilities", "desc": "Government offices, schools, and libraries with energy reduction mandates" },
+      { "title": "Hospitals & Medical Facilities", "desc": "24/7 operations with high energy use and critical indoor environment requirements" },
+      { "title": "Industrial & Logistics", "desc": "Factories, data centers, and warehouses requiring peak management and equipment optimization" }
+    ],
+
+    "ctaTitle": "Manage your building energy with data",
+    "ctaDesc": "Reduce energy costs and move closer to carbon neutrality with BEMS.",
     "ctaContact": "Contact Us"
   }
 }

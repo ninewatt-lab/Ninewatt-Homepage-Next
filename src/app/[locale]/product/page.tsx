@@ -33,18 +33,18 @@ const categories = [
     titleKey: "productMenu.pv" as const,
     products: [
       {
+        href: "/product/bems" as const,
+        name: "BEMS",
+        badge: null,
+        tagline: "Building Energy Management System",
+        descKey: "list.bemsDesc" as const,
+      },
+      {
         href: "/product/pv-intelligence" as const,
         nameKey: "productMenu.pvRtuLabel" as const,
         badge: null,
         tagline: "Solar Plant Monitoring System",
         descKey: "list.pvIntelligenceDesc" as const,
-      },
-      {
-        href: "/product/solar-site" as const,
-        nameKey: "productMenu.solarScopeLabel" as const,
-        badge: null,
-        tagline: "Solar Site Analysis Platform",
-        descKey: "list.solarScopeDesc" as const,
       },
     ],
   },
@@ -64,6 +64,13 @@ const categories = [
         badge: null,
         tagline: "Smart Facility Management",
         descKey: "list.reparkDesc" as const,
+      },
+      {
+        href: "/product/solar-site" as const,
+        name: "SolarScope",
+        badge: null,
+        tagline: "Solar Site Analysis Platform",
+        descKey: "list.solarScopeDesc" as const,
       },
     ],
   },
@@ -97,7 +104,7 @@ export default async function ProductPage() {
               </h2>
               <div className="mt-4 space-y-1">
                 {category.products.map((product) => {
-                  const displayName = "nameKey" in product ? tc(product.nameKey) : product.name;
+                  const displayName = "nameKey" in product ? tc((product as { nameKey: string }).nameKey) : (product as { name: string }).name;
                   return (
                   <Link
                     key={product.href}
