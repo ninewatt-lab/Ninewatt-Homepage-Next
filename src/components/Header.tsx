@@ -209,7 +209,7 @@ const solutionsNav: NavItemWithChildren = {
           ),
         },
         {
-          href: "/company/global",
+          href: "/solutions/global",
           labelKey: "companyMenu.global",
           descKey: "companyMenu.globalDesc",
           icon: (

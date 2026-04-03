@@ -38,7 +38,7 @@ export default function SolutionsNav() {
         { href: "/solutions/cases", label: t("solutionsMenu.cases") },
         { href: "/solutions/rnd", label: t("solutionsMenu.rnd") },
         { href: "/solutions/services", label: t("solutionsMenu.services") },
-        { href: "/company/global", label: t("companyMenu.global") },
+        { href: "/solutions/global", label: t("companyMenu.global") },
       ],
     },
   ];

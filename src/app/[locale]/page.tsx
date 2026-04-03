@@ -118,7 +118,7 @@ export default async function Home({
                   </div>
                 </Link>
                 <Link
-                  href="/company/global"
+                  href="/solutions/global"
                   className="group relative flex-1 rounded-2xl border border-border p-8 transition-all duration-300 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5"
                 >
                   <p className="text-xs font-medium uppercase tracking-wider text-muted">
