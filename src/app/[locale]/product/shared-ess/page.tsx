@@ -1,5 +1,6 @@
 import { Link } from "@/i18n/navigation";
 import { getTranslations } from "next-intl/server";
+import Image from "next/image";
 
 export async function generateMetadata() {
   const t = await getTranslations("product");
@@ -12,37 +13,55 @@ export async function generateMetadata() {
 export default async function SharedEssPage() {
   const t = await getTranslations("product");
   const backgroundItems = t.raw("sharedEss.backgroundItems") as { title: string; desc: string }[];
+  const peakDemandItems = t.raw("sharedEss.peakDemandItems") as { year: string; capacity: string }[];
   const conceptAdvantages = t.raw("sharedEss.conceptAdvantages") as { title: string; desc: string }[];
   const comparisonItems = t.raw("sharedEss.comparisonItems") as { category: string; individual: string; shared: string }[];
   const operationNormalItems = t.raw("sharedEss.operationNormalItems") as string[];
   const operationGridItems = t.raw("sharedEss.operationGridItems") as string[];
   const allianceMembers = t.raw("sharedEss.allianceMembers") as { name: string; role: string; items: string[] }[];
   const projectGoals = t.raw("sharedEss.projectGoals") as string[];
+  const timelineItems = t.raw("sharedEss.timelineItems") as { date: string; title: string; desc: string }[];
+  const fundingItems = t.raw("sharedEss.fundingItems") as { name: string; type: string; agency: string; participants: string; budget: string; scope: string; purpose: string; location: string }[];
   const roadmapSteps = t.raw("sharedEss.roadmapSteps") as { phase: string; title: string; items: string[]; scale?: string }[];
   const impactItems = t.raw("sharedEss.impactItems") as { value: string; label: string }[];
+  const stakeholderItems = t.raw("sharedEss.stakeholderItems") as { stakeholder: string; items: string[] }[];
 
   return (
     <>
       {/* Hero */}
       <section className="border-b border-border px-6 pb-20 pt-16">
         <div className="mx-auto max-w-5xl">
-          <p className="text-sm font-medium text-primary">{t("sharedEss.heroLabel")}</p>
-          <h1 className="mt-6 text-5xl font-bold tracking-tight md:text-7xl">
-            {t("sharedEss.heroTitle")}
-          </h1>
-          <p className="mt-3 text-xl text-muted md:text-2xl">
-            {t("sharedEss.heroSubtitle")}
-          </p>
-          <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted">
-            {t("sharedEss.heroDesc")}
-          </p>
-          <div className="mt-10 flex flex-wrap gap-4">
-            <Link
-              href="/contact"
-              className="rounded-full bg-primary px-8 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-primary-dark"
-            >
-              {t("sharedEss.requestDemo")}
-            </Link>
+          <div className="grid gap-10 md:grid-cols-2 md:items-center">
+            <div>
+              <p className="text-sm font-medium text-primary">{t("sharedEss.heroLabel")}</p>
+              <h1 className="mt-6 text-5xl font-bold tracking-tight md:text-6xl">
+                {t("sharedEss.heroTitle")}
+              </h1>
+              <p className="mt-3 text-xl text-muted md:text-2xl">
+                {t("sharedEss.heroSubtitle")}
+              </p>
+              <p className="mt-6 text-lg leading-relaxed text-muted">
+                {t("sharedEss.heroDesc")}
+              </p>
+              <div className="mt-10 flex flex-wrap gap-4">
+                <Link
+                  href="/contact"
+                  className="rounded-full bg-primary px-8 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-primary-dark"
+                >
+                  {t("sharedEss.requestDemo")}
+                </Link>
+              </div>
+            </div>
+            <div className="overflow-hidden rounded-2xl">
+              <Image
+                src="https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/product/shared-ess-facility.jpg"
+                alt="공유형 ESS 설비"
+                width={1600}
+                height={1200}
+                className="h-auto w-full object-cover"
+                priority
+              />
+            </div>
           </div>
         </div>
       </section>
@@ -62,6 +81,35 @@ export default async function SharedEssPage() {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Peak Demand Table */}
+      <section className="border-t border-border bg-surface px-6 py-24">
+        <div className="mx-auto max-w-5xl">
+          <h2 className="text-2xl font-bold">{t("sharedEss.peakDemandTitle")}</h2>
+          <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted">
+            {t("sharedEss.peakDemandDesc")}
+          </p>
+          <div className="mt-10 overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b-2 border-border">
+                  {peakDemandItems.map((item, i) => (
+                    <th key={i} className="pb-3 pr-4 text-center font-medium text-muted">{item.year}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  {peakDemandItems.map((item, i) => (
+                    <td key={i} className="py-4 pr-4 text-center text-lg font-bold text-primary">{item.capacity}</td>
+                  ))}
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p className="mt-4 text-xs text-muted">{t("sharedEss.peakDemandSource")}</p>
         </div>
       </section>
 
@@ -197,6 +245,15 @@ export default async function SharedEssPage() {
         <div className="mx-auto max-w-5xl">
           <h2 className="text-2xl font-bold">{t("sharedEss.alliance")}</h2>
           <p className="mt-3 text-sm text-muted">{t("sharedEss.allianceDesc")}</p>
+          <div className="mt-8 mx-auto max-w-2xl overflow-hidden rounded-2xl">
+            <Image
+              src="https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/product/shared-ess-alliance.jpg"
+              alt="공유형 ESS 실증사업 업무 협약식"
+              width={843}
+              height={521}
+              className="h-auto w-full object-cover"
+            />
+          </div>
           <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {allianceMembers.map((member, i) => (
               <div key={i} className="rounded-lg border border-border p-6">
@@ -207,6 +264,72 @@ export default async function SharedEssPage() {
                     <li key={j} className="text-sm text-muted">· {item}</li>
                   ))}
                 </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Timeline */}
+      <section className="border-t border-border bg-surface px-6 py-24">
+        <div className="mx-auto max-w-5xl">
+          <h2 className="text-2xl font-bold">{t("sharedEss.timeline")}</h2>
+          <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted">
+            {t("sharedEss.timelineDesc")}
+          </p>
+          <div className="mt-10 relative">
+            <div className="absolute left-[7px] top-2 bottom-2 w-px bg-border md:left-20" />
+            <div className="space-y-6">
+              {timelineItems.map((item, i) => (
+                <div key={i} className="relative flex gap-4 md:gap-6">
+                  <div className="shrink-0 w-16 text-right hidden md:block">
+                    <span className="text-sm font-bold text-primary">{item.date}</span>
+                  </div>
+                  <div className="relative shrink-0">
+                    <div className="h-4 w-4 rounded-full border-2 border-primary bg-background" />
+                  </div>
+                  <div className="pb-2">
+                    <span className="text-xs font-bold text-primary md:hidden">{item.date}</span>
+                    <h3 className="font-medium">{item.title}</h3>
+                    <p className="mt-1 text-sm text-muted">{item.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Funding */}
+      <section className="border-t border-border px-6 py-24">
+        <div className="mx-auto max-w-5xl">
+          <h2 className="text-2xl font-bold">{t("sharedEss.funding")}</h2>
+          <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted">
+            {t("sharedEss.fundingDesc")}
+          </p>
+          <div className="mt-10 grid gap-8 md:grid-cols-2">
+            {fundingItems.map((item, i) => (
+              <div key={i} className="rounded-lg border border-border p-6">
+                <p className="text-xs font-medium text-primary">{item.type}</p>
+                <h3 className="mt-1 text-lg font-bold">{item.name}</h3>
+                <div className="mt-4 space-y-2 text-sm">
+                  <div className="flex gap-2">
+                    <span className="shrink-0 font-medium text-muted">출연기관</span>
+                    <span>{item.agency}</span>
+                  </div>
+                  <div className="flex gap-2">
+                    <span className="shrink-0 font-medium text-muted">참여기관</span>
+                    <span>{item.participants}</span>
+                  </div>
+                  <div className="flex gap-2">
+                    <span className="shrink-0 font-medium text-muted">사업내용</span>
+                    <span>{item.scope}</span>
+                  </div>
+                  <div className="flex gap-2">
+                    <span className="shrink-0 font-medium text-muted">설치장소</span>
+                    <span>{item.location}</span>
+                  </div>
+                </div>
               </div>
             ))}
           </div>
@@ -224,6 +347,23 @@ export default async function SharedEssPage() {
                 <p className="mt-2 text-sm text-muted">{item.label}</p>
               </div>
             ))}
+          </div>
+
+          {/* Stakeholder Impact */}
+          <div className="mt-16">
+            <h3 className="text-xl font-bold">{t("sharedEss.stakeholderImpact")}</h3>
+            <div className="mt-8 grid gap-6 md:grid-cols-3">
+              {stakeholderItems.map((group, i) => (
+                <div key={i} className="rounded-lg border border-border bg-surface-elevated p-6">
+                  <h4 className="font-bold text-primary">{group.stakeholder}</h4>
+                  <ul className="mt-4 space-y-2">
+                    {group.items.map((item, j) => (
+                      <li key={j} className="text-sm text-muted">· {item}</li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>

@@ -39,7 +39,7 @@ const productNav: NavItemWithChildren = {
   menuNamespace: "productMenu",
   sections: [
     {
-      titleKey: "productMenu.energy",
+      titleKey: "productMenu.ess",
       items: [
         {
           href: "/product/shared-ess",
@@ -51,6 +51,21 @@ const productNav: NavItemWithChildren = {
             </svg>
           ),
         },
+        {
+          href: "/product/peak-ess",
+          labelKey: "productMenu.peakEssLabel",
+          descKey: "productMenu.peakEssDesc",
+          icon: (
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
+              <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+            </svg>
+          ),
+        },
+      ],
+    },
+    {
+      titleKey: "productMenu.pv",
+      items: [
         {
           href: "/product/pv-intelligence",
           labelKey: "productMenu.pvRtuLabel",

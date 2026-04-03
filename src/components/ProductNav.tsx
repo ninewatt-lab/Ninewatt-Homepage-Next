@@ -25,9 +25,15 @@ export default function ProductNav() {
       ],
     },
     {
-      label: t("productMenu.energy"),
+      label: t("productMenu.ess"),
       items: [
         { href: "/product/shared-ess", label: t("productMenu.sharedEssLabel") },
+        { href: "/product/peak-ess", label: t("productMenu.peakEssLabel") },
+      ],
+    },
+    {
+      label: t("productMenu.pv"),
+      items: [
         { href: "/product/pv-intelligence", label: t("productMenu.pvRtuLabel") },
         { href: "/product/solar-site", label: t("productMenu.solarScopeLabel") },
       ],
