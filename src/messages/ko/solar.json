@@ -1,0 +1,368 @@
+{
+  "metadata": {
+    "title": "나인와트 솔라 | AI 기반 태양광 O&M",
+    "description": "AI가 먼저 발견하고, 사람은 해결만 합니다. 나인와트 솔라의 스마트 태양광 운영관리 서비스"
+  },
+  "nav": {
+    "home": "홈",
+    "services": "O&M 서비스",
+    "monitoring": "AI 모니터링",
+    "sites": "발전소 현황",
+    "contact": "문의하기",
+    "mainSite": "나인와트 홈"
+  },
+  "hero": {
+    "badge": "AI-Powered Solar O&M",
+    "title": "AI가 먼저 발견하고,\n사람은 해결만 합니다",
+    "subtitle": "나인와트 솔라는 자체 태양광 발전소 운영 경험과 AI 기술을 결합하여,\n발전 손실을 최소화하고 수익을 극대화하는 스마트 O&M 서비스를 제공합니다.",
+    "cta": "O&M 서비스 문의",
+    "ctaSecondary": "발전소 현황 보기"
+  },
+  "stats": {
+    "title": "운영 현황",
+    "totalCapacity": "총 관리 용량",
+    "totalCapacityValue": "3.84",
+    "totalCapacityUnit": "MW",
+    "operatingSites": "운전 중 발전소",
+    "operatingSitesValue": "6",
+    "operatingSitesUnit": "개소",
+    "monitoring": "AI 모니터링",
+    "monitoringValue": "24/7",
+    "monitoringUnit": "",
+    "detectionAccuracy": "이상 탐지 정확도",
+    "detectionAccuracyValue": "94",
+    "detectionAccuracyUnit": "%"
+  },
+  "services": {
+    "title": "O&M 서비스",
+    "subtitle": "설비투자부터 운영관리까지, 태양광 발전의 모든 것을 책임집니다",
+    "items": {
+      "monitoring": {
+        "title": "24/7 원격 모니터링",
+        "description": "자사 RTU로 5분 주기 인버터 데이터 수집. 다중 사이트 교차 비교로 이상 징후를 10분 내 탐지하고 즉시 알림합니다."
+      },
+      "diagnosis": {
+        "title": "AI 이상 진단",
+        "description": "날씨 때문인지, 장비 고장인지 AI가 구분합니다. 원인 분석과 조치 방안, 방치 시 손실 금액까지 자동으로 산출합니다."
+      },
+      "maintenance": {
+        "title": "정기 점검 & 긴급 출동",
+        "description": "분기별 정기 점검과 연 1회 정밀 점검을 수행하고, 긴급 상황 시 4시간 내 현장 출동합니다."
+      },
+      "optimization": {
+        "title": "수익 최적화",
+        "description": "SMP/REC 매도 타이밍 분석, 출력제어 보상금 극대화, 패널 세척 ROI 분석으로 발전 수익을 극대화합니다."
+      },
+      "safety": {
+        "title": "전기안전관리",
+        "description": "전담 안전관리자가 전기설비의 안전 점검, 절연 측정, 접지 확인 등 법정 안전관리 업무를 수행합니다."
+      },
+      "report": {
+        "title": "자동 리포트",
+        "description": "AI가 월간/분기 O&M 리포트를 자동 생성합니다. 발전량, 이상 이력, 수익 분석, 정비 권고사항을 한눈에 확인하세요."
+      }
+    }
+  },
+  "plans": {
+    "title": "서비스 플랜",
+    "subtitle": "발전소 규모와 운영 목표에 맞는 최적의 O&M 플랜을 선택하세요",
+    "basic": {
+      "name": "Basic",
+      "price": "kW당 월 3,000~5,000원",
+      "description": "원격 모니터링 중심",
+      "features": [
+        "24/7 원격 모니터링",
+        "이상 감지 알림 (카카오톡/SMS)",
+        "월간 발전 리포트",
+        "SMP/REC 시세 분석"
+      ],
+      "target": "자가관리 의지가 있는 소규모 사업자"
+    },
+    "standard": {
+      "name": "Standard",
+      "price": "kW당 월 8,000~12,000원",
+      "description": "모니터링 + 정기 점검",
+      "popular": "인기",
+      "features": [
+        "Basic 플랜 전체 포함",
+        "분기 정기점검 (연 4회)",
+        "연 1회 정밀점검",
+        "긴급 출동 (연 2회 포함)",
+        "전기안전관리",
+        "출력제어 보상금 최적화"
+      ],
+      "target": "100~500kW 일반 발전사업자"
+    },
+    "premium": {
+      "name": "Premium",
+      "price": "발전 수익의 5~8%",
+      "description": "성과 보장형 풀 서비스",
+      "features": [
+        "Standard 플랜 전체 포함",
+        "발전량 보증 (성과 보장)",
+        "무제한 긴급 출동",
+        "패널 세척 & 잡초 제거",
+        "수익 최적화 컨설팅",
+        "드론 열화상 정밀 점검"
+      ],
+      "target": "500kW 이상 또는 부재 사업자"
+    }
+  },
+  "monitoring": {
+    "title": "AI 모니터링 시스템",
+    "subtitle": "PV Intelligence — 발전량을 보여주는 것을 넘어, AI가 이상을 감지하고 손실 금액까지 산출합니다",
+    "features": {
+      "crossCompare": {
+        "title": "다중 사이트 교차 비교",
+        "description": "같은 날 같은 지역인데 한 곳만 발전량이 떨어지면? 날씨가 아닌 설비 문제입니다. 기상 데이터에 의존하지 않는 독자적 이상 탐지."
+      },
+      "aiDiagnosis": {
+        "title": "AI 원인 분석 + 조치 안내",
+        "description": "왜 떨어졌고, 뭘 해야 하고, 안 하면 얼마 손해인지까지 알려줍니다. 94% 신뢰도의 AI 분석."
+      },
+      "revenueOptimize": {
+        "title": "수익 최적화 엔진",
+        "description": "SMP 실시간 분석, REC 매도 타이밍 제안, 출력제어 보상금 극대화, 자가소비율 최적화."
+      },
+      "dashboard": {
+        "title": "3D 맵 대시보드",
+        "description": "지도 위에서 모든 발전소 상태를 한눈에. 정상/주의/긴급을 색상으로 즉시 인식."
+      }
+    },
+    "scenarios": {
+      "title": "AI 탐지 시나리오",
+      "scenario1": {
+        "title": "발전소 1곳만 발전량 급감",
+        "situation": "7개 발전소 중 1곳만 오전부터 발전 효율 13%",
+        "diagnosis": "AI가 계통 연계 쪽 이상으로 판단",
+        "action": "MCCB 점검 안내",
+        "loss": "방치 시 월 약 138만원 손실"
+      },
+      "scenario2": {
+        "title": "오후만 되면 출력 감소",
+        "situation": "오후 2시부터 인버터 #2 출력 30% 감소",
+        "diagnosis": "오후 그림자 또는 스트링 오염 가능성",
+        "action": "현장 확인 포인트 안내",
+        "loss": "조기 대응 시 월 50만원 회복"
+      },
+      "scenario3": {
+        "title": "전체 효율 서서히 하락",
+        "situation": "한 달 단위로 전체 사이트 평균 효율 3%p 감소",
+        "diagnosis": "패널 세척 시기 도래",
+        "action": "세척 비용 15만원 vs 회복 매출 월 53만원 비교",
+        "loss": "세척 투자 회수 3.4일"
+      }
+    },
+    "techSpec": {
+      "title": "기술 사양",
+      "rtu": "자사 개발 RTU (LTE Cat.M1)",
+      "protocol": "RS-485 Modbus RTU",
+      "interval": "5분 주기 데이터 수집",
+      "inverters": "효성, 화웨이, 현대 등 주요 인버터 호환",
+      "alert": "카카오 알림톡 (SMS 폴백)",
+      "dashboard": "웹 기반 3D 맵 대시보드"
+    }
+  },
+  "sites": {
+    "title": "발전소 현황",
+    "subtitle": "나인와트 솔라가 직접 설치하고 운영하는 태양광 발전소",
+    "totalCapacity": "총 관리 용량",
+    "operatingLabel": "운전중",
+    "developingLabel": "개발중",
+    "filterAll": "전체",
+    "filterOperating": "운전중",
+    "filterDeveloping": "개발중",
+    "filterRooftop": "옥상형",
+    "filterGround": "노지형",
+    "capacity": "설비용량",
+    "location": "위치",
+    "type": "유형",
+    "status": "상태",
+    "factory": "공장",
+    "plantList": [
+      {
+        "id": "plant-16",
+        "name": "나인와트발전소 16호",
+        "factory": "건우금속",
+        "address": "경상북도 영천시",
+        "fullAddress": "경상북도 영천시 영천산단로 385",
+        "capacity": 1000,
+        "status": "operating",
+        "type": "rooftop",
+        "typeLabel": "옥상임대형",
+        "statusLabel": "운전중",
+        "images": ["/images/solar/sites/site-drone-01.jpg", "/images/solar/sites/site-drone-02.jpg"]
+      },
+      {
+        "id": "plant-15",
+        "name": "나인와트발전소 15호",
+        "factory": "예천군300",
+        "address": "경상북도 예천군",
+        "fullAddress": "경상북도 예천군 지보면 도화리 503",
+        "capacity": 300,
+        "status": "operating",
+        "type": "ground",
+        "typeLabel": "노지형",
+        "statusLabel": "운전중",
+        "images": ["/images/solar/sites/site-ground-01.jpg", "/images/solar/sites/site-ground-02.jpg"]
+      },
+      {
+        "id": "plant-13",
+        "name": "나인와트태양광발전소 13호",
+        "factory": "대승",
+        "address": "경상북도 경주시",
+        "fullAddress": "경상북도 경주시 강동면 왕신리 765-1",
+        "capacity": 100,
+        "status": "operating",
+        "type": "rooftop",
+        "typeLabel": "옥상임대형",
+        "statusLabel": "운전중",
+        "images": ["/images/solar/sites/site-drone-04.jpg", "/images/solar/sites/site-drone-05.jpg"]
+      },
+      {
+        "id": "plant-14",
+        "name": "나인와트태양광발전소 14호",
+        "factory": "대승",
+        "address": "경상북도 경주시",
+        "fullAddress": "경상북도 경주시 강동면 왕신리 765-1",
+        "capacity": 100,
+        "status": "operating",
+        "type": "rooftop",
+        "typeLabel": "옥상임대형",
+        "statusLabel": "운전중",
+        "images": ["/images/solar/sites/site-drone-06.jpg"]
+      },
+      {
+        "id": "plant-11",
+        "name": "나인와트태양광발전소 11호",
+        "factory": "디에스글로벌",
+        "address": "경상북도 경주시",
+        "fullAddress": "경상북도 경주시 천북면 오야리 1382-3",
+        "capacity": 100,
+        "status": "operating",
+        "type": "rooftop",
+        "typeLabel": "옥상임대형",
+        "statusLabel": "운전중",
+        "images": ["/images/solar/sites/site-drone-07.jpg", "/images/solar/sites/site-drone-08.jpg"]
+      },
+      {
+        "id": "plant-12",
+        "name": "나인와트태양광발전소 12호",
+        "factory": "디에스글로벌",
+        "address": "경상북도 경주시",
+        "fullAddress": "경상북도 경주시 천북면 오야리 1382-3",
+        "capacity": 100,
+        "status": "operating",
+        "type": "rooftop",
+        "typeLabel": "옥상임대형",
+        "statusLabel": "운전중",
+        "images": ["/images/solar/sites/site-drone-09.jpg"]
+      },
+      {
+        "id": "plant-17-18",
+        "name": "나인와트발전소 17·18호",
+        "factory": "디에스글로벌",
+        "address": "경상북도 경주시",
+        "fullAddress": "경상북도 경주시 천북면 오야리 1381-4",
+        "capacity": 640,
+        "status": "developing",
+        "type": "rooftop",
+        "typeLabel": "옥상임대형",
+        "statusLabel": "공사 착공",
+        "images": ["/images/solar/sites/site-drone-10.jpg"]
+      },
+      {
+        "id": "plant-naju",
+        "name": "나주 1MW 발전소",
+        "factory": "",
+        "address": "전라남도 나주시",
+        "fullAddress": "전라남도 나주시 왕곡면 행전리 116-19",
+        "capacity": 1000,
+        "status": "developing",
+        "type": "ground",
+        "typeLabel": "노지형",
+        "statusLabel": "선로대기",
+        "images": ["/images/solar/sites/site-ground-03.jpg"]
+      },
+      {
+        "id": "plant-taean",
+        "name": "태안 500kW 발전소",
+        "factory": "",
+        "address": "충청남도 태안군",
+        "fullAddress": "충청남도 태안군 남면 신온리 652-361",
+        "capacity": 500,
+        "status": "developing",
+        "type": "ground",
+        "typeLabel": "노지형",
+        "statusLabel": "개발 진행중",
+        "images": []
+      }
+    ]
+  },
+  "process": {
+    "title": "O&M 프로세스",
+    "subtitle": "AI가 감지하고, 전문가가 해결합니다",
+    "steps": [
+      {
+        "step": "01",
+        "title": "데이터 수집",
+        "description": "자사 RTU가 인버터 데이터를 5분 주기로 클라우드에 전송합니다."
+      },
+      {
+        "step": "02",
+        "title": "AI 분석",
+        "description": "다중 사이트 교차 비교로 이상 징후를 자동 탐지하고 원인을 분석합니다."
+      },
+      {
+        "step": "03",
+        "title": "알림 & 판단",
+        "description": "카카오톡으로 즉시 알림. 조치 방안과 손실 금액을 함께 안내합니다."
+      },
+      {
+        "step": "04",
+        "title": "현장 조치",
+        "description": "전문 정비팀이 AI 진단 결과를 기반으로 타겟 출동하여 신속히 해결합니다."
+      }
+    ]
+  },
+  "cta": {
+    "title": "태양광 발전소, AI로 관리하세요",
+    "subtitle": "발전 손실은 줄이고 수익은 높이는 스마트 O&M.\n지금 무료 상담을 신청하세요.",
+    "button": "무료 상담 신청",
+    "phone": "070-8866-7226",
+    "email": "ninewatt@ninewatt.com"
+  },
+  "contact": {
+    "title": "O&M 서비스 문의",
+    "subtitle": "발전소 정보를 알려주시면, 맞춤 O&M 플랜과 예상 비용을 안내해드립니다",
+    "form": {
+      "name": "이름 / 회사명",
+      "phone": "연락처",
+      "email": "이메일",
+      "plantCapacity": "발전소 용량 (kW)",
+      "plantLocation": "발전소 위치",
+      "plantType": "발전소 유형",
+      "plantTypeOptions": {
+        "rooftop": "옥상형",
+        "ground": "노지형",
+        "other": "기타"
+      },
+      "message": "문의 내용",
+      "messagePlaceholder": "현재 운영 상황, 고민 사항 등을 자유롭게 적어주세요",
+      "submit": "상담 신청하기",
+      "success": "문의가 접수되었습니다. 빠른 시일 내에 연락드리겠습니다."
+    }
+  },
+  "footer": {
+    "description": "AI 기반 태양광 O&M 전문 서비스. 나인와트의 에너지 AI 기술로 발전소를 스마트하게 관리합니다.",
+    "copyright": "© 2025 Ninewatt Solar. All rights reserved.",
+    "links": {
+      "services": "O&M 서비스",
+      "monitoring": "AI 모니터링",
+      "sites": "발전소 현황",
+      "contact": "문의하기",
+      "mainSite": "나인와트 홈페이지",
+      "pvIntelligence": "PV Intelligence"
+    }
+  }
+}
