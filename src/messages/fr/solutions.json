@@ -52,7 +52,7 @@
       { "label": "Études de cas", "href": "/solutions/cases", "icon": "cases", "desc": "Plus de 60 projets réalisés pour des institutions publiques, collectivités, entreprises et partenaires internationaux" },
       { "label": "R&D", "href": "/solutions/rnd", "icon": "rnd", "desc": "Développement de technologies clés d'IA énergétique via des projets de R&D gouvernementaux" },
       { "label": "Développement de systèmes", "href": "/solutions/services", "icon": "services", "desc": "Conception, développement, déploiement et exploitation de systèmes de gestion énergétique sur mesure" },
-      { "label": "Activités internationales", "href": "/company/global", "icon": "global", "desc": "Expansion sur les marchés mondiaux avec des partenaires au Japon, en France, au Royaume-Uni et ailleurs" }
+      { "label": "Activités internationales", "href": "/solutions/global", "icon": "global", "desc": "Expansion sur les marchés mondiaux avec des partenaires au Japon, en France, au Royaume-Uni et ailleurs" }
     ],
     "platformTitle": "Plateforme",
     "platformDesc": "Les plateformes principales de gestion énergétique basées sur l'IA de Ninewatt",

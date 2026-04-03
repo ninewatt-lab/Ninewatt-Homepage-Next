@@ -26,7 +26,7 @@ const footerSections: FooterSection[] = [
       { label: "solutionsMenu.cases", href: "/solutions/cases" },
       { label: "solutionsMenu.rnd", href: "/solutions/rnd" },
       { label: "solutionsMenu.services", href: "/solutions/services" },
-      { label: "companyMenu.global", href: "/company/global" },
+      { label: "companyMenu.global", href: "/solutions/global" },
     ],
   },
   {

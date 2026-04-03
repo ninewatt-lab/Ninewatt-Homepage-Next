@@ -52,7 +52,7 @@
       { "label": "実績紹介", "href": "/solutions/cases", "icon": "cases", "desc": "公共機関・自治体・企業・海外パートナー向け60件以上のプロジェクト実績" },
       { "label": "研究開発(R&D)", "href": "/solutions/rnd", "icon": "rnd", "desc": "政府R&D課題遂行によるエネルギーAIコア技術の確保と高度化" },
       { "label": "システム開発", "href": "/solutions/services", "icon": "services", "desc": "顧客に最適なエネルギー管理システムの設計・開発・構築・運用サービス" },
-      { "label": "グローバル事業", "href": "/company/global", "icon": "global", "desc": "日本・フランス・英国など海外パートナーとグローバル市場に進出" }
+      { "label": "グローバル事業", "href": "/solutions/global", "icon": "global", "desc": "日本・フランス・英国など海外パートナーとグローバル市場に進出" }
     ],
     "platformTitle": "プラットフォーム",
     "platformDesc": "NinewattのAIベースのエネルギー管理コアプラットフォーム",
