@@ -14,16 +14,18 @@ export default function SolarContactPage() {
     const formData = new FormData(form);
 
     try {
-      await fetch("/api/contact", {
+      const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: formData.get("name"),
+          email: formData.get("email") || `${formData.get("phone")}@solar.ninewatt.com`,
           phone: formData.get("phone"),
-          email: formData.get("email"),
-          message: `[나인와트 솔라 O&M 문의]\n발전소 용량: ${formData.get("plantCapacity")}kW\n발전소 위치: ${formData.get("plantLocation")}\n발전소 유형: ${formData.get("plantType")}\n\n${formData.get("message")}`,
+          type: "Ninewatt Solar O&M",
+          message: `[Ninewatt Solar O&M 문의]\n연락처: ${formData.get("phone")}\n발전소 용량: ${formData.get("plantCapacity")}kW\n발전소 위치: ${formData.get("plantLocation")}\n발전소 유형: ${formData.get("plantType")}\n\n${formData.get("message") || ""}`,
         }),
       });
+      if (!res.ok) throw new Error("전송 실패");
       setSubmitted(true);
     } catch {
       alert("문의 전송에 실패했습니다. 전화로 연락 부탁드립니다.");
