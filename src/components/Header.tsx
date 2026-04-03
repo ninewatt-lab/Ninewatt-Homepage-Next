@@ -17,6 +17,7 @@ interface NavSubItem {
   labelKey: string;
   descKey: string;
   icon: React.ReactNode;
+  external?: boolean;
 }
 
 interface NavSection {
@@ -628,41 +629,59 @@ export default function Header() {
                           </h3>
                         )}
                         <div className="flex flex-col gap-1">
-                          {section.items.map((subItem) => (
-                            <Link
-                              key={subItem.href}
-                              href={subItem.href}
-                              onClick={() => setActiveMenu(null)}
-                              className="group flex items-start gap-3 rounded-xl p-3 transition-colors hover:bg-surface"
-                            >
-                              <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-surface text-primary transition-colors group-hover:bg-primary group-hover:text-white">
-                                {subItem.icon}
-                              </span>
-                              <div className="flex flex-col">
-                                <span className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors flex items-center gap-1">
-                                  {resolveLabel(subItem.labelKey)}
-                                  <svg
-                                    viewBox="0 0 12 12"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    strokeWidth="1.5"
-                                    className="h-3 w-3 opacity-0 -translate-x-1 transition-all group-hover:opacity-100 group-hover:translate-x-0"
-                                  >
-                                    <path d="M4 2L8 6L4 10" />
-                                  </svg>
+                          {section.items.map((subItem) => {
+                            const content = (
+                              <>
+                                <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-surface text-primary transition-colors group-hover:bg-primary group-hover:text-white">
+                                  {subItem.icon}
                                 </span>
-                                <span className="text-xs leading-relaxed text-muted">
-                                  {t(subItem.descKey)}
-                                </span>
-                              </div>
-                            </Link>
-                          ))}
+                                <div className="flex flex-col">
+                                  <span className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors flex items-center gap-1">
+                                    {resolveLabel(subItem.labelKey)}
+                                    {subItem.external ? (
+                                      <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-3 w-3 opacity-40 group-hover:opacity-100 transition-opacity">
+                                        <path d="M3.5 2H10V8.5M10 2L2 10" />
+                                      </svg>
+                                    ) : (
+                                      <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-3 w-3 opacity-0 -translate-x-1 transition-all group-hover:opacity-100 group-hover:translate-x-0">
+                                        <path d="M4 2L8 6L4 10" />
+                                      </svg>
+                                    )}
+                                  </span>
+                                  <span className="text-xs leading-relaxed text-muted">
+                                    {t(subItem.descKey)}
+                                  </span>
+                                </div>
+                              </>
+                            );
+                            return subItem.external ? (
+                              <a
+                                key={subItem.href}
+                                href={subItem.href}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                onClick={() => setActiveMenu(null)}
+                                className="group flex items-start gap-3 rounded-xl p-3 transition-colors hover:bg-surface"
+                              >
+                                {content}
+                              </a>
+                            ) : (
+                              <Link
+                                key={subItem.href}
+                                href={subItem.href}
+                                onClick={() => setActiveMenu(null)}
+                                className="group flex items-start gap-3 rounded-xl p-3 transition-colors hover:bg-surface"
+                              >
+                                {content}
+                              </Link>
+                            );
+                          })}
                         </div>
                       </div>
                     ))}
 
                     {/* Right side: Overview link with divider */}
-                    <div className="ml-auto flex items-start border-l border-border pl-10 pt-3">
+                    <div className="ml-auto flex flex-col items-start border-l border-border pl-10 pt-3 gap-3">
                       <Link
                         href={item.href}
                         onClick={() => setActiveMenu(null)}
@@ -679,6 +698,25 @@ export default function Header() {
                           <path d="M4 2L8 6L4 10" />
                         </svg>
                       </Link>
+                      {item.labelKey === "nav.company" && (
+                        <a
+                          href="https://solar.ninewatt.com/ko"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={() => setActiveMenu(null)}
+                          className="group flex items-center gap-2 rounded-lg border border-border px-4 py-2.5 transition-colors hover:border-primary/30 hover:bg-primary/5 w-full"
+                        >
+                          <div className="flex flex-col flex-1">
+                            <span className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors">
+                              {t("companyMenu.solar")}
+                            </span>
+                            <span className="text-xs text-muted">{t("companyMenu.solarDesc")}</span>
+                          </div>
+                          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-3.5 w-3.5 text-muted group-hover:text-primary transition-colors shrink-0">
+                            <path d="M3.5 2H10V8.5M10 2L2 10" />
+                          </svg>
+                        </a>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -731,29 +769,49 @@ export default function Header() {
                               {t(section.titleKey)}
                             </h3>
                           )}
-                          {section.items.map((subItem) => (
-                            <Link
-                              key={subItem.href}
-                              href={subItem.href}
-                              onClick={() => {
-                                setMobileOpen(false);
-                                setMobileExpanded(null);
-                              }}
-                              className="flex items-center gap-3 rounded-lg px-3 py-2.5 transition-colors hover:bg-surface"
-                            >
-                              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-surface text-primary">
-                                {subItem.icon}
-                              </span>
-                              <div>
-                                <span className="text-sm font-medium text-foreground">
-                                  {resolveLabel(subItem.labelKey)}
+                          {section.items.map((subItem) => {
+                            const mobileContent = (
+                              <>
+                                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-surface text-primary">
+                                  {subItem.icon}
                                 </span>
-                                <span className="ml-2 text-xs text-muted">
-                                  {t(subItem.descKey)}
-                                </span>
-                              </div>
-                            </Link>
-                          ))}
+                                <div>
+                                  <span className="text-sm font-medium text-foreground flex items-center gap-1">
+                                    {resolveLabel(subItem.labelKey)}
+                                    {subItem.external && (
+                                      <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-3 w-3 opacity-40">
+                                        <path d="M3.5 2H10V8.5M10 2L2 10" />
+                                      </svg>
+                                    )}
+                                  </span>
+                                  <span className="ml-0 text-xs text-muted">
+                                    {t(subItem.descKey)}
+                                  </span>
+                                </div>
+                              </>
+                            );
+                            return subItem.external ? (
+                              <a
+                                key={subItem.href}
+                                href={subItem.href}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                onClick={() => { setMobileOpen(false); setMobileExpanded(null); }}
+                                className="flex items-center gap-3 rounded-lg px-3 py-2.5 transition-colors hover:bg-surface"
+                              >
+                                {mobileContent}
+                              </a>
+                            ) : (
+                              <Link
+                                key={subItem.href}
+                                href={subItem.href}
+                                onClick={() => { setMobileOpen(false); setMobileExpanded(null); }}
+                                className="flex items-center gap-3 rounded-lg px-3 py-2.5 transition-colors hover:bg-surface"
+                              >
+                                {mobileContent}
+                              </Link>
+                            );
+                          })}
                         </div>
                       ))}
                     </div>

@@ -59,6 +59,14 @@ export default async function PVIntelligencePage() {
             >
               {t("pvIntelligence.downloadPdf")}
             </a>
+            <a
+              href="https://solar.ninewatt.com/ko"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded-full border border-primary/30 bg-primary/5 px-8 py-3.5 text-sm font-semibold text-primary transition-colors hover:bg-primary/10"
+            >
+              Ninewatt Solar O&M &rarr;
+            </a>
             {serviceUrl && (
               <a
                 href={serviceUrl}
