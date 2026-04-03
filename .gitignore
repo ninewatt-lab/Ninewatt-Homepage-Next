@@ -48,3 +48,6 @@ next-env.d.ts
 # local document files & DB dump
 /assets/documents/
 prod_dump.sql
+.gstack/
+.claude/skills/gstack/
+public/temp/

@@ -17,6 +17,13 @@ export default getRequestConfig(async ({ requestLocale }) => {
   const company = (await import(`../messages/${locale}/company.json`)).default;
   const contact = (await import(`../messages/${locale}/contact.json`)).default;
 
+  let solar = {};
+  try {
+    solar = (await import(`../messages/${locale}/solar.json`)).default;
+  } catch {
+    solar = (await import(`../messages/ko/solar.json`)).default;
+  }
+
   return {
     locale,
     messages: {
@@ -26,6 +33,7 @@ export default getRequestConfig(async ({ requestLocale }) => {
       solutions,
       company,
       contact,
+      solar,
     },
   };
 });
