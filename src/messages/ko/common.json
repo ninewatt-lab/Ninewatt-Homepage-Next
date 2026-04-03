@@ -28,12 +28,14 @@
     "sharedEssDesc": "배전망 연계 공유형 에너지저장장치",
     "pvEss": "PV & ESS",
     "ess": "ESS",
-    "pv": "PV",
+    "pv": "EMS",
     "sharedEssLabel": "공유형 ESS",
     "peakEssLabel": "피크저감형 ESS",
     "peakEssDesc": "AI 기반 피크 전력 저감 ESS 최적제어 시스템",
-    "pvRtuLabel": "PV RTU",
-    "solarScopeLabel": "태양광 적지분석"
+    "pvRtuLabel": "PV REMS",
+    "solarScopeLabel": "태양광 적지분석",
+    "bemsLabel": "BEMS",
+    "bemsDesc": "건물 에너지 관리 시스템"
   },
   "solutionsMenu": {
     "overview": "전체 보기",

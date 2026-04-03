@@ -67,22 +67,22 @@ const productNav: NavItemWithChildren = {
       titleKey: "productMenu.pv",
       items: [
         {
+          href: "/product/bems",
+          labelKey: "productMenu.bemsLabel",
+          descKey: "productMenu.bemsDesc",
+          icon: (
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
+              <rect x="3" y="3" width="18" height="18" rx="2" /><path d="M3 9h18M9 21V9" />
+            </svg>
+          ),
+        },
+        {
           href: "/product/pv-intelligence",
           labelKey: "productMenu.pvRtuLabel",
           descKey: "productMenu.pvIntelligenceDesc",
           icon: (
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
               <path d="M2 12h4l3-9 6 18 3-9h4" />
-            </svg>
-          ),
-        },
-        {
-          href: "/product/solar-site",
-          labelKey: "productMenu.solarScopeLabel",
-          descKey: "productMenu.solarScopeDesc",
-          icon: (
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
-              <circle cx="12" cy="12" r="5" /><path d="M12 1v2m0 18v2m-8.66-3.34l1.42-1.42m12.48-12.48l1.42-1.42M1 12h2m18 0h2m-3.34 8.66l-1.42-1.42M4.76 4.76L3.34 3.34" />
             </svg>
           ),
         },
@@ -112,6 +112,16 @@ const productNav: NavItemWithChildren = {
               <rect x="3" y="3" width="7" height="7" rx="1" /><rect x="14" y="3" width="7" height="7" rx="1" />
               <rect x="3" y="14" width="7" height="7" rx="1" /><rect x="14" y="14" width="3" height="3" />
               <rect x="18" y="18" width="3" height="3" />
+            </svg>
+          ),
+        },
+        {
+          href: "/product/solar-site",
+          labelKey: "SolarScope",
+          descKey: "productMenu.solarScopeDesc",
+          icon: (
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
+              <circle cx="12" cy="12" r="5" /><path d="M12 1v2m0 18v2m-8.66-3.34l1.42-1.42m12.48-12.48l1.42-1.42M1 12h2m18 0h2m-3.34 8.66l-1.42-1.42M4.76 4.76L3.34 3.34" />
             </svg>
           ),
         },

@@ -10,7 +10,8 @@
     "solarScopeDesc": "Analysez en une seule saisie d'adresse la réglementation, les distances d'éloignement, le réseau de distribution, le productible et la rentabilité d'un site solaire.",
     "pvIntelligenceDesc": "Au-delà de l'affichage de la production — l'IA détecte les anomalies, calcule les pertes et maximise les revenus. Une plateforme Solar AI éprouvée sur nos propres centrales.",
     "sharedEssDesc": "Un nouveau modèle d'affaires où plusieurs bâtiments partagent un seul ESS de grande capacité connecté au réseau de distribution. Réduit les coûts d'électricité par compensation virtuelle et fournit la flexibilité au réseau.",
-    "peakEssDesc": "L'IA apprend les schémas de consommation électrique des bâtiments pour prédire les heures de pointe et contrôler de manière optimale la charge/décharge de l'ESS. Réduit considérablement les frais de demande et optimise la capacité contractuelle."
+    "peakEssDesc": "L'IA apprend les schémas de consommation électrique des bâtiments pour prédire les heures de pointe et contrôler de manière optimale la charge/décharge de l'ESS. Réduit considérablement les frais de demande et optimise la capacité contractuelle.",
+    "bemsDesc": "Collectez et analysez en temps réel les données de consommation énergétique, en visualisant par source, usage et zone. Réduisez les coûts avec la prévision IA et le contrôle automatisé."
   },
   "opti": {
     "heroSubtitle": "Conseiller IA en énergie pour les bâtiments",
@@ -784,6 +785,172 @@
 
     "ctaTitle": "Découvrez le contrôle optimal ESS d'écrêtement",
     "ctaDesc": "Réduisez les frais de demande et optimisez les opérations électriques avec le contrôle optimal ESS par IA.",
+    "ctaContact": "Nous contacter"
+  },
+
+  "bems": {
+    "heroSubtitle": "Visualisez l'énergie du bâtiment en données, gérez-la en coûts",
+    "heroDesc": "Collectez et analysez en temps réel les données de consommation énergétique des bâtiments, en visualisant l'utilisation par source, usage et zone. Réduisez les coûts énergétiques et les émissions de carbone grâce à la prévision IA et au contrôle automatisé.",
+    "requestDemo": "Nous contacter",
+
+    "coreFeatures": [
+      {
+        "title": "Affichage des données et surveillance",
+        "desc": "Affichez les données énergétiques en temps réel en unités SI et déclenchez des alarmes instantanées en cas de dépassement.",
+        "items": [
+          "Affichage en temps réel de la consommation énergétique (unités SI)",
+          "Définition des seuils et plages de fonctionnement par l'opérateur",
+          "Comparaison valeurs de référence vs performances réelles",
+          "Alarme automatique en cas de dépassement des seuils"
+        ]
+      },
+      {
+        "title": "Consultation et comparaison",
+        "desc": "Consultez les données journalières, hebdomadaires, mensuelles et annuelles sous forme de tableaux et graphiques.",
+        "items": [
+          "Consultation par période (tableaux, graphiques)",
+          "Vues journalières, hebdomadaires, mensuelles, annuelles",
+          "Comparaison multi-périodes (ex : année précédente vs année en cours)"
+        ]
+      },
+      {
+        "title": "Analyse de la consommation",
+        "desc": "Analyse multidimensionnelle de la consommation par source, usage et zone.",
+        "items": [
+          "Analyse par source d'énergie (électricité, gaz, chauffage urbain, etc.)",
+          "Conversion en énergie primaire (unités TEP)",
+          "Analyse par usage (refroidissement, chauffage, eau chaude, éclairage, ventilation, prises)",
+          "Analyse par zone (étage, secteur, lot locatif)",
+          "Analyse des émissions de CO₂ (facteur d'émission carbone)",
+          "Analyse de l'intensité énergétique (EUI) (par surface, par personne)",
+          "Analyse de la demande de pointe",
+          "Évaluation de l'efficacité énergétique du bâtiment",
+          "Analyse des économies d'énergie réalisées"
+        ]
+      },
+      {
+        "title": "Performance et environnement",
+        "desc": "Surveillez l'état des équipements et fournissez des données environnementales intérieures/extérieures.",
+        "items": [
+          "État de fonctionnement des équipements (ON/OFF, position de vanne, etc.)",
+          "Analyse des performances et de l'efficacité (COP, etc.)",
+          "Température et humidité extérieures",
+          "Température et humidité intérieures",
+          "Concentration de CO₂ intérieur",
+          "Éclairement intérieur (capteur connecté)"
+        ]
+      },
+      {
+        "title": "Prévision et analyse des coûts",
+        "desc": "Prévision de consommation basée sur les tendances passées et analyse des coûts par tarif.",
+        "items": [
+          "Prévision de consommation (basée sur les tendances historiques)",
+          "Guides d'économie et de gestion opérationnelle",
+          "Sélection du plan tarifaire",
+          "Ajustement du coût unitaire (réponse aux changements de tarifs)",
+          "Consultation des coûts énergétiques par période",
+          "Consultation des coûts énergétiques prévisionnels"
+        ]
+      },
+      {
+        "title": "Intégration de contrôle",
+        "desc": "Contrôle automatisé via contrôle natif ou intégration BAS.",
+        "items": [
+          "Contrôle automatique natif ou via BAS",
+          "Contrôle de fonctionnement programmé",
+          "Contrôle optimal de démarrage/arrêt"
+        ]
+      }
+    ],
+
+    "dataTitle": "Pipeline de traitement des données",
+    "dataSubtitle": "Des capteurs au tableau de bord — une architecture en 4 étapes",
+    "dataAcquisition": [
+      {
+        "title": "Acquisition des données",
+        "items": [
+          "Communication directe avec compteurs et capteurs",
+          "Interface FMS (système de gestion des installations)",
+          "Interface BAS (système d'automatisation du bâtiment)",
+          "Interface AMR (relevé automatique des compteurs)"
+        ]
+      },
+      {
+        "title": "Transmission des données",
+        "items": [
+          "Bus de terrain (BACnet, LonWorks, Modbus)",
+          "Réseau sans fil USN (Zigbee, etc.)",
+          "Équipements réseau (Gateway, Routeur)",
+          "Réseau TCP/IP"
+        ]
+      },
+      {
+        "title": "Collecte des données",
+        "items": [
+          "Livraison et collecte vers serveur central",
+          "Vérification des erreurs de communication"
+        ]
+      },
+      {
+        "title": "Gestion et utilisation",
+        "items": [
+          "Données stockées disponibles en permanence",
+          "Traitement à intervalles de 15min/30min/1h",
+          "Données traitées en informations exploitables"
+        ]
+      }
+    ],
+
+    "classTitle": "Classification des usages énergétiques",
+    "classSubtitle": "L'énergie du bâtiment est catégorisée par usage pour une analyse précise",
+    "energyCategories": [
+      {
+        "category": "CVC et eau chaude",
+        "items": [
+          { "name": "Chauffage", "desc": "Énergie pour le chauffage du bâtiment, humidification incluse" },
+          { "name": "Refroidissement", "desc": "Énergie pour la climatisation, déshumidification incluse" },
+          { "name": "Ventilation et circulation d'air", "desc": "CTA, ventilo-convecteurs, échangeurs de chaleur, extracteurs" },
+          { "name": "Eau chaude sanitaire", "desc": "Énergie pour l'approvisionnement en eau chaude" }
+        ]
+      },
+      {
+        "category": "Éclairage et prises",
+        "items": [
+          { "name": "Éclairage", "desc": "Énergie d'éclairage intérieur et extérieur" },
+          { "name": "Prises électriques", "desc": "PC, équipements de bureau, appareils électroménagers" },
+          { "name": "Transport dans le bâtiment", "desc": "Ascenseurs, escalators et systèmes de transport" }
+        ]
+      },
+      {
+        "category": "Autres usages",
+        "items": [
+          { "name": "Équipements auxiliaires", "desc": "Pompes d'alimentation/évacuation, traitement des eaux usées" },
+          { "name": "Cuisine", "desc": "Gaz/électricité pour la préparation des repas" },
+          { "name": "Réfrigération", "desc": "Équipements de stockage et de réfrigération alimentaire" },
+          { "name": "Systèmes informatiques", "desc": "Salles serveurs, centres de données, refroidissement de précision" },
+          { "name": "Usages spéciaux", "desc": "Équipements médicaux, installations de piscine, etc." }
+        ]
+      }
+    ],
+
+    "benefitTitle": "Bénéfices attendus",
+    "benefitItems": [
+      { "value": "15–30%", "label": "Réduction des coûts énergétiques" },
+      { "value": "Temps réel", "label": "Détection d'anomalies et alertes" },
+      { "value": "CO₂", "label": "Gestion quantitative du carbone" },
+      { "value": "24/7", "label": "Surveillance énergétique continue" }
+    ],
+
+    "targetTitle": "Idéal pour ces bâtiments",
+    "targetItems": [
+      { "title": "Grands bâtiments commerciaux", "desc": "Immeubles de bureaux, centres commerciaux et complexes à forte consommation énergétique" },
+      { "title": "Bâtiments publics", "desc": "Administrations, écoles et bibliothèques soumises à des obligations de réduction énergétique" },
+      { "title": "Hôpitaux et établissements médicaux", "desc": "Fonctionnement 24h/24 avec consommation élevée et exigences environnementales intérieures critiques" },
+      { "title": "Industrie et logistique", "desc": "Usines, centres de données et entrepôts nécessitant une gestion des pointes et une optimisation des équipements" }
+    ],
+
+    "ctaTitle": "Gérez l'énergie de votre bâtiment avec les données",
+    "ctaDesc": "Réduisez les coûts énergétiques et progressez vers la neutralité carbone avec le BEMS.",
     "ctaContact": "Nous contacter"
   }
 }
