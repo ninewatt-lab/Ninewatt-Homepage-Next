@@ -245,7 +245,7 @@ export default async function SharedEssPage() {
         <div className="mx-auto max-w-5xl">
           <h2 className="text-2xl font-bold">{t("sharedEss.alliance")}</h2>
           <p className="mt-3 text-sm text-muted">{t("sharedEss.allianceDesc")}</p>
-          <div className="mt-8 mx-auto max-w-2xl overflow-hidden rounded-2xl">
+          <div className="mt-8 max-w-2xl overflow-hidden rounded-2xl">
             <Image
               src="https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/product/shared-ess-alliance.jpg"
               alt="공유형 ESS 실증사업 업무 협약식"
