@@ -9,7 +9,8 @@
     "reparkDesc": "QR code-based facility management. From citizen fault reports to administrator status tracking and contractor work order management.",
     "solarScopeDesc": "Perform integrated analysis of regulations, setback distances, distribution grid capacity, energy yield, and financial viability for solar installation candidate sites — using just an address.",
     "pvIntelligenceDesc": "Beyond showing generation numbers — AI detects anomalies, calculates loss amounts, and maximizes revenue. A Solar AI platform proven at our own power plants.",
-    "sharedEssDesc": "A new business model where multiple buildings share a single large-scale ESS connected to the distribution grid. Reduces electricity costs through virtual net metering and supplies grid flexibility."
+    "sharedEssDesc": "A new business model where multiple buildings share a single large-scale ESS connected to the distribution grid. Reduces electricity costs through virtual net metering and supplies grid flexibility.",
+    "peakEssDesc": "AI learns building power usage patterns to predict peak times and optimally control ESS charge/discharge. Significantly reduces demand charges and optimizes contracted power capacity."
   },
   "opti": {
     "heroSubtitle": "AI Energy Advisor for Buildings",
@@ -474,6 +475,76 @@
       { "phase": "Phase 3 ('27~)", "title": "Expansion", "items": ["Prioritize metropolitan overloaded lines", "Provide operation guides for expansion to other cities", "Attract private ESS operators through market opening", "Build standard model for shared ESS expansion"], "scale": "6,300MWh (~₩3T)" }
     ],
 
+    "peakDemandTitle": "Peak Shaving ESS Required Capacity Forecast",
+    "peakDemandDesc": "According to the 10th Basic Plan for Electricity Supply and Demand, the required capacity for peak shaving ESS to reduce metropolitan area peak power demand is projected to increase continuously.",
+    "peakDemandSource": "* Source: 10th Basic Plan for Electricity Supply and Demand",
+    "peakDemandItems": [
+      { "year": "2024", "capacity": "126MW" },
+      { "year": "2028", "capacity": "440MW" },
+      { "year": "2029", "capacity": "559MW" },
+      { "year": "2030", "capacity": "699MW" },
+      { "year": "2036", "capacity": "2,100MW" }
+    ],
+    "timeline": "Project Timeline",
+    "timelineDesc": "Gyeonggi Province and Goyang Special City launched the Shared ESS project in September 2024, establishing plans to build two Shared ESS sites (1MWh and 4MWh).",
+    "timelineItems": [
+      { "date": "'24.05", "title": "Business Model Planning", "desc": "Shared ESS business model planning and launch of local government collaboration" },
+      { "date": "'24.09", "title": "Demand Survey & Funding", "desc": "Demand survey for Shared ESS participation across provincial cities and budget planning" },
+      { "date": "'25.01", "title": "Consortium Formation", "desc": "Formation of public-private consortium and completion of feasibility review" },
+      { "date": "'25.04", "title": "National Funding Secured", "desc": "Selected for MOTIE competitive grant, securing additional national funding for 4MWh ESS" },
+      { "date": "'25.07", "title": "Construction Begins", "desc": "ESS installation site selected and construction commenced" }
+    ],
+    "funding": "Funding Secured",
+    "fundingDesc": "Pre-emptively secured provincial and city funding for 1MWh ESS construction, then strategically attracted additional national funding from MOTIE for 4MWh ESS expansion.",
+    "fundingItems": [
+      {
+        "name": "Gyeonggi Smart ESS Installation Support",
+        "type": "Provincial Subsidy",
+        "agency": "Gyeonggi Province",
+        "participants": "Goyang Special City, Goyang Urban Management Corp.",
+        "budget": "",
+        "scope": "PCS 250kW, Battery 1MWh construction",
+        "purpose": "Shared ESS virtual net metering for public institution ESS mandate compliance demonstration",
+        "location": "Public site in Goyang Special City"
+      },
+      {
+        "name": "2025 Future Regional Energy Ecosystem Activation",
+        "type": "Competitive Grant",
+        "agency": "Ministry of Trade, Industry and Energy (MOTIE)",
+        "participants": "(Local gov.) Gyeonggi Province, Goyang Special City / (Corp.) Goyang Urban Management Corp., Ninewatt",
+        "budget": "",
+        "scope": "PCS 1MW, Battery 4MWh construction + Virtual net metering & NWAs system development",
+        "purpose": "Shared ESS-based distribution grid flexibility supply and NWAs benefit demonstration",
+        "location": "Public site in Goyang Special City"
+      }
+    ],
+    "stakeholderImpact": "Expected Outcomes by Stakeholder",
+    "stakeholderItems": [
+      {
+        "stakeholder": "Government & Grid Operators",
+        "items": [
+          "Reduced social costs from delayed grid construction",
+          "Contribution to ESS peak demand management targets (863MW by 2031)",
+          "Increased national power grid reliability"
+        ]
+      },
+      {
+        "stakeholder": "Gyeonggi Province & Goyang City",
+        "items": [
+          "Resolution of regional conflicts from substation and grid construction",
+          "Improved public institution ESS mandate compliance and reduced operational burden",
+          "Reduced site and operational management burden through Shared ESS"
+        ]
+      },
+      {
+        "stakeholder": "Enterprises",
+        "items": [
+          "(Operators) Global competitiveness through new ESS business model development",
+          "(Service users) Electricity cost savings through participation"
+        ]
+      }
+    ],
+
     "impact": "Expected Impact",
     "impactItems": [
       { "value": "~40%", "label": "Initial investment cost reduction" },
@@ -483,6 +554,92 @@
 
     "ctaTitle": "Want to learn more about Shared ESS?",
     "ctaDesc": "We provide detailed consultation on shared ESS construction and virtual net metering transaction demonstration.",
+    "ctaContact": "Contact Us"
+  },
+
+  "peakEss": {
+    "heroLabel": "Peak Shaving ESS Optimal Control",
+    "heroTitle": "Peak Shaving ESS\nOptimal Control",
+    "heroSubtitle": "AI-based Peak Power Reduction ESS Optimal Control System",
+    "heroDesc": "AI learns building and factory power usage patterns to precisely predict peak times and optimally control ESS charge/discharge schedules. Significantly reduces demand charges and efficiently manages contracted power capacity.",
+    "requestDemo": "Contact Us",
+
+    "background": "Background",
+    "backgroundDesc": "In industrial and commercial electricity tariffs, the basic charge (demand charge) is determined by the monthly maximum peak power. Since a brief peak moment determines the entire month's basic charge, peak management is the key to electricity cost reduction.",
+    "backgroundItems": [
+      { "title": "High Demand Charge Ratio", "desc": "Demand charges account for 30-40% of industrial electricity bills, determined by the 15-minute monthly peak." },
+      { "title": "Inefficient Contracted Power", "desc": "Many facilities maintain higher contracted power than needed to prepare for peaks, paying unnecessary basic charges." },
+      { "title": "Limitations of Manual Control", "desc": "Conventional ESS operates on fixed schedules, failing to respond to varying load patterns with limited peak reduction effect." }
+    ],
+
+    "solution": "Solution Overview",
+    "solutionDesc": "Ninewatt's Peak Shaving ESS Optimal Control System combines AI prediction models with a real-time optimization engine to automatically control ESS charge/discharge.",
+    "solutionFeatures": [
+      { "title": "AI Load Prediction", "desc": "Deep learning-based 15-minute power demand forecasting. Enhances accuracy by reflecting weather, day of week, season and other variables." },
+      { "title": "Optimal Charge/Discharge Scheduling", "desc": "Optimizes ESS charge/discharge timing and output based on predicted load profiles to minimize peaks." },
+      { "title": "Real-time Adaptive Control", "desc": "Monitors real-time power data and corrects prediction-actual gaps, immediately responding to unexpected peaks." }
+    ],
+
+    "how": "How It Works",
+    "howSteps": [
+      { "step": "1", "title": "Data Collection", "desc": "Collects 15-minute power usage, weather data, and operational schedules for AI model training." },
+      { "step": "2", "title": "Peak Prediction", "desc": "Predicts next 24-hour power demand in 15-minute intervals, calculating peak timing and magnitude." },
+      { "step": "3", "title": "Optimal Schedule Generation", "desc": "Automatically generates optimal charge/discharge schedules considering peak reduction targets, ESS capacity, and SoC." },
+      { "step": "4", "title": "Real-time Control", "desc": "Automatically controls ESS per generated schedule while dynamically adjusting for real-time load variations." }
+    ],
+
+    "benefits": "Benefits",
+    "benefitItems": [
+      { "value": "15~30%", "label": "Demand charge reduction" },
+      { "value": "10~20%", "label": "Contracted power optimization" },
+      { "value": "95%+", "label": "Peak prediction accuracy" },
+      { "value": "24/7", "label": "Automated operation & monitoring" }
+    ],
+
+    "targets": "Target Applications",
+    "targetDesc": "Applicable to various facilities requiring peak power management.",
+    "targetItems": [
+      { "title": "Manufacturing", "desc": "Controls sudden load variations and peaks from production processes." },
+      { "title": "Large Commercial Facilities", "desc": "Manages peaks in department stores, hypermarkets and other HVAC-heavy facilities." },
+      { "title": "Public Buildings", "desc": "Contributes to public building energy efficiency and electricity cost reduction." },
+      { "title": "Data Centers", "desc": "Optimally controls IT load and cooling system peaks." }
+    ],
+
+    "policy": "Policy Background",
+    "policyDesc": "According to the 10th Basic Plan for Electricity Supply and Demand, the required capacity for peak shaving ESS in the metropolitan area is projected to grow significantly to 2,100MW by 2036. However, there is currently no plan for demand-side ESS utilization in the metropolitan area.",
+    "policyDemandItems": [
+      { "year": "2024", "capacity": "126MW" },
+      { "year": "2028", "capacity": "440MW" },
+      { "year": "2029", "capacity": "559MW" },
+      { "year": "2030", "capacity": "699MW" },
+      { "year": "2036", "capacity": "2,100MW" }
+    ],
+    "policySource": "* Source: 10th Basic Plan for Electricity Supply and Demand",
+
+    "market": "Market Status",
+    "marketDesc": "The demand-side ESS market has slowed since the special tariff expiration in 2019, and the compliance rate for mandatory public institution ESS installation remains low.",
+    "marketStats": [
+      { "value": "18%", "label": "Nationwide public institution ESS mandate compliance (88 of 502 institutions)" },
+      { "value": "24%", "label": "Gyeonggi Province compliance rate (17 of 70 institutions)" }
+    ],
+    "marketIssues": [
+      "New installations ceased after special discount expiration (2019) and safety measure tightening",
+      "Difficulty securing budgets and high initial investment costs",
+      "Fire safety concerns and safety management burden",
+      "Low utilization rates of installed ESS due to lack of operational expertise"
+    ],
+
+    "sharedEssLink": "Integration with Shared ESS",
+    "sharedEssLinkDesc": "Peak shaving ESS optimal control technology is not only an independent solution, but also operates as a core function in Ninewatt's Shared ESS business. Shared ESS connects a single large-capacity ESS to the distribution grid, enabling multiple buildings to share peak reduction benefits through virtual net metering.",
+    "sharedEssLinkItems": [
+      { "title": "Multi-building Peak Management", "desc": "Shared ESS AI optimal control analyzes and simultaneously manages peak times across multiple subscribers." },
+      { "title": "Virtual Net Metering Cost Savings", "desc": "Without physically installing ESS, buildings receive electricity cost savings through Shared ESS charge/discharge." },
+      { "title": "Grid Flexibility Supply", "desc": "Provides peak reduction during normal operations and grid stabilization during emergencies, generating additional revenue." }
+    ],
+    "sharedEssLinkCta": "Learn more about Shared ESS",
+
+    "ctaTitle": "Learn about Peak Shaving ESS Optimal Control",
+    "ctaDesc": "Reduce demand charges and optimize power operations with AI-based ESS optimal control.",
     "ctaContact": "Contact Us"
   }
 }

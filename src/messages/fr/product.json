@@ -9,7 +9,8 @@
     "reparkDesc": "Gestion des installations par QR code : du signalement citoyen au suivi par le gestionnaire, jusqu'au compte rendu d'intervention des prestataires.",
     "solarScopeDesc": "Analysez en une seule saisie d'adresse la réglementation, les distances d'éloignement, le réseau de distribution, le productible et la rentabilité d'un site solaire.",
     "pvIntelligenceDesc": "Au-delà de l'affichage de la production — l'IA détecte les anomalies, calcule les pertes et maximise les revenus. Une plateforme Solar AI éprouvée sur nos propres centrales.",
-    "sharedEssDesc": "Un nouveau modèle d'affaires où plusieurs bâtiments partagent un seul ESS de grande capacité connecté au réseau de distribution. Réduit les coûts d'électricité par compensation virtuelle et fournit la flexibilité au réseau."
+    "sharedEssDesc": "Un nouveau modèle d'affaires où plusieurs bâtiments partagent un seul ESS de grande capacité connecté au réseau de distribution. Réduit les coûts d'électricité par compensation virtuelle et fournit la flexibilité au réseau.",
+    "peakEssDesc": "L'IA apprend les schémas de consommation électrique des bâtiments pour prédire les heures de pointe et contrôler de manière optimale la charge/décharge de l'ESS. Réduit considérablement les frais de demande et optimise la capacité contractuelle."
   },
   "opti": {
     "heroSubtitle": "Conseiller IA en énergie pour les bâtiments",
@@ -618,6 +619,76 @@
       { "phase": "Phase 3 ('27~)", "title": "Expansion", "items": ["Priorisation des lignes métropolitaines en surcharge", "Fourniture de guides opérationnels pour l'expansion", "Attraction d'opérateurs ESS privés par l'ouverture du marché", "Construction d'un modèle standard pour l'expansion de l'ESS partagé"], "scale": "6 300 MWh (~3 000 Mrd ₩)" }
     ],
 
+    "peakDemandTitle": "Prévision de la capacité requise en ESS d'écrêtement",
+    "peakDemandDesc": "Selon le 10e Plan de base pour l'approvisionnement en électricité, la capacité requise en ESS d'écrêtement pour réduire la demande de pointe métropolitaine devrait augmenter continuellement.",
+    "peakDemandSource": "* Source : 10e Plan de base pour l'approvisionnement en électricité",
+    "peakDemandItems": [
+      { "year": "2024", "capacity": "126MW" },
+      { "year": "2028", "capacity": "440MW" },
+      { "year": "2029", "capacity": "559MW" },
+      { "year": "2030", "capacity": "699MW" },
+      { "year": "2036", "capacity": "2 100MW" }
+    ],
+    "timeline": "Chronologie du projet",
+    "timelineDesc": "La province de Gyeonggi et la ville spéciale de Goyang ont lancé le projet ESS Partagé en septembre 2024, établissant des plans pour construire deux sites ESS Partagé (1MWh et 4MWh).",
+    "timelineItems": [
+      { "date": "'24.05", "title": "Planification du modèle", "desc": "Planification du modèle d'affaires ESS Partagé et lancement de la collaboration avec les collectivités" },
+      { "date": "'24.09", "title": "Enquête et financement", "desc": "Enquête de demande et planification budgétaire pour la participation des villes provinciales" },
+      { "date": "'25.01", "title": "Formation du consortium", "desc": "Formation du consortium public-privé et achèvement de l'étude de faisabilité" },
+      { "date": "'25.04", "title": "Financement national obtenu", "desc": "Sélection au concours MOTIE, financement national supplémentaire pour ESS 4MWh" },
+      { "date": "'25.07", "title": "Début de construction", "desc": "Sélection du site d'installation ESS et début de la construction" }
+    ],
+    "funding": "Financement obtenu",
+    "fundingDesc": "Financement provincial et municipal obtenu de manière proactive pour la construction de l'ESS 1MWh, puis attraction stratégique de fonds nationaux supplémentaires du MOTIE pour l'extension ESS 4MWh.",
+    "fundingItems": [
+      {
+        "name": "Soutien à l'installation ESS intelligent de Gyeonggi",
+        "type": "Subvention provinciale",
+        "agency": "Province de Gyeonggi",
+        "participants": "Ville de Goyang, Corp. de gestion urbaine de Goyang",
+        "budget": "",
+        "scope": "Construction PCS 250kW, Batterie 1MWh",
+        "purpose": "Démonstration de conformité au mandat ESS via le comptage net virtuel ESS Partagé",
+        "location": "Site public à Goyang"
+      },
+      {
+        "name": "Activation de l'écosystème énergétique régional 2025",
+        "type": "Appel d'offres compétitif",
+        "agency": "Ministère du Commerce, de l'Industrie et de l'Énergie (MOTIE)",
+        "participants": "(Collectivités) Province de Gyeonggi, Ville de Goyang / (Entreprises) Corp. de gestion urbaine de Goyang, Ninewatt",
+        "budget": "",
+        "scope": "Construction PCS 1MW, Batterie 4MWh + Développement systèmes comptage net virtuel & NWAs",
+        "purpose": "Démonstration de flexibilité du réseau de distribution via ESS Partagé et bénéfices NWAs",
+        "location": "Site public à Goyang"
+      }
+    ],
+    "stakeholderImpact": "Résultats attendus par partie prenante",
+    "stakeholderItems": [
+      {
+        "stakeholder": "Gouvernement et opérateurs de réseau",
+        "items": [
+          "Réduction des coûts sociaux liés aux retards de construction du réseau",
+          "Contribution aux objectifs de gestion de la demande de pointe ESS (863MW d'ici 2031)",
+          "Amélioration de la fiabilité du réseau électrique national"
+        ]
+      },
+      {
+        "stakeholder": "Province de Gyeonggi et Ville de Goyang",
+        "items": [
+          "Résolution des conflits régionaux liés à la construction de sous-stations et réseaux",
+          "Amélioration du taux de conformité ESS des institutions publiques",
+          "Réduction de la charge de gestion des sites et des opérations via l'ESS Partagé"
+        ]
+      },
+      {
+        "stakeholder": "Entreprises",
+        "items": [
+          "(Opérateurs) Compétitivité mondiale grâce au développement de nouveaux modèles d'affaires ESS",
+          "(Utilisateurs) Économies sur les coûts d'électricité grâce à la participation"
+        ]
+      }
+    ],
+
     "impact": "Impact Attendu",
     "impactItems": [
       { "value": "~40 %", "label": "Réduction de l'investissement initial" },
@@ -627,6 +698,92 @@
 
     "ctaTitle": "Envie d'en savoir plus sur l'ESS Partagé ?",
     "ctaDesc": "Nous vous proposons un accompagnement détaillé sur la construction d'ESS partagé et la démonstration de compensation virtuelle.",
+    "ctaContact": "Nous contacter"
+  },
+
+  "peakEss": {
+    "heroLabel": "Contrôle Optimal ESS d'Écrêtement de Pointe",
+    "heroTitle": "ESS Écrêtement\nde Pointe",
+    "heroSubtitle": "Système de contrôle optimal ESS pour la réduction des pics par IA",
+    "heroDesc": "L'IA apprend les schémas de consommation des bâtiments et usines pour prédire précisément les heures de pointe et contrôler de manière optimale les cycles de charge/décharge de l'ESS. Réduction significative des frais de demande et gestion efficace de la capacité contractuelle.",
+    "requestDemo": "Nous contacter",
+
+    "background": "Contexte",
+    "backgroundDesc": "Dans les tarifs électriques industriels et commerciaux, la charge de base (frais de demande) est déterminée par la puissance de pointe mensuelle maximale. Un bref pic détermine la totalité de la charge de base mensuelle, faisant de la gestion des pics le levier clé de réduction des coûts.",
+    "backgroundItems": [
+      { "title": "Part élevée des frais de demande", "desc": "Les frais de demande représentent 30 à 40% des factures industrielles, déterminés par le pic de 15 minutes mensuel." },
+      { "title": "Puissance contractuelle inefficace", "desc": "De nombreuses installations maintiennent une puissance contractuelle supérieure au nécessaire, payant des charges de base inutiles." },
+      { "title": "Limites du contrôle manuel", "desc": "Les ESS conventionnels fonctionnent sur des horaires fixes, incapables de s'adapter aux variations de charge." }
+    ],
+
+    "solution": "Aperçu de la solution",
+    "solutionDesc": "Le système de contrôle optimal ESS de Ninewatt combine des modèles de prédiction IA avec un moteur d'optimisation en temps réel pour contrôler automatiquement la charge/décharge de l'ESS.",
+    "solutionFeatures": [
+      { "title": "Prédiction de charge IA", "desc": "Prévision de la demande électrique par intervalles de 15 minutes basée sur le deep learning. Précision améliorée par la météo, le jour et la saison." },
+      { "title": "Planification optimale charge/décharge", "desc": "Optimise le timing et la puissance de charge/décharge de l'ESS basé sur les profils de charge prédits." },
+      { "title": "Contrôle adaptatif en temps réel", "desc": "Surveille les données électriques en temps réel et corrige les écarts prédiction/réalité pour répondre aux pics imprévus." }
+    ],
+
+    "how": "Fonctionnement",
+    "howSteps": [
+      { "step": "1", "title": "Collecte de données", "desc": "Collecte la consommation par intervalles de 15 min, données météo et plannings opérationnels pour l'apprentissage IA." },
+      { "step": "2", "title": "Prédiction des pics", "desc": "Prédit la demande des 24 prochaines heures par intervalles de 15 min, calculant le moment et l'ampleur des pics." },
+      { "step": "3", "title": "Génération du planning optimal", "desc": "Génère automatiquement le planning optimal de charge/décharge selon les objectifs et la capacité ESS." },
+      { "step": "4", "title": "Contrôle en temps réel", "desc": "Contrôle automatiquement l'ESS selon le planning tout en ajustant dynamiquement aux variations de charge." }
+    ],
+
+    "benefits": "Bénéfices",
+    "benefitItems": [
+      { "value": "15~30%", "label": "Réduction des frais de demande" },
+      { "value": "10~20%", "label": "Optimisation de la puissance contractuelle" },
+      { "value": "95%+", "label": "Précision de prédiction des pics" },
+      { "value": "24/7", "label": "Exploitation et surveillance automatisées" }
+    ],
+
+    "targets": "Applications cibles",
+    "targetDesc": "Applicable à diverses installations nécessitant une gestion de la puissance de pointe.",
+    "targetItems": [
+      { "title": "Industrie manufacturière", "desc": "Contrôle les variations de charge soudaines et les pics des processus de production." },
+      { "title": "Grands centres commerciaux", "desc": "Gère les pics des grands magasins et centres commerciaux à forte charge CVC." },
+      { "title": "Bâtiments publics", "desc": "Contribue à l'efficacité énergétique et à la réduction des coûts des bâtiments publics." },
+      { "title": "Centres de données", "desc": "Contrôle de manière optimale les pics de charge IT et des systèmes de refroidissement." }
+    ],
+
+    "policy": "Contexte politique",
+    "policyDesc": "Selon le 10e Plan de base, la capacité requise en ESS d'écrêtement dans la zone métropolitaine devrait atteindre 2 100MW d'ici 2036. Cependant, il n'existe actuellement aucun plan d'utilisation d'ESS côté demande dans la région métropolitaine.",
+    "policyDemandItems": [
+      { "year": "2024", "capacity": "126MW" },
+      { "year": "2028", "capacity": "440MW" },
+      { "year": "2029", "capacity": "559MW" },
+      { "year": "2030", "capacity": "699MW" },
+      { "year": "2036", "capacity": "2 100MW" }
+    ],
+    "policySource": "* Source : 10e Plan de base pour l'approvisionnement en électricité",
+
+    "market": "État du marché",
+    "marketDesc": "Le marché des ESS côté demande a ralenti depuis l'expiration du tarif spécial en 2019, et le taux de conformité à l'obligation d'installation ESS des institutions publiques reste faible.",
+    "marketStats": [
+      { "value": "18%", "label": "Taux de conformité national ESS institutions publiques (88 sur 502)" },
+      { "value": "24%", "label": "Taux de conformité Province de Gyeonggi (17 sur 70)" }
+    ],
+    "marketIssues": [
+      "Arrêt des nouvelles installations après l'expiration de la remise spéciale (2019) et le renforcement des mesures de sécurité",
+      "Difficulté à obtenir des budgets et coûts d'investissement initiaux élevés",
+      "Préoccupations liées aux risques d'incendie et à la gestion de la sécurité",
+      "Faible taux d'utilisation des ESS installés par manque d'expertise opérationnelle"
+    ],
+
+    "sharedEssLink": "Intégration avec l'ESS Partagé",
+    "sharedEssLinkDesc": "La technologie de contrôle optimal ESS d'écrêtement est non seulement une solution indépendante, mais fonctionne aussi comme fonction centrale dans l'activité ESS Partagé de Ninewatt. L'ESS Partagé connecte un ESS de grande capacité au réseau de distribution, permettant à plusieurs bâtiments de partager les avantages de réduction des pics via le comptage net virtuel.",
+    "sharedEssLinkItems": [
+      { "title": "Gestion simultanée multi-bâtiments", "desc": "Le contrôle optimal IA de l'ESS Partagé analyse et gère simultanément les heures de pointe de plusieurs abonnés." },
+      { "title": "Réduction des coûts par comptage net virtuel", "desc": "Sans installation physique d'ESS, les bâtiments bénéficient d'économies via la charge/décharge de l'ESS Partagé." },
+      { "title": "Flexibilité du réseau de distribution", "desc": "Écrêtement en temps normal, stabilisation du réseau en urgence, générant des revenus supplémentaires." }
+    ],
+    "sharedEssLinkCta": "En savoir plus sur l'ESS Partagé",
+
+    "ctaTitle": "Découvrez le contrôle optimal ESS d'écrêtement",
+    "ctaDesc": "Réduisez les frais de demande et optimisez les opérations électriques avec le contrôle optimal ESS par IA.",
     "ctaContact": "Nous contacter"
   }
 }
