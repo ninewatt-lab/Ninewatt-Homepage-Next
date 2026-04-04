@@ -199,22 +199,63 @@ export default async function Home({
         </section>
       </ScrollReveal>
 
-      {/* CTA */}
+      {/* CTA — with impact highlights */}
       <ScrollReveal>
         <section className="border-t border-border px-6 py-24">
           <div className="mx-auto max-w-5xl">
+            {/* Impact highlights */}
+            <div className="mb-12 grid gap-6 sm:grid-cols-3">
+              {[
+                { valueKey: "cta.impactValue1", labelKey: "cta.impactLabel1" },
+                { valueKey: "cta.impactValue2", labelKey: "cta.impactLabel2" },
+                { valueKey: "cta.impactValue3", labelKey: "cta.impactLabel3" },
+              ].map((item) => (
+                <div
+                  key={item.valueKey}
+                  className="rounded-2xl border border-border p-6 transition-colors hover:border-primary/20"
+                >
+                  <p className="text-2xl font-bold text-primary md:text-3xl">
+                    {t(item.valueKey)}
+                  </p>
+                  <p className="mt-2 text-sm text-muted">{t(item.labelKey)}</p>
+                </div>
+              ))}
+            </div>
+
+            {/* Testimonial */}
+            <div className="mb-12 rounded-2xl bg-surface p-8">
+              <blockquote className="text-lg leading-relaxed italic text-foreground/80">
+                &ldquo;{t("cta.testimonial")}&rdquo;
+              </blockquote>
+              <div className="mt-4 flex items-center gap-3">
+                <div className="h-px flex-1 bg-border" />
+                <p className="text-sm font-medium text-muted">
+                  {t("cta.testimonialAuthor")}
+                </p>
+              </div>
+            </div>
+
+            {/* Heading + CTA */}
             <h2 className="text-3xl font-bold md:text-4xl">
               {t("cta.heading")}
             </h2>
             <p className="mt-4 max-w-lg text-muted">
               {t("cta.description")}
             </p>
-            <Link
-              href="/contact"
-              className="mt-8 inline-block rounded-full bg-primary px-8 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-dark"
-            >
-              {t("cta.button")}
-            </Link>
+            <div className="mt-8 flex flex-wrap items-center gap-4">
+              <Link
+                href="/contact"
+                className="inline-block rounded-full bg-primary px-8 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-dark"
+              >
+                {t("cta.button")}
+              </Link>
+              <Link
+                href="/solutions/cases"
+                className="inline-block rounded-full border border-border px-8 py-3 text-sm font-semibold text-foreground transition-colors hover:border-primary/30 hover:text-primary"
+              >
+                {t("cta.casesButton")}
+              </Link>
+            </div>
           </div>
         </section>
       </ScrollReveal>

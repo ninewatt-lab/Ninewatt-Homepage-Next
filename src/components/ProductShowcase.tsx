@@ -444,7 +444,7 @@ export default function ProductShowcase() {
               </div>
 
               {/* Product nav dots */}
-              <div className="mb-10 flex gap-1.5">
+              <div className="mb-10 flex gap-1">
                 {products.map((product, i) => (
                   <button
                     key={product.id}
@@ -455,12 +455,16 @@ export default function ProductShowcase() {
                       });
                     }}
                     aria-label={product.label}
-                    className={`h-1 rounded-full transition-all duration-500 ${
-                      activeIndex === i
-                        ? "w-8 bg-primary"
-                        : "w-4 bg-border hover:bg-muted"
-                    }`}
-                  />
+                    className="flex items-center py-3"
+                  >
+                    <span
+                      className={`block h-1 rounded-full transition-all duration-500 ${
+                        activeIndex === i
+                          ? "w-8 bg-primary"
+                          : "w-4 bg-border hover:bg-muted"
+                      }`}
+                    />
+                  </button>
                 ))}
               </div>
 

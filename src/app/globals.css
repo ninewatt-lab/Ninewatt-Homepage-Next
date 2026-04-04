@@ -85,6 +85,13 @@ body.subnav-visible header {
   color: #fff;
 }
 
+/* Global focus-visible styles for keyboard navigation */
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
 /* Scroll reveal animation */
 .scroll-reveal {
   opacity: 0;
@@ -107,8 +114,8 @@ body.subnav-visible header {
 
 /* Hero accent — subtle brand glow on "에너지" in white headline */
 .hero-accent {
-  color: #85D2E0;
-  text-shadow: 0 0 30px rgba(73, 182, 202, 0.4);
+  color: var(--primary-light);
+  text-shadow: 0 0 30px color-mix(in srgb, var(--primary) 40%, transparent);
 }
 
 /* Hero accent inside shine gradient — brighter pulse */
@@ -120,11 +127,11 @@ body.subnav-visible header {
 .hero-shine {
   background: linear-gradient(
     270deg,
-    #49B6CA,
-    #85D2E0,
+    var(--primary-light),
+    var(--primary-light),
     #ffffff,
-    #85D2E0,
-    #49B6CA
+    var(--primary-light),
+    var(--primary-light)
   );
   background-size: 300% 100%;
   -webkit-background-clip: text;

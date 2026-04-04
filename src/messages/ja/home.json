@@ -64,8 +64,17 @@
     "patents": "保有特許"
   },
   "cta": {
+    "impactValue1": "15 GWh+",
+    "impactLabel1": "年間エネルギー削減量",
+    "impactValue2": "200+",
+    "impactLabel2": "AI最適化ビル数",
+    "impactValue3": "30%",
+    "impactLabel3": "平均エネルギーコスト削減率",
+    "testimonial": "NinewattのOpti導入後、ビルのエネルギーコストを年間30%以上削減できました。AIベースのリアルタイムモニタリングにより、運営効率が大幅に向上しました。",
+    "testimonialAuthor": "公共施設管理担当者",
     "heading": "エネルギーソリューションをお探しですか？",
     "description": "Ninewattチームがエネルギー課題の診断から実行まで伴走します。",
-    "button": "お問い合わせ"
+    "button": "お問い合わせ",
+    "casesButton": "実績を見る"
   }
 }

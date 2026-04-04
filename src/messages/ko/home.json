@@ -64,8 +64,17 @@
     "patents": "보유 특허"
   },
   "cta": {
+    "impactValue1": "15 GWh+",
+    "impactLabel1": "연간 에너지 절감량",
+    "impactValue2": "200+",
+    "impactLabel2": "AI 최적화 건물 수",
+    "impactValue3": "30%",
+    "impactLabel3": "평균 에너지 비용 절감률",
+    "testimonial": "나인와트의 Opti 도입 후 건물 에너지 비용을 연간 30% 이상 절감했습니다. AI 기반 실시간 모니터링으로 운영 효율이 크게 향상되었습니다.",
+    "testimonialAuthor": "공공기관 시설관리 담당자",
     "heading": "에너지 솔루션이 필요하신가요?",
     "description": "나인와트가 AI 기반 에너지 진단부터 탄소중립 실행까지 함께합니다.",
-    "button": "문의하기"
+    "button": "문의하기",
+    "casesButton": "수행사례 보기"
   }
 }

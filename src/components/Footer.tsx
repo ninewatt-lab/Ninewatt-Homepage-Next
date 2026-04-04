@@ -33,6 +33,9 @@ const footerSections: FooterSection[] = [
     titleKey: "nav.product",
     href: "/product",
     links: [
+      { label: "productMenu.sharedEssLabel", href: "/product/shared-ess" },
+      { label: "productMenu.peakEssLabel", href: "/product/peak-ess" },
+      { label: "productMenu.bemsLabel", href: "/product/bems" },
       { label: "GreenPlanner", href: "/product/greenplanner", isLiteral: true },
       { label: "RE:park", href: "/product/repark", isLiteral: true },
       { label: "SolarScope", href: "/product/solar-site", isLiteral: true },
@@ -61,7 +64,7 @@ export default function Footer() {
   const t = useTranslations("common");
 
   return (
-    <footer className="border-t border-border bg-surface">
+    <footer aria-label="Site footer" className="border-t border-border bg-surface">
       <div className="mx-auto max-w-7xl px-6 py-10">
         <div className="flex flex-col gap-6 lg:flex-row lg:justify-between">
           {/* Company Info */}
@@ -125,12 +128,12 @@ export default function Footer() {
                 {t(section.titleKey)}
               </Link>
               {section.links.length > 0 && (
-                <div className="mt-2 flex flex-col gap-1.5 text-sm text-muted">
+                <div className="mt-2 flex flex-col gap-0.5 text-sm text-muted">
                   {section.links.map((link) => (
                     <Link
                       key={link.href}
                       href={link.href}
-                      className="transition-colors hover:text-foreground"
+                      className="py-1 transition-colors hover:text-foreground"
                     >
                       {link.isLiteral ? link.label : t(link.label)}
                     </Link>

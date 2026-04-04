@@ -64,8 +64,17 @@
     "patents": "Brevets"
   },
   "cta": {
+    "impactValue1": "15 GWh+",
+    "impactLabel1": "Économies d'énergie annuelles",
+    "impactValue2": "200+",
+    "impactLabel2": "Bâtiments optimisés par IA",
+    "impactValue3": "30%",
+    "impactLabel3": "Réduction moyenne des coûts énergétiques",
+    "testimonial": "Après le déploiement d'Opti de Ninewatt, nous avons réduit nos coûts énergétiques de plus de 30 % par an. Le monitoring en temps réel par IA a considérablement amélioré notre efficacité opérationnelle.",
+    "testimonialAuthor": "Directeur de gestion des installations publiques",
     "heading": "Besoin d'une solution énergétique ?",
     "description": "L'équipe Ninewatt vous accompagne du diagnostic énergétique jusqu'à la mise en œuvre.",
-    "button": "Nous contacter"
+    "button": "Nous contacter",
+    "casesButton": "Voir les études de cas"
   }
 }
