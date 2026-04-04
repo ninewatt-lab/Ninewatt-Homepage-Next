@@ -69,7 +69,9 @@
     "papers": "Publications",
     "papersDesc": "Articles academiques et recherche",
     "media": "Médias",
-    "mediaDesc": "Actualités, communiqués de presse et vidéos"
+    "mediaDesc": "Actualités, communiqués de presse et vidéos",
+    "solar": "Ninewatt Solar",
+    "solarDesc": "Service O&M solaire PV par IA"
   },
   "footer": {
     "tagline": "Avec une technologie énergétique à la pointe de la transition GX,\nnous contribuons aux villes intelligentes et à la neutralité carbone.",
