@@ -64,8 +64,17 @@
     "patents": "Patents"
   },
   "cta": {
+    "impactValue1": "15 GWh+",
+    "impactLabel1": "Annual energy savings",
+    "impactValue2": "200+",
+    "impactLabel2": "AI-optimized buildings",
+    "impactValue3": "30%",
+    "impactLabel3": "Average energy cost reduction",
+    "testimonial": "After deploying Ninewatt's Opti, we reduced building energy costs by over 30% annually. AI-powered real-time monitoring significantly improved our operational efficiency.",
+    "testimonialAuthor": "Public facility management director",
     "heading": "Need an energy solution?",
     "description": "The Ninewatt team partners with you from energy diagnosis to execution.",
-    "button": "Contact Us"
+    "button": "Contact Us",
+    "casesButton": "View Case Studies"
   }
 }

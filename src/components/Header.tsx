@@ -467,7 +467,7 @@ export default function Header() {
           </Link>
 
           {/* Desktop Nav */}
-          <nav className="hidden items-center gap-1 lg:flex">
+          <nav aria-label="Main navigation" className="hidden items-center gap-1 lg:flex">
             {megaMenuItems.map((item) => (
               <div
                 key={item.labelKey}
@@ -728,7 +728,7 @@ export default function Header() {
 
         {/* ── Mobile Nav ── */}
         {mobileOpen && (
-          <nav className="border-t border-border bg-background/95 px-6 py-4 backdrop-blur-xl lg:hidden max-h-[calc(100dvh-4rem)] overflow-y-auto">
+          <nav aria-label="Mobile navigation" className="border-t border-border bg-background/95 px-6 py-4 backdrop-blur-xl lg:hidden max-h-[calc(100dvh-4rem)] overflow-y-auto">
             <div className="flex flex-col gap-1">
               {megaMenuItems.map((item) => (
                 <div key={item.labelKey}>

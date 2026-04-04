@@ -77,6 +77,18 @@
     "rnd": "(Centre R&D) 22, Gangnam-daero 162-gil, Gangnam-gu, Séoul, Corée (06028)",
     "gyeonggi": "(Succursale Gyeonggi) 158, Gimpohangang 8-ro, Gimpo-si, Gyeonggi-do, Corée (10068)"
   },
+  "error": {
+    "notFoundTitle": "Page introuvable",
+    "notFoundDescription": "La page que vous recherchez n'existe pas ou a été déplacée. Veuillez vérifier l'URL ou retourner à l'accueil.",
+    "backToHome": "Retour à l'accueil",
+    "serverErrorTitle": "Une erreur est survenue",
+    "serverErrorDescription": "Le service rencontre un problème temporaire. Veuillez réessayer dans un instant.",
+    "tryAgain": "Réessayer"
+  },
+  "contact": {
+    "successMessage": "Votre demande a été envoyée avec succès. Nous vous répondrons dans les plus brefs délais.",
+    "errorMessage": "L'envoi a échoué. Veuillez réessayer."
+  },
   "trackRecord": {
     "title": "Références associées",
     "subtitle": "R&D gouvernemental, commercialisation et projets de démonstration ({count} projets)",

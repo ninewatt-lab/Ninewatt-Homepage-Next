@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import { useTranslations } from "next-intl";
 
 interface ContactFormProps {
   labels: {
@@ -21,6 +22,7 @@ interface ContactFormProps {
 }
 
 export default function ContactForm({ labels }: ContactFormProps) {
+  const t = useTranslations("common");
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
 
@@ -50,14 +52,14 @@ export default function ContactForm({ labels }: ContactFormProps) {
 
       if (!res.ok) {
         const data = await res.json();
-        throw new Error(data.error || "전송에 실패했습니다.");
+        throw new Error(data.error || t("contact.errorMessage"));
       }
 
       setStatus("success");
       form.reset();
     } catch (err) {
       setStatus("error");
-      setErrorMsg(err instanceof Error ? err.message : "전송에 실패했습니다.");
+      setErrorMsg(err instanceof Error ? err.message : t("contact.errorMessage"));
     }
   }
 
@@ -146,12 +148,12 @@ export default function ContactForm({ labels }: ContactFormProps) {
       </div>
 
       {status === "success" && (
-        <div className="rounded-lg bg-green-50 p-4 text-sm text-green-700">
-          문의가 정상적으로 접수되었습니다. 빠른 시일 내에 답변드리겠습니다.
+        <div className="rounded-lg bg-green-50 p-4 text-sm text-green-700 dark:bg-green-900/20 dark:text-green-400">
+          {t("contact.successMessage")}
         </div>
       )}
       {status === "error" && (
-        <div className="rounded-lg bg-red-50 p-4 text-sm text-red-700">
+        <div className="rounded-lg bg-red-50 p-4 text-sm text-red-700 dark:bg-red-900/20 dark:text-red-400">
           {errorMsg}
         </div>
       )}
@@ -161,7 +163,7 @@ export default function ContactForm({ labels }: ContactFormProps) {
         disabled={status === "sending"}
         className="w-full rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-dark disabled:opacity-50 sm:w-auto"
       >
-        {status === "sending" ? "전송 중..." : labels.submit}
+        {status === "sending" ? `${labels.submit}...` : labels.submit}
       </button>
     </form>
   );
