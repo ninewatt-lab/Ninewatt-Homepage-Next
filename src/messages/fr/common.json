@@ -71,7 +71,9 @@
     "media": "Médias",
     "mediaDesc": "Actualités, communiqués de presse et vidéos",
     "solar": "Ninewatt Solar",
-    "solarDesc": "Service O&M solaire PV par IA"
+    "solarDesc": "Service O&M solaire PV par IA",
+    "energy": "Ninewatt Energy",
+    "energyDesc": "Service O&M énergies renouvelables par IA (Solaire + ESS)"
   },
   "footer": {
     "tagline": "Avec une technologie énergétique à la pointe de la transition GX,\nnous contribuons aux villes intelligentes et à la neutralité carbone.",

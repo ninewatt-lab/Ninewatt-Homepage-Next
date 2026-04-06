@@ -700,7 +700,7 @@ export default function Header() {
                       </Link>
                       {item.labelKey === "nav.company" && (
                         <a
-                          href="https://solar.ninewatt.com/ko"
+                          href="https://energy.ninewatt.com/ko"
                           target="_blank"
                           rel="noopener noreferrer"
                           onClick={() => setActiveMenu(null)}
@@ -708,9 +708,9 @@ export default function Header() {
                         >
                           <div className="flex flex-col flex-1">
                             <span className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors">
-                              {t("companyMenu.solar")}
+                              {t("companyMenu.energy")}
                             </span>
-                            <span className="text-xs text-muted">{t("companyMenu.solarDesc")}</span>
+                            <span className="text-xs text-muted">{t("companyMenu.energyDesc")}</span>
                           </div>
                           <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-3.5 w-3.5 text-muted group-hover:text-primary transition-colors shrink-0">
                             <path d="M3.5 2H10V8.5M10 2L2 10" />
