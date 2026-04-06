@@ -71,7 +71,9 @@
     "media": "メディア",
     "mediaDesc": "ニュース・プレスリリース・動画コンテンツ",
     "solar": "Ninewatt Solar",
-    "solarDesc": "AI活用型太陽光O&Mサービス"
+    "solarDesc": "AI活用型太陽光O&Mサービス",
+    "energy": "Ninewatt Energy",
+    "energyDesc": "AI活用型再生可能エネルギーO&Mサービス（太陽光+ESS）"
   },
   "footer": {
     "tagline": "GX実現を牽引するエネルギー技術で、\nスマートシティとカーボンニュートラル社会に貢献します。",

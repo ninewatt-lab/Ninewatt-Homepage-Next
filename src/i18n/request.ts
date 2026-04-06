@@ -24,6 +24,20 @@ export default getRequestConfig(async ({ requestLocale }) => {
     solar = (await import(`../messages/ko/solar.json`)).default;
   }
 
+  let energy = {};
+  try {
+    energy = (await import(`../messages/${locale}/energy.json`)).default;
+  } catch {
+    energy = (await import(`../messages/ko/energy.json`)).default;
+  }
+
+  let ess = {};
+  try {
+    ess = (await import(`../messages/${locale}/ess.json`)).default;
+  } catch {
+    ess = (await import(`../messages/ko/ess.json`)).default;
+  }
+
   return {
     locale,
     messages: {
@@ -34,6 +48,8 @@ export default getRequestConfig(async ({ requestLocale }) => {
       company,
       contact,
       solar,
+      energy,
+      ess,
     },
   };
 });

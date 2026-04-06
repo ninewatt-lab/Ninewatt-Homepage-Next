@@ -71,7 +71,9 @@
     "media": "Media",
     "mediaDesc": "News, press releases & video content",
     "solar": "Ninewatt Solar",
-    "solarDesc": "AI-powered solar PV O&M service"
+    "solarDesc": "AI-powered solar PV O&M service",
+    "energy": "Ninewatt Energy",
+    "energyDesc": "AI-powered renewable energy O&M (Solar + ESS)"
   },
   "footer": {
     "tagline": "Leading the GX transformation with energy technology,\ncontributing to smart cities and a carbon-neutral society.",

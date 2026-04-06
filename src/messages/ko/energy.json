@@ -1,0 +1,197 @@
+{
+  "metadata": {
+    "title": "나인와트 에너지 | AI 기반 신재생에너지 O&M",
+    "description": "태양광부터 ESS까지, AI가 에너지 자산을 관리합니다. 나인와트의 스마트 신재생에너지 O&M 서비스"
+  },
+  "nav": {
+    "home": "홈",
+    "pv": "PV",
+    "pvOm": "태양광 O&M",
+    "solarServices": "서비스 플랜",
+    "solarMonitoring": "AI 모니터링",
+    "ess": "ESS",
+    "essOm": "ESS O&M",
+    "essServices": "서비스 플랜",
+    "essMonitoring": "ESS 모니터링",
+    "products": "제품",
+    "peakEss": "피크저감형 ESS",
+    "sharedEss": "공유형 ESS",
+    "pvIntelligence": "PV Intelligence",
+    "solarSite": "SolarScope",
+    "bems": "BEMS",
+    "ppa": "직접PPA",
+    "sites": "발전소 현황",
+    "contact": "문의하기"
+  },
+  "hub": {
+    "hero": {
+      "badge": "Renewable Energy O&M",
+      "title": "태양광부터 ESS까지,\nAI가 에너지 자산을 관리합니다",
+      "subtitle": "나인와트는 자체 발전소 운영 경험과 AI 기술을 결합하여,\n태양광과 ESS의 발전 손실을 최소화하고 수익을 극대화합니다.",
+      "cta": "O&M 서비스 문의",
+      "ctaSecondary": "서비스 살펴보기"
+    },
+    "stats": {
+      "totalCapacity": "총 관리 용량",
+      "totalCapacityValue": "5.84",
+      "totalCapacityUnit": "MW",
+      "operatingSites": "운영 사이트",
+      "operatingSitesValue": "8",
+      "operatingSitesUnit": "개소",
+      "monitoring": "AI 모니터링",
+      "monitoringValue": "24/7",
+      "monitoringUnit": "",
+      "detectionAccuracy": "이상 탐지 정확도",
+      "detectionAccuracyValue": "94",
+      "detectionAccuracyUnit": "%"
+    },
+    "overview": {
+      "title": "신재생에너지 O&M",
+      "subtitle": "태양광과 ESS, 하나의 AI 플랫폼으로 통합 관리합니다",
+      "pvCard": {
+        "title": "태양광 O&M",
+        "description": "자체 RTU와 AI로 발전소를 24/7 모니터링하고, 이상 감지부터 현장 조치까지 원스톱으로 관리합니다.",
+        "features": [
+          "24/7 원격 모니터링 & AI 이상 진단",
+          "정기 점검 & 긴급 출동",
+          "수익 최적화 & 자동 리포트"
+        ],
+        "cta": "태양광 O&M 상세 보기"
+      },
+      "essCard": {
+        "title": "ESS O&M",
+        "description": "배터리 건강 상태부터 충방전 최적화, 화재 안전까지 ESS 자산의 전체 수명주기를 관리합니다.",
+        "features": [
+          "SoC/SoH 실시간 모니터링",
+          "충방전 최적화 & 수익 극대화",
+          "화재 안전 & PCS 관리"
+        ],
+        "cta": "ESS O&M 상세 보기"
+      }
+    },
+    "synergy": {
+      "title": "PV + ESS 통합 관리의 이점",
+      "subtitle": "태양광과 ESS를 함께 운영하면 개별 관리보다 더 높은 수익과 안정성을 실현할 수 있습니다",
+      "items": [
+        {
+          "title": "단일 AI 플랫폼",
+          "description": "태양광 발전 데이터와 ESS 충방전 데이터를 하나의 AI 플랫폼에서 통합 분석하여 교차 최적화합니다."
+        },
+        {
+          "title": "통합 리포트 & 대시보드",
+          "description": "PV 발전량, ESS 운영 현황, 수익 분석을 하나의 대시보드에서 확인. 통합 월간/분기 리포트를 제공합니다."
+        },
+        {
+          "title": "교차 수익 최적화",
+          "description": "태양광 발전 패턴에 맞춘 ESS 충방전 스케줄 최적화로 자가소비율을 높이고 피크 요금을 절감합니다."
+        },
+        {
+          "title": "원스톱 운영관리",
+          "description": "PV와 ESS를 별도 업체에 맡기면 발생하는 책임 공백 없이, 하나의 팀이 통합 관리합니다."
+        }
+      ]
+    },
+    "process": {
+      "title": "O&M 프로세스",
+      "subtitle": "AI가 감지하고, 전문가가 해결합니다",
+      "steps": [
+        {
+          "step": "01",
+          "title": "데이터 수집",
+          "description": "자사 RTU/BMS 게이트웨이가 인버터·배터리 데이터를 실시간 수집하여 클라우드에 전송합니다."
+        },
+        {
+          "step": "02",
+          "title": "AI 분석",
+          "description": "다중 사이트 교차 비교와 패턴 분석으로 이상 징후를 자동 탐지하고 원인을 분석합니다."
+        },
+        {
+          "step": "03",
+          "title": "알림 & 판단",
+          "description": "카카오톡으로 즉시 알림. 조치 방안과 예상 손실 금액을 함께 안내합니다."
+        },
+        {
+          "step": "04",
+          "title": "현장 조치",
+          "description": "전문 정비팀이 AI 진단 결과를 기반으로 타겟 출동하여 신속히 해결합니다."
+        }
+      ]
+    },
+    "products": {
+      "title": "에너지 솔루션",
+      "subtitle": "에너지 생산부터 저장, 관리까지 — 나인와트의 에너지 기술 제품",
+      "peakEss": {
+        "title": "피크저감형 ESS",
+        "description": "전력 피크 시간대 ESS 방전으로 계약전력 초과를 방지하고, 전기요금을 절감합니다."
+      },
+      "sharedEss": {
+        "title": "공유형 ESS",
+        "description": "배전망 연계형 공유 에너지저장장치로, 다수 수용가가 하나의 ESS를 공유하여 비용을 절감합니다."
+      },
+      "pvIntelligence": {
+        "title": "PV Intelligence",
+        "description": "AI 기반 태양광 발전소 통합 관제 시스템. 이상 감지, 원인 분석, 손실 금액 산출까지 자동화합니다."
+      },
+      "solarSite": {
+        "title": "SolarScope",
+        "description": "태양광 후보지 통합 타당성 분석 플랫폼. 일사량, 계통용량, 수익성을 한 번에 분석합니다."
+      },
+      "bems": {
+        "title": "BEMS",
+        "description": "건물 에너지 관리 시스템. 실시간 에너지 모니터링, 분석, 제어로 건물 에너지를 최적화합니다."
+      },
+      "ppa": {
+        "title": "직접PPA",
+        "description": "등록된 재생에너지 전기공급사업자로서 RE100 이행을 위한 직접PPA 서비스를 제공합니다."
+      }
+    },
+    "cta": {
+      "title": "에너지 자산, AI로 관리하세요",
+      "subtitle": "태양광부터 ESS까지, 발전 손실은 줄이고 수익은 높이는 스마트 O&M.\n지금 무료 상담을 신청하세요.",
+      "button": "무료 상담 신청",
+      "phone": "070-8866-7226"
+    }
+  },
+  "contact": {
+    "title": "O&M 서비스 문의",
+    "subtitle": "설비 정보를 알려주시면, 맞춤 O&M 플랜과 예상 비용을 안내해드립니다",
+    "inquiryType": "문의 유형",
+    "inquiryTypes": {
+      "solar": "태양광 O&M",
+      "ess": "ESS O&M",
+      "integrated": "PV+ESS 통합 O&M",
+      "product": "제품 문의",
+      "ppa": "직접PPA 문의"
+    },
+    "form": {
+      "name": "이름 / 회사명",
+      "phone": "연락처",
+      "email": "이메일",
+      "plantCapacity": "발전소 용량 (kW)",
+      "plantLocation": "발전소 위치",
+      "plantType": "발전소 유형",
+      "plantTypeOptions": {
+        "rooftop": "옥상형",
+        "ground": "노지형",
+        "other": "기타"
+      },
+      "essCapacity": "ESS 용량 (kWh)",
+      "essManufacturer": "배터리 제조사",
+      "pcsCapacity": "PCS 용량 (kW)",
+      "message": "문의 내용",
+      "messagePlaceholder": "현재 운영 상황, 고민 사항 등을 자유롭게 적어주세요",
+      "submit": "상담 신청하기",
+      "success": "문의가 접수되었습니다. 빠른 시일 내에 연락드리겠습니다."
+    }
+  },
+  "footer": {
+    "description": "AI 기반 신재생에너지 O&M 전문 서비스. 나인와트의 에너지 AI 기술로 태양광과 ESS를 스마트하게 관리합니다.",
+    "solarServices": "태양광 O&M",
+    "essServices": "ESS O&M",
+    "productServices": "에너지 솔루션",
+    "links": {
+      "mainSite": "나인와트 홈페이지",
+      "pvIntelligence": "PV Intelligence"
+    }
+  }
+}

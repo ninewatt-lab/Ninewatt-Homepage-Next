@@ -1,0 +1,189 @@
+{
+  "metadata": {
+    "title": "ESS O&M | AI 기반 에너지저장장치 운영관리",
+    "description": "배터리 건강 모니터링부터 충방전 최적화, 화재 안전까지. 나인와트의 스마트 ESS O&M 서비스"
+  },
+  "hero": {
+    "badge": "AI-Powered ESS O&M",
+    "title": "ESS 자산의 가치를\n극대화합니다",
+    "subtitle": "배터리 건강 상태 모니터링부터 충방전 최적화, 화재 안전 관리까지.\nAI가 ESS의 전체 수명주기를 관리합니다.",
+    "cta": "ESS O&M 문의",
+    "ctaSecondary": "서비스 상세 보기"
+  },
+  "stats": {
+    "totalCapacity": "ESS 관리 용량",
+    "totalCapacityValue": "2.0",
+    "totalCapacityUnit": "MWh",
+    "avgSoH": "평균 SoH",
+    "avgSoHValue": "96.2",
+    "avgSoHUnit": "%",
+    "safetyRecord": "안전 사고",
+    "safetyRecordValue": "0",
+    "safetyRecordUnit": "건",
+    "uptime": "시스템 가동률",
+    "uptimeValue": "99.7",
+    "uptimeUnit": "%"
+  },
+  "services": {
+    "title": "ESS O&M 서비스",
+    "subtitle": "배터리 자산의 안전과 수익성을 AI가 동시에 관리합니다",
+    "items": {
+      "batteryHealth": {
+        "title": "배터리 건강 모니터링",
+        "description": "셀 단위 SoC/SoH 추적, 전압·전류·온도 모니터링. 열화율 분석과 수명 예측으로 최적의 교체 시기를 안내합니다."
+      },
+      "chargeOptimize": {
+        "title": "충방전 최적화",
+        "description": "AI 기반 피크셰이빙 스케줄링, SMP 차익거래, 수요반응(DR) 참여 최적화로 ESS 수익을 극대화합니다."
+      },
+      "fireSafety": {
+        "title": "화재 안전 모니터링",
+        "description": "열폭주 조기 감지, 가스(CO/H₂) 센서 모니터링, HVAC 상태 확인. 다단계 경보 시스템으로 사고를 예방합니다."
+      },
+      "pcsManagement": {
+        "title": "PCS 관리",
+        "description": "전력변환장치(PCS) 효율 추적, 계통 연계 품질 모니터링, 고조파 분석으로 안정적인 전력 공급을 보장합니다."
+      },
+      "degradation": {
+        "title": "용량 열화 분석",
+        "description": "사이클 카운팅, DoD 분석, 달력열화/사이클열화 분리 분석. 용량 감소 곡선 예측과 교체 비용 시뮬레이션을 제공합니다."
+      },
+      "report": {
+        "title": "자동 리포트",
+        "description": "월간/분기 ESS O&M 리포트 자동 생성. 수익 분석, 안전 점검 기록, 열화 현황, 규제 보고(KEMCO/KPX)를 지원합니다."
+      }
+    }
+  },
+  "plans": {
+    "title": "ESS O&M 플랜",
+    "subtitle": "ESS 규모와 운영 목표에 맞는 최적의 O&M 플랜을 선택하세요",
+    "basic": {
+      "name": "Basic",
+      "price": "kWh당 월 2,000~4,000원",
+      "description": "원격 BMS 모니터링 중심",
+      "features": [
+        "24/7 BMS 원격 모니터링",
+        "SoC/SoH 월간 리포트",
+        "이상 감지 알림 (카카오톡/SMS)",
+        "PCS 기본 상태 모니터링"
+      ],
+      "target": "소규모 ESS 운영자"
+    },
+    "standard": {
+      "name": "Standard",
+      "price": "kWh당 월 6,000~10,000원",
+      "description": "모니터링 + 정기 점검",
+      "popular": "인기",
+      "features": [
+        "Basic 플랜 전체 포함",
+        "분기 현장 점검 (연 4회)",
+        "PCS 성능 튜닝",
+        "연 1회 용량 시험",
+        "화재 안전 시스템 점검",
+        "충방전 스케줄 최적화"
+      ],
+      "target": "500kWh~2MWh ESS 사업자"
+    },
+    "premium": {
+      "name": "Premium",
+      "price": "ESS 수익의 8~12%",
+      "description": "성과 보장형 풀 서비스",
+      "features": [
+        "Standard 플랜 전체 포함",
+        "화재 안전 시스템 풀 관리",
+        "무제한 긴급 출동",
+        "열화 예측 & 교체 계획",
+        "규제 대응 리포트 (KEMCO/KPX)",
+        "수익 최적화 컨설팅"
+      ],
+      "target": "2MWh 이상 또는 다수 ESS 운영"
+    }
+  },
+  "monitoring": {
+    "title": "ESS 모니터링 시스템",
+    "subtitle": "ESS Intelligence — 배터리 상태를 보여주는 것을 넘어, AI가 이상을 감지하고 수익을 최적화합니다",
+    "features": {
+      "bmsDashboard": {
+        "title": "실시간 BMS 대시보드",
+        "description": "셀/모듈/랙/시스템 레벨의 계층적 시각화. SoC, SoH, 온도, 전압, 전류를 실시간으로 모니터링합니다."
+      },
+      "aiAnomaly": {
+        "title": "AI 이상 감지",
+        "description": "온도·전압·전류 패턴 인식으로 이상 징후를 조기 감지. 과거 데이터 학습 기반 예측형 진단을 수행합니다."
+      },
+      "revenueEngine": {
+        "title": "수익 최적화 엔진",
+        "description": "SMP 실시간 분석, 피크 시간대 방전 최적화, DR 참여 타이밍 제안. ESS 투자 수익률을 극대화합니다."
+      },
+      "safetySystem": {
+        "title": "다층 안전 시스템",
+        "description": "온도·가스·전압 이상을 3단계(주의/경고/긴급)로 분류. 소방 시스템 연동과 자동 차단 기능을 제공합니다."
+      }
+    },
+    "scenarios": {
+      "title": "AI 탐지 시나리오",
+      "scenario1": {
+        "title": "셀 온도 이상 감지",
+        "situation": "특정 랙 내 3개 셀의 온도가 주변 셀 대비 5°C 이상 상승",
+        "diagnosis": "AI가 냉각 시스템 부분 고장 또는 셀 내부 저항 증가로 판단",
+        "action": "해당 랙 충방전 제한 후 현장 점검 안내",
+        "loss": "조기 감지로 열폭주 사고 예방"
+      },
+      "scenario2": {
+        "title": "예상보다 빠른 용량 열화",
+        "situation": "설치 18개월 차 ESS의 SoH가 제조사 보증 곡선 대비 4%p 빠르게 감소",
+        "diagnosis": "DoD 과다 및 고온 환경에 의한 가속 열화로 분석",
+        "action": "충방전 깊이 조정 및 냉각 설정 최적화 권고",
+        "loss": "배터리 수명 2년 연장 효과"
+      },
+      "scenario3": {
+        "title": "PCS 효율 저하",
+        "situation": "PCS 변환 효율이 97%에서 93%로 점진적 하락",
+        "diagnosis": "IGBT 모듈 열화 또는 팬 필터 막힘 가능성",
+        "action": "PCS 내부 점검 및 필터 교체 안내",
+        "loss": "효율 회복 시 월 40만원 수익 증가"
+      }
+    },
+    "techSpec": {
+      "title": "기술 사양",
+      "bms": "BMS 게이트웨이 (LTE/이더넷)",
+      "protocol": "Modbus TCP/RTU, CAN",
+      "interval": "1분 주기 데이터 수집",
+      "batteries": "삼성SDI, LG에너지솔루션, SK온 등 호환",
+      "alert": "카카오 알림톡 (SMS 폴백)",
+      "dashboard": "웹 기반 ESS 통합 대시보드"
+    }
+  },
+  "process": {
+    "title": "ESS O&M 프로세스",
+    "subtitle": "AI가 감지하고, 전문가가 해결합니다",
+    "steps": [
+      {
+        "step": "01",
+        "title": "데이터 수집",
+        "description": "BMS 게이트웨이가 셀/모듈/랙 데이터를 1분 주기로 클라우드에 전송합니다."
+      },
+      {
+        "step": "02",
+        "title": "AI 분석",
+        "description": "온도·전압·전류 패턴과 열화 트렌드를 분석하여 이상 징후를 자동 탐지합니다."
+      },
+      {
+        "step": "03",
+        "title": "알림 & 판단",
+        "description": "3단계 경보 시스템(주의/경고/긴급)으로 즉시 알림. 조치 방안을 함께 안내합니다."
+      },
+      {
+        "step": "04",
+        "title": "현장 조치",
+        "description": "전문 정비팀이 AI 진단 결과를 기반으로 타겟 출동하여 신속히 해결합니다."
+      }
+    ]
+  },
+  "cta": {
+    "title": "ESS, AI로 안전하게 관리하세요",
+    "subtitle": "배터리 수명은 늘리고 수익은 높이는 스마트 O&M.\n지금 무료 상담을 신청하세요.",
+    "button": "무료 상담 신청",
+    "phone": "070-8866-7226"
+  }
+}

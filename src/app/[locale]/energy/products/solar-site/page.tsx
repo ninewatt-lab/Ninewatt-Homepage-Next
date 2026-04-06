@@ -41,19 +41,17 @@ export default async function SolarSitePage() {
           </p>
           <div className="mt-10 flex flex-wrap gap-4">
             <Link
-              href="/contact"
+              href="/energy/contact"
               className="rounded-full bg-primary px-8 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-primary-dark"
             >
               {t("solarScope.requestDemo")}
             </Link>
-            <a
-              href="https://energy.ninewatt.com/ko"
-              target="_blank"
-              rel="noopener noreferrer"
+            <Link
+              href="/energy/solar"
               className="rounded-full border border-primary/30 bg-primary/5 px-8 py-3.5 text-sm font-semibold text-primary transition-colors hover:bg-primary/10"
             >
               Ninewatt Energy O&M &rarr;
-            </a>
+            </Link>
             {serviceUrl && (
               <a
                 href={serviceUrl}
@@ -239,7 +237,7 @@ export default async function SolarSitePage() {
           </p>
           <div className="mt-8 flex flex-wrap gap-4">
             <Link
-              href="/contact"
+              href="/energy/contact"
               className="rounded-full bg-primary px-8 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-primary-dark"
             >
               {t("solarScope.ctaDemo")}
