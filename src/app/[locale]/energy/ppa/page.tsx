@@ -1,18 +1,30 @@
 import { Link } from "@/i18n/navigation";
+import Image from "next/image";
 
 export default function PPAPage() {
   return (
     <>
-      {/* Hero */}
-      <section className="pt-24 pb-16 bg-gradient-to-b from-blue-50/50 dark:from-blue-950/20 to-transparent">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Hero — full-bleed image background */}
+      <section className="relative min-h-[70vh] flex items-center overflow-hidden -mt-16">
+        <div className="absolute inset-0">
+          <Image
+            src="/images/solar/sites/site-drone-01.jpg"
+            alt="나인와트 태양광 발전소"
+            fill
+            className="object-cover"
+            priority
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-zinc-950/90 via-zinc-950/60 to-zinc-950/30" />
+        </div>
+
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-20 w-full">
           <p className="text-primary text-sm font-medium tracking-[0.2em] uppercase mb-5">
             재생에너지 전기공급사업자
           </p>
-          <h1 className="text-4xl sm:text-5xl lg:text-[3.5rem] font-bold text-zinc-900 dark:text-white leading-[1.15] whitespace-pre-line max-w-2xl">
+          <h1 className="text-4xl sm:text-5xl lg:text-[3.5rem] font-bold text-white leading-[1.15] whitespace-pre-line max-w-2xl">
             {"RE100, 직접PPA로\n시작하세요"}
           </h1>
-          <p className="mt-6 text-base sm:text-lg text-zinc-500 dark:text-zinc-400 leading-relaxed max-w-lg whitespace-pre-line">
+          <p className="mt-6 text-base sm:text-lg text-zinc-300 leading-relaxed max-w-lg whitespace-pre-line">
             {"나인와트는 등록된 재생에너지 전기공급사업자로서,\n재생에너지 발전사업자와 전기사용자를 연결합니다."}
           </p>
           <div className="mt-10 flex flex-col sm:flex-row gap-3">
@@ -20,8 +32,36 @@ export default function PPAPage() {
               href="/energy/contact"
               className="inline-flex items-center justify-center px-7 py-3.5 text-sm font-semibold text-white bg-primary hover:bg-primary-dark rounded-lg transition-colors"
             >
-              PPA 상담 신청
+              발전사업자 참여 문의
             </Link>
+            <Link
+              href="/energy/contact"
+              className="inline-flex items-center justify-center px-7 py-3.5 text-sm font-semibold text-zinc-300 border border-zinc-600 hover:border-zinc-400 hover:text-white rounded-lg transition-colors"
+            >
+              RE100 전력 구매 문의
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Stats — 나인와트 실적 */}
+      <section className="border-b border-zinc-100 dark:border-zinc-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-2 lg:grid-cols-4 divide-x divide-zinc-100 dark:divide-zinc-800">
+            {[
+              { value: "3.84", unit: "MW", label: "자체 발전소 운영" },
+              { value: "6", unit: "개소", label: "운영 중 발전소" },
+              { value: "94", unit: "%", label: "AI 이상 탐지 정확도" },
+              { value: "24/7", unit: "", label: "실시간 모니터링" },
+            ].map((stat) => (
+              <div key={stat.label} className="py-10 px-6 text-center">
+                <p className="text-3xl font-bold text-zinc-900 dark:text-white tracking-tight">
+                  {stat.value}
+                  {stat.unit && <span className="text-base font-medium text-zinc-400 ml-0.5">{stat.unit}</span>}
+                </p>
+                <p className="mt-1.5 text-xs text-zinc-500 tracking-wide uppercase">{stat.label}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -87,6 +127,21 @@ export default function PPAPage() {
             자체 태양광 발전소 운영 경험과 AI 기술을 바탕으로,
             발전사업자와 전기사용자 사이에서 안정적인 재생에너지 전력 공급을 책임집니다.
           </p>
+
+          {/* 역량 배지 */}
+          <div className="mt-8 flex flex-wrap gap-3">
+            {[
+              "태양광 발전사업자",
+              "재생에너지 전기공급사업자",
+              "PV Intelligence AI 관제",
+              "ESS 통합 관리",
+              "자체 발전소 3.84MW 운영",
+            ].map((badge) => (
+              <span key={badge} className="px-3 py-1.5 bg-primary/5 border border-primary/20 rounded-full text-xs font-medium text-primary">
+                {badge}
+              </span>
+            ))}
+          </div>
 
           <div className="mt-14 grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
