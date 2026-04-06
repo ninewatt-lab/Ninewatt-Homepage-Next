@@ -320,7 +320,7 @@ function ProductsSection() {
     <Link
       key={product.key}
       href={product.href}
-      className="bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 p-6 hover:border-primary/50 transition-colors group"
+      className="block bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 p-6 hover:border-primary/50 transition-colors group"
     >
       <div className={`w-10 h-10 rounded-lg ${product.iconBg} flex items-center justify-center`}>
         {product.icon}
@@ -349,7 +349,7 @@ function ProductsSection() {
           {/* PV */}
           <div>
             <h3 className="text-lg font-bold text-zinc-900 dark:text-white mb-5">PV (태양광)</h3>
-            <div className="space-y-4">
+            <div className="grid grid-cols-1 gap-4">
               {pvProducts.map(renderCard)}
             </div>
           </div>
@@ -357,7 +357,7 @@ function ProductsSection() {
           {/* ESS */}
           <div>
             <h3 className="text-lg font-bold text-zinc-900 dark:text-white mb-5">ESS (에너지저장)</h3>
-            <div className="space-y-4">
+            <div className="grid grid-cols-1 gap-4">
               {essProducts.map(renderCard)}
             </div>
           </div>
