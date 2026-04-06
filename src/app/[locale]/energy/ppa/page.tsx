@@ -128,21 +128,6 @@ export default function PPAPage() {
             발전사업자와 전기사용자 사이에서 안정적인 재생에너지 전력 공급을 책임집니다.
           </p>
 
-          {/* 역량 배지 */}
-          <div className="mt-8 flex flex-wrap gap-3">
-            {[
-              "태양광 발전사업자",
-              "재생에너지 전기공급사업자",
-              "PV Intelligence AI 관제",
-              "ESS 통합 관리",
-              "자체 발전소 3.84MW 운영",
-            ].map((badge) => (
-              <span key={badge} className="px-3 py-1.5 bg-primary/5 border border-primary/20 rounded-full text-xs font-medium text-primary">
-                {badge}
-              </span>
-            ))}
-          </div>
-
           <div className="mt-14 grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
               {
