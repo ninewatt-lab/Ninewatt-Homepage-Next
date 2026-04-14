@@ -11,7 +11,6 @@
     "companyInfo": [
       { "label": "설립일", "value": "2019.02.12" },
       { "label": "사원수", "value": "30명" },
-      { "label": "투자단계", "value": "시리즈 A (누적 약 48억원)" },
       { "label": "사업분야", "value": "스마트시티 구축 및 건물 에너지 절감 솔루션" }
     ],
     "executives": "경영진",

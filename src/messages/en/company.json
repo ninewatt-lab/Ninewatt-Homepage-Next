@@ -11,7 +11,6 @@
     "companyInfo": [
       { "label": "Founded", "value": "Feb 12, 2019" },
       { "label": "Employees", "value": "30+" },
-      { "label": "Funding Stage", "value": "Series A (Approx. KRW 4.8B cumulative)" },
       { "label": "Business Areas", "value": "Smart city solutions & building energy reduction" }
     ],
     "executives": "Leadership",

@@ -41,17 +41,10 @@ export default async function Home({
   const { locale } = await params;
   const t = await getTranslations("home");
 
-  const investmentByLocale: Record<string, string> = {
-    ko: "48억",
-    en: "$3.3M",
-    ja: "5.2億円",
-    fr: "3M€",
-  };
   const stats = [
     { value: "30+", label: t("stats.employees") },
     { value: "60+", label: t("stats.projects") },
     { value: "96.81%", label: t("stats.growth") },
-    { value: investmentByLocale[locale] ?? "$3.3M", label: t("stats.investment") },
     { value: "33", label: t("stats.patents") },
   ];
 

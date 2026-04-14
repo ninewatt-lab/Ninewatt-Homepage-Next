@@ -11,7 +11,6 @@
     "companyInfo": [
       { "label": "Date de creation", "value": "12 fev. 2019" },
       { "label": "Effectifs", "value": "30+" },
-      { "label": "Stade de financement", "value": "Serie A (env. 4,8 Mds KRW cumules)" },
       { "label": "Domaines d'activite", "value": "Solutions de villes intelligentes et de reduction energetique des batiments" }
     ],
     "executives": "Direction",
