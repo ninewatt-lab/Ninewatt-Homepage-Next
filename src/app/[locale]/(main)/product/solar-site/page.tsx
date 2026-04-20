@@ -11,6 +11,9 @@ export async function generateMetadata() {
   };
 }
 
+const S3_BASE =
+  "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/SolarAnalysis";
+
 export default async function SolarSitePage() {
   const [t, serviceUrl] = await Promise.all([
     getTranslations("product"),
@@ -21,6 +24,15 @@ export default async function SolarSitePage() {
   const solutionItems = t.raw("solarScope.solutionItems") as { title: string; desc: string }[];
   const features = t.raw("solarScope.features") as { name: string; desc: string }[];
   const impactItems = t.raw("solarScope.impactItems") as { title: string; desc: string }[];
+  const dataStats = t.raw("solarScope.dataCredibility.stats") as { value: string; label: string }[];
+  const dataSources = t.raw("solarScope.dataCredibility.sources") as string[];
+
+  const screenshots = [
+    { key: "powerGrid", src: `${S3_BASE}/power-grid.png`, alt: "SolarScope power grid map" },
+    { key: "mapAnalysis", src: `${S3_BASE}/map-analysis.png`, alt: "SolarScope parcel-level land analysis" },
+    { key: "shadowAnalysis", src: `${S3_BASE}/shadow-analysis.png`, alt: "SolarScope 3D shadow and irradiance analysis" },
+    { key: "businessAnalysis", src: `${S3_BASE}/business-analysis.png`, alt: "SolarScope financial viability review" },
+  ] as const;
 
   return (
     <>
@@ -68,17 +80,34 @@ export default async function SolarSitePage() {
         </div>
       </section>
 
+      {/* Hero Image */}
+      <section className="px-6 pb-4 pt-8">
+        <div className="mx-auto max-w-5xl">
+          <div className="overflow-hidden rounded-2xl border border-border bg-neutral-900 shadow-2xl">
+            <div className="flex items-center gap-1.5 border-b border-white/10 px-4 py-2.5">
+              <span className="h-2.5 w-2.5 rounded-full bg-white/20" />
+              <span className="h-2.5 w-2.5 rounded-full bg-white/20" />
+              <span className="h-2.5 w-2.5 rounded-full bg-white/20" />
+            </div>
+            <div className="aspect-video">
+              <Image
+                src={`${S3_BASE}/hero.png`}
+                alt="SolarScope overview"
+                width={1920}
+                height={1080}
+                className="h-full w-full object-cover object-top"
+                priority
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Product Screenshots */}
       <section className="px-6 py-20">
-        <div className="mx-auto max-w-5xl space-y-16">
-          {/* Row 1: Wide screenshots — 4-column */}
+        <div className="mx-auto max-w-5xl">
           <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-4">
-            {([
-              { key: "dashboard" as const, src: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/SolarScope/SolarScope_1.png", alt: "SolarScope Map Analysis Dashboard" },
-              { key: "nationwideGrid" as const, src: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/SolarScope/SolarScope_7.png", alt: "SolarScope Nationwide Grid Capacity Heatmap" },
-              { key: "roofAnalysis3d" as const, src: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/SolarScope/SolarScope_8.png", alt: "SolarScope 3D Roof Analysis" },
-              { key: "feasibility" as const, src: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/SolarScope/SolarScope_6.png", alt: "SolarScope Detailed Feasibility Review" },
-            ] as const).map((item) => (
+            {screenshots.map((item) => (
               <div key={item.key}>
                 <div className="group/img overflow-hidden rounded-xl border border-border bg-neutral-900 shadow-xl transition-shadow hover:shadow-primary/10">
                   <div className="flex items-center gap-1.5 border-b border-white/10 px-3 py-2">
@@ -103,43 +132,11 @@ export default async function SolarSitePage() {
               </div>
             ))}
           </div>
-
-          {/* Row 2: Detail panels — 3-column */}
-          <div className="grid gap-6 md:grid-cols-3">
-            {([
-              { key: "siteAnalysis" as const, src: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/SolarScope/SolarScope_3.png", alt: "SolarScope Site Analysis & Grid Capacity" },
-              { key: "irradiance" as const, src: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/SolarScope/SolarScope_4.png", alt: "SolarScope Irradiance & Energy Yield" },
-              { key: "profitability" as const, src: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/SolarScope/SolarScope_5.png", alt: "SolarScope Profitability Analysis" },
-            ] as const).map((item) => (
-              <div key={item.key}>
-                <div className="group/img overflow-hidden rounded-xl border border-border bg-neutral-900 shadow-xl transition-shadow hover:shadow-primary/10">
-                  <div className="flex items-center gap-1.5 border-b border-white/10 px-3 py-2">
-                    <span className="h-2 w-2 rounded-full bg-white/20" />
-                    <span className="h-2 w-2 rounded-full bg-white/20" />
-                    <span className="h-2 w-2 rounded-full bg-white/20" />
-                  </div>
-                  <div className="aspect-2/3 overflow-hidden">
-                    <Image
-                      src={item.src}
-                      alt={item.alt}
-                      width={720}
-                      height={1080}
-                      className="h-full w-full object-cover object-top transition-transform duration-500 ease-out group-hover/img:scale-105"
-                    />
-                  </div>
-                </div>
-                <h3 className="mt-4 text-lg font-bold">{t(`solarScope.${item.key}`)}</h3>
-                <p className="mt-1.5 text-sm leading-relaxed text-muted">
-                  {t(`solarScope.${item.key}Desc`)}
-                </p>
-              </div>
-            ))}
-          </div>
         </div>
       </section>
 
       {/* Target users */}
-      <section className="border-b border-border px-6 py-10">
+      <section className="border-b border-t border-border px-6 py-10">
         <div className="mx-auto flex max-w-5xl flex-wrap items-center gap-6 text-sm text-muted">
           <span className="font-semibold text-foreground">{t("solarScope.targetUsersLabel")}</span>
           {targetUsers.map((user, i) => (
@@ -192,8 +189,37 @@ export default async function SolarSitePage() {
         </div>
       </section>
 
-      {/* Key Features */}
+      {/* Data Credibility */}
       <section className="border-t border-border bg-surface px-6 py-24">
+        <div className="mx-auto max-w-5xl">
+          <h2 className="text-2xl font-bold">{t("solarScope.dataCredibility.title")}</h2>
+          <p className="mt-3 text-muted">{t("solarScope.dataCredibility.desc")}</p>
+
+          <div className="mt-10 grid gap-6 sm:grid-cols-2 md:grid-cols-4">
+            {dataStats.map((s, i) => (
+              <div key={i} className="rounded-xl border border-border bg-background p-6">
+                <p className="text-3xl font-bold tracking-tight">{s.value}</p>
+                <p className="mt-2 text-sm text-muted">{s.label}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-10">
+            <p className="text-sm font-semibold">{t("solarScope.dataCredibility.sourcesLabel")}</p>
+            <div className="mt-3 flex flex-wrap gap-x-6 gap-y-2 text-sm text-muted">
+              {dataSources.map((s, i) => (
+                <span key={i}>
+                  {i > 0 && <span className="mr-6 text-border">|</span>}
+                  {s}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Key Features */}
+      <section className="border-t border-border px-6 py-24">
         <div className="mx-auto max-w-5xl">
           <h2 className="text-2xl font-bold">{t("solarScope.keyFeatures")}</h2>
           <div className="mt-8 grid gap-x-12 gap-y-4 sm:grid-cols-2">

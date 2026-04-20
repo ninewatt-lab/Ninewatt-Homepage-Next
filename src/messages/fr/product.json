@@ -342,86 +342,75 @@
     "ctaBrochure": "Brochure PDF"
   },
   "solarScope": {
-    "heroSubtitle": "Analysez un site solaire avec une simple adresse",
-    "heroDesc": "Plateforme d'analyse intégrée de la faisabilité technique, juridique et économique des sites candidats à l'installation photovoltaïque. La saisie d'une adresse ou d'une référence cadastrale suffit pour évaluer la réglementation, les distances d'éloignement, le réseau de distribution, le productible et la rentabilité.",
+    "heroSubtitle": "Sélection de sites solaires pilotée par les données",
+    "heroDesc": "Plateforme d'analyse de sites dédiée aux développeurs solaires indépendants coréens. Validez la connectivité réseau, la réglementation foncière, les ombres 3D et la rentabilité — le tout sur une seule carte.",
     "requestDemo": "Demander une démonstration",
     "goToService": "Accéder au service",
-    "dashboard": "Tableau de bord intégré",
-    "dashboardDesc": "Une seule saisie d'adresse pour l'analyse foncière, la vérification du réseau, le contrôle des distances d'éloignement et l'évaluation de la rentabilité. Gérez vos projets récents en un coup d'œil.",
-    "detailAnalysis": "Analyse détaillée",
-    "detailAnalysisDesc": "Informations foncières de base, capacité résiduelle du réseau de distribution, vérification des distances d'éloignement et simulation d'ensoleillement et de productible, le tout sur un seul écran.",
-    "siteAnalysis": "Analyse foncière et réseau",
-    "siteAnalysisDesc": "Consultez les informations foncières, la capacité résiduelle du réseau et les résultats de contrôle des distances d'éloignement sur un seul écran. Évaluez instantanément la faisabilité de raccordement par poste source, transformateur et ligne de distribution.",
-    "irradiance": "Ensoleillement et productible",
-    "irradianceDesc": "Estimation automatique de la capacité installable et du productible à partir de l'ensoleillement annuel, de l'inclinaison optimale et du facteur de capacité. Configuration de la surface d'installation terrain/toiture et simulation mensuelle du productible.",
-    "profitability": "Analyse de rentabilité",
-    "profitabilityDesc": "Visualisez le TRI, le délai de récupération et la VAN en un coup d'œil. Évaluez instantanément la viabilité grâce aux graphiques de seuil de rentabilité et aux comparaisons annuelles revenus/coûts.",
-    "feasibility": "Étude de faisabilité détaillée",
-    "feasibilityDesc": "Calcul des revenus de production, simulation de remboursement d'emprunt, scénarios de remboursement anticipé et analyse des flux de trésorerie — l'ensemble des données nécessaires à la décision d'investissement.",
-    "nationwideGrid": "Analyse nationale du réseau",
-    "nationwideGridDesc": "Visualisation de la capacité résiduelle des postes sources sous forme de carte thermique. Consultez la capacité installée, raccordée et résiduelle par poste source pour identifier les points de raccordement optimaux.",
-    "roofAnalysis3d": "Analyse 3D des toitures",
-    "roofAnalysis3dDesc": "Inspectez intuitivement la surface et la géométrie des toitures sur des modèles 3D de bâtiments. Évaluez rapidement les projets solaires urbains grâce à la simulation d'installation sur toiture.",
+    "powerGrid": "Carte du réseau électrique",
+    "powerGridDesc": "Visualisez les centrales, lignes de transport, postes sources et grands consommateurs sur une carte nationale et évaluez la faisabilité du raccordement.",
+    "mapAnalysis": "Analyse parcellaire cartographique",
+    "mapAnalysisDesc": "Vérification automatique par SIG du zonage d'usage, de la réglementation et des distances d'éloignement pour la parcelle sélectionnée.",
+    "shadowAnalysis": "Analyse 3D des ombres et de l'ensoleillement",
+    "shadowAnalysisDesc": "Simulations d'ombrage 3D saisonnières et analyse d'ensoleillement pour prévoir le productible réel.",
+    "businessAnalysis": "Étude de viabilité économique",
+    "businessAnalysisDesc": "TRI, VAN et délai de récupération calculés automatiquement pour étayer votre décision d'investissement.",
     "targetUsersLabel": "À qui s'adresse SolarScope",
     "targetUsers": [
-      "Développeurs solaires et entreprises EPC",
+      "Développeurs solaires indépendants coréens",
+      "Entreprises EPC",
       "Sociétés d'investissement et établissements financiers du secteur énergétique",
       "Collectivités et organismes publics",
       "Propriétaires fonciers et immobiliers"
     ],
     "problem": "Problématique",
-    "problemDesc": "Un projet solaire nécessite, dès la phase initiale d'étude des sites candidats, de vérifier individuellement de nombreux paramètres dans un processus complexe.",
+    "problemDesc": "La sélection d'un site solaire impose de vérifier la connectivité réseau, la réglementation, l'ombrage et la rentabilité dans des systèmes dispersés.",
     "problemItems": [
-      "Vérification de la zone d'usage et des restrictions d'activité",
-      "Examen des règles de distances d'éloignement",
-      "Vérification de la possibilité de raccordement au réseau",
-      "Analyse du productible et de la rentabilité",
-      "Examen des autorisations et des conditions réglementaires"
+      "La faisabilité de raccordement est difficile à vérifier à partir de données fragmentées",
+      "L'usage des sols, la réglementation et les distances d'éloignement se vérifient dans plusieurs portails distincts",
+      "L'analyse d'ensoleillement et d'ombres 3D nécessite des outils spécialisés séparés",
+      "La collecte de données pour l'étude financière prend plusieurs jours, voire plusieurs semaines",
+      "Il n'existe aucun moyen de pré-valider un site avant une visite de terrain"
     ],
-    "problemConclusion": "Ce processus implique de naviguer entre plusieurs systèmes et jeux de données, ce qui allonge les délais d'étude et nuit à la cohérence des décisions.",
+    "problemConclusion": "Résultat : des délais d'étude longs, des décisions peu cohérentes, et le risque de passer à côté de bons sites ou d'investir dans de mauvais.",
     "whatSolarScopeDoes": "Ce que fait SolarScope",
-    "whatSolarScopeDoesDesc": "SolarScope unifie ce processus en un seul workflow.",
+    "whatSolarScopeDoesDesc": "Unifie les données nationales de réseau, de foncier et de ressource solaire sur une seule carte.",
     "solutionItems": [
-      {
-        "title": "Analyse automatique du site",
-        "desc": "L'analyse démarre instantanément à la saisie de l'adresse ou de la référence cadastrale."
-      },
-      {
-        "title": "Examen réglementaire et de localisation",
-        "desc": "Vérification automatique des réglementations et distances d'éloignement par SIG."
-      },
-      {
-        "title": "Vérification du raccordement réseau",
-        "desc": "Évaluation préalable de la possibilité de raccordement au réseau électrique."
-      },
-      {
-        "title": "Estimation de la capacité et du productible",
-        "desc": "Calcul automatique de la capacité installable et du productible annuel."
-      },
-      {
-        "title": "Analyse économique",
-        "desc": "Analyse de la faisabilité : investissement, chiffre d'affaires, temps de retour."
-      }
+      { "title": "Carte du réseau électrique", "desc": "Pré-évaluation du raccordement avec 187 940 centrales, 4 000 lignes de transport, 1 184 postes sources et 5 376 grands consommateurs" },
+      { "title": "Analyse parcellaire cartographique", "desc": "Vérification SIG automatique du zonage, de la réglementation et des distances d'éloignement" },
+      { "title": "Ombres 3D et ensoleillement", "desc": "Simulation saisonnière de la position solaire et optimisation inclinaison/azimut pour prévoir le productible réel" },
+      { "title": "Viabilité économique", "desc": "Calcul automatique du TRI, de la VAN et du délai de récupération pour étayer les décisions d'investissement" }
     ],
+    "dataCredibility": {
+      "title": "Bâti sur des données fiables",
+      "desc": "Sources de données publiques et mondiales intégrées et vérifiées.",
+      "stats": [
+        { "value": "187 940", "label": "Centrales électriques" },
+        { "value": "4 000", "label": "Lignes de transport" },
+        { "value": "1 184", "label": "Postes sources" },
+        { "value": "5 376", "label": "Grands consommateurs" }
+      ],
+      "sourcesLabel": "Sources de données",
+      "sources": ["Global Energy Monitor", "OpenStreetMap", "Ministère du Territoire, des Infrastructures et des Transports (Corée)", "Korea Electric Power Corporation (KEPCO)", "Google Solar API"]
+    },
     "keyFeatures": "Fonctionnalités principales",
     "features": [
-      { "name": "Integrated Feasibility Analysis", "desc": "Analyse intégrée de la réglementation, des distances, du réseau, du productible et de la rentabilité" },
-      { "name": "GIS-based Spatial Analysis", "desc": "Analyse spatiale à la parcelle et au bâtiment, visualisation cartographique (2D/3D)" },
-      { "name": "Capacity & Yield Estimation", "desc": "Calcul automatique de la capacité installable et du productible annuel" },
-      { "name": "Financial Modeling", "desc": "Analyse de faisabilité : investissement, financement, revenus et temps de retour" },
-      { "name": "Multi-site Comparison", "desc": "Comparaison simultanée de plusieurs sites candidats pour optimiser la prise de décision" },
-      { "name": "Report Generation", "desc": "Sauvegarde et exploitation des résultats d'analyse en format PDF et données" }
+      { "name": "Intégration des données réseau", "desc": "Évaluation du raccordement à partir des données nationales de centrales, lignes, postes et consommateurs" },
+      { "name": "Analyse parcellaire SIG", "desc": "Vérification automatique du zonage, des distances et de la réglementation (2D/3D)" },
+      { "name": "Simulation d'ombres 3D", "desc": "Modélisation saisonnière de la position solaire pour prévoir l'impact des ombres" },
+      { "name": "Prévision d'ensoleillement et de productible", "desc": "Optimisation inclinaison/azimut pour estimer la production annuelle" },
+      { "name": "Modélisation financière automatisée", "desc": "TRI, VAN, délai de récupération et graphique de seuil de rentabilité calculés instantanément" },
+      { "name": "Comparaison multi-sites", "desc": "Analyse de plusieurs sites côte à côte sur la carte" }
     ],
     "expectedImpact": "Impact attendu",
-    "expectedImpactDesc": "Réduction du temps et de l'incertitude liés à l'étude des sites solaires candidats, pour des décisions cohérentes fondées sur les données.",
+    "expectedImpactDesc": "Validez avec des données avant toute visite de terrain — réduisez délais, coûts et incertitude.",
     "impactItems": [
-      { "title": "Réduction du temps d'étude", "desc": "Processus complet sur une seule plateforme, sans naviguer entre plusieurs systèmes" },
-      { "title": "Standardisation des critères d'analyse", "desc": "Évaluation et comparaison des sites selon des critères homogènes" },
-      { "title": "Amélioration de l'efficacité comparative", "desc": "Analyse simultanée de nombreux sites pour sélectionner l'emplacement optimal" },
-      { "title": "Réduction du risque projet", "desc": "Minimisation de l'incertitude d'investissement grâce à des décisions fondées sur les données" }
+      { "title": "Études plus rapides", "desc": "Processus complet sur une seule plateforme, sans naviguer entre plusieurs systèmes" },
+      { "title": "Décisions standardisées", "desc": "Évaluation et comparaison des sites selon des critères homogènes" },
+      { "title": "Comparaison simultanée", "desc": "Analyse de plusieurs sites candidats en parallèle sur la carte" },
+      { "title": "Risque d'investissement réduit", "desc": "Filtrage par les données avant tout engagement sur le terrain" }
     ],
     "ctaTitle": "Validez vos sites solaires par les données",
-    "ctaDesc": "Découvrez à travers une démonstration de SolarScope comment l'analyse de sites candidats se transforme.",
+    "ctaDesc": "Découvrez comment SolarScope transforme la sélection de sites candidats.",
     "ctaDemo": "Demander une démo"
   },
   "pvIntelligence": {
