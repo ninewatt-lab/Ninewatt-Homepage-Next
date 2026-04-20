@@ -97,6 +97,7 @@ export default async function SolarSitePage() {
                 height={1080}
                 className="h-full w-full object-cover object-top"
                 priority
+                unoptimized
               />
             </div>
           </div>
@@ -122,6 +123,7 @@ export default async function SolarSitePage() {
                       width={640}
                       height={360}
                       className="h-full w-full object-cover object-top transition-transform duration-500 ease-out group-hover/img:scale-105"
+                      unoptimized
                     />
                   </div>
                 </div>
