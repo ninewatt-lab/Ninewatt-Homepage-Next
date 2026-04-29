@@ -463,7 +463,7 @@ export default function Header() {
       >
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
           <Link href="/" className={`transition-colors ${isTransparent ? "text-white" : "text-foreground"}`}>
-            <NinewattLogo height={36} width="auto" />
+            <NinewattLogo height={44} width="auto" />
           </Link>
 
           {/* Desktop Nav */}
@@ -477,12 +477,12 @@ export default function Header() {
               >
                 <Link
                   href={item.href}
-                  className={`inline-flex items-center gap-1 rounded-lg px-4 py-2 text-sm font-medium transition-colors duration-200 ${
+                  className={`inline-flex items-center gap-1 rounded-lg px-4 py-2 text-lg font-medium transition-colors duration-200 ${
                     activeMenu === item.labelKey
                       ? "text-foreground bg-surface"
                       : isTransparent
-                        ? "text-white/80 hover:text-white"
-                        : "text-muted hover:text-foreground"
+                        ? "text-white hover:text-white [text-shadow:0_1px_2px_rgba(0,0,0,0.4)]"
+                        : "text-foreground hover:text-primary"
                   }`}
                 >
                   {t(item.labelKey)}
@@ -506,7 +506,7 @@ export default function Header() {
               <div ref={langRef} className="relative">
                 <button
                   onClick={() => setLangOpen(!langOpen)}
-                  className={`flex h-8 items-center gap-1 rounded-full px-2.5 text-xs font-semibold transition-colors ${isTransparent ? "text-white/80 hover:text-white" : "text-muted hover:text-foreground"}`}
+                  className={`flex h-8 items-center gap-1 rounded-full px-2.5 text-lg font-semibold transition-colors ${isTransparent ? "text-white hover:text-white [text-shadow:0_1px_2px_rgba(0,0,0,0.4)]" : "text-foreground hover:text-primary"}`}
                 >
                   {localeLabels[locale].short}
                   <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.5" className={`h-3 w-3 transition-transform ${langOpen ? "rotate-180" : ""}`}>
@@ -531,11 +531,11 @@ export default function Header() {
               {/* Theme Toggle */}
               <button
                 onClick={toggleTheme}
-                className={`flex h-8 w-8 items-center justify-center rounded-full transition-colors ${isTransparent ? "text-white/80 hover:text-white" : "text-muted hover:text-foreground"}`}
+                className={`flex h-10 w-10 items-center justify-center rounded-full transition-colors ${isTransparent ? "text-white hover:text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]" : "text-foreground hover:text-primary"}`}
                 aria-label={t("nav.themeToggle")}
               >
                 {theme === "dark" ? (
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <circle cx="12" cy="12" r="5" />
                     <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
                     <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
@@ -543,7 +543,7 @@ export default function Header() {
                     <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
                   </svg>
                 ) : (
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
                   </svg>
                 )}
@@ -551,7 +551,7 @@ export default function Header() {
 
               <Link
                 href="/contact"
-                className="rounded-full bg-primary px-5 py-2 text-sm font-medium text-white transition-colors hover:bg-primary-dark"
+                className="rounded-full bg-primary px-6 py-2.5 text-base font-medium text-white transition-colors hover:bg-primary-dark"
               >
                 {t("nav.contact")}
               </Link>
@@ -562,11 +562,11 @@ export default function Header() {
           <div className="flex items-center gap-3 lg:hidden">
             <button
               onClick={toggleTheme}
-              className={`flex h-8 w-8 items-center justify-center rounded-full transition-colors ${isTransparent ? "text-white/80 hover:text-white" : "text-muted hover:text-foreground"}`}
+              className={`flex h-10 w-10 items-center justify-center rounded-full transition-colors ${isTransparent ? "text-white hover:text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]" : "text-foreground hover:text-primary"}`}
               aria-label={t("nav.themeToggle")}
             >
               {theme === "dark" ? (
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <circle cx="12" cy="12" r="5" />
                   <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
                   <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
@@ -574,7 +574,7 @@ export default function Header() {
                   <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
                 </svg>
               ) : (
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
                 </svg>
               )}
@@ -624,7 +624,7 @@ export default function Header() {
                         }`}
                       >
                         {section.titleKey && (
-                          <h3 className="mb-3 text-xs font-semibold uppercase tracking-widest text-muted/70">
+                          <h3 className="mb-3 text-sm font-semibold uppercase tracking-widest text-muted/70">
                             {t(section.titleKey)}
                           </h3>
                         )}
@@ -636,19 +636,19 @@ export default function Header() {
                                   {subItem.icon}
                                 </span>
                                 <div className="flex flex-col">
-                                  <span className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors flex items-center gap-1">
+                                  <span className="text-base font-semibold text-foreground group-hover:text-primary transition-colors flex items-center gap-1">
                                     {resolveLabel(subItem.labelKey)}
                                     {subItem.external ? (
-                                      <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-3 w-3 opacity-40 group-hover:opacity-100 transition-opacity">
+                                      <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-3.5 w-3.5 opacity-40 group-hover:opacity-100 transition-opacity">
                                         <path d="M3.5 2H10V8.5M10 2L2 10" />
                                       </svg>
                                     ) : (
-                                      <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-3 w-3 opacity-0 -translate-x-1 transition-all group-hover:opacity-100 group-hover:translate-x-0">
+                                      <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-3.5 w-3.5 opacity-0 -translate-x-1 transition-all group-hover:opacity-100 group-hover:translate-x-0">
                                         <path d="M4 2L8 6L4 10" />
                                       </svg>
                                     )}
                                   </span>
-                                  <span className="text-xs leading-relaxed text-muted">
+                                  <span className="text-sm leading-relaxed text-muted">
                                     {t(subItem.descKey)}
                                   </span>
                                 </div>
@@ -685,7 +685,7 @@ export default function Header() {
                       <Link
                         href={item.href}
                         onClick={() => setActiveMenu(null)}
-                        className="group inline-flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-medium text-primary transition-colors hover:bg-primary hover:text-white"
+                        className="group inline-flex items-center gap-1.5 rounded-lg px-4 py-2 text-base font-medium text-primary transition-colors hover:bg-primary hover:text-white"
                       >
                         {t(item.viewAllKey)}
                         <svg
@@ -707,10 +707,10 @@ export default function Header() {
                           className="group flex items-center gap-2 rounded-lg border border-border px-4 py-2.5 transition-colors hover:border-primary/30 hover:bg-primary/5 w-full"
                         >
                           <div className="flex flex-col flex-1">
-                            <span className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors">
+                            <span className="text-base font-semibold text-foreground group-hover:text-primary transition-colors">
                               {t("companyMenu.energy")}
                             </span>
-                            <span className="text-xs text-muted">{t("companyMenu.energyDesc")}</span>
+                            <span className="text-sm text-muted">{t("companyMenu.energyDesc")}</span>
                           </div>
                           <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-3.5 w-3.5 text-muted group-hover:text-primary transition-colors shrink-0">
                             <path d="M3.5 2H10V8.5M10 2L2 10" />
