@@ -33,15 +33,15 @@ export default async function GlobalPage() {
         <div className="mx-auto max-w-5xl space-y-12">
           {countries.map((c) => (
             <div key={c.country} className="border-l-2 border-primary pl-6">
-              <h2 className="text-lg font-bold">
+              <h2 className="text-xl font-bold">
                 {c.country}{" "}
-                <span className="text-sm font-normal text-muted">{c.flag}</span>
+                <span className="text-base font-normal text-muted">{c.flag}</span>
               </h2>
               <ul className="mt-4 space-y-2">
                 {c.items.map((item, i) => (
                   <li
                     key={i}
-                    className="text-sm leading-relaxed text-muted"
+                    className="text-base leading-relaxed text-muted"
                   >
                     {item}
                   </li>

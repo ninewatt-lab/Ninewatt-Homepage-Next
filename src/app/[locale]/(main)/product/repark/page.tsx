@@ -93,7 +93,7 @@ export default async function REparkPage() {
 
       {/* Service features — inline tags */}
       <section className="border-b border-border px-6 py-10">
-        <div className="mx-auto flex max-w-5xl flex-wrap gap-3 text-sm">
+        <div className="mx-auto flex max-w-5xl flex-wrap gap-3 text-base">
           {tags.map((item, i) => (
             <span key={i} className="rounded-full border border-border px-4 py-2">
               {item}
@@ -106,14 +106,14 @@ export default async function REparkPage() {
       <section className="px-6 py-24">
         <div className="mx-auto max-w-5xl">
           <h2 className="text-2xl font-bold">{t("repark.serviceFlow")}</h2>
-          <p className="mt-3 text-muted">{t("repark.serviceFlowDesc")}</p>
+          <p className="mt-3 text-base text-muted">{t("repark.serviceFlowDesc")}</p>
           <div className="mt-10 space-y-10">
             {flows.map((item, i) => (
               <div key={i} className="md:flex md:items-baseline md:gap-8">
-                <h3 className="md:w-32 shrink-0 text-lg font-bold text-primary">
+                <h3 className="md:w-32 shrink-0 text-xl font-bold text-primary">
                   {item.role}
                 </h3>
-                <p className="mt-1 md:mt-0 text-sm text-muted">{item.flow}</p>
+                <p className="mt-1 md:mt-0 text-base text-muted">{item.flow}</p>
               </div>
             ))}
           </div>
@@ -124,12 +124,12 @@ export default async function REparkPage() {
       <section className="border-t border-border bg-surface px-6 py-24">
         <div className="mx-auto max-w-5xl">
           <h2 className="text-2xl font-bold">{t("repark.expansion")}</h2>
-          <p className="mt-3 text-muted">
+          <p className="mt-3 text-base text-muted">
             {t("repark.expansionDesc")}
           </p>
           <ul className="mt-8 space-y-3">
             {expansionItems.map((item, i) => (
-              <li key={i} className="border-l-2 border-primary pl-4 text-sm">
+              <li key={i} className="border-l-2 border-primary pl-4 text-base">
                 {item}
               </li>
             ))}
@@ -143,27 +143,27 @@ export default async function REparkPage() {
           <h2 className="text-2xl font-bold">{t("repark.caseStudy")}</h2>
           <div className="mt-8 rounded-xl border border-border p-6 md:p-8">
             <h3 className="text-xl font-bold">{t("repark.caseTitle")}</h3>
-            <p className="mt-2 text-sm text-muted">
+            <p className="mt-2 text-base text-muted">
               {t("repark.casePartners")}
             </p>
             <div className="mt-6 grid gap-6 md:grid-cols-2">
               <div>
-                <p className="text-sm text-muted">{t("repark.phase1Label")}</p>
+                <p className="text-base text-muted">{t("repark.phase1Label")}</p>
                 <p className="mt-1 text-2xl font-bold text-primary">{t("repark.phase1Value")}</p>
               </div>
               <div>
-                <p className="text-sm text-muted">{t("repark.phase2Label")}</p>
+                <p className="text-base text-muted">{t("repark.phase2Label")}</p>
                 <p className="mt-1 text-2xl font-bold text-primary">{t("repark.phase2Value")}</p>
               </div>
             </div>
             <div className="mt-6 space-y-3">
               <div className="md:flex md:gap-4">
-                <span className="text-sm font-medium md:w-20 shrink-0">2023</span>
-                <p className="text-sm text-muted">{t("repark.timeline2023")}</p>
+                <span className="text-base font-medium md:w-20 shrink-0">2023</span>
+                <p className="text-base text-muted">{t("repark.timeline2023")}</p>
               </div>
               <div className="md:flex md:gap-4">
-                <span className="text-sm font-medium md:w-20 shrink-0">2024~</span>
-                <p className="text-sm text-muted">{t("repark.timeline2024")}</p>
+                <span className="text-base font-medium md:w-20 shrink-0">2024~</span>
+                <p className="text-base text-muted">{t("repark.timeline2024")}</p>
               </div>
             </div>
           </div>
@@ -178,7 +178,7 @@ export default async function REparkPage() {
         <div className="mx-auto max-w-5xl md:flex md:items-center md:justify-between">
           <div>
             <h2 className="text-2xl font-bold">{t("repark.ctaTitle")}</h2>
-            <p className="mt-2 text-muted">
+            <p className="mt-2 text-base text-muted">
               {t("repark.ctaDesc")}
             </p>
           </div>

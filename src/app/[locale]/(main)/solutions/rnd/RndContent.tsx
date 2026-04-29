@@ -151,7 +151,7 @@ function ProjectRow({ project, index, labels }: { project: RndProject; index: nu
 
                   <div className="grid gap-4 md:grid-cols-2 text-sm">
                     <div className="md:col-span-2">
-                      <h4 className="font-semibold text-xs uppercase tracking-wider text-muted mb-1.5">
+                      <h4 className="font-semibold text-sm uppercase tracking-wider text-muted mb-1.5">
                         {labels.goal}
                       </h4>
                       <p className="text-foreground/90 leading-relaxed">
@@ -161,7 +161,7 @@ function ProjectRow({ project, index, labels }: { project: RndProject; index: nu
 
                     {project.detail!.contents.length > 0 && (
                       <div className="md:col-span-2">
-                        <h4 className="font-semibold text-xs uppercase tracking-wider text-muted mb-1.5">
+                        <h4 className="font-semibold text-sm uppercase tracking-wider text-muted mb-1.5">
                           {labels.contents}
                         </h4>
                         <ul className="space-y-1">
@@ -177,15 +177,15 @@ function ProjectRow({ project, index, labels }: { project: RndProject; index: nu
 
                     <div className="flex flex-wrap gap-x-8 gap-y-2 md:col-span-2 pt-2 border-t border-border/50">
                       <div>
-                        <span className="text-xs text-muted">{labels.category}</span>
+                        <span className="text-sm text-muted">{labels.category}</span>
                         <p className="text-foreground/90">{project.detail!.category}</p>
                       </div>
                       <div>
-                        <span className="text-xs text-muted">{labels.department}</span>
+                        <span className="text-sm text-muted">{labels.department}</span>
                         <p className="text-foreground/90">{project.detail!.department}</p>
                       </div>
                       <div>
-                        <span className="text-xs text-muted">{labels.budget}</span>
+                        <span className="text-sm text-muted">{labels.budget}</span>
                         <p className="text-foreground/90">{project.detail!.budget}</p>
                       </div>
                     </div>
@@ -197,7 +197,7 @@ function ProjectRow({ project, index, labels }: { project: RndProject; index: nu
                           target="_blank"
                           rel="noopener noreferrer"
                           onClick={(e) => e.stopPropagation()}
-                          className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
+                          className="inline-flex items-center gap-1.5 text-base font-medium text-primary hover:underline"
                         >
                           <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101" />
@@ -224,7 +224,7 @@ function ProjectRow({ project, index, labels }: { project: RndProject; index: nu
 function ProjectTable({ projects, headerLabels, detailLabels }: { projects: RndProject[]; headerLabels: { agency: string; research: string; lead: string; period: string }; detailLabels: { goal: string; contents: string; category: string; department: string; budget: string } }) {
   return (
     <div className="overflow-x-auto">
-      <table className="w-full min-w-175 table-fixed text-sm">
+      <table className="w-full min-w-175 table-fixed text-base">
         <colgroup>
           <col className="w-[18%]" />
           <col className="w-[53%]" />
@@ -267,7 +267,7 @@ export function RndContent({ projects }: { projects: RndProject[] }) {
             {t("rnd.subtitle")} — {projects.length}{t("rnd.count")} ({t("rnd.inProgress")}{" "}
             {inProgress.length}, {t("rnd.completed")} {completed.length})
           </p>
-          <p className="mt-2 text-sm text-muted">
+          <p className="mt-2 text-base text-muted">
             {t("rnd.clickHint")}
           </p>
         </div>
@@ -276,7 +276,7 @@ export function RndContent({ projects }: { projects: RndProject[] }) {
       {/* In Progress */}
       <section className="px-6 py-20">
         <div className="mx-auto max-w-5xl">
-          <h2 className="text-lg font-bold">
+          <h2 className="text-xl font-bold">
             {t("rnd.inProgress")} <span className="text-muted">({inProgress.length}{t("rnd.count")})</span>
           </h2>
           <div className="mt-6">
@@ -288,7 +288,7 @@ export function RndContent({ projects }: { projects: RndProject[] }) {
       {/* Completed */}
       <section className="border-t border-border px-6 py-20">
         <div className="mx-auto max-w-5xl">
-          <h2 className="text-lg font-bold">
+          <h2 className="text-xl font-bold">
             {t("rnd.completed")} <span className="text-muted">({completed.length}{t("rnd.count")})</span>
           </h2>
           <div className="mt-6">
@@ -301,7 +301,7 @@ export function RndContent({ projects }: { projects: RndProject[] }) {
       <section className="border-t border-border px-6 py-20">
         <div className="mx-auto flex max-w-5xl flex-col items-center text-center">
           <h2 className="text-2xl font-bold tracking-tight">{t("rnd.ctaTitle")}</h2>
-          <p className="mt-3 text-muted">
+          <p className="mt-3 text-base text-muted">
             {t("rnd.ctaDesc")}
           </p>
           <Link

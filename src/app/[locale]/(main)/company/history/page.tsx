@@ -57,10 +57,10 @@ export default async function HistoryPage() {
                 <div className="space-y-3">
                   {historyByYear[year].map((item) => (
                     <div key={item.id} className="flex gap-3">
-                      <span className="w-18 shrink-0 tabular-nums text-sm text-muted">
+                      <span className="w-18 shrink-0 tabular-nums text-base text-muted">
                         {item.date}
                       </span>
-                      <span className="text-sm">{item.content}</span>
+                      <span className="text-base">{item.content}</span>
                     </div>
                   ))}
                 </div>

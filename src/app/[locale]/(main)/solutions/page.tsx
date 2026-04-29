@@ -93,7 +93,7 @@ export default async function SolutionsPage() {
         <section className="border-b border-border px-6 py-16">
           <div className="mx-auto max-w-5xl">
             <h2 className="text-2xl font-bold">{t("overview.serviceLinksTitle")}</h2>
-            <p className="mt-2 text-sm text-muted">{t("overview.serviceLinksDesc")}</p>
+            <p className="mt-2 text-base text-muted">{t("overview.serviceLinksDesc")}</p>
             <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
               {serviceLinks.map((link) => (
                 <Link
@@ -109,11 +109,11 @@ export default async function SolutionsPage() {
                       <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
                     </svg>
                   </div>
-                  <p className="mt-4 text-sm font-semibold tracking-tight">{link.label}</p>
-                  <p className="mt-1.5 flex-1 text-[13px] leading-relaxed text-muted">
+                  <p className="mt-4 text-base font-semibold tracking-tight">{link.label}</p>
+                  <p className="mt-1.5 flex-1 text-sm leading-relaxed text-muted">
                     {link.desc}
                   </p>
-                  <span className="mt-4 inline-flex items-center gap-1 text-xs font-semibold text-primary opacity-0 transition-opacity group-hover:opacity-100">
+                  <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-primary opacity-0 transition-opacity group-hover:opacity-100">
                     {t("overview.learnMore")}
                     <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
@@ -131,7 +131,7 @@ export default async function SolutionsPage() {
         <section className="border-b border-border px-6 py-16">
           <div className="mx-auto max-w-5xl">
             <h2 className="text-2xl font-bold">{t("overview.platformTitle")}</h2>
-            <p className="mt-2 text-sm text-muted">{t("overview.platformDesc")}</p>
+            <p className="mt-2 text-base text-muted">{t("overview.platformDesc")}</p>
             <div className="mt-8 grid gap-6 sm:grid-cols-3">
               {platformProducts.map((product) => (
                 <Link
@@ -140,18 +140,18 @@ export default async function SolutionsPage() {
                   className="group relative rounded-xl border border-border p-6 transition-all duration-300 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5"
                 >
                   {product.badge && (
-                    <span className="absolute right-4 top-4 rounded-full bg-primary/10 px-2.5 py-0.5 text-[10px] font-bold text-primary">
+                    <span className="absolute right-4 top-4 rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-bold text-primary">
                       {product.badge}
                     </span>
                   )}
-                  <p className="text-xs font-semibold uppercase tracking-wider text-primary">
+                  <p className="text-sm font-semibold uppercase tracking-wider text-primary">
                     {product.name}
                   </p>
-                  <p className="mt-1 text-[11px] text-muted">{product.tagline}</p>
-                  <p className="mt-3 text-sm leading-relaxed text-muted">
+                  <p className="mt-1 text-[13px] text-muted">{product.tagline}</p>
+                  <p className="mt-3 text-base leading-relaxed text-muted">
                     {tp(`list.${product.descKey}`)}
                   </p>
-                  <span className="mt-4 inline-flex items-center gap-1 text-xs font-semibold text-primary opacity-0 transition-opacity group-hover:opacity-100">
+                  <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-primary opacity-0 transition-opacity group-hover:opacity-100">
                     {t("overview.learnMore")}
                     <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
@@ -176,7 +176,7 @@ export default async function SolutionsPage() {
                     <div className="flex size-9 items-center justify-center rounded-full bg-primary text-sm font-bold text-white">
                       {idx + 1}
                     </div>
-                    <span className="max-w-[100px] text-center text-[11px] font-medium leading-tight text-muted">
+                    <span className="max-w-[100px] text-center text-[13px] font-medium leading-tight text-muted">
                       {sol.title}
                     </span>
                   </div>
@@ -210,14 +210,14 @@ export default async function SolutionsPage() {
         <section className="border-t border-border px-6 py-16">
           <div className="mx-auto max-w-5xl md:flex md:items-center md:justify-between">
             <div>
-              <h2 className="text-xl font-bold">{t("overview.ctaTitle")}</h2>
-              <p className="mt-1 text-sm text-muted">
+              <h2 className="text-2xl font-bold">{t("overview.ctaTitle")}</h2>
+              <p className="mt-1 text-base text-muted">
                 {t("overview.ctaDesc")}
               </p>
             </div>
             <Link
               href="/contact"
-              className="mt-6 inline-block rounded-full bg-primary px-8 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-dark md:mt-0"
+              className="mt-6 inline-block rounded-full bg-primary px-8 py-3 text-base font-semibold text-white transition-colors hover:bg-primary-dark md:mt-0"
             >
               {t("overview.ctaButton")}
             </Link>

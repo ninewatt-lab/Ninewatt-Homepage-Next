@@ -85,11 +85,11 @@ export default function SolutionCards({ solutions }: { solutions: Solution[] }) 
                 </div>
                 <div className="min-w-0 flex-1">
                   {/* Step label */}
-                  <p className="text-xs font-semibold uppercase tracking-widest text-primary">
+                  <p className="text-sm font-semibold uppercase tracking-widest text-primary">
                     Step {String(idx + 1).padStart(2, "0")}
                   </p>
                   {/* Title */}
-                  <h3 className="mt-1 text-lg font-bold tracking-tight">{sol.title}</h3>
+                  <h3 className="mt-1 text-xl font-bold tracking-tight">{sol.title}</h3>
                 </div>
                 {/* Expand indicator */}
                 <svg
@@ -104,7 +104,7 @@ export default function SolutionCards({ solutions }: { solutions: Solution[] }) 
               </div>
 
               {/* Description */}
-              <p className="mt-3 text-sm leading-relaxed text-muted">{sol.desc}</p>
+              <p className="mt-3 text-base leading-relaxed text-muted">{sol.desc}</p>
 
               {/* Expandable detail items */}
               <div
@@ -115,7 +115,7 @@ export default function SolutionCards({ solutions }: { solutions: Solution[] }) 
                 <div className="overflow-hidden">
                   <ul className="space-y-2 border-t border-border/60 pt-4">
                     {sol.items.map((item) => (
-                      <li key={item} className="flex items-start gap-2 text-sm text-muted">
+                      <li key={item} className="flex items-start gap-2 text-base text-muted">
                         <span className="mt-1.5 block size-1.5 shrink-0 rounded-full bg-primary/60" />
                         {item}
                       </li>

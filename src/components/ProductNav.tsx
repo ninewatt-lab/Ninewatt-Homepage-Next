@@ -49,7 +49,7 @@ export default function ProductNav() {
   ];
 
   return (
-    <nav className={`subnav sticky top-16 z-40 border-b border-border bg-background/85 backdrop-blur-md transition-transform duration-300 ${visible ? "translate-y-0" : "-translate-y-full"}`}>
+    <nav className={`subnav sticky top-16 z-40 border-b border-border bg-background/90 backdrop-blur-xl transition-transform duration-300 ${visible ? "translate-y-0" : "-translate-y-full"}`}>
       <div className="mx-auto flex max-w-7xl items-center overflow-x-auto px-6">
         {groups.map((group, gi) => (
           <div key={gi} className="flex items-center">

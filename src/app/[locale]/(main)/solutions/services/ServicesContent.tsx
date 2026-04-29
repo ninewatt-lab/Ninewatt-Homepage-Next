@@ -140,7 +140,7 @@ function ServiceRow({ project, index }: { project: ServiceProject; index: number
                   </div>
 
                   {/* Description */}
-                  <p className="text-sm text-foreground/90 leading-relaxed max-w-3xl">
+                  <p className="text-base text-foreground/90 leading-relaxed max-w-3xl">
                     {project.detail!.description}
                   </p>
 
@@ -151,7 +151,7 @@ function ServiceRow({ project, index }: { project: ServiceProject; index: number
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={(e) => e.stopPropagation()}
-                      className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
+                      className="mt-4 inline-flex items-center gap-1.5 text-base font-medium text-primary hover:underline"
                     >
                       <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101" />
@@ -192,7 +192,7 @@ export function ServicesContent({ projects }: { projects: ServiceProject[] }) {
             })}
           </p>
           {hasDetailProjects && (
-            <p className="mt-2 text-sm text-muted">
+            <p className="mt-2 text-base text-muted">
               {t("services.clickHint")}
             </p>
           )}
@@ -203,7 +203,7 @@ export function ServicesContent({ projects }: { projects: ServiceProject[] }) {
       <section className="px-6 py-20">
         <div className="mx-auto max-w-5xl">
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[600px] text-sm">
+            <table className="w-full min-w-[600px] text-base">
               <thead>
                 <tr className="border-b border-border text-left">
                   <th className="py-3 pr-4 font-semibold text-muted">{headers.client}</th>
@@ -225,7 +225,7 @@ export function ServicesContent({ projects }: { projects: ServiceProject[] }) {
       <section className="border-t border-border px-6 py-20">
         <div className="mx-auto flex max-w-5xl flex-col items-center text-center">
           <h2 className="text-2xl font-bold tracking-tight">{t("services.ctaTitle")}</h2>
-          <p className="mt-3 text-muted">
+          <p className="mt-3 text-base text-muted">
             {t("services.ctaText")}
           </p>
           <Link

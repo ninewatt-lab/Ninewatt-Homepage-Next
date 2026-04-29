@@ -50,14 +50,14 @@ export default async function CompanyPage({
       <section className="px-6 py-20">
         <div className="mx-auto max-w-5xl">
           <h2 className="text-2xl font-bold">{t("about.vision")}</h2>
-          <p className="mt-4 max-w-3xl leading-relaxed text-muted">
+          <p className="mt-4 max-w-3xl text-base leading-relaxed text-muted">
             {t("about.visionDesc")}
           </p>
 
-          <dl className="mt-12 grid grid-cols-2 gap-x-6 gap-y-6 text-sm md:flex md:justify-between">
+          <dl className="mt-12 grid grid-cols-2 gap-x-6 gap-y-6 text-base md:flex md:justify-between">
             {companyInfo.map((item) => (
               <div key={item.label}>
-                <dt className="text-xs text-muted">{item.label}</dt>
+                <dt className="text-sm text-muted">{item.label}</dt>
                 <dd className="mt-1 font-semibold">{item.value}</dd>
               </div>
             ))}
@@ -68,8 +68,8 @@ export default async function CompanyPage({
           <div className="space-y-3">
             {(t.raw("about.affiliations") as Array<{ label: string; items: string[] }>).map((group) => (
               <div key={group.label} className="flex flex-col gap-2 sm:flex-row sm:items-baseline sm:gap-4">
-                <span className="w-28 shrink-0 text-xs font-semibold">{group.label}</span>
-                <p className="text-sm text-muted">{group.items.join(" · ")}</p>
+                <span className="w-28 shrink-0 text-sm font-semibold">{group.label}</span>
+                <p className="text-base text-muted">{group.items.join(" · ")}</p>
               </div>
             ))}
           </div>
@@ -80,19 +80,19 @@ export default async function CompanyPage({
       <section className="border-t border-border px-6 py-20">
         <div className="mx-auto max-w-5xl">
           <h2 className="text-2xl font-bold">{t("about.organization")}</h2>
-          <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted">
+          <p className="mt-3 max-w-3xl text-base leading-relaxed text-muted">
             {t("about.orgSubtitle")}
           </p>
 
           <div className="mt-10 grid gap-px overflow-hidden rounded-lg border border-border bg-border sm:grid-cols-2">
             {orgTranslations.map((org) => (
               <div key={org.name} className="bg-background p-6">
-                <h3 className="font-semibold">{org.name}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted">
+                <h3 className="text-base font-semibold">{org.name}</h3>
+                <p className="mt-2 text-base leading-relaxed text-muted">
                   {org.desc}
                 </p>
                 {org.tags && org.tags.length > 0 && (
-                  <p className="mt-3 text-xs text-muted/70">
+                  <p className="mt-3 text-sm text-muted/70">
                     {org.tags.join(" · ")}
                   </p>
                 )}
@@ -106,7 +106,7 @@ export default async function CompanyPage({
       <section className="border-t border-border px-6 py-20">
         <div className="mx-auto max-w-5xl">
           <h2 className="text-2xl font-bold">{t("about.location")}</h2>
-          <table className="mt-8 w-full text-sm">
+          <table className="mt-8 w-full text-base">
             <tbody>
               <tr className="border-b border-border">
                 <td className="py-4 pr-6 font-semibold align-top whitespace-nowrap">{t("about.hqLabel")}</td>
@@ -129,14 +129,14 @@ export default async function CompanyPage({
       <section className="border-t border-border px-6 py-16">
         <div className="mx-auto max-w-5xl md:flex md:items-center md:justify-between">
           <div>
-            <h2 className="text-xl font-bold">{t("about.ctaTitle")}</h2>
-            <p className="mt-1 text-sm text-muted">
+            <h2 className="text-2xl font-bold">{t("about.ctaTitle")}</h2>
+            <p className="mt-1 text-base text-muted">
               {t("about.ctaDesc")}
             </p>
           </div>
           <Link
             href="/contact"
-            className="mt-6 inline-block rounded-lg border border-primary bg-primary px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary/90 md:mt-0"
+            className="mt-6 inline-block rounded-lg border border-primary bg-primary px-6 py-2.5 text-base font-semibold text-white transition-colors hover:bg-primary/90 md:mt-0"
           >
             {t("about.ctaButton")}
           </Link>
