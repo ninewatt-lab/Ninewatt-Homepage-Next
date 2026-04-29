@@ -68,7 +68,7 @@ function StatsSection() {
                 {stat.value}
                 {stat.unit && <span className="text-base font-medium text-zinc-400 ml-0.5">{stat.unit}</span>}
               </p>
-              <p className="mt-1.5 text-xs text-zinc-500 tracking-wide uppercase">{stat.label}</p>
+              <p className="mt-1.5 text-sm text-zinc-500 tracking-wide uppercase">{stat.label}</p>
             </div>
           ))}
         </div>
@@ -87,24 +87,24 @@ function OverviewSection() {
         <h2 className="mt-3 text-3xl font-bold text-zinc-900 dark:text-white">
           {t("title")}
         </h2>
-        <p className="mt-3 text-zinc-500 dark:text-zinc-400 max-w-xl">
+        <p className="mt-3 text-base text-zinc-500 dark:text-zinc-400 max-w-xl">
           {t("subtitle")}
         </p>
 
         <div className="mt-14 grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* PV Card */}
-          <div className="bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 p-8 hover:border-primary/50 transition-colors group">
+          <div className="h-full bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 p-8 hover:border-primary/50 transition-colors group">
             <p className="text-xs text-primary font-medium tracking-wider uppercase">Solar O&M</p>
             <h3 className="mt-2 text-xl font-bold text-zinc-900 dark:text-white">
               {t("pvCard.title")}
             </h3>
-            <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">
+            <p className="text-base text-zinc-500 dark:text-zinc-400 leading-relaxed">
               {t("pvCard.description")}
             </p>
             <ul className="mt-5 space-y-2">
               {[0, 1, 2].map((i) => (
-                <li key={i} className="flex items-start gap-2.5 text-sm text-zinc-600 dark:text-zinc-300">
-                  <span className="w-1 h-1 rounded-full bg-primary shrink-0 mt-2" />
+                <li key={i} className="flex items-start gap-2.5 text-base text-zinc-600 dark:text-zinc-300">
+                  <span className="w-1 h-1 rounded-full bg-primary shrink-0 mt-2.5" />
                   {t(`pvCard.features.${i}`)}
                 </li>
               ))}
@@ -118,18 +118,18 @@ function OverviewSection() {
           </div>
 
           {/* ESS Card */}
-          <div className="bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 p-8 hover:border-primary/50 transition-colors group">
+          <div className="h-full bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 p-8 hover:border-primary/50 transition-colors group">
             <p className="text-xs text-primary font-medium tracking-wider uppercase">ESS O&M</p>
             <h3 className="mt-2 text-xl font-bold text-zinc-900 dark:text-white">
               {t("essCard.title")}
             </h3>
-            <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">
+            <p className="text-base text-zinc-500 dark:text-zinc-400 leading-relaxed">
               {t("essCard.description")}
             </p>
             <ul className="mt-5 space-y-2">
               {[0, 1, 2].map((i) => (
-                <li key={i} className="flex items-start gap-2.5 text-sm text-zinc-600 dark:text-zinc-300">
-                  <span className="w-1 h-1 rounded-full bg-primary shrink-0 mt-2" />
+                <li key={i} className="flex items-start gap-2.5 text-base text-zinc-600 dark:text-zinc-300">
+                  <span className="w-1 h-1 rounded-full bg-primary shrink-0 mt-2.5" />
                   {t(`essCard.features.${i}`)}
                 </li>
               ))}
@@ -157,7 +157,7 @@ function SynergySection() {
         <h2 className="mt-3 text-3xl font-bold text-zinc-900 dark:text-white">
           {t("title")}
         </h2>
-        <p className="mt-3 text-zinc-500 dark:text-zinc-400 max-w-xl">
+        <p className="mt-3 text-base text-zinc-500 dark:text-zinc-400 max-w-xl">
           {t("subtitle")}
         </p>
 
@@ -165,13 +165,13 @@ function SynergySection() {
           {[0, 1, 2, 3].map((i) => (
             <div
               key={i}
-              className="bg-white dark:bg-zinc-900 p-8 hover:bg-zinc-50 dark:hover:bg-zinc-800/60 transition-colors"
+              className="h-full bg-white dark:bg-zinc-900 p-8 hover:bg-zinc-50 dark:hover:bg-zinc-800/60 transition-colors"
             >
               <span className="text-xs text-zinc-400 font-mono">0{i + 1}</span>
               <h3 className="mt-3 text-base font-semibold text-zinc-900 dark:text-white">
                 {t(`items.${i}.title`)}
               </h3>
-              <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">
+              <p className="mt-2 text-base text-zinc-500 dark:text-zinc-400 leading-relaxed">
                 {t(`items.${i}.description`)}
               </p>
             </div>
@@ -192,7 +192,7 @@ function ProcessSection() {
         <h2 className="mt-3 text-3xl font-bold text-zinc-900 dark:text-white">
           {t("title")}
         </h2>
-        <p className="mt-3 text-zinc-500 dark:text-zinc-400 max-w-lg">
+        <p className="mt-3 text-base text-zinc-500 dark:text-zinc-400 max-w-lg">
           {t("subtitle")}
         </p>
 
@@ -207,7 +207,7 @@ function ProcessSection() {
                 <h3 className="mt-4 text-base font-semibold text-zinc-900 dark:text-white">
                   {t(`steps.${i}.title`)}
                 </h3>
-                <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-500 leading-relaxed">
+                <p className="mt-2 text-base text-zinc-500 dark:text-zinc-500 leading-relaxed">
                   {t(`steps.${i}.description`)}
                 </p>
               </div>
@@ -230,7 +230,7 @@ function CTASection() {
             <h2 className="text-2xl sm:text-3xl font-bold text-zinc-900 dark:text-white">
               {t("title")}
             </h2>
-            <p className="mt-3 text-zinc-500 dark:text-zinc-400 max-w-md whitespace-pre-line">
+            <p className="mt-3 text-base text-zinc-500 dark:text-zinc-400 max-w-md whitespace-pre-line">
               {t("subtitle")}
             </p>
           </div>
@@ -277,7 +277,7 @@ function ProductsSection() {
       <h3 className="text-base font-semibold text-zinc-900 dark:text-white group-hover:text-primary transition-colors">
         {t(`${product.key}.title`)}
       </h3>
-      <p className="mt-1.5 text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">
+      <p className="mt-1.5 text-base text-zinc-500 dark:text-zinc-400 leading-relaxed">
         {t(`${product.key}.description`)}
       </p>
     </Link>
@@ -290,14 +290,14 @@ function ProductsSection() {
         <h2 className="mt-3 text-3xl font-bold text-zinc-900 dark:text-white">
           {t("title")}
         </h2>
-        <p className="mt-3 text-zinc-500 dark:text-zinc-400 max-w-xl">
+        <p className="mt-3 text-base text-zinc-500 dark:text-zinc-400 max-w-xl">
           {t("subtitle")}
         </p>
 
         <div className="mt-14 grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* PV */}
           <div>
-            <h3 className="text-lg font-bold text-zinc-900 dark:text-white mb-5">PV (태양광)</h3>
+            <h3 className="text-xl font-bold text-zinc-900 dark:text-white mb-5">PV (태양광)</h3>
             <div className="grid grid-cols-1 gap-4">
               {pvProducts.map(renderCard)}
             </div>
@@ -305,7 +305,7 @@ function ProductsSection() {
 
           {/* ESS */}
           <div>
-            <h3 className="text-lg font-bold text-zinc-900 dark:text-white mb-5">ESS (에너지저장)</h3>
+            <h3 className="text-xl font-bold text-zinc-900 dark:text-white mb-5">ESS (에너지저장)</h3>
             <div className="grid grid-cols-1 gap-4">
               {essProducts.map(renderCard)}
             </div>
@@ -321,7 +321,7 @@ function ProductsSection() {
             <h3 className="text-base font-semibold text-zinc-900 dark:text-white group-hover:text-primary transition-colors">
               {t("ppa.title")}
             </h3>
-            <p className="mt-1.5 text-sm text-zinc-500 dark:text-zinc-400">
+            <p className="mt-1.5 text-base text-zinc-500 dark:text-zinc-400">
               {t("ppa.description")}
             </p>
           </Link>
@@ -332,7 +332,7 @@ function ProductsSection() {
             <h3 className="text-base font-semibold text-zinc-900 dark:text-white group-hover:text-primary transition-colors">
               {t("bems.title")}
             </h3>
-            <p className="mt-1.5 text-sm text-zinc-500 dark:text-zinc-400">
+            <p className="mt-1.5 text-base text-zinc-500 dark:text-zinc-400">
               {t("bems.description")}
             </p>
           </Link>

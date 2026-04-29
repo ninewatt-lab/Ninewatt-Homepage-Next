@@ -23,10 +23,10 @@ function ServicesDetailSection() {
                 0{i + 1}
               </span>
               <div className="border-t border-zinc-200 dark:border-zinc-800 pt-5">
-                <h3 className="text-lg font-semibold text-zinc-900 dark:text-white">
+                <h3 className="text-xl font-semibold text-zinc-900 dark:text-white">
                   {t(`items.${key}.title`)}
                 </h3>
-                <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">
+                <p className="mt-2 text-base text-zinc-500 dark:text-zinc-400 leading-relaxed">
                   {t(`items.${key}.description`)}
                 </p>
               </div>
@@ -49,7 +49,7 @@ function ProcessSection() {
         <h2 className="mt-3 text-3xl font-bold text-zinc-900 dark:text-white">
           {t("title")}
         </h2>
-        <p className="mt-3 text-zinc-500 dark:text-zinc-400">
+        <p className="mt-3 text-base text-zinc-500 dark:text-zinc-400">
           {t("subtitle")}
         </p>
 
@@ -64,7 +64,7 @@ function ProcessSection() {
                 <h3 className="text-base font-semibold text-zinc-900 dark:text-white">
                   {t(`steps.${i}.title`)}
                 </h3>
-                <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">
+                <p className="mt-1 text-base text-zinc-500 dark:text-zinc-400 leading-relaxed">
                   {t(`steps.${i}.description`)}
                 </p>
               </div>
@@ -104,7 +104,7 @@ export default function ESSServicesPage() {
             <h2 className="text-2xl font-bold text-white">
               맞춤 ESS O&M 플랜이 필요하신가요?
             </h2>
-            <p className="mt-2 text-zinc-400">
+            <p className="mt-2 text-base text-zinc-400">
               ESS 정보를 알려주시면, 최적의 플랜과 예상 비용을 안내해드립니다.
             </p>
           </div>

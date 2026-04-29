@@ -16,10 +16,10 @@ function FeaturesSection() {
               className="bg-white dark:bg-zinc-900 p-10 hover:bg-zinc-50 dark:hover:bg-zinc-800/60 transition-colors"
             >
               <span className="text-xs text-zinc-400 font-mono">0{i + 1}</span>
-              <h3 className="mt-4 text-lg font-semibold text-zinc-900 dark:text-white">
+              <h3 className="mt-4 text-xl font-semibold text-zinc-900 dark:text-white">
                 {t(`features.${key}.title`)}
               </h3>
-              <p className="mt-3 text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">
+              <p className="mt-3 text-base text-zinc-500 dark:text-zinc-400 leading-relaxed">
                 {t(`features.${key}.description`)}
               </p>
             </div>
@@ -47,7 +47,7 @@ function StatsRow() {
               <p className="text-2xl font-bold text-zinc-900 dark:text-white tracking-tight">
                 {stat.value}
               </p>
-              <p className="mt-1.5 text-xs text-zinc-500 tracking-wide">{stat.label}</p>
+              <p className="mt-1.5 text-sm text-zinc-500 tracking-wide">{stat.label}</p>
             </div>
           ))}
         </div>
@@ -68,7 +68,7 @@ function ScenariosSection() {
         <h2 className="mt-3 text-3xl font-bold text-zinc-900 dark:text-white">
           {t("title")}
         </h2>
-        <p className="mt-3 text-zinc-500 dark:text-zinc-400 max-w-lg">
+        <p className="mt-3 text-base text-zinc-500 dark:text-zinc-400 max-w-lg">
           실제 운영 중 AI가 감지한 사례를 소개합니다
         </p>
 
@@ -76,13 +76,13 @@ function ScenariosSection() {
           {scenarios.map((sc) => (
             <div
               key={sc}
-              className="bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 p-8"
+              className="h-full bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 p-8"
             >
               <h3 className="text-base font-semibold text-zinc-900 dark:text-white">
                 {t(`${sc}.title`)}
               </h3>
 
-              <dl className="mt-6 space-y-4 text-sm">
+              <dl className="mt-6 space-y-4 text-base">
                 <div>
                   <dt className="text-xs text-zinc-400 uppercase tracking-wider">상황</dt>
                   <dd className="mt-1 text-zinc-600 dark:text-zinc-300">
@@ -103,7 +103,7 @@ function ScenariosSection() {
                 </div>
               </dl>
 
-              <p className="mt-6 pt-5 border-t border-zinc-100 dark:border-zinc-800 text-sm font-medium text-zinc-900 dark:text-white">
+              <p className="mt-6 pt-5 border-t border-zinc-100 dark:border-zinc-800 text-base font-medium text-zinc-900 dark:text-white">
                 {t(`${sc}.loss`)}
               </p>
             </div>
@@ -140,7 +140,7 @@ function TechSpecSection() {
               <p className="text-xs text-zinc-400 uppercase tracking-wider">
                 {spec.label}
               </p>
-              <p className="mt-1 text-sm font-medium text-zinc-900 dark:text-white">
+              <p className="mt-1 text-base font-medium text-zinc-900 dark:text-white">
                 {spec.value}
               </p>
             </div>
@@ -181,7 +181,7 @@ export default function ESSMonitoringPage() {
             <h2 className="text-2xl font-bold text-zinc-900 dark:text-white">
               ESS 모니터링을 직접 체험해보세요
             </h2>
-            <p className="mt-2 text-zinc-500 dark:text-zinc-400">
+            <p className="mt-2 text-base text-zinc-500 dark:text-zinc-400">
               ESS 정보를 알려주시면 무료 진단 리포트를 제공해드립니다.
             </p>
           </div>

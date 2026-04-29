@@ -243,7 +243,7 @@ export default function EnergyContactPage() {
             {/* Contact Info Sidebar */}
             <div className="lg:col-span-2">
               <div className="bg-zinc-50 dark:bg-zinc-900 rounded-2xl p-8 border border-zinc-100 dark:border-zinc-800 sticky top-24">
-                <h3 className="text-lg font-semibold text-zinc-900 dark:text-white mb-6">
+                <h3 className="text-xl font-semibold text-zinc-900 dark:text-white mb-6">
                   연락처
                 </h3>
 
@@ -254,7 +254,7 @@ export default function EnergyContactPage() {
                     </svg>
                     <div>
                       <p className="text-sm text-zinc-500">전화</p>
-                      <a href="tel:070-8866-7226" className="text-sm font-medium text-zinc-900 dark:text-white hover:text-primary transition-colors">
+                      <a href="tel:070-8866-7226" className="text-base font-medium text-zinc-900 dark:text-white hover:text-primary transition-colors">
                         070-8866-7226
                       </a>
                     </div>
@@ -266,7 +266,7 @@ export default function EnergyContactPage() {
                     </svg>
                     <div>
                       <p className="text-sm text-zinc-500">이메일</p>
-                      <a href="mailto:ninewatt@ninewatt.com" className="text-sm font-medium text-zinc-900 dark:text-white hover:text-primary transition-colors">
+                      <a href="mailto:ninewatt@ninewatt.com" className="text-base font-medium text-zinc-900 dark:text-white hover:text-primary transition-colors">
                         ninewatt@ninewatt.com
                       </a>
                     </div>
@@ -279,11 +279,11 @@ export default function EnergyContactPage() {
                     </svg>
                     <div>
                       <p className="text-sm text-zinc-500">본사</p>
-                      <p className="text-sm font-medium text-zinc-900 dark:text-white">
+                      <p className="text-base font-medium text-zinc-900 dark:text-white">
                         인천광역시 연수구 컨벤시아대로 204, 104호 (22004)
                       </p>
                       <p className="text-sm text-zinc-500 mt-2">기업부설연구소</p>
-                      <p className="text-sm font-medium text-zinc-900 dark:text-white">
+                      <p className="text-base font-medium text-zinc-900 dark:text-white">
                         서울특별시 강남구 강남대로162길 22, 2·4F (06028)
                       </p>
                     </div>
@@ -292,10 +292,10 @@ export default function EnergyContactPage() {
 
                 <div className="mt-8 pt-6 border-t border-zinc-200 dark:border-zinc-700">
                   <p className="text-sm text-zinc-500 mb-3">상담 가능 시간</p>
-                  <p className="text-sm font-medium text-zinc-900 dark:text-white">
+                  <p className="text-base font-medium text-zinc-900 dark:text-white">
                     평일 09:00 ~ 18:00
                   </p>
-                  <p className="text-xs text-zinc-400 mt-1">
+                  <p className="text-sm text-zinc-400 mt-1">
                     긴급 장애 신고는 24시간 접수 가능
                   </p>
                 </div>

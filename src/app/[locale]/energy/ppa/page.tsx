@@ -59,7 +59,7 @@ export default function PPAPage() {
                   {stat.value}
                   {stat.unit && <span className="text-base font-medium text-zinc-400 ml-0.5">{stat.unit}</span>}
                 </p>
-                <p className="mt-1.5 text-xs text-zinc-500 tracking-wide uppercase">{stat.label}</p>
+                <p className="mt-1.5 text-sm text-zinc-500 tracking-wide uppercase">{stat.label}</p>
               </div>
             ))}
           </div>
@@ -73,7 +73,7 @@ export default function PPAPage() {
           <h2 className="mt-3 text-3xl font-bold text-zinc-900 dark:text-white">
             직접PPA란?
           </h2>
-          <p className="mt-4 text-zinc-500 dark:text-zinc-400 max-w-2xl leading-relaxed">
+          <p className="mt-4 text-base text-zinc-500 dark:text-zinc-400 max-w-2xl leading-relaxed">
             재생에너지를 이용하여 생산한 전기를 전력시장을 통하지 않고 전기사용자에게 직접 공급하는 제도입니다.
             전기사업법 제2조 제12의8에 근거하여 2022년 12월 전면 시행되었습니다.
           </p>
@@ -91,7 +91,7 @@ export default function PPAPage() {
                 <svg className="w-4 h-4 text-zinc-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
                 <span className="px-3 py-1.5 bg-zinc-200 dark:bg-zinc-700 rounded-lg text-sm font-medium text-zinc-700 dark:text-zinc-300">전기소비자</span>
               </div>
-              <p className="mt-4 text-sm text-zinc-500 dark:text-zinc-400">
+              <p className="mt-4 text-base text-zinc-500 dark:text-zinc-400">
                 발전사업자가 전력을 생산하여 전력시장을 거쳐 판매사업자(한전)에게 판매하고,
                 한전이 전기소비자에게 공급하는 구조
               </p>
@@ -107,7 +107,7 @@ export default function PPAPage() {
                 <svg className="w-4 h-4 text-primary shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
                 <span className="px-3 py-1.5 bg-zinc-100 dark:bg-zinc-800 rounded-lg text-sm font-medium text-zinc-700 dark:text-zinc-300">재생E 전기소비자</span>
               </div>
-              <p className="mt-4 text-sm text-zinc-600 dark:text-zinc-300">
+              <p className="mt-4 text-base text-zinc-600 dark:text-zinc-300">
                 재생에너지 발전사업자가 전력시장을 거치지 않고 재생E공급사업자(나인와트)를 통해
                 전기소비자에게 직접 공급. 초과/부족 전력은 전력시장에서 자동 정산
               </p>
@@ -123,7 +123,7 @@ export default function PPAPage() {
           <h2 className="mt-3 text-3xl font-bold text-zinc-900 dark:text-white">
             나인와트는 재생에너지 전기공급사업자입니다
           </h2>
-          <p className="mt-4 text-zinc-500 dark:text-zinc-400 max-w-2xl leading-relaxed">
+          <p className="mt-4 text-base text-zinc-500 dark:text-zinc-400 max-w-2xl leading-relaxed">
             자체 태양광 발전소 운영 경험과 AI 기술을 바탕으로,
             발전사업자와 전기사용자 사이에서 안정적인 재생에너지 전력 공급을 책임집니다.
           </p>
@@ -148,13 +148,13 @@ export default function PPAPage() {
             ].map((item) => (
               <div
                 key={item.num}
-                className="bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 p-8 hover:border-primary/50 transition-colors"
+                className="h-full bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 p-8 hover:border-primary/50 transition-colors"
               >
                 <span className="text-xs text-zinc-400 font-mono">{item.num}</span>
                 <h3 className="mt-3 text-base font-semibold text-zinc-900 dark:text-white">
                   {item.title}
                 </h3>
-                <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">
+                <p className="mt-2 text-base text-zinc-500 dark:text-zinc-400 leading-relaxed">
                   {item.desc}
                 </p>
               </div>
@@ -170,7 +170,7 @@ export default function PPAPage() {
           <h2 className="mt-3 text-3xl font-bold text-zinc-900 dark:text-white">
             계약 유형
           </h2>
-          <p className="mt-4 text-zinc-500 dark:text-zinc-400 max-w-lg">
+          <p className="mt-4 text-base text-zinc-500 dark:text-zinc-400 max-w-lg">
             사업 규모와 목적에 따라 다양한 계약 형태를 지원합니다
           </p>
 
@@ -194,7 +194,7 @@ export default function PPAPage() {
             ].map((item) => (
               <div
                 key={item.type}
-                className="bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 p-8"
+                className="h-full bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 p-8"
               >
                 <span className="inline-block px-3 py-1 bg-primary/10 text-primary text-lg font-bold rounded-lg">
                   {item.type}
@@ -202,7 +202,7 @@ export default function PPAPage() {
                 <h3 className="mt-4 text-base font-semibold text-zinc-900 dark:text-white">
                   {item.title}
                 </h3>
-                <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">
+                <p className="mt-2 text-base text-zinc-500 dark:text-zinc-400 leading-relaxed">
                   {item.desc}
                 </p>
               </div>
@@ -212,15 +212,15 @@ export default function PPAPage() {
           {/* Off-Site vs On-Site */}
           <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="border-t border-zinc-200 dark:border-zinc-800 pt-6">
-              <h3 className="text-lg font-bold text-zinc-900 dark:text-white">Off-Site PPA</h3>
-              <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">
+              <h3 className="text-xl font-bold text-zinc-900 dark:text-white">Off-Site PPA</h3>
+              <p className="mt-2 text-base text-zinc-500 dark:text-zinc-400 leading-relaxed">
                 재생E 발전설비에서 생산된 전기가 한전의 송배전망을 통해 전기사용자에게 공급됩니다.
                 전력손실률이 적용되며, 망이용 요금이 발생합니다.
               </p>
             </div>
             <div className="border-t border-zinc-200 dark:border-zinc-800 pt-6">
-              <h3 className="text-lg font-bold text-zinc-900 dark:text-white">On-Site PPA</h3>
-              <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">
+              <h3 className="text-xl font-bold text-zinc-900 dark:text-white">On-Site PPA</h3>
+              <p className="mt-2 text-base text-zinc-500 dark:text-zinc-400 leading-relaxed">
                 재생E 발전설비가 전기사용자 부지에 직접 설치되어 전력을 공급합니다.
                 전력손실률 0%, 망이용 요금 및 부가정산금이 면제되어 비용이 절감됩니다.
               </p>
@@ -238,28 +238,28 @@ export default function PPAPage() {
           </h2>
 
           <div className="mt-14 grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 p-8">
-              <h3 className="text-lg font-bold text-zinc-900 dark:text-white">재생에너지 발전사업자</h3>
+            <div className="h-full bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 p-8">
+              <h3 className="text-xl font-bold text-zinc-900 dark:text-white">재생에너지 발전사업자</h3>
               <ul className="mt-4 space-y-3">
-                <li className="flex items-start gap-2.5 text-sm text-zinc-600 dark:text-zinc-300">
-                  <span className="w-1 h-1 rounded-full bg-primary shrink-0 mt-2" />
+                <li className="flex items-start gap-2.5 text-base text-zinc-600 dark:text-zinc-300">
+                  <span className="w-1 h-1 rounded-full bg-primary shrink-0 mt-2.5" />
                   설비용량 1MW를 초과(합산 또는 단독)하는 재생에너지 발전설비
                 </li>
-                <li className="flex items-start gap-2.5 text-sm text-zinc-600 dark:text-zinc-300">
-                  <span className="w-1 h-1 rounded-full bg-primary shrink-0 mt-2" />
+                <li className="flex items-start gap-2.5 text-base text-zinc-600 dark:text-zinc-300">
+                  <span className="w-1 h-1 rounded-full bg-primary shrink-0 mt-2.5" />
                   참여 가능 발전원: 태양에너지, 풍력, 수력, 바이오, 지열, 해양에너지
                 </li>
               </ul>
             </div>
-            <div className="bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 p-8">
-              <h3 className="text-lg font-bold text-zinc-900 dark:text-white">전기사용자</h3>
+            <div className="h-full bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 p-8">
+              <h3 className="text-xl font-bold text-zinc-900 dark:text-white">전기사용자</h3>
               <ul className="mt-4 space-y-3">
-                <li className="flex items-start gap-2.5 text-sm text-zinc-600 dark:text-zinc-300">
-                  <span className="w-1 h-1 rounded-full bg-primary shrink-0 mt-2" />
+                <li className="flex items-start gap-2.5 text-base text-zinc-600 dark:text-zinc-300">
+                  <span className="w-1 h-1 rounded-full bg-primary shrink-0 mt-2.5" />
                   직접구매자: 수전설비 300kVA 이상 설치자
                 </li>
-                <li className="flex items-start gap-2.5 text-sm text-zinc-600 dark:text-zinc-300">
-                  <span className="w-1 h-1 rounded-full bg-primary shrink-0 mt-2" />
+                <li className="flex items-start gap-2.5 text-base text-zinc-600 dark:text-zinc-300">
+                  <span className="w-1 h-1 rounded-full bg-primary shrink-0 mt-2.5" />
                   한전고객: 계약전력 300kW 이상 일반용·산업용(을) 고객
                 </li>
               </ul>
@@ -285,7 +285,7 @@ export default function PPAPage() {
                     <h4 className="mt-4 text-base font-semibold text-zinc-900 dark:text-white">
                       {item.title}
                     </h4>
-                    <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-500 leading-relaxed">
+                    <p className="mt-2 text-base text-zinc-500 dark:text-zinc-500 leading-relaxed">
                       {item.desc}
                     </p>
                   </div>
@@ -313,13 +313,13 @@ export default function PPAPage() {
             ].map((item, i) => (
               <div
                 key={i}
-                className="bg-white dark:bg-zinc-900 p-8 hover:bg-zinc-50 dark:hover:bg-zinc-800/60 transition-colors"
+                className="h-full bg-white dark:bg-zinc-900 p-8 hover:bg-zinc-50 dark:hover:bg-zinc-800/60 transition-colors"
               >
                 <span className="text-xs text-zinc-400 font-mono">0{i + 1}</span>
                 <h3 className="mt-3 text-base font-semibold text-zinc-900 dark:text-white">
                   {item.title}
                 </h3>
-                <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">
+                <p className="mt-2 text-base text-zinc-500 dark:text-zinc-400 leading-relaxed">
                   {item.desc}
                 </p>
               </div>
@@ -336,7 +336,7 @@ export default function PPAPage() {
               <h2 className="text-2xl sm:text-3xl font-bold text-zinc-900 dark:text-white">
                 직접PPA, 나인와트와 함께하세요
               </h2>
-              <p className="mt-3 text-zinc-500 dark:text-zinc-400 max-w-md whitespace-pre-line">
+              <p className="mt-3 text-base text-zinc-500 dark:text-zinc-400 max-w-md whitespace-pre-line">
                 {"RE100 이행부터 비용 절감까지,\n나인와트가 최적의 직접PPA 솔루션을 제안합니다."}
               </p>
             </div>
