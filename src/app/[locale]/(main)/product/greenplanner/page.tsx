@@ -98,7 +98,7 @@ export default async function GreenPlannerPage() {
 
       {/* Target users */}
       <section className="border-b border-border px-6 py-10">
-        <div className="mx-auto flex max-w-5xl flex-wrap gap-6 text-sm text-muted">
+        <div className="mx-auto flex max-w-5xl flex-wrap gap-6 text-base text-muted">
           {targetUsers.map((user, i) => (
             <span key={i}>
               {i > 0 && <span className="text-border mr-6">|</span>}
@@ -115,10 +115,10 @@ export default async function GreenPlannerPage() {
           <div className="mt-10 space-y-10">
             {questions.map((item, i) => (
               <div key={i} className="md:flex md:gap-8">
-                <h3 className="md:w-64 shrink-0 text-lg font-bold">
+                <h3 className="md:w-64 shrink-0 text-xl font-bold">
                   {item.q}
                 </h3>
-                <p className="mt-2 md:mt-0 text-sm leading-relaxed text-muted">
+                <p className="mt-2 md:mt-0 text-base leading-relaxed text-muted">
                   {item.a}
                 </p>
               </div>
@@ -133,7 +133,7 @@ export default async function GreenPlannerPage() {
           <h2 className="text-2xl font-bold">{t("greenplanner.moreFeatures")}</h2>
           <ul className="mt-8 space-y-4">
             {moreFeaturesItems.map((item, i) => (
-              <li key={i} className="border-l-2 border-primary pl-4 text-sm">
+              <li key={i} className="border-l-2 border-primary pl-4 text-base">
                 {item}
               </li>
             ))}
@@ -145,18 +145,18 @@ export default async function GreenPlannerPage() {
       <section className="border-t border-border px-6 py-24">
         <div className="mx-auto max-w-5xl">
           <h2 className="text-2xl font-bold">{t("greenplanner.funding")}</h2>
-          <p className="mt-3 text-muted">
+          <p className="mt-3 text-base text-muted">
             {t("greenplanner.fundingDesc")}
           </p>
           <div className="mt-8 grid gap-6 md:grid-cols-2">
             {fundingItems.map((f, i) => (
               <div key={i} className="rounded-xl border border-border p-6">
-                <p className="text-sm text-muted">{f.program}</p>
+                <p className="text-base text-muted">{f.program}</p>
                 <p className="mt-2 text-3xl font-bold text-primary">
                   {t("greenplanner.fundingMax")} {f.maxAmount}
                 </p>
-                <p className="mt-3 text-sm text-muted">{f.terms}</p>
-                <p className="mt-1 text-xs text-muted">{f.year}</p>
+                <p className="mt-3 text-base text-muted">{f.terms}</p>
+                <p className="mt-1 text-sm text-muted">{f.year}</p>
               </div>
             ))}
           </div>
@@ -170,7 +170,7 @@ export default async function GreenPlannerPage() {
       <section className="border-t border-border px-6 py-20">
         <div className="mx-auto max-w-5xl">
           <h2 className="text-2xl font-bold">{t("greenplanner.ctaTitle")}</h2>
-          <p className="mt-3 text-muted">
+          <p className="mt-3 text-base text-muted">
             {t("greenplanner.ctaDesc")}
           </p>
           <div className="mt-8 flex flex-wrap gap-4">

@@ -85,7 +85,7 @@ export default async function PVIntelligencePage() {
       <section className="px-6 py-24">
         <div className="mx-auto max-w-5xl">
           <h2 className="text-2xl font-bold">{t("pvIntelligence.problemTitle")}</h2>
-          <p className="mt-3 text-muted">{t("pvIntelligence.problemDesc")}</p>
+          <p className="mt-3 text-base text-muted">{t("pvIntelligence.problemDesc")}</p>
           <ul className="mt-8 space-y-4">
             {problemItems.map((item, i) => (
               <li key={i} className="border-l-2 border-border pl-4 text-muted">
@@ -100,7 +100,7 @@ export default async function PVIntelligencePage() {
       <section className="border-t border-border bg-surface px-6 py-24">
         <div className="mx-auto max-w-5xl">
           <h2 className="text-2xl font-bold">{t("pvIntelligence.diffTitle")}</h2>
-          <p className="mt-2 text-muted">{t("pvIntelligence.diffSubtitle")}</p>
+          <p className="mt-2 text-base text-muted">{t("pvIntelligence.diffSubtitle")}</p>
           <div className="mt-12 space-y-8">
             {diffItems.map((item, i) => (
               <div key={i} className="rounded-xl border border-border p-6">
@@ -109,8 +109,8 @@ export default async function PVIntelligencePage() {
                     {i + 1}
                   </span>
                   <div>
-                    <h3 className="text-lg font-bold">{item.title}</h3>
-                    <p className="mt-2 text-sm leading-relaxed text-muted">{item.desc}</p>
+                    <h3 className="text-xl font-bold">{item.title}</h3>
+                    <p className="mt-2 text-base leading-relaxed text-muted">{item.desc}</p>
                   </div>
                 </div>
               </div>
@@ -123,13 +123,13 @@ export default async function PVIntelligencePage() {
       <section className="border-t border-border px-6 py-24">
         <div className="mx-auto max-w-5xl">
           <h2 className="text-2xl font-bold">{t("pvIntelligence.howItWorksTitle")}</h2>
-          <p className="mt-2 text-muted">{t("pvIntelligence.howItWorksSubtitle")}</p>
+          <p className="mt-2 text-base text-muted">{t("pvIntelligence.howItWorksSubtitle")}</p>
           <div className="mt-12 grid gap-8 md:grid-cols-2">
             {howItWorksSteps.map((step) => (
               <div key={step.step} className="relative rounded-xl border border-border p-6">
                 <span className="text-4xl font-black text-primary/20">{step.step}</span>
-                <h3 className="mt-2 text-lg font-bold">{step.title}</h3>
-                <p className="mt-3 text-sm leading-relaxed text-muted">{step.desc}</p>
+                <h3 className="mt-2 text-xl font-bold">{step.title}</h3>
+                <p className="mt-3 text-base leading-relaxed text-muted">{step.desc}</p>
               </div>
             ))}
           </div>
@@ -140,21 +140,21 @@ export default async function PVIntelligencePage() {
       <section className="border-t border-border bg-surface px-6 py-24">
         <div className="mx-auto max-w-5xl">
           <h2 className="text-2xl font-bold">{t("pvIntelligence.aiDetectionTitle")}</h2>
-          <p className="mt-3 text-muted">{t("pvIntelligence.aiDetectionSubtitle")}</p>
+          <p className="mt-3 text-base text-muted">{t("pvIntelligence.aiDetectionSubtitle")}</p>
           <div className="mt-12 space-y-10">
             {aiDetectionScenarios.map((scenario, i) => (
               <div key={i}>
-                <h3 className="text-lg font-bold">
+                <h3 className="text-xl font-bold">
                   &ldquo;{scenario.situation}&rdquo;
                 </h3>
                 <div className="mt-4 grid gap-4 md:grid-cols-2">
                   <div className="border-l-2 border-border pl-4">
-                    <p className="text-xs font-medium text-muted/70">무슨 일이 생겼나</p>
-                    <p className="mt-1 text-sm leading-relaxed text-muted">{scenario.what}</p>
+                    <p className="text-sm font-medium text-muted/70">무슨 일이 생겼나</p>
+                    <p className="mt-1 text-base leading-relaxed text-muted">{scenario.what}</p>
                   </div>
                   <div className="border-l-2 border-primary pl-4">
-                    <p className="text-xs font-medium text-primary">PV Intelligence가 하는 일</p>
-                    <p className="mt-1 text-sm leading-relaxed text-muted">{scenario.action}</p>
+                    <p className="text-sm font-medium text-primary">PV Intelligence가 하는 일</p>
+                    <p className="mt-1 text-base leading-relaxed text-muted">{scenario.action}</p>
                   </div>
                 </div>
               </div>
@@ -167,12 +167,12 @@ export default async function PVIntelligencePage() {
       <section className="border-t border-border px-6 py-24">
         <div className="mx-auto max-w-5xl">
           <h2 className="text-2xl font-bold">{t("pvIntelligence.revenueTitle")}</h2>
-          <p className="mt-2 text-muted">{t("pvIntelligence.revenueSubtitle")}</p>
+          <p className="mt-2 text-base text-muted">{t("pvIntelligence.revenueSubtitle")}</p>
           <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {revenueItems.map((item, i) => (
               <div key={i} className="rounded-xl border border-border p-6">
                 <h3 className="font-bold">{item.title}</h3>
-                <p className="mt-3 text-sm leading-relaxed text-muted">{item.desc}</p>
+                <p className="mt-3 text-base leading-relaxed text-muted">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -183,12 +183,12 @@ export default async function PVIntelligencePage() {
       <section className="border-t border-border bg-surface px-6 py-24">
         <div className="mx-auto max-w-5xl">
           <h2 className="text-2xl font-bold">{t("pvIntelligence.dashboardTitle")}</h2>
-          <p className="mt-2 text-muted">{t("pvIntelligence.dashboardSubtitle")}</p>
+          <p className="mt-2 text-base text-muted">{t("pvIntelligence.dashboardSubtitle")}</p>
           <div className="mt-10 space-y-4">
             {dashboardFeatures.map((feature, i) => (
               <div key={i} className="md:flex md:gap-8 md:border-b md:border-border md:py-5">
-                <h3 className="shrink-0 text-sm font-bold md:w-40">{feature.title}</h3>
-                <p className="mt-1 text-sm leading-relaxed text-muted md:mt-0">{feature.desc}</p>
+                <h3 className="shrink-0 text-base font-bold md:w-40">{feature.title}</h3>
+                <p className="mt-1 text-base leading-relaxed text-muted md:mt-0">{feature.desc}</p>
               </div>
             ))}
           </div>
@@ -203,7 +203,7 @@ export default async function PVIntelligencePage() {
             {impactItems.map((item, i) => (
               <div key={i} className="rounded-xl border border-border p-6 text-center">
                 <p className="text-3xl font-bold text-primary">{item.value}</p>
-                <p className="mt-2 text-sm text-muted">{item.label}</p>
+                <p className="mt-2 text-base text-muted">{item.label}</p>
               </div>
             ))}
           </div>
@@ -218,7 +218,7 @@ export default async function PVIntelligencePage() {
             {targetItems.map((item, i) => (
               <div key={i} className="rounded-xl border border-border p-6">
                 <h3 className="font-bold">{item.title}</h3>
-                <p className="mt-3 text-sm leading-relaxed text-muted">{item.desc}</p>
+                <p className="mt-3 text-base leading-relaxed text-muted">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -229,11 +229,11 @@ export default async function PVIntelligencePage() {
       <section className="border-t border-border px-6 py-24">
         <div className="mx-auto max-w-5xl">
           <h2 className="text-2xl font-bold">{t("pvIntelligence.proofTitle")}</h2>
-          <p className="mt-2 text-muted">{t("pvIntelligence.proofSubtitle")}</p>
-          <p className="mt-6 text-sm leading-relaxed text-muted">{t("pvIntelligence.proofDesc")}</p>
+          <p className="mt-2 text-base text-muted">{t("pvIntelligence.proofSubtitle")}</p>
+          <p className="mt-6 text-base leading-relaxed text-muted">{t("pvIntelligence.proofDesc")}</p>
           <ul className="mt-8 space-y-3">
             {proofPoints.map((point, i) => (
-              <li key={i} className="flex items-start gap-3 text-sm text-muted">
+              <li key={i} className="flex items-start gap-3 text-base text-muted">
                 <span className="mt-0.5 text-primary">&#10003;</span>
                 {point}
               </li>
@@ -249,8 +249,8 @@ export default async function PVIntelligencePage() {
           <div className="mt-8 divide-y divide-border rounded-xl border border-border">
             {techItems.map((item, i) => (
               <div key={i} className="flex gap-4 px-6 py-4">
-                <span className="w-32 shrink-0 text-sm font-medium">{item.label}</span>
-                <span className="text-sm text-muted">{item.value}</span>
+                <span className="w-32 shrink-0 text-base font-medium">{item.label}</span>
+                <span className="text-base text-muted">{item.value}</span>
               </div>
             ))}
           </div>
@@ -261,7 +261,7 @@ export default async function PVIntelligencePage() {
       <section className="border-t border-border px-6 py-20">
         <div className="mx-auto max-w-5xl">
           <h2 className="text-2xl font-bold">{t("pvIntelligence.ctaTitle")}</h2>
-          <p className="mt-3 text-muted">{t("pvIntelligence.ctaDesc")}</p>
+          <p className="mt-3 text-base text-muted">{t("pvIntelligence.ctaDesc")}</p>
           <div className="mt-8 flex flex-wrap gap-4">
             <Link
               href="/contact"

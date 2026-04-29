@@ -120,26 +120,26 @@ export default async function WattiPage() {
           <div className="grid gap-16 md:grid-cols-5">
             <div className="md:col-span-2">
               <h2 className="text-2xl font-bold">{t("watti.coreCapabilities")}</h2>
-              <p className="mt-3 text-sm text-muted leading-relaxed">
+              <p className="mt-3 text-base text-muted leading-relaxed">
                 {t("watti.coreCapabilitiesDesc")}
               </p>
             </div>
             <div className="md:col-span-3 space-y-6">
               <div>
-                <h3 className="text-sm font-semibold">{t("watti.analysisModules")}</h3>
+                <h3 className="text-base font-semibold">{t("watti.analysisModules")}</h3>
                 <ul className="mt-3 space-y-2">
                   {analysisItems.map((item, i) => (
-                    <li key={i} className="text-sm text-muted leading-relaxed">
+                    <li key={i} className="text-base text-muted leading-relaxed">
                       {item}
                     </li>
                   ))}
                 </ul>
               </div>
               <div>
-                <h3 className="text-sm font-semibold">{t("watti.dataTypes")}</h3>
+                <h3 className="text-base font-semibold">{t("watti.dataTypes")}</h3>
                 <ul className="mt-3 space-y-2">
                   {dataItems.map((item, i) => (
-                    <li key={i} className="text-sm text-muted leading-relaxed">
+                    <li key={i} className="text-base text-muted leading-relaxed">
                       {item}
                     </li>
                   ))}
@@ -154,12 +154,12 @@ export default async function WattiPage() {
       <section className="border-t border-border bg-surface px-6 py-24">
         <div className="mx-auto max-w-5xl">
           <h2 className="text-2xl font-bold">{t("watti.govUseCases")}</h2>
-          <p className="mt-3 text-muted">
+          <p className="mt-3 text-base text-muted">
             {t("watti.govUseCasesDesc")}
           </p>
           <ul className="mt-8 space-y-3">
             {govItems.map((item, i) => (
-              <li key={i} className="border-l-2 border-primary pl-4 text-sm">
+              <li key={i} className="border-l-2 border-primary pl-4 text-base">
                 {item}
               </li>
             ))}
@@ -175,10 +175,10 @@ export default async function WattiPage() {
             {cases.map((cs, i) => (
               <div key={i} className="md:flex md:gap-8">
                 <div className="mb-2 md:mb-0 md:w-48 shrink-0">
-                  <h3 className="text-lg font-bold">{cs.title}</h3>
-                  <p className="text-sm text-muted">{cs.location}</p>
+                  <h3 className="text-xl font-bold">{cs.title}</h3>
+                  <p className="text-base text-muted">{cs.location}</p>
                 </div>
-                <p className="text-sm leading-relaxed text-muted">
+                <p className="text-base leading-relaxed text-muted">
                   {cs.desc}
                 </p>
               </div>
@@ -195,7 +195,7 @@ export default async function WattiPage() {
         <div className="mx-auto max-w-5xl md:flex md:items-center md:justify-between">
           <div>
             <h2 className="text-2xl font-bold">{t("watti.ctaTitle")}</h2>
-            <p className="mt-2 text-muted">
+            <p className="mt-2 text-base text-muted">
               {t("watti.ctaDesc")}
             </p>
           </div>

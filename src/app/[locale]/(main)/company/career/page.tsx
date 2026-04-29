@@ -54,7 +54,7 @@ export default async function CareerPage() {
           <h3 className="mt-2 text-3xl font-bold tracking-tight">
             {t("career.cultureTitle")}
           </h3>
-          <p className="mt-4 max-w-2xl text-muted leading-relaxed">
+          <p className="mt-4 max-w-2xl text-base text-muted leading-relaxed">
             {t("career.cultureDesc")}
           </p>
         </div>
@@ -69,7 +69,7 @@ export default async function CareerPage() {
           <h3 className="mt-2 text-3xl font-bold tracking-tight">
             {t("career.talentTitle")}
           </h3>
-          <p className="mt-4 max-w-2xl text-muted">
+          <p className="mt-4 max-w-2xl text-base text-muted">
             {t("career.talentSubtitle")}
           </p>
 
@@ -82,8 +82,8 @@ export default async function CareerPage() {
                 <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary">
                   {valueIcons[i]}
                 </div>
-                <h4 className="mt-4 text-lg font-semibold">{v.title}</h4>
-                <p className="mt-2 text-sm leading-relaxed text-muted">{v.desc}</p>
+                <h4 className="mt-4 text-xl font-semibold">{v.title}</h4>
+                <p className="mt-2 text-base leading-relaxed text-muted">{v.desc}</p>
               </div>
             ))}
           </div>
@@ -101,14 +101,14 @@ export default async function CareerPage() {
           <div className="mt-8 space-y-6">
             {benefitCategories.map((group) => (
               <div key={group.category}>
-                <h4 className="mb-3 text-sm font-bold">
+                <h4 className="mb-3 text-base font-bold">
                   {group.category}
                 </h4>
                 <div className="flex flex-wrap gap-2">
                   {(group.items ?? []).map((item) => (
                     <span
                       key={item.title}
-                      className="rounded-full border border-border bg-white px-4 py-1.5 text-sm dark:bg-white/5"
+                      className="rounded-full border border-border bg-white px-4 py-1.5 text-base dark:bg-white/5"
                     >
                       {item.title}
                     </span>
@@ -135,8 +135,8 @@ export default async function CareerPage() {
                   {s.step}
                 </div>
                 <div className="sm:mt-3">
-                  <h4 className="font-semibold">{s.title}</h4>
-                  <p className="mt-1 text-sm text-muted">{s.desc}</p>
+                  <h4 className="text-base font-semibold">{s.title}</h4>
+                  <p className="mt-1 text-base text-muted">{s.desc}</p>
                 </div>
               </div>
             ))}
@@ -150,7 +150,7 @@ export default async function CareerPage() {
           <h3 className="text-2xl font-bold tracking-tight">
             {t("career.ctaTitle")}
           </h3>
-          <p className="mt-3 text-muted">
+          <p className="mt-3 text-base text-muted">
             {t("career.ctaDesc")}
           </p>
           <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">

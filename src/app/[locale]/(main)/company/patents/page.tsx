@@ -70,7 +70,7 @@ export default async function PatentsPage({
       {/* Stats */}
       <section className="px-6 py-16">
         <div className="mx-auto max-w-5xl">
-          <dl className="grid grid-cols-3 gap-x-8 gap-y-6 text-sm md:grid-cols-6">
+          <dl className="grid grid-cols-3 gap-x-8 gap-y-6 text-base md:grid-cols-6">
             <div>
               <dt className="text-muted">{t("patents.technologyTransfers")}</dt>
               <dd className="text-4xl font-bold">{techTransfers.length}</dd>
@@ -106,7 +106,7 @@ export default async function PatentsPage({
             {t("patents.technologyTransfers")} <span className="text-muted">({techTransfers.length}건)</span>
           </h2>
           <div className="mt-4 overflow-x-auto">
-            <table className="w-full min-w-175 text-sm">
+            <table className="w-full min-w-175 text-base">
               <thead>
                 <tr className="border-b border-border text-left">
                   <th className="w-12 py-3 pr-3 font-semibold text-muted">{t("patents.tableNo")}</th>
@@ -162,7 +162,7 @@ export default async function PatentsPage({
             {t("patents.domesticRegistered")} <span className="text-muted">({domesticRegistered.length}건)</span>
           </h2>
           <div className="mt-4 overflow-x-auto">
-            <table className="w-full min-w-175 text-sm">
+            <table className="w-full min-w-175 text-base">
               <thead>
                 <tr className="border-b border-border text-left">
                   <th className="w-12 py-3 pr-3 font-semibold text-muted">{t("patents.tableNo")}</th>
@@ -192,7 +192,7 @@ export default async function PatentsPage({
               {t("patents.domesticPending")} <span className="text-muted">({domesticPending.length}건)</span>
             </h2>
             <div className="mt-4 overflow-x-auto">
-              <table className="w-full min-w-175 text-sm">
+              <table className="w-full min-w-175 text-base">
                 <thead>
                   <tr className="border-b border-border text-left">
                     <th className="w-12 py-3 pr-3 font-semibold text-muted">{t("patents.tableNo")}</th>
@@ -226,7 +226,7 @@ export default async function PatentsPage({
               {t("patents.internationalPatents")} <span className="text-muted">({internationalPatents.length}건)</span>
             </h2>
             <div className="mt-4 overflow-x-auto">
-              <table className="w-full min-w-200 text-sm">
+              <table className="w-full min-w-200 text-base">
                 <thead>
                   <tr className="border-b border-border text-left">
                     <th className="w-12 py-3 pr-3 font-semibold text-muted">{t("patents.tableNo")}</th>
@@ -277,7 +277,7 @@ export default async function PatentsPage({
                 {t("patents.internationalTrademarks")} <span className="text-muted">({internationalTrademarks.length}건)</span>
               </h2>
               <div className="mt-4 overflow-x-auto">
-                <table className="w-full min-w-150 text-sm">
+                <table className="w-full min-w-150 text-base">
                   <thead>
                     <tr className="border-b border-border text-left">
                       <th className="w-12 py-3 pr-3 font-semibold text-muted">{t("patents.tableNo")}</th>
@@ -318,7 +318,7 @@ export default async function PatentsPage({
               <h3 className="mt-10 text-lg font-semibold">
                 {t("patents.certAchievement")} <span className="text-muted">({achievements.length}건)</span>
               </h3>
-              <p className="mt-1 text-sm text-muted">{t("patents.certAchievementDesc")}</p>
+              <p className="mt-1 text-base text-muted">{t("patents.certAchievementDesc")}</p>
               <div className="mt-6 grid grid-cols-1 items-start gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {achievements.map((c) => (
                   <CertCard key={c.id} cert={c} />
@@ -359,36 +359,36 @@ function TechTransferDetailView({ transfer }: { transfer: TechnologyTransfer }) 
   const detail = transfer.detail!;
 
   return (
-    <div className="grid gap-4 md:grid-cols-2 text-sm">
+    <div className="grid gap-4 md:grid-cols-2 text-base">
       {detail.abstract && (
         <div className="md:col-span-2">
-          <h4 className="font-semibold text-xs uppercase tracking-wider text-muted mb-1.5">요약</h4>
+          <h4 className="font-semibold text-sm uppercase tracking-wider text-muted mb-1.5">요약</h4>
           <p className="text-foreground/90 leading-relaxed">{detail.abstract}</p>
         </div>
       )}
 
       <div className="flex flex-wrap gap-x-8 gap-y-2 md:col-span-2 pt-2 border-t border-border/50">
         <div>
-          <span className="text-xs text-muted">출원번호(일자)</span>
+          <span className="text-sm text-muted">출원번호(일자)</span>
           <p className="text-foreground/90">{detail.applicationNo ? `${detail.applicationNo} (${detail.applicationDate})` : "—"}</p>
         </div>
         <div>
-          <span className="text-xs text-muted">출원인</span>
+          <span className="text-sm text-muted">출원인</span>
           <p className="text-foreground/90">{detail.applicant || "—"}</p>
         </div>
         {detail.registrationNo && (
           <div>
-            <span className="text-xs text-muted">등록번호(일자)</span>
+            <span className="text-sm text-muted">등록번호(일자)</span>
             <p className="text-foreground/90">{detail.registrationNo} ({detail.registrationDate})</p>
           </div>
         )}
         <div>
-          <span className="text-xs text-muted">법적상태</span>
+          <span className="text-sm text-muted">법적상태</span>
           <p className="text-foreground/90">{detail.legalStatus || "—"}</p>
         </div>
         {transfer.period && (
           <div>
-            <span className="text-xs text-muted">계약기간</span>
+            <span className="text-sm text-muted">계약기간</span>
             <p className="text-foreground/90">{transfer.period}</p>
           </div>
         )}
@@ -400,13 +400,13 @@ function TechTransferDetailView({ transfer }: { transfer: TechnologyTransfer }) 
 function CertCard({ cert: c }: { cert: { id: number; name: string; issuer: string; thumbnailUrl?: string } }) {
   return (
     <div className="rounded-lg border border-border bg-card p-5 transition-shadow hover:shadow-md">
-      <p className="truncate text-sm font-semibold">{c.name}</p>
+      <p className="truncate text-base font-semibold">{c.name}</p>
       {c.thumbnailUrl ? (
-        <InlineExpandImage src={c.thumbnailUrl} alt={c.name} className="text-xs text-muted leading-6">
+        <InlineExpandImage src={c.thumbnailUrl} alt={c.name} className="text-sm text-muted leading-6">
           <span>{c.issuer}</span>
         </InlineExpandImage>
       ) : (
-        <p className="text-xs text-muted leading-6">{c.issuer}</p>
+        <p className="text-sm text-muted leading-6">{c.issuer}</p>
       )}
     </div>
   );

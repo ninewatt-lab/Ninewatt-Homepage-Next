@@ -119,12 +119,12 @@ export default async function OptiPage() {
       <section className="border-t border-border bg-surface px-6 py-24">
         <div className="mx-auto max-w-5xl">
           <h2 className="text-2xl font-bold">{t("opti.howItWorks")}</h2>
-          <p className="mt-2 text-muted">{t("opti.howItWorksSubtitle")}</p>
+          <p className="mt-2 text-base text-muted">{t("opti.howItWorksSubtitle")}</p>
           <div className="mt-12 grid gap-12 md:grid-cols-3">
             {steps.map((step, i) => (
               <div key={i}>
-                <h3 className="text-lg font-bold">{step.title}</h3>
-                <p className="mt-3 text-sm leading-relaxed text-muted">
+                <h3 className="text-xl font-bold">{step.title}</h3>
+                <p className="mt-3 text-base leading-relaxed text-muted">
                   {step.desc}
                 </p>
               </div>
@@ -155,8 +155,8 @@ export default async function OptiPage() {
           <div className="mt-8 grid gap-x-12 gap-y-4 sm:grid-cols-2">
             {modules.map((m) => (
               <div key={m.name} className="flex items-baseline gap-3 border-b border-border py-3">
-                <span className="text-sm font-medium">{m.name}</span>
-                <span className="text-xs text-muted">{m.desc}</span>
+                <span className="text-base font-medium">{m.name}</span>
+                <span className="text-sm text-muted">{m.desc}</span>
               </div>
             ))}
           </div>

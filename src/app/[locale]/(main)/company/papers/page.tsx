@@ -58,7 +58,7 @@ export default async function PapersPage({
       {/* Stats */}
       <section className="px-6 py-16">
         <div className="mx-auto max-w-5xl">
-          <dl className="grid grid-cols-2 gap-x-8 gap-y-6 text-sm md:grid-cols-4">
+          <dl className="grid grid-cols-2 gap-x-8 gap-y-6 text-base md:grid-cols-4">
             <div>
               <dt className="text-muted">{t("papers.total")}</dt>
               <dd className="text-4xl font-bold">{papers.length}</dd>
@@ -96,7 +96,7 @@ export default async function PapersPage({
                   {categoryLabels[cat]} <span className="text-muted">({papersByCategory[cat].length}건)</span>
                 </h2>
                 <div className="mt-4 overflow-x-auto">
-                  <table className="w-full min-w-150 text-sm">
+                  <table className="w-full min-w-150 text-base">
                     <thead>
                       <tr className="border-b border-border text-left">
                         <th className="w-12 py-3 pr-3 font-semibold text-muted">{t("papers.tableNo")}</th>
@@ -189,7 +189,7 @@ function PaperDetail({ paper, labels }: { paper: Paper; labels: PaperLabels }) {
     : null;
 
   return (
-    <div className="space-y-3 text-sm">
+    <div className="space-y-3 text-base">
       {/* 저자 */}
       <div>
         <span className="text-xs text-muted">{labels.authors}</span>
@@ -212,30 +212,30 @@ function PaperDetail({ paper, labels }: { paper: Paper; labels: PaperLabels }) {
       {/* 논문 서지정보 */}
       <div className="flex flex-wrap gap-x-8 gap-y-2">
         <div>
-          <span className="text-xs text-muted">{labels.journal}</span>
+          <span className="text-sm text-muted">{labels.journal}</span>
           <p className="text-foreground/90">{paper.journal}</p>
         </div>
         {volumeDisplay && (
           <div>
-            <span className="text-xs text-muted">{labels.volume}</span>
+            <span className="text-sm text-muted">{labels.volume}</span>
             <p className="text-foreground/90">{volumeDisplay}</p>
           </div>
         )}
         {paper.pages && (
           <div>
-            <span className="text-xs text-muted">{labels.pages}</span>
+            <span className="text-sm text-muted">{labels.pages}</span>
             <p className="text-foreground/90">{paper.pages}</p>
           </div>
         )}
         {paper.articleNo && (
           <div>
-            <span className="text-xs text-muted">{labels.articleNo}</span>
+            <span className="text-sm text-muted">{labels.articleNo}</span>
             <p className="text-foreground/90">{paper.articleNo}</p>
           </div>
         )}
         {paper.status && (
           <div>
-            <span className="text-xs text-muted">{labels.status}</span>
+            <span className="text-sm text-muted">{labels.status}</span>
             <p className="text-foreground/90">
               {paper.status === "under-review" ? labels.underReview : labels.published}
             </p>

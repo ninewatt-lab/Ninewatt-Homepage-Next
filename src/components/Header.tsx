@@ -455,9 +455,9 @@ export default function Header() {
         ref={headerRef}
         className={`fixed top-0 z-50 w-full border-b transition-all duration-200 ${
           activeMenu
-            ? "bg-background/95 backdrop-blur-xl border-border shadow-lg shadow-black/5"
+            ? "bg-background/90 backdrop-blur-xl border-border shadow-lg shadow-black/5"
             : scrolled || mobileOpen
-              ? "bg-background/80 border-border backdrop-blur-xl"
+              ? "bg-background/90 border-border backdrop-blur-xl"
               : "bg-transparent border-transparent"
         }`}
       >

@@ -58,19 +58,19 @@ export default async function AwardsPage({
                   {awardsByYear[year].map((award) =>
                     <div key={award.id} className="flex flex-col gap-0.5 sm:flex-row sm:gap-3">
                       {award.linkUrl ? (
-                        <a href={award.linkUrl} target="_blank" rel="noopener noreferrer" className="shrink-0 text-sm font-medium text-primary underline underline-offset-2 hover:text-primary/80">
+                        <a href={award.linkUrl} target="_blank" rel="noopener noreferrer" className="shrink-0 text-base font-medium text-primary underline underline-offset-2 hover:text-primary/80">
                           {award.name}
                         </a>
                       ) : award.thumbnailUrl ? (
-                        <InlineExpandImage src={award.thumbnailUrl} alt={award.name} className="shrink-0 text-sm font-medium">
+                        <InlineExpandImage src={award.thumbnailUrl} alt={award.name} className="shrink-0 text-base font-medium">
                           {award.name}
                         </InlineExpandImage>
                       ) : (
-                        <span className="shrink-0 text-sm font-medium">
+                        <span className="shrink-0 text-base font-medium">
                           {award.name}
                         </span>
                       )}
-                      <span className="text-sm text-muted">
+                      <span className="text-base text-muted">
                         {award.organization} · {award.grade}
                       </span>
                     </div>

@@ -61,7 +61,7 @@ function CaseRow({ item, index, openKey, setOpenKey }: { item: CaseItem; index: 
         className={`py-4 ${hasDetail ? "cursor-pointer hover:bg-secondary/30 transition-colors rounded-md px-2 -mx-2" : ""}`}
         onClick={toggle}
       >
-        <p className="font-medium flex items-center gap-2">
+        <p className="text-base font-medium flex items-center gap-2">
           {item.title}
           {hasDetail && (
             <svg
@@ -75,7 +75,7 @@ function CaseRow({ item, index, openKey, setOpenKey }: { item: CaseItem; index: 
             </svg>
           )}
         </p>
-        <p className="mt-1 text-sm text-muted">{item.desc}</p>
+        <p className="mt-1 text-base text-muted">{item.desc}</p>
       </div>
 
       {hasDetail && mounted && (
@@ -121,7 +121,7 @@ function CaseRow({ item, index, openKey, setOpenKey }: { item: CaseItem; index: 
                 </div>
 
                 {/* Description */}
-                <p className="text-sm text-foreground/90 leading-relaxed max-w-3xl">
+                <p className="text-base text-foreground/90 leading-relaxed max-w-3xl">
                   {item.detail!.description}
                 </p>
 
@@ -132,7 +132,7 @@ function CaseRow({ item, index, openKey, setOpenKey }: { item: CaseItem; index: 
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={(e) => e.stopPropagation()}
-                    className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
+                    className="mt-4 inline-flex items-center gap-1.5 text-base font-medium text-primary hover:underline"
                   >
                     <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101" />
@@ -172,7 +172,7 @@ export function CasesContent({ cases, stats }: { cases: CaseItem[]; stats: StatI
             {t("cases.subtitle")}
           </p>
           {hasDetailItems && (
-            <p className="mt-2 text-sm text-muted">
+            <p className="mt-2 text-base text-muted">
               {t("cases.clickHint")}
             </p>
           )}
@@ -187,7 +187,7 @@ export function CasesContent({ cases, stats }: { cases: CaseItem[]; stats: StatI
             if (items.length === 0) return null;
             return (
               <div key={cat}>
-                <h2 className="text-lg font-bold">{cat}</h2>
+                <h2 className="text-xl font-bold">{cat}</h2>
                 <div className="mt-4 divide-y-0">
                   {items.map((c) => {
                     const globalIndex = cases.indexOf(c);
@@ -214,7 +214,7 @@ export function CasesContent({ cases, stats }: { cases: CaseItem[]; stats: StatI
           {stats.map((s) => (
             <div key={s.label}>
               <span className="text-2xl font-bold">{s.value}</span>
-              <span className="ml-2 text-sm text-muted">{s.label}</span>
+              <span className="ml-2 text-base text-muted">{s.label}</span>
             </div>
           ))}
         </div>

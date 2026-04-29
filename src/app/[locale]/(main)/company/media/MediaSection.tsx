@@ -88,8 +88,8 @@ function VideoCard({ item, noImageLabel }: { item: MediaItem; noImageLabel: stri
         </div>
       </div>
       <div className="p-4">
-        <p className="text-xs text-muted">{item.date} · {item.origin}</p>
-        <p className="mt-1.5 text-sm font-semibold leading-snug line-clamp-2 group-hover:text-primary">{item.title}</p>
+        <p className="text-sm text-muted">{item.date} · {item.origin}</p>
+        <p className="mt-1.5 text-base font-semibold leading-snug line-clamp-2 group-hover:text-primary">{item.title}</p>
       </div>
     </a>
   );
@@ -117,8 +117,8 @@ function NewsCard({ item, noImageLabel }: { item: MediaItem; noImageLabel: strin
         )}
       </div>
       <div className="p-4">
-        <p className="text-xs text-muted">{item.date} · {item.origin}</p>
-        <p className="mt-1.5 text-sm font-semibold leading-snug line-clamp-2 group-hover:text-primary">{item.title}</p>
+        <p className="text-sm text-muted">{item.date} · {item.origin}</p>
+        <p className="mt-1.5 text-base font-semibold leading-snug line-clamp-2 group-hover:text-primary">{item.title}</p>
       </div>
     </a>
   );
@@ -129,7 +129,7 @@ function NewsCard({ item, noImageLabel }: { item: MediaItem; noImageLabel: strin
 function MediaTable({ items, labels }: { items: MediaItem[]; labels: { date: string; title: string; source: string } }) {
   return (
     <div className="overflow-x-auto">
-      <table className="w-full min-w-150 table-fixed text-sm">
+      <table className="w-full min-w-150 table-fixed text-base">
         <thead>
           <tr className="border-b border-border text-left">
             <th className="w-[5%] py-3 pr-3 font-semibold text-muted">No.</th>

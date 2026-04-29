@@ -99,7 +99,7 @@ export default async function ProductPage() {
         <div className="mx-auto max-w-5xl">
           {categories.map((category, ci) => (
             <div key={category.titleKey} className={ci > 0 ? "mt-16 pt-16 border-t border-border" : ""}>
-              <h2 className="mb-2 text-xs font-semibold uppercase tracking-widest text-primary">
+              <h2 className="mb-2 text-sm font-semibold uppercase tracking-widest text-primary">
                 {tc(category.titleKey)}
               </h2>
               <div className="mt-4 space-y-1">
@@ -116,16 +116,16 @@ export default async function ProductPage() {
                         {displayName}
                       </h3>
                       {product.badge && (
-                        <span className="rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary">
+                        <span className="rounded-full bg-primary/10 px-2.5 py-0.5 text-sm font-medium text-primary">
                           {product.badge}
                         </span>
                       )}
                     </div>
                     <div className="flex-1">
-                      <p className="text-sm font-medium text-primary">
+                      <p className="text-base font-medium text-primary">
                         {product.tagline}
                       </p>
-                      <p className="mt-1 text-sm leading-relaxed text-muted">
+                      <p className="mt-1 text-base leading-relaxed text-muted">
                         {t(product.descKey)}
                       </p>
                     </div>

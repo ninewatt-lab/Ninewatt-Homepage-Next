@@ -89,14 +89,14 @@ export default async function SaveEPage() {
           <div className="grid gap-16 md:grid-cols-5">
             <div className="md:col-span-2">
               <h2 className="text-2xl font-bold">{t("saveE.analysisItems")}</h2>
-              <p className="mt-3 text-sm text-muted">
+              <p className="mt-3 text-base text-muted">
                 {t("saveE.analysisItemsDesc")}
               </p>
             </div>
             <div className="md:col-span-3">
               <div className="grid grid-cols-2 gap-x-8 gap-y-3">
                 {items.map((item, i) => (
-                  <p key={i} className="border-b border-border py-2 text-sm">
+                  <p key={i} className="border-b border-border py-2 text-base">
                     {item}
                   </p>
                 ))}
@@ -112,20 +112,20 @@ export default async function SaveEPage() {
           <h2 className="text-2xl font-bold">{t("saveE.howItWorks")}</h2>
           <div className="mt-10 grid gap-12 md:grid-cols-3">
             <div>
-              <h3 className="text-lg font-bold text-primary">{t("saveE.analysisTitle")}</h3>
-              <p className="mt-3 text-sm leading-relaxed text-muted">
+              <h3 className="text-xl font-bold text-primary">{t("saveE.analysisTitle")}</h3>
+              <p className="mt-3 text-base leading-relaxed text-muted">
                 {t("saveE.analysisDesc")}
               </p>
             </div>
             <div>
-              <h3 className="text-lg font-bold text-primary">{t("saveE.dashboardTitle")}</h3>
-              <p className="mt-3 text-sm leading-relaxed text-muted">
+              <h3 className="text-xl font-bold text-primary">{t("saveE.dashboardTitle")}</h3>
+              <p className="mt-3 text-base leading-relaxed text-muted">
                 {t("saveE.dashboardDesc")}
               </p>
             </div>
             <div>
-              <h3 className="text-lg font-bold text-primary">{t("saveE.reportTitle")}</h3>
-              <p className="mt-3 text-sm leading-relaxed text-muted">
+              <h3 className="text-xl font-bold text-primary">{t("saveE.reportTitle")}</h3>
+              <p className="mt-3 text-base leading-relaxed text-muted">
                 {t("saveE.reportDesc")}
               </p>
             </div>
@@ -140,8 +140,8 @@ export default async function SaveEPage() {
           <ul className="mt-8 space-y-5">
             {advantageItems.map((item, i) => (
               <li key={i} className="border-l-2 border-primary pl-4">
-                <span className="font-medium">{item.title}</span>
-                <p className="mt-1 text-sm text-muted">{item.desc}</p>
+                <span className="text-base font-medium">{item.title}</span>
+                <p className="mt-1 text-base text-muted">{item.desc}</p>
               </li>
             ))}
           </ul>
@@ -154,7 +154,7 @@ export default async function SaveEPage() {
           <h2 className="text-2xl font-bold">{t("saveE.dataSourcesTitle")}</h2>
           <div className="mt-8 flex flex-wrap gap-3">
             {dataSources.map((item, i) => (
-              <span key={i} className="rounded-full border border-border bg-surface-elevated px-4 py-2 text-sm">
+              <span key={i} className="rounded-full border border-border bg-surface-elevated px-4 py-2 text-base">
                 {item}
               </span>
             ))}
@@ -170,11 +170,11 @@ export default async function SaveEPage() {
             {cases.map((cs, i) => (
               <div key={i} className="md:flex md:gap-8 border-b border-border pb-8 last:border-0">
                 <div className="mb-3 md:mb-0 md:w-56 shrink-0">
-                  <h3 className="text-lg font-bold">{cs.title}</h3>
-                  <p className="text-sm text-muted">{cs.location}</p>
-                  <p className="mt-1 text-sm font-medium text-primary">{cs.result}</p>
+                  <h3 className="text-xl font-bold">{cs.title}</h3>
+                  <p className="text-base text-muted">{cs.location}</p>
+                  <p className="mt-1 text-base font-medium text-primary">{cs.result}</p>
                 </div>
-                <p className="text-sm leading-relaxed text-muted">
+                <p className="text-base leading-relaxed text-muted">
                   {cs.desc}
                 </p>
               </div>
@@ -191,7 +191,7 @@ export default async function SaveEPage() {
         <div className="mx-auto max-w-5xl md:flex md:items-center md:justify-between">
           <div>
             <h2 className="text-2xl font-bold">{t("saveE.ctaTitle")}</h2>
-            <p className="mt-2 text-muted">
+            <p className="mt-2 text-base text-muted">
               {t("saveE.ctaDesc")}
             </p>
           </div>

@@ -54,12 +54,12 @@ export default async function BemsPage() {
         >
           <div className="mx-auto max-w-5xl">
             <h2 className="text-2xl font-bold">{section.title}</h2>
-            <p className="mt-2 text-muted">{section.desc}</p>
+            <p className="mt-2 text-base text-muted">{section.desc}</p>
             <ul className="mt-8 grid gap-4 sm:grid-cols-2">
               {section.items.map((item, i) => (
                 <li key={i} className="flex items-start gap-3 rounded-lg border border-border p-4">
                   <span className="mt-0.5 text-primary">&#10003;</span>
-                  <span className="text-sm leading-relaxed text-muted">{item}</span>
+                  <span className="text-base leading-relaxed text-muted">{item}</span>
                 </li>
               ))}
             </ul>
@@ -71,18 +71,18 @@ export default async function BemsPage() {
       <section className="border-t border-border bg-surface px-6 py-24">
         <div className="mx-auto max-w-5xl">
           <h2 className="text-2xl font-bold">{t("bems.dataTitle")}</h2>
-          <p className="mt-2 text-muted">{t("bems.dataSubtitle")}</p>
+          <p className="mt-2 text-base text-muted">{t("bems.dataSubtitle")}</p>
           <div className="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
             {dataAcquisition.map((stage, i) => (
-              <div key={i} className="relative rounded-xl border border-border p-6">
+              <div key={i} className="relative h-full rounded-xl border border-border p-6">
                 <span className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-sm font-bold text-white">
                   {i + 1}
                 </span>
                 <h3 className="mt-4 text-lg font-bold">{stage.title}</h3>
                 <ul className="mt-4 space-y-2">
                   {stage.items.map((item, j) => (
-                    <li key={j} className="flex items-start gap-2 text-sm text-muted">
-                      <span className="mt-1 h-1 w-1 shrink-0 rounded-full bg-primary" />
+                    <li key={j} className="flex items-start gap-2 text-base text-muted">
+                      <span className="mt-2.5 h-1 w-1 shrink-0 rounded-full bg-primary" />
                       {item}
                     </li>
                   ))}
@@ -97,16 +97,16 @@ export default async function BemsPage() {
       <section className="border-t border-border px-6 py-24">
         <div className="mx-auto max-w-5xl">
           <h2 className="text-2xl font-bold">{t("bems.classTitle")}</h2>
-          <p className="mt-2 text-muted">{t("bems.classSubtitle")}</p>
+          <p className="mt-2 text-base text-muted">{t("bems.classSubtitle")}</p>
           <div className="mt-12 space-y-10">
             {energyCategories.map((cat, ci) => (
               <div key={ci}>
-                <h3 className="text-lg font-bold text-primary">{cat.category}</h3>
+                <h3 className="text-xl font-bold text-primary">{cat.category}</h3>
                 <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                   {cat.items.map((item, i) => (
                     <div key={i} className="border-l-2 border-border pl-4">
-                      <p className="font-medium">{item.name}</p>
-                      <p className="mt-1 text-sm text-muted">{item.desc}</p>
+                      <p className="text-base font-medium">{item.name}</p>
+                      <p className="mt-1 text-base text-muted">{item.desc}</p>
                     </div>
                   ))}
                 </div>
@@ -124,7 +124,7 @@ export default async function BemsPage() {
             {benefitItems.map((item, i) => (
               <div key={i} className="rounded-xl border border-border p-6 text-center">
                 <p className="text-3xl font-bold text-primary">{item.value}</p>
-                <p className="mt-2 text-sm text-muted">{item.label}</p>
+                <p className="mt-2 text-base text-muted">{item.label}</p>
               </div>
             ))}
           </div>
@@ -139,7 +139,7 @@ export default async function BemsPage() {
             {targetItems.map((item, i) => (
               <div key={i} className="rounded-xl border border-border p-6">
                 <h3 className="font-bold">{item.title}</h3>
-                <p className="mt-3 text-sm leading-relaxed text-muted">{item.desc}</p>
+                <p className="mt-3 text-base leading-relaxed text-muted">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -151,7 +151,7 @@ export default async function BemsPage() {
         <div className="mx-auto max-w-5xl md:flex md:items-center md:justify-between">
           <div>
             <h2 className="text-2xl font-bold">{t("bems.ctaTitle")}</h2>
-            <p className="mt-2 text-muted">{t("bems.ctaDesc")}</p>
+            <p className="mt-2 text-base text-muted">{t("bems.ctaDesc")}</p>
           </div>
           <div className="mt-6 md:mt-0">
             <Link
