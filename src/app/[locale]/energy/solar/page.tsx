@@ -68,7 +68,7 @@ function StatsSection() {
                 {stat.value}
                 {stat.unit && <span className="text-base font-medium text-zinc-400 ml-0.5">{stat.unit}</span>}
               </p>
-              <p className="mt-1.5 text-xs text-zinc-500 tracking-wide uppercase">{stat.label}</p>
+              <p className="mt-1.5 text-sm text-zinc-500 tracking-wide uppercase">{stat.label}</p>
             </div>
           ))}
         </div>
@@ -96,7 +96,7 @@ function ServicesOverview() {
         <h2 className="mt-3 text-3xl font-bold text-zinc-900 dark:text-white">
           {t("title")}
         </h2>
-        <p className="mt-3 text-zinc-500 dark:text-zinc-400 max-w-xl">
+        <p className="mt-3 text-base text-zinc-500 dark:text-zinc-400 max-w-xl">
           {t("subtitle")}
         </p>
 
@@ -104,13 +104,13 @@ function ServicesOverview() {
           {services.map((key, i) => (
             <div
               key={key}
-              className="bg-white dark:bg-zinc-900 p-8 hover:bg-zinc-50 dark:hover:bg-zinc-800/60 transition-colors"
+              className="h-full bg-white dark:bg-zinc-900 p-8 hover:bg-zinc-50 dark:hover:bg-zinc-800/60 transition-colors"
             >
               <span className="text-xs text-zinc-400 font-mono">0{i + 1}</span>
               <h3 className="mt-3 text-base font-semibold text-zinc-900 dark:text-white">
                 {t(`items.${key}.title`)}
               </h3>
-              <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">
+              <p className="mt-2 text-base text-zinc-500 dark:text-zinc-400 leading-relaxed">
                 {t(`items.${key}.description`)}
               </p>
             </div>
@@ -140,7 +140,7 @@ function ProcessSection() {
         <h2 className="mt-3 text-3xl font-bold text-zinc-900 dark:text-white">
           {t("title")}
         </h2>
-        <p className="mt-3 text-zinc-500 dark:text-zinc-400 max-w-lg">
+        <p className="mt-3 text-base text-zinc-500 dark:text-zinc-400 max-w-lg">
           {t("subtitle")}
         </p>
 
@@ -155,7 +155,7 @@ function ProcessSection() {
                 <h3 className="mt-4 text-base font-semibold text-zinc-900 dark:text-white">
                   {t(`steps.${i}.title`)}
                 </h3>
-                <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-500 leading-relaxed">
+                <p className="mt-2 text-base text-zinc-500 dark:text-zinc-500 leading-relaxed">
                   {t(`steps.${i}.description`)}
                 </p>
               </div>
@@ -239,7 +239,7 @@ function CTASection() {
             <h2 className="text-2xl sm:text-3xl font-bold text-zinc-900 dark:text-white">
               {t("title")}
             </h2>
-            <p className="mt-3 text-zinc-500 dark:text-zinc-400 max-w-md whitespace-pre-line">
+            <p className="mt-3 text-base text-zinc-500 dark:text-zinc-400 max-w-md whitespace-pre-line">
               {t("subtitle")}
             </p>
           </div>

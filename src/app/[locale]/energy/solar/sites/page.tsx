@@ -42,16 +42,16 @@ function PlantCard({ plant }: { plant: Plant }) {
       )}
 
       <div className="p-5">
-        <h3 className="text-sm font-semibold text-zinc-900 dark:text-white">
+        <h3 className="text-base font-semibold text-zinc-900 dark:text-white">
           {plant.name}
         </h3>
         {plant.factory && (
-          <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
+          <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-0.5">
             {plant.factory}
           </p>
         )}
 
-        <div className="mt-4 flex items-center gap-4 text-xs text-zinc-500">
+        <div className="mt-4 flex items-center gap-4 text-sm text-zinc-500">
           <span>
             {plant.capacity >= 1000 ? `${plant.capacity / 1000}MW` : `${plant.capacity}kW`}
           </span>
@@ -151,7 +151,7 @@ export default function SitesPage() {
           <h1 className="mt-3 text-4xl sm:text-5xl font-bold text-zinc-900 dark:text-white">
             {t("title")}
           </h1>
-          <p className="mt-4 text-zinc-500 dark:text-zinc-400 max-w-lg">
+          <p className="mt-4 text-base text-zinc-500 dark:text-zinc-400 max-w-lg">
             {t("subtitle")}
           </p>
 
@@ -162,7 +162,7 @@ export default function SitesPage() {
                 {(totalCapacity / 1000).toFixed(2)}
                 <span className="text-sm font-medium text-zinc-400 ml-1">MW</span>
               </p>
-              <p className="text-xs text-zinc-500 mt-1">{t("totalCapacity")}</p>
+              <p className="text-sm text-zinc-500 mt-1">{t("totalCapacity")}</p>
             </div>
             <div className="w-px h-10 bg-zinc-200 dark:bg-zinc-700" />
             <div>
@@ -170,7 +170,7 @@ export default function SitesPage() {
                 {(operatingCapacity / 1000).toFixed(1)}
                 <span className="text-sm font-medium text-zinc-400 ml-1">MW</span>
               </p>
-              <p className="text-xs text-zinc-500 mt-1">{t("operatingLabel")}</p>
+              <p className="text-sm text-zinc-500 mt-1">{t("operatingLabel")}</p>
             </div>
             <div className="w-px h-10 bg-zinc-200 dark:bg-zinc-700" />
             <div>
@@ -178,7 +178,7 @@ export default function SitesPage() {
                 {plantData.length}
                 <span className="text-sm font-medium text-zinc-400 ml-1">개소</span>
               </p>
-              <p className="text-xs text-zinc-500 mt-1">총 발전소</p>
+              <p className="text-sm text-zinc-500 mt-1">총 발전소</p>
             </div>
           </div>
         </div>

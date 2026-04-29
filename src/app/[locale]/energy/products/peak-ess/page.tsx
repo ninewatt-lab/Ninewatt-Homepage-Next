@@ -66,14 +66,14 @@ export default async function PeakEssPage() {
       <section className="px-6 py-24">
         <div className="mx-auto max-w-5xl">
           <h2 className="text-2xl font-bold">{t("peakEss.background")}</h2>
-          <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted">
+          <p className="mt-3 max-w-3xl text-base leading-relaxed text-muted">
             {t("peakEss.backgroundDesc")}
           </p>
           <div className="mt-10 grid gap-8 md:grid-cols-3">
             {backgroundItems.map((item, i) => (
               <div key={i} className="border-l-2 border-primary pl-4">
                 <h3 className="font-medium">{item.title}</h3>
-                <p className="mt-2 text-sm text-muted">{item.desc}</p>
+                <p className="mt-2 text-base text-muted">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -84,11 +84,11 @@ export default async function PeakEssPage() {
       <section className="border-t border-border bg-surface px-6 py-24">
         <div className="mx-auto max-w-5xl">
           <h2 className="text-2xl font-bold">{t("peakEss.policy")}</h2>
-          <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted">
+          <p className="mt-3 max-w-3xl text-base leading-relaxed text-muted">
             {t("peakEss.policyDesc")}
           </p>
           <div className="mt-10 overflow-x-auto">
-            <table className="w-full text-sm">
+            <table className="w-full text-base">
               <thead>
                 <tr className="border-b-2 border-border">
                   {policyDemandItems.map((item, i) => (
@@ -105,7 +105,7 @@ export default async function PeakEssPage() {
               </tbody>
             </table>
           </div>
-          <p className="mt-4 text-xs text-muted">{t("peakEss.policySource")}</p>
+          <p className="mt-4 text-sm text-muted">{t("peakEss.policySource")}</p>
         </div>
       </section>
 
@@ -113,22 +113,22 @@ export default async function PeakEssPage() {
       <section className="border-t border-border px-6 py-24">
         <div className="mx-auto max-w-5xl">
           <h2 className="text-2xl font-bold">{t("peakEss.market")}</h2>
-          <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted">
+          <p className="mt-3 max-w-3xl text-base leading-relaxed text-muted">
             {t("peakEss.marketDesc")}
           </p>
           <div className="mt-10 grid gap-8 md:grid-cols-2">
             {marketStats.map((item, i) => (
-              <div key={i} className="rounded-lg border border-border p-6 text-center">
+              <div key={i} className="h-full rounded-lg border border-border p-6 text-center">
                 <p className="text-4xl font-bold text-primary">{item.value}</p>
-                <p className="mt-2 text-sm text-muted">{item.label}</p>
+                <p className="mt-2 text-base text-muted">{item.label}</p>
               </div>
             ))}
           </div>
           <div className="mt-10">
-            <h3 className="text-lg font-bold">주요 이슈</h3>
+            <h3 className="text-xl font-bold">주요 이슈</h3>
             <ul className="mt-4 space-y-3">
               {marketIssues.map((issue, i) => (
-                <li key={i} className="flex gap-3 text-sm">
+                <li key={i} className="flex gap-3 text-base">
                   <span className="shrink-0 flex h-6 w-6 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">{i + 1}</span>
                   {issue}
                 </li>
@@ -147,9 +147,9 @@ export default async function PeakEssPage() {
           </p>
           <div className="mt-10 grid gap-8 md:grid-cols-3">
             {solutionFeatures.map((item, i) => (
-              <div key={i} className="rounded-lg border border-border bg-surface-elevated p-6">
-                <h3 className="text-lg font-bold text-primary">{item.title}</h3>
-                <p className="mt-2 text-sm text-muted">{item.desc}</p>
+              <div key={i} className="h-full rounded-lg border border-border bg-surface-elevated p-6">
+                <h3 className="text-xl font-bold text-primary">{item.title}</h3>
+                <p className="mt-2 text-base text-muted">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -166,8 +166,8 @@ export default async function PeakEssPage() {
                 <span className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-lg font-bold text-white">
                   {item.step}
                 </span>
-                <h3 className="mt-4 text-lg font-bold">{item.title}</h3>
-                <p className="mt-2 text-sm text-muted">{item.desc}</p>
+                <h3 className="mt-4 text-xl font-bold">{item.title}</h3>
+                <p className="mt-2 text-base text-muted">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -182,7 +182,7 @@ export default async function PeakEssPage() {
             {benefitItems.map((item, i) => (
               <div key={i} className="text-center">
                 <p className="text-4xl font-bold text-primary">{item.value}</p>
-                <p className="mt-2 text-sm text-muted">{item.label}</p>
+                <p className="mt-2 text-base text-muted">{item.label}</p>
               </div>
             ))}
           </div>
@@ -193,12 +193,12 @@ export default async function PeakEssPage() {
       <section className="border-t border-border px-6 py-24">
         <div className="mx-auto max-w-5xl">
           <h2 className="text-2xl font-bold">{t("peakEss.targets")}</h2>
-          <p className="mt-3 text-sm text-muted">{t("peakEss.targetDesc")}</p>
+          <p className="mt-3 text-base text-muted">{t("peakEss.targetDesc")}</p>
           <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {targetItems.map((item, i) => (
-              <div key={i} className="rounded-lg border border-border p-6">
-                <h3 className="text-lg font-bold">{item.title}</h3>
-                <p className="mt-2 text-sm text-muted">{item.desc}</p>
+              <div key={i} className="h-full rounded-lg border border-border p-6">
+                <h3 className="text-xl font-bold">{item.title}</h3>
+                <p className="mt-2 text-base text-muted">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -209,14 +209,14 @@ export default async function PeakEssPage() {
       <section className="border-t border-border bg-surface px-6 py-24">
         <div className="mx-auto max-w-5xl">
           <h2 className="text-2xl font-bold">{t("peakEss.sharedEssLink")}</h2>
-          <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted">
+          <p className="mt-3 max-w-3xl text-base leading-relaxed text-muted">
             {t("peakEss.sharedEssLinkDesc")}
           </p>
           <div className="mt-10 grid gap-8 md:grid-cols-3">
             {sharedEssLinkItems.map((item, i) => (
-              <div key={i} className="rounded-lg border border-border bg-surface-elevated p-6">
-                <h3 className="text-lg font-bold text-primary">{item.title}</h3>
-                <p className="mt-2 text-sm text-muted">{item.desc}</p>
+              <div key={i} className="h-full rounded-lg border border-border bg-surface-elevated p-6">
+                <h3 className="text-xl font-bold text-primary">{item.title}</h3>
+                <p className="mt-2 text-base text-muted">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -239,7 +239,7 @@ export default async function PeakEssPage() {
         <div className="mx-auto max-w-5xl md:flex md:items-center md:justify-between">
           <div>
             <h2 className="text-2xl font-bold">{t("peakEss.ctaTitle")}</h2>
-            <p className="mt-2 text-muted">
+            <p className="mt-2 text-base text-muted">
               {t("peakEss.ctaDesc")}
             </p>
           </div>

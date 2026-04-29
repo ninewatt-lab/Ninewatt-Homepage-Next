@@ -125,8 +125,8 @@ export default async function SolarSitePage() {
                     />
                   </div>
                 </div>
-                <h3 className="mt-3 text-base font-bold">{t(`solarScope.${item.key}`)}</h3>
-                <p className="mt-1 text-xs leading-relaxed text-muted">
+                <h3 className="mt-3 text-xl font-bold">{t(`solarScope.${item.key}`)}</h3>
+                <p className="mt-1 text-sm leading-relaxed text-muted">
                   {t(`solarScope.${item.key}Desc`)}
                 </p>
               </div>
@@ -137,7 +137,7 @@ export default async function SolarSitePage() {
 
       {/* Target users */}
       <section className="border-b border-t border-border px-6 py-10">
-        <div className="mx-auto flex max-w-5xl flex-wrap items-center gap-6 text-sm text-muted">
+        <div className="mx-auto flex max-w-5xl flex-wrap items-center gap-6 text-base text-muted">
           <span className="font-semibold text-foreground">{t("solarScope.targetUsersLabel")}</span>
           {targetUsers.map((user, i) => (
             <span key={i}>
@@ -154,23 +154,23 @@ export default async function SolarSitePage() {
           <div className="grid gap-16 md:grid-cols-2">
             <div>
               <h2 className="text-2xl font-bold">{t("solarScope.problem")}</h2>
-              <p className="mt-4 text-sm leading-relaxed text-muted">
+              <p className="mt-4 text-base leading-relaxed text-muted">
                 {t("solarScope.problemDesc")}
               </p>
-              <ul className="mt-6 space-y-4 text-muted">
+              <ul className="mt-6 space-y-4 text-base text-muted">
                 {problemItems.map((item, i) => (
                   <li key={i} className="border-l-2 border-border pl-4">
                     {item}
                   </li>
                 ))}
               </ul>
-              <p className="mt-6 text-sm leading-relaxed text-muted">
+              <p className="mt-6 text-base leading-relaxed text-muted">
                 {t("solarScope.problemConclusion")}
               </p>
             </div>
             <div>
               <h2 className="text-2xl font-bold">{t("solarScope.whatSolarScopeDoes")}</h2>
-              <p className="mt-4 text-sm leading-relaxed text-muted">
+              <p className="mt-4 text-base leading-relaxed text-muted">
                 {t("solarScope.whatSolarScopeDoesDesc")}
               </p>
               <ul className="mt-6 space-y-4">
@@ -193,20 +193,20 @@ export default async function SolarSitePage() {
       <section className="border-t border-border bg-surface px-6 py-24">
         <div className="mx-auto max-w-5xl">
           <h2 className="text-2xl font-bold">{t("solarScope.dataCredibility.title")}</h2>
-          <p className="mt-3 text-muted">{t("solarScope.dataCredibility.desc")}</p>
+          <p className="mt-3 text-base text-muted">{t("solarScope.dataCredibility.desc")}</p>
 
           <div className="mt-10 grid gap-6 sm:grid-cols-2 md:grid-cols-4">
             {dataStats.map((s, i) => (
-              <div key={i} className="rounded-xl border border-border bg-background p-6">
+              <div key={i} className="h-full rounded-xl border border-border bg-background p-6">
                 <p className="text-3xl font-bold tracking-tight">{s.value}</p>
-                <p className="mt-2 text-sm text-muted">{s.label}</p>
+                <p className="mt-2 text-base text-muted">{s.label}</p>
               </div>
             ))}
           </div>
 
           <div className="mt-10">
-            <p className="text-sm font-semibold">{t("solarScope.dataCredibility.sourcesLabel")}</p>
-            <div className="mt-3 flex flex-wrap gap-x-6 gap-y-2 text-sm text-muted">
+            <p className="text-base font-semibold">{t("solarScope.dataCredibility.sourcesLabel")}</p>
+            <div className="mt-3 flex flex-wrap gap-x-6 gap-y-2 text-base text-muted">
               {dataSources.map((s, i) => (
                 <span key={i}>
                   {i > 0 && <span className="mr-6 text-border">|</span>}
@@ -228,8 +228,8 @@ export default async function SolarSitePage() {
                 key={m.name}
                 className="flex items-baseline gap-3 border-b border-border py-3"
               >
-                <span className="text-sm font-medium">{m.name}</span>
-                <span className="text-xs text-muted">{m.desc}</span>
+                <span className="text-base font-medium">{m.name}</span>
+                <span className="text-sm text-muted">{m.desc}</span>
               </div>
             ))}
           </div>
@@ -240,14 +240,14 @@ export default async function SolarSitePage() {
       <section className="border-t border-border px-6 py-24">
         <div className="mx-auto max-w-5xl">
           <h2 className="text-2xl font-bold">{t("solarScope.expectedImpact")}</h2>
-          <p className="mt-3 text-muted">
+          <p className="mt-3 text-base text-muted">
             {t("solarScope.expectedImpactDesc")}
           </p>
           <div className="mt-8 grid gap-6 sm:grid-cols-2 md:grid-cols-4">
             {impactItems.map((v, i) => (
-              <div key={i} className="rounded-xl border border-border p-6">
-                <p className="text-lg font-bold">{v.title}</p>
-                <p className="mt-2 text-sm text-muted">{v.desc}</p>
+              <div key={i} className="h-full rounded-xl border border-border p-6">
+                <p className="text-xl font-bold">{v.title}</p>
+                <p className="mt-2 text-base text-muted">{v.desc}</p>
               </div>
             ))}
           </div>
@@ -260,7 +260,7 @@ export default async function SolarSitePage() {
           <h2 className="text-2xl font-bold">
             {t("solarScope.ctaTitle")}
           </h2>
-          <p className="mt-3 text-muted">
+          <p className="mt-3 text-base text-muted">
             {t("solarScope.ctaDesc")}
           </p>
           <div className="mt-8 flex flex-wrap gap-4">
