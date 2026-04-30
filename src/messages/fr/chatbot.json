@@ -1,0 +1,58 @@
+{
+  "fab": {
+    "openLabel": "Ouvrir l'assistant IA",
+    "closeLabel": "Fermer l'assistant IA",
+    "label": "Assistant IA",
+    "tooltip": "Posez votre question"
+  },
+  "header": {
+    "title": "Assistant IA Ninewatt",
+    "subtitle": "Énergie & solutions, posez vos questions",
+    "status": "En ligne",
+    "resetLabel": "Nouvelle discussion",
+    "minimizeLabel": "Réduire"
+  },
+  "assistant": {
+    "name": "Ninewatt AI"
+  },
+  "greeting": "Bonjour ! Je suis l'assistant IA de Ninewatt. N'hésitez pas à me poser vos questions sur nos produits, solutions ou un projet.",
+  "quickRepliesTitle": "Suggestions",
+  "quickReplies": {
+    "products": "Présentez-moi vos produits",
+    "solutions": "Études de cas",
+    "consult": "Demander une consultation",
+    "company": "À propos de Ninewatt"
+  },
+  "input": {
+    "placeholder": "Tapez un message…",
+    "sendLabel": "Envoyer",
+    "limitReached": "Veuillez réessayer plus tard. (Limite atteinte)",
+    "errorFallback": "Une erreur est survenue. Veuillez réessayer ou contacter ninewatt@ninewatt.com."
+  },
+  "disclaimer": "Les réponses IA peuvent être inexactes.",
+  "poweredBy": "Powered by Claude",
+  "leadForm": {
+    "title": "Demander une consultation",
+    "description": "Notre équipe vous répondra sous 1 à 2 jours ouvrés.",
+    "name": "Nom",
+    "namePlaceholder": "Jean Dupont",
+    "company": "Société (facultatif)",
+    "companyPlaceholder": "Acme SAS",
+    "email": "Email",
+    "emailPlaceholder": "vous@exemple.com",
+    "phone": "Téléphone (facultatif)",
+    "phonePlaceholder": "+33 6 00 00 00 00",
+    "message": "Message (facultatif)",
+    "messagePlaceholder": "Quel sujet souhaitez-vous aborder ?",
+    "submit": "Envoyer",
+    "submitting": "Envoi…",
+    "successTitle": "Demande reçue",
+    "successBody": "Notre équipe vous recontactera prochainement. Merci !",
+    "errorBody": "Échec de l'envoi. Veuillez réessayer plus tard."
+  },
+  "static": {
+    "products": "Ninewatt opère 7 produits principaux :\n\n- **Shared-ESS / Peak-ESS** : Gestion des systèmes de stockage d'énergie\n- **BEMS** : Système de gestion énergétique des bâtiments\n- **Solar-Site** : Analyse de faisabilité de sites solaires\n- **PV Intelligence** : Supervision des centrales solaires\n- **GreenPlanner** : Simulation de rénovation verte\n- **RE:park** : Gestion d'installations par QR code\n\nDites-moi lequel vous intéresse.",
+    "solutions": "Nos solutions phares :\n\n- **Opti** : Conseiller IA en énergie pour bâtiments\n- **Watti** : Analyse énergétique 3D des bâtiments\n- **Save-E** : Optimisation des coûts énergétiques\n\nNous avons livré plus de 60 projets dans le monde. Quel secteur ou cas d'usage vous intéresse ?",
+    "company": "**Ninewatt** est une entreprise tech IA & énergie qui mène la GX (Green Transformation) pour un futur durable.\n\n- Siège : Incheon / R&D : Séoul\n- 30+ employés, 60+ projets, 36+ brevets\n- Présence : Japon, Royaume-Uni, France, USA\n- Contact : ninewatt@ninewatt.com / +82 70-8866-7226"
+  }
+}

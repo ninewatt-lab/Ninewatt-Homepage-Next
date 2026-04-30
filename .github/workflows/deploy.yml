@@ -48,11 +48,12 @@ jobs:
         env:
           ECR_REGISTRY: ${{ steps.ecr-login.outputs.registry }}
           TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
-          envs: ECR_REGISTRY,TEAMS_WEBHOOK_URL
+          envs: ECR_REGISTRY,TEAMS_WEBHOOK_URL,ANTHROPIC_API_KEY
           script: |
             aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin ${ECR_REGISTRY}
             IMAGE_TAG="${ECR_REGISTRY}/ninewatt-homepage:${{ github.sha }}"
@@ -66,4 +67,5 @@ jobs:
               --restart unless-stopped \
               -p 3000:3000 \
               -e "TEAMS_WEBHOOK_URL=$TEAMS_WEBHOOK_URL" \
+              -e "ANTHROPIC_API_KEY=$ANTHROPIC_API_KEY" \
               ${IMAGE_TAG}

@@ -1,0 +1,58 @@
+{
+  "fab": {
+    "openLabel": "AI 도우미 열기",
+    "closeLabel": "AI 도우미 닫기",
+    "label": "AI 도우미",
+    "tooltip": "무엇이든 물어보세요"
+  },
+  "header": {
+    "title": "나인와트 AI 도우미",
+    "subtitle": "에너지·솔루션 무엇이든 물어보세요",
+    "status": "온라인",
+    "resetLabel": "새 대화",
+    "minimizeLabel": "최소화"
+  },
+  "assistant": {
+    "name": "Ninewatt AI"
+  },
+  "greeting": "안녕하세요! 나인와트 AI 도우미예요. 제품·솔루션·도입 상담 등 무엇이든 편하게 물어보세요.",
+  "quickRepliesTitle": "이런 게 궁금하신가요?",
+  "quickReplies": {
+    "products": "제품을 소개해주세요",
+    "solutions": "솔루션 사례가 궁금해요",
+    "consult": "상담을 신청하고 싶어요",
+    "company": "회사가 궁금해요"
+  },
+  "input": {
+    "placeholder": "메시지를 입력하세요…",
+    "sendLabel": "전송",
+    "limitReached": "잠시 후 다시 시도해주세요. (요청 한도 초과)",
+    "errorFallback": "일시적인 오류가 발생했습니다. 잠시 후 다시 시도하시거나 ninewatt@ninewatt.com 으로 문의해주세요."
+  },
+  "disclaimer": "AI 응답은 부정확할 수 있습니다.",
+  "poweredBy": "Powered by Claude",
+  "leadForm": {
+    "title": "상담 신청하기",
+    "description": "담당자가 영업일 기준 1-2일 내 연락드립니다.",
+    "name": "이름",
+    "namePlaceholder": "홍길동",
+    "company": "회사명 (선택)",
+    "companyPlaceholder": "주식회사 나인와트",
+    "email": "이메일",
+    "emailPlaceholder": "you@example.com",
+    "phone": "연락처 (선택)",
+    "phonePlaceholder": "010-0000-0000",
+    "message": "문의 내용 (선택)",
+    "messagePlaceholder": "어떤 부분이 궁금하신가요?",
+    "submit": "상담 신청",
+    "submitting": "전송 중…",
+    "successTitle": "상담 신청이 접수되었습니다",
+    "successBody": "영업팀이 곧 연락드릴 예정입니다. 감사합니다!",
+    "errorBody": "전송에 실패했습니다. 잠시 후 다시 시도해주세요."
+  },
+  "static": {
+    "products": "나인와트는 7개 핵심 제품을 운영하고 있습니다:\n\n- **Shared-ESS / Peak-ESS**: 에너지저장장치 운영·관리\n- **BEMS**: 건물 에너지 관리 시스템\n- **Solar-Site**: 태양광 부지 타당성 분석\n- **PV Intelligence**: 태양광 발전소 모니터링\n- **GreenPlanner**: 그린리모델링 시뮬레이션\n- **RE:park**: QR 기반 시설 관리\n\n관심 있는 제품을 알려주시면 더 자세히 설명드릴게요.",
+    "solutions": "나인와트의 대표 솔루션은 다음과 같습니다:\n\n- **Opti**: AI 기반 건물 에너지 어드바이저\n- **Watti**: 3D 건물 에너지 분석\n- **Save-E**: 건물 에너지 비용 최적화\n\n국내외 60+ 프로젝트를 수행했습니다. 어떤 산업/사례가 궁금하신가요?",
+    "company": "**나인와트(Ninewatt)** 는 GX(Green Transformation) 기술로 지속가능한 미래를 실현하는 AI·에너지 테크 기업입니다.\n\n- 본사: 인천 / R&D 센터: 서울\n- 직원 30+, 프로젝트 60+, 특허 36+\n- 글로벌 진출: 일본·영국·프랑스·미국\n- 연락처: ninewatt@ninewatt.com / 070-8866-7226"
+  }
+}

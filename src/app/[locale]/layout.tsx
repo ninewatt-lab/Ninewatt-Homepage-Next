@@ -7,6 +7,7 @@ import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import ThemeProvider from "@/components/ThemeProvider";
+import ChatbotWidget from "@/components/chatbot/ChatbotWidget";
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
@@ -46,6 +47,7 @@ export default async function LocaleLayout({
         <NextIntlClientProvider locale={locale}>
           <ThemeProvider>
             {children}
+            <ChatbotWidget />
           </ThemeProvider>
         </NextIntlClientProvider>
       </body>
