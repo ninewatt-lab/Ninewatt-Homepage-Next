@@ -29,7 +29,7 @@ export default function QuickReplies({ onSelect, disabled }: Props) {
             type="button"
             onClick={() => onSelect(r)}
             disabled={disabled}
-            className="group flex items-center justify-between gap-3 border-b border-border/60 py-2.5 text-left text-[13px] text-foreground transition-colors last:border-b-0 hover:text-primary disabled:pointer-events-none disabled:opacity-50"
+            className="group flex items-center justify-between gap-3 border-b border-border/60 py-2.5 text-left text-[14.5px] text-foreground transition-colors last:border-b-0 hover:text-primary disabled:pointer-events-none disabled:opacity-50"
           >
             <span className="flex-1 leading-snug">{r.label}</span>
             <span

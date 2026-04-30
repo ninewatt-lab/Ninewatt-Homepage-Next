@@ -6,7 +6,9 @@ import type { ChatMessage as ChatMessageType } from "./types";
 
 function renderInline(text: string) {
   const parts: (string | React.ReactNode)[] = [];
-  const regex = /(\*\*([^*]+)\*\*)|(\[([^\]]+)\]\(([^)]+)\))/g;
+  // Match **bold** or [label](href). Allow optional whitespace between ] and (
+  // because the model occasionally inserts a space or zero-width separator.
+  const regex = /(\*\*([^*]+)\*\*)|(\[([^\]]+)\]\s*\(([^)\s]+)\))/g;
   let lastIndex = 0;
   let match: RegExpExecArray | null;
   let i = 0;
@@ -26,9 +28,21 @@ function renderInline(text: string) {
           {...(isInternal
             ? {}
             : { target: "_blank", rel: "noopener noreferrer" })}
-          className="font-medium text-primary underline decoration-primary/30 underline-offset-[3px] transition-colors hover:decoration-primary"
+          className="inline-flex items-baseline gap-0.5 font-semibold text-primary underline decoration-primary decoration-2 underline-offset-[3px] transition-colors hover:bg-primary/10 hover:decoration-[3px] rounded-xs -mx-0.5 px-0.5"
         >
-          {match[4]}
+          <span>{match[4]}</span>
+          {!isInternal && (
+            <svg
+              viewBox="0 0 12 12"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.75"
+              aria-hidden="true"
+              className="h-2.5 w-2.5 -translate-y-px shrink-0"
+            >
+              <path d="M3.5 2H10V8.5M10 2L2 10" />
+            </svg>
+          )}
         </a>
       );
     }
@@ -64,6 +78,19 @@ function renderContent(content: string) {
   };
 
   lines.forEach((line, idx) => {
+    // Strip leading markdown heading markers (#, ##, ### ...) and render
+    // the remaining text as a bold paragraph. The chat UI does not render
+    // headings, so leaving the # marks would show literal "##" to users.
+    const headingMatch = line.match(/^(#{1,6})\s+(.+)$/);
+    if (headingMatch) {
+      flushList(idx);
+      blocks.push(
+        <p key={`h-${idx}`} className="font-semibold">
+          {renderInline(headingMatch[2])}
+        </p>
+      );
+      return;
+    }
     if (/^[-*]\s+/.test(line)) {
       currentList.push(line);
     } else {
@@ -84,7 +111,7 @@ function ChatMessageBase({ message }: { message: ChatMessageType }) {
   if (isUser) {
     return (
       <div className="flex justify-end" role="article">
-        <div className="max-w-[80%] rounded-2xl bg-primary/95 px-4 py-2.5 text-[13.5px] leading-relaxed text-white shadow-[0_1px_2px_rgba(0,0,0,0.04)]">
+        <div className="max-w-[80%] rounded-2xl bg-primary/95 px-4 py-2.5 text-[15px] leading-relaxed text-white shadow-[0_1px_2px_rgba(0,0,0,0.04)]">
           <div className="space-y-1.5">{renderContent(message.content)}</div>
         </div>
       </div>
@@ -101,8 +128,10 @@ function ChatMessageBase({ message }: { message: ChatMessageType }) {
       </span>
       <div
         className={[
-          "min-w-0 flex-1 pt-0.5 text-[13.5px] leading-relaxed",
-          isError ? "text-red-700 dark:text-red-300" : "text-foreground",
+          "min-w-0 flex-1 rounded-2xl border px-4 py-3 text-[15px] leading-relaxed shadow-[0_1px_2px_rgba(15,23,42,0.04)]",
+          isError
+            ? "border-red-200 bg-red-50/60 text-red-700 dark:border-red-900/40 dark:bg-red-950/30 dark:text-red-300"
+            : "border-border bg-surface-elevated text-foreground",
         ].join(" ")}
       >
         <div className="space-y-2">{renderContent(message.content)}</div>
