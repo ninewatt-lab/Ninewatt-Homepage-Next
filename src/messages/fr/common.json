@@ -73,13 +73,16 @@
     "solar": "Ninewatt Solar",
     "solarDesc": "Service O&M solaire PV par IA",
     "energy": "Ninewatt Energy",
-    "energyDesc": "Service O&M énergies renouvelables par IA (Solaire + ESS)"
+    "energyDesc": "Service O&M énergies renouvelables par IA (Solaire + ESS)",
+    "greenplannerPartners": "GreenPlanner Partners",
+    "greenplannerPartnersDesc": "Portail réservé aux partenaires d'affaires en énergies renouvelables"
   },
   "footer": {
     "tagline": "Avec une technologie énergétique à la pointe de la transition GX,\nnous contribuons aux villes intelligentes et à la neutralité carbone.",
     "hq": "(Siège) 204, Convensia-daero, Yeonsu-gu, Incheon, Corée (22004)",
     "rnd": "(Centre R&D) 22, Gangnam-daero 162-gil, Gangnam-gu, Séoul, Corée (06028)",
-    "gyeonggi": "(Succursale Gyeonggi) 158, Gimpohangang 8-ro, Gimpo-si, Gyeonggi-do, Corée (10068)"
+    "gyeonggi": "(Succursale Gyeonggi) 158, Gimpohangang 8-ro, Gimpo-si, Gyeonggi-do, Corée (10068)",
+    "familySite": "Sites partenaires"
   },
   "error": {
     "notFoundTitle": "Page introuvable",

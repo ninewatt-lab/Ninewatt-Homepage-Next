@@ -64,6 +64,8 @@
     "solarDesc": "AI 기반 태양광 O&M 서비스",
     "energy": "Ninewatt Energy",
     "energyDesc": "AI 기반 신재생에너지 O&M 서비스 (태양광 + ESS)",
+    "greenplannerPartners": "그린플래너 파트너스",
+    "greenplannerPartnersDesc": "재생에너지 사업 파트너 전용 포털",
     "global": "글로벌 사업",
     "globalDesc": "일본·영국·프랑스·미국 진출",
     "awards": "수상 내역",
@@ -79,7 +81,8 @@
     "tagline": "GX 실현을 이끄는 에너지 기술로,\n스마트시티와 탄소중립 사회에 기여합니다.",
     "hq": "(본사) 인천광역시 연수구 컨벤시아대로 204, 104호 (22004)",
     "rnd": "(기업부설연구소) 서울특별시 강남구 강남대로162길 22, 2·4F (06028)",
-    "gyeonggi": "(경기지사) 경기도 김포시 김포한강8로 158, 6층 604-d154호(마산동) (10068)"
+    "gyeonggi": "(경기지사) 경기도 김포시 김포한강8로 158, 6층 604-d154호(마산동) (10068)",
+    "familySite": "패밀리 사이트"
   },
   "error": {
     "notFoundTitle": "페이지를 찾을 수 없습니다",
