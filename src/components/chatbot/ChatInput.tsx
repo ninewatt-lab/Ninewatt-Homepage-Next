@@ -59,7 +59,7 @@ export default function ChatInput({ onSend, disabled, autoFocus }: Props) {
           placeholder={t("placeholder")}
           rows={1}
           disabled={disabled}
-          className="block w-full resize-none bg-transparent text-[13.5px] leading-relaxed text-foreground outline-hidden placeholder:text-muted/70 focus:outline-hidden focus-visible:outline-hidden disabled:opacity-50"
+          className="block w-full resize-none bg-transparent text-[15px] leading-relaxed text-foreground outline-hidden placeholder:text-muted/70 focus:outline-hidden focus-visible:outline-hidden disabled:opacity-50"
           aria-label={t("placeholder")}
         />
       </div>

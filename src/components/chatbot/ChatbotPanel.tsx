@@ -229,7 +229,7 @@ export default function ChatbotPanel() {
               <h2 className="mt-1.5 text-[17px] font-semibold leading-tight tracking-tight text-foreground">
                 {t("header.title")}
               </h2>
-              <p className="mt-1 flex items-center gap-1.5 text-[11.5px] text-muted">
+              <p className="mt-1 flex items-center gap-1.5 text-[12.5px] text-muted">
                 <span className="relative flex h-1.5 w-1.5">
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary/40" />
                   <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-primary/70" />
@@ -265,7 +265,7 @@ export default function ChatbotPanel() {
           <div
             ref={scrollRef}
             aria-live="polite"
-            className="flex-1 overflow-y-auto bg-background px-5 py-5"
+            className="flex-1 overflow-y-auto overscroll-contain bg-background px-5 py-5"
           >
             <div className="space-y-5">
               {messages.map((m) => (
@@ -306,7 +306,7 @@ export default function ChatbotPanel() {
               disabled={isLoading}
               autoFocus={open}
             />
-            <div className="mt-2.5 flex items-center justify-between gap-3 text-[10px] text-muted/80">
+            <div className="mt-2.5 flex items-center justify-between gap-3 text-[11px] text-muted/80">
               <span className="truncate">{t("disclaimer")}</span>
               <span className="shrink-0 font-medium tracking-tight">
                 {t("poweredBy")}
