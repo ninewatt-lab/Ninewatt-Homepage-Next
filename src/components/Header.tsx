@@ -455,9 +455,9 @@ export default function Header() {
         ref={headerRef}
         className={`fixed top-0 z-50 w-full border-b transition-all duration-200 ${
           activeMenu
-            ? "bg-background/90 backdrop-blur-xl border-border shadow-lg shadow-black/5"
+            ? "bg-background border-transparent"
             : scrolled || mobileOpen
-              ? "bg-background/90 border-border backdrop-blur-xl"
+              ? "bg-background/95 border-border backdrop-blur-xl"
               : "bg-transparent border-transparent"
         }`}
       >
@@ -479,7 +479,7 @@ export default function Header() {
                   href={item.href}
                   className={`inline-flex items-center gap-1 rounded-lg px-4 py-2 text-lg font-medium transition-colors duration-200 ${
                     activeMenu === item.labelKey
-                      ? "text-foreground bg-surface"
+                      ? "text-primary"
                       : isTransparent
                         ? "text-white hover:text-white [text-shadow:0_1px_2px_rgba(0,0,0,0.4)]"
                         : "text-foreground hover:text-primary"
@@ -601,7 +601,7 @@ export default function Header() {
           onMouseEnter={handleDropdownEnter}
           onMouseLeave={handleMouseLeave}
         >
-          <div className="bg-background/95 backdrop-blur-xl">
+          <div className="bg-background shadow-lg shadow-black/5">
             <div className="mx-auto max-w-7xl px-6 py-6">
               <div className="grid *:col-start-1 *:row-start-1">
               {megaMenuItems.map((item) => (
@@ -632,7 +632,7 @@ export default function Header() {
                           {section.items.map((subItem) => {
                             const content = (
                               <>
-                                <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-surface text-primary transition-colors group-hover:bg-primary group-hover:text-white">
+                                <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-white">
                                   {subItem.icon}
                                 </span>
                                 <div className="flex flex-col">
