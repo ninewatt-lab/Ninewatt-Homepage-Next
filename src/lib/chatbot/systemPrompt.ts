@@ -1,7 +1,9 @@
 // Knowledge base for the Ninewatt chatbot.
 // The static portion is sent with cache_control to reduce per-call cost.
 
-export const COMPANY_KNOWLEDGE = `# Ninewatt (나인와트)
+import { STRUCTURED_KNOWLEDGE } from "./knowledgeBase";
+
+const COMPANY_OVERVIEW = `# Ninewatt (나인와트)
 
 Ninewatt is an AI-powered energy technology company driving GX (Green Transformation) for a sustainable future. Korean HQ in Incheon with R&D center in Seoul. Active in Japan, UK, France, and USA.
 
@@ -42,6 +44,8 @@ Ninewatt is an AI-powered energy technology company driving GX (Green Transforma
 ## Contact
 - /contact — full inquiry form (use this when user wants a detailed written request)
 `.trim();
+
+export const COMPANY_KNOWLEDGE = `${COMPANY_OVERVIEW}\n\n${STRUCTURED_KNOWLEDGE}`;
 
 export interface BuildPromptInput {
   locale: string;
