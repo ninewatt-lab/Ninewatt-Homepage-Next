@@ -7,11 +7,13 @@ type FooterLink = {
   label: string;
   href: string;
   isLiteral?: boolean;
+  external?: boolean;
 };
 
 type FooterSection = {
   titleKey: string;
   href: string;
+  external?: boolean;
   links: FooterLink[];
 };
 
@@ -58,7 +60,37 @@ const footerSections: FooterSection[] = [
       { label: "nav.contact", href: "/contact" },
     ],
   },
+  {
+    titleKey: "footer.familySite",
+    href: "https://energy.ninewatt.com/ko",
+    external: true,
+    links: [
+      {
+        label: "companyMenu.energy",
+        href: "https://energy.ninewatt.com/ko",
+        external: true,
+      },
+      {
+        label: "companyMenu.greenplannerPartners",
+        href: "https://partners.greenplanner.co.kr",
+        external: true,
+      },
+    ],
+  },
 ];
+
+const ExternalArrow = () => (
+  <svg
+    viewBox="0 0 12 12"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.5"
+    className="h-3 w-3 shrink-0 opacity-60"
+    aria-hidden="true"
+  >
+    <path d="M3.5 2H10V8.5M10 2L2 10" />
+  </svg>
+);
 
 export default function Footer() {
   const t = useTranslations("common");
@@ -118,26 +150,45 @@ export default function Footer() {
           </div>
 
           {/* Navigation Columns */}
-          <div className="grid grid-cols-2 gap-x-10 gap-y-8 sm:grid-cols-3">
+          <div className="grid grid-cols-2 gap-x-10 gap-y-8 sm:grid-cols-4">
           {footerSections.map((section) => (
             <div key={section.href}>
-              <Link
-                href={section.href}
-                className="font-semibold text-foreground transition-colors hover:text-accent"
-              >
-                {t(section.titleKey)}
-              </Link>
+              {section.external ? (
+                <span className="font-semibold text-foreground">
+                  {t(section.titleKey)}
+                </span>
+              ) : (
+                <Link
+                  href={section.href}
+                  className="font-semibold text-foreground transition-colors hover:text-accent"
+                >
+                  {t(section.titleKey)}
+                </Link>
+              )}
               {section.links.length > 0 && (
                 <div className="mt-2 flex flex-col gap-0.5 text-sm text-muted">
-                  {section.links.map((link) => (
-                    <Link
-                      key={link.href}
-                      href={link.href}
-                      className="py-1 transition-colors hover:text-foreground"
-                    >
-                      {link.isLiteral ? link.label : t(link.label)}
-                    </Link>
-                  ))}
+                  {section.links.map((link) =>
+                    link.external ? (
+                      <a
+                        key={link.href}
+                        href={link.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 py-1 transition-colors hover:text-foreground"
+                      >
+                        <span>{link.isLiteral ? link.label : t(link.label)}</span>
+                        <ExternalArrow />
+                      </a>
+                    ) : (
+                      <Link
+                        key={link.href}
+                        href={link.href}
+                        className="py-1 transition-colors hover:text-foreground"
+                      >
+                        {link.isLiteral ? link.label : t(link.label)}
+                      </Link>
+                    )
+                  )}
                 </div>
               )}
             </div>

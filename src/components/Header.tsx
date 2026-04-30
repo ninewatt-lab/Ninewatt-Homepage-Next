@@ -699,23 +699,42 @@ export default function Header() {
                         </svg>
                       </Link>
                       {item.labelKey === "nav.company" && (
-                        <a
-                          href="https://energy.ninewatt.com/ko"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          onClick={() => setActiveMenu(null)}
-                          className="group flex items-center gap-2 rounded-lg border border-border px-4 py-2.5 transition-colors hover:border-primary/30 hover:bg-primary/5 w-full"
-                        >
-                          <div className="flex flex-col flex-1">
-                            <span className="text-base font-semibold text-foreground group-hover:text-primary transition-colors">
-                              {t("companyMenu.energy")}
-                            </span>
-                            <span className="text-sm text-muted">{t("companyMenu.energyDesc")}</span>
-                          </div>
-                          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-3.5 w-3.5 text-muted group-hover:text-primary transition-colors shrink-0">
-                            <path d="M3.5 2H10V8.5M10 2L2 10" />
-                          </svg>
-                        </a>
+                        <>
+                          <a
+                            href="https://energy.ninewatt.com/ko"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={() => setActiveMenu(null)}
+                            className="group flex items-center gap-2 rounded-lg border border-border px-4 py-2.5 transition-colors hover:border-primary/30 hover:bg-primary/5 w-full"
+                          >
+                            <div className="flex flex-col flex-1">
+                              <span className="text-base font-semibold text-foreground group-hover:text-primary transition-colors">
+                                {t("companyMenu.energy")}
+                              </span>
+                              <span className="text-sm text-muted">{t("companyMenu.energyDesc")}</span>
+                            </div>
+                            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-3.5 w-3.5 text-muted group-hover:text-primary transition-colors shrink-0">
+                              <path d="M3.5 2H10V8.5M10 2L2 10" />
+                            </svg>
+                          </a>
+                          <a
+                            href="https://partners.greenplanner.co.kr"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={() => setActiveMenu(null)}
+                            className="group flex items-center gap-2 rounded-lg border border-border px-4 py-2.5 transition-colors hover:border-primary/30 hover:bg-primary/5 w-full"
+                          >
+                            <div className="flex flex-col flex-1">
+                              <span className="text-base font-semibold text-foreground group-hover:text-primary transition-colors">
+                                {t("companyMenu.greenplannerPartners")}
+                              </span>
+                              <span className="text-sm text-muted">{t("companyMenu.greenplannerPartnersDesc")}</span>
+                            </div>
+                            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-3.5 w-3.5 text-muted group-hover:text-primary transition-colors shrink-0">
+                              <path d="M3.5 2H10V8.5M10 2L2 10" />
+                            </svg>
+                          </a>
+                        </>
                       )}
                     </div>
                   </div>
