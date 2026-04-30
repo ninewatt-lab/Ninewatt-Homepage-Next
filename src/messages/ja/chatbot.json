@@ -1,0 +1,58 @@
+{
+  "fab": {
+    "openLabel": "AIアシスタントを開く",
+    "closeLabel": "AIアシスタントを閉じる",
+    "label": "AI アシスタント",
+    "tooltip": "お気軽にどうぞ"
+  },
+  "header": {
+    "title": "Ninewatt AI アシスタント",
+    "subtitle": "エネルギー・ソリューションのご質問はこちら",
+    "status": "オンライン",
+    "resetLabel": "新規チャット",
+    "minimizeLabel": "最小化"
+  },
+  "assistant": {
+    "name": "Ninewatt AI"
+  },
+  "greeting": "こんにちは!Ninewatt の AI アシスタントです。製品・ソリューション・導入相談など、お気軽にご質問ください。",
+  "quickRepliesTitle": "こんなご質問はいかがですか?",
+  "quickReplies": {
+    "products": "製品を紹介してください",
+    "solutions": "ソリューション事例を見たい",
+    "consult": "相談を申し込みたい",
+    "company": "会社情報を知りたい"
+  },
+  "input": {
+    "placeholder": "メッセージを入力…",
+    "sendLabel": "送信",
+    "limitReached": "しばらく経ってから再度お試しください。(リクエスト上限)",
+    "errorFallback": "一時的なエラーが発生しました。しばらく経ってから再度お試しいただくか、ninewatt@ninewatt.com までご連絡ください。"
+  },
+  "disclaimer": "AI の回答には誤りが含まれる可能性があります。",
+  "poweredBy": "Powered by Claude",
+  "leadForm": {
+    "title": "相談を申し込む",
+    "description": "営業日 1-2 日以内に担当者よりご連絡いたします。",
+    "name": "お名前",
+    "namePlaceholder": "山田 太郎",
+    "company": "会社名(任意)",
+    "companyPlaceholder": "株式会社サンプル",
+    "email": "メール",
+    "emailPlaceholder": "you@example.com",
+    "phone": "電話番号(任意)",
+    "phonePlaceholder": "090-0000-0000",
+    "message": "ご相談内容(任意)",
+    "messagePlaceholder": "ご質問・ご要望をご記入ください",
+    "submit": "相談を申し込む",
+    "submitting": "送信中…",
+    "successTitle": "お申し込みを受け付けました",
+    "successBody": "営業チームよりご連絡いたします。ありがとうございました。",
+    "errorBody": "送信に失敗しました。しばらく経ってから再度お試しください。"
+  },
+  "static": {
+    "products": "Ninewatt は 7 つのコア製品を提供しています:\n\n- **Shared-ESS / Peak-ESS**: 蓄電池運用・管理\n- **BEMS**: 建物エネルギー管理システム\n- **Solar-Site**: 太陽光用地の事業性分析\n- **PV Intelligence**: 太陽光発電所モニタリング\n- **GreenPlanner**: グリーンリモデリングシミュレーション\n- **RE:park**: QR ベースの施設管理\n\nご興味のある製品をお知らせください。",
+    "solutions": "代表的なソリューション:\n\n- **Opti**: AI 建物エネルギーアドバイザー\n- **Watti**: 3D 建物エネルギー分析\n- **Save-E**: 建物エネルギーコスト最適化\n\n国内外で 60+ プロジェクトを実施しました。どの業種・事例がお知りになりたいですか?",
+    "company": "**Ninewatt** は GX(Green Transformation)技術で持続可能な未来を実現する AI・エネルギーテック企業です。\n\n- 本社: 仁川 / R&D: ソウル\n- 従業員 30+、プロジェクト 60+、特許 36+\n- グローバル展開: 日本・英国・フランス・米国\n- 連絡先: ninewatt@ninewatt.com / +82 70-8866-7226"
+  }
+}
