@@ -28,5 +28,13 @@
     "eslint-config-next": "16.1.7",
     "tailwindcss": "^4",
     "typescript": "^5"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@parcel/watcher",
+      "@swc/core",
+      "sharp",
+      "unrs-resolver"
+    ]
   }
 }
