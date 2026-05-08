@@ -3,7 +3,13 @@
     "openLabel": "AIアシスタントを開く",
     "closeLabel": "AIアシスタントを閉じる",
     "label": "AI アシスタント",
-    "tooltip": "お気軽にどうぞ"
+    "tooltip": "お気軽にどうぞ",
+    "newBadge": "NEW"
+  },
+  "teaser": {
+    "title": "省エネのこと、AIにお任せ",
+    "body": "製品・ソリューション・導入相談を即時回答。",
+    "dismiss": "閉じる"
   },
   "header": {
     "title": "Ninewatt AI アシスタント",

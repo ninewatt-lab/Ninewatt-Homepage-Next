@@ -3,7 +3,13 @@
     "openLabel": "AI 도우미 열기",
     "closeLabel": "AI 도우미 닫기",
     "label": "AI 도우미",
-    "tooltip": "무엇이든 물어보세요"
+    "tooltip": "무엇이든 물어보세요",
+    "newBadge": "NEW"
+  },
+  "teaser": {
+    "title": "에너지 절감, AI에게 물어보세요",
+    "body": "제품·솔루션·도입 상담을 즉시 답변해드려요.",
+    "dismiss": "닫기"
   },
   "header": {
     "title": "나인와트 AI 도우미",

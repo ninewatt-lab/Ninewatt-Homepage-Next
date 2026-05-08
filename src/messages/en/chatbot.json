@@ -3,7 +3,13 @@
     "openLabel": "Open AI assistant",
     "closeLabel": "Close AI assistant",
     "label": "AI Assistant",
-    "tooltip": "Ask anything"
+    "tooltip": "Ask anything",
+    "newBadge": "NEW"
+  },
+  "teaser": {
+    "title": "Save energy. Just ask the AI.",
+    "body": "Instant answers on products, solutions, and consulting.",
+    "dismiss": "Dismiss"
   },
   "header": {
     "title": "Ninewatt AI Assistant",

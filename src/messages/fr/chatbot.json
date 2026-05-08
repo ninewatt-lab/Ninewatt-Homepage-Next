@@ -3,7 +3,13 @@
     "openLabel": "Ouvrir l'assistant IA",
     "closeLabel": "Fermer l'assistant IA",
     "label": "Assistant IA",
-    "tooltip": "Posez votre question"
+    "tooltip": "Posez votre question",
+    "newBadge": "NEW"
+  },
+  "teaser": {
+    "title": "Économisez l'énergie. Demandez à l'IA.",
+    "body": "Réponses instantanées sur produits, solutions et consulting.",
+    "dismiss": "Fermer"
   },
   "header": {
     "title": "Assistant IA Ninewatt",

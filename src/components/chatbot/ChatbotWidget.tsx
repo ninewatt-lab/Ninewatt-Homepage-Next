@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import ChatbotProvider from "./ChatbotProvider";
 import ChatbotFAB from "./ChatbotFAB";
 import ChatbotPanel from "./ChatbotPanel";
+import ChatbotTeaser from "./ChatbotTeaser";
 
 // Routes where the chatbot should be hidden (path suffix match, locale-agnostic)
 const HIDDEN_PATH_SUFFIXES = ["/contact"];
@@ -17,6 +18,7 @@ export default function ChatbotWidget() {
   return (
     <ChatbotProvider>
       <ChatbotFAB />
+      <ChatbotTeaser />
       <ChatbotPanel />
     </ChatbotProvider>
   );
