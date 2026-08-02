@@ -8,7 +8,9 @@ import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import ThemeProvider from "@/components/ThemeProvider";
 import ChatbotWidget from "@/components/chatbot/ChatbotWidget";
+import JsonLd from "@/components/JsonLd";
 import { SITE_URL } from "@/lib/seo";
+import { organizationJsonLd } from "@/lib/jsonld";
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
@@ -65,6 +67,8 @@ export default async function LocaleLayout({
       <body
         className={`${geistMono.variable} antialiased overflow-x-hidden`}
       >
+        {/* 회사 엔티티는 전 페이지에 한 번씩. 값 출처는 src/data/companyInfo.ts */}
+        <JsonLd data={organizationJsonLd()} />
         <NextIntlClientProvider locale={locale}>
           <ThemeProvider>
             {children}

@@ -1,3 +1,4 @@
+import ProductJsonLd from "@/components/ProductJsonLd";
 import type { Metadata } from "next";
 import { buildMetadata } from "@/lib/seo";
 import { Link } from "@/i18n/navigation";
@@ -37,6 +38,12 @@ export default async function SharedEssPage() {
 
   return (
     <>
+    <ProductJsonLd
+      path="/product/shared-ess"
+      metaKey="meta.sharedEss"
+      category="Energy Storage System (ESS)"
+    />
+
       {/* Hero */}
       <section className="border-b border-border px-6 pb-20 pt-16">
         <div className="mx-auto max-w-5xl">
