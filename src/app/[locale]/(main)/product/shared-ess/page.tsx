@@ -1,13 +1,22 @@
+import type { Metadata } from "next";
+import { buildMetadata } from "@/lib/seo";
 import { Link } from "@/i18n/navigation";
 import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 
-export async function generateMetadata() {
-  const t = await getTranslations("product");
-  return {
-    title: `${t("sharedEss.heroTitle")} - Shared ESS - Ninewatt`,
-    description: t("sharedEss.heroDesc"),
-  };
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "product" });
+  return buildMetadata({
+    locale,
+    path: "/product/shared-ess",
+    title: t("meta.sharedEss.title"),
+    description: t("meta.sharedEss.description"),
+  });
 }
 
 export default async function SharedEssPage() {

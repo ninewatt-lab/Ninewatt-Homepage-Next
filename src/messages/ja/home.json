@@ -1,4 +1,8 @@
 {
+  "meta": {
+    "title": "Ninewatt — ビルエネルギーインテリジェンス",
+    "description": "AI駆動型ビルエネルギー分析・最適化プラットフォーム"
+  },
   "hero": {
     "badge": "CES 2026 Innovation Awards",
     "headline": "ビルに<accent>エネルギー</accent>を",

@@ -1,4 +1,8 @@
 {
+  "meta": {
+    "title": "Ninewatt — Building Energy Intelligence",
+    "description": "AI-powered building energy analytics and optimization platform"
+  },
   "hero": {
     "badge": "CES 2026 Innovation Awards",
     "headline": "Make buildings",

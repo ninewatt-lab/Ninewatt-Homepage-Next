@@ -1,14 +1,23 @@
+import type { Metadata } from "next";
+import { buildMetadata } from "@/lib/seo";
 import { getTranslations } from "next-intl/server";
 import { getPapers } from "@/lib/cms";
 import { DetailExpandableRow, DetailTrigger, AccordionTableBody } from "@/components/ImageLightbox";
 import type { PaperCategory, Paper } from "@/data/papers";
 
-export async function generateMetadata() {
-  const t = await getTranslations("company");
-  return {
-    title: `${t("papers.title")} - Ninewatt`,
-    description: t("papers.subtitle"),
-  };
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "company" });
+  return buildMetadata({
+    locale,
+    path: "/company/papers",
+    title: t("meta.papers.title"),
+    description: t("meta.papers.description"),
+  });
 }
 
 const categoryOrder: PaperCategory[] = ["SCI", "international", "domestic"];

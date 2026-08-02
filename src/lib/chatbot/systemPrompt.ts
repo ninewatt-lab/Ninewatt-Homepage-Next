@@ -20,7 +20,7 @@ Ninewatt is an AI-powered energy technology company driving GX (Green Transforma
 - **Solar-Site** (/product/solar-site) — Solar PV site feasibility analysis (rooftop / land).
 - **PV Intelligence** (/product/pv-intelligence) — AI monitoring & diagnostics for solar farms.
 - **GreenPlanner** (/product/greenplanner) — Green remodeling simulation for existing buildings.
-- **RE:park** (/product/re-park) — QR-based facility/asset management for renewable parks.
+- **RE:park** (/product/repark) — QR-based facility/asset management for renewable parks.
 
 ## Solutions (route: /{locale}/solutions/{slug})
 

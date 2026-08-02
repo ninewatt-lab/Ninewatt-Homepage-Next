@@ -1,4 +1,22 @@
 {
+  "meta": {
+    "index": {
+      "title": "AI가 먼저 발견하고, 사람은 해결만 합니다",
+      "description": "나인와트 솔라는 자체 태양광 발전소 운영 경험과 AI 기술을 결합하여, 발전 손실을 최소화하고 수익을 극대화하는 스마트 O&M 서비스를 제공합니다."
+    },
+    "monitoring": {
+      "title": "AI 모니터링 시스템",
+      "description": "PV Intelligence — 발전량을 보여주는 것을 넘어, AI가 이상을 감지하고 손실 금액까지 산출합니다"
+    },
+    "services": {
+      "title": "O&M 서비스",
+      "description": "설비투자부터 운영관리까지, 태양광 발전의 모든 것을 책임집니다"
+    },
+    "sites": {
+      "title": "발전소 현황",
+      "description": "나인와트 솔라가 직접 설치하고 운영하는 태양광 발전소"
+    }
+  },
   "metadata": {
     "title": "나인와트 솔라 | AI 기반 태양광 O&M",
     "description": "AI가 먼저 발견하고, 사람은 해결만 합니다. 나인와트 솔라의 스마트 태양광 운영관리 서비스"

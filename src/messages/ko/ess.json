@@ -1,4 +1,18 @@
 {
+  "meta": {
+    "index": {
+      "title": "ESS 자산의 가치를 극대화합니다",
+      "description": "배터리 건강 상태 모니터링부터 충방전 최적화, 화재 안전 관리까지. AI가 ESS의 전체 수명주기를 관리합니다."
+    },
+    "monitoring": {
+      "title": "ESS 모니터링 시스템",
+      "description": "ESS Intelligence — 배터리 상태를 보여주는 것을 넘어, AI가 이상을 감지하고 수익을 최적화합니다"
+    },
+    "services": {
+      "title": "ESS O&M 서비스",
+      "description": "배터리 자산의 안전과 수익성을 AI가 동시에 관리합니다"
+    }
+  },
   "metadata": {
     "title": "ESS O&M | AI 기반 에너지저장장치 운영관리",
     "description": "배터리 건강 모니터링부터 충방전 최적화, 화재 안전까지. 나인와트의 스마트 ESS O&M 서비스"

@@ -1,4 +1,22 @@
 {
+  "meta": {
+    "index": {
+      "title": "Solutions",
+      "description": "End-to-end building energy management solutions, from data collection to AI-powered analysis"
+    },
+    "services": {
+      "title": "System Development Track Record",
+      "description": "System Development Track Record"
+    },
+    "cases": {
+      "title": "Case Studies",
+      "description": "Proven track record delivering solutions to domestic public institutions, local governments, and international partners"
+    },
+    "rnd": {
+      "title": "R&D Track Record",
+      "description": "Building technical expertise through government-funded R&D projects"
+    }
+  },
   "nav": {
     "coreSolutions": "Core Solutions",
     "cases": "Cases",

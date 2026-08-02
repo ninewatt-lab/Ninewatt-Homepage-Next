@@ -1,4 +1,50 @@
 {
+  "meta": {
+    "index": {
+      "title": "Product",
+      "description": "データ分析からコスト削減まで、エネルギー管理のすべてのステップ"
+    },
+    "sharedEss": {
+      "title": "共有型ESS - Shared ESS",
+      "description": "一つの敷地に大容量のESSを配電網に連系し、遠隔地の多数の需要家が仮想相殺を通じた電気料金削減の恩恵を受け、必要に応じて配電網の電力系統安定化を提供するESS新ビジネスモデルです。"
+    },
+    "peakEss": {
+      "title": "ピーク低減型ESS 最適制御",
+      "description": "ビル・工場の電力使用パターンをAIが学習し、ピーク時間帯を精密に予測してESSの充放電スケジュールを最適制御します。需要料金を大幅に削減し、電力契約容量を効率的に管理できます。"
+    },
+    "bems": {
+      "title": "BEMS - Building Energy Management System",
+      "description": "建物のエネルギー消費データをリアルタイムで収集・分析し、エネルギー源別・用途別・ゾーン別の消費状況を可視化します。AI予測と自動制御連携でエネルギーコストを削減し、CO₂排出を抑制します。"
+    },
+    "solarSite": {
+      "title": "SolarScope - Solar Site Analysis Platform",
+      "description": "韓国の独立太陽光開発事業者のための適地分析プラットフォームです。電力網接続性、土地規制、3D陰影、収益性まで、地図上でまとめて検証できます。"
+    },
+    "pvIntelligence": {
+      "title": "PV Intelligence - Solar AI Monitoring Platform",
+      "description": "従来のモニタリングシステムは発電量を表示するだけです。PV IntelligenceはAIが異常を検知し、原因を分析し、対処を案内し、損失額まで算出します。Ninewatt自社発電所で実証済みの技術です。"
+    },
+    "greenplanner": {
+      "title": "GreenPlanner - Green Remodeling Planner",
+      "description": "エネルギーシミュレーションと不動産公共データを活用して、リノベーション後の推定資産価値を予測し、政府支援金のコンサルティングまでワンストップで提供します。"
+    },
+    "repark": {
+      "title": "RE:park - Smart Facility Management",
+      "description": "市民はQRコードで故障を報告し、管理者は受付・配分を処理し、保守業者は作業完了を報告します。三者をひとつにつなぐ施設管理システムです。"
+    },
+    "watti": {
+      "title": "Watti - 3D Building Energy Platform",
+      "description": "建築物・エネルギー・環境・都市データを3D地図上で統合分析します。データ種別と分析モジュールをカスタマイズし、お客様のニーズに合わせたプラットフォームを構築します。"
+    },
+    "opti": {
+      "title": "Opti - AI Energy Advisor",
+      "description": "建物エネルギーデータを対話で分析し、コスト削減戦略を自動でご提案します。200棟以上の建物で実証済みです。"
+    },
+    "saveE": {
+      "title": "Save-E - Smart Energy Insight",
+      "description": "15分単位の電力使用量を分析し、最適料金プランを特定します。設備投資なしでもエネルギーコストを削減できます。韓国電力のお客様番号10桁だけで開始いただけます。"
+    }
+  },
   "list": {
     "title": "Product",
     "subtitle": "データ分析からコスト削減まで、エネルギー管理のすべてのステップ",

@@ -1,14 +1,23 @@
+import type { Metadata } from "next";
+import { buildMetadata } from "@/lib/seo";
 import { Link } from "@/i18n/navigation";
 import { getTranslations } from "next-intl/server";
 import ScrollReveal from "@/components/ScrollReveal";
 import SolutionCards from "@/components/SolutionCards";
 
-export async function generateMetadata() {
-  const t = await getTranslations("solutions");
-  return {
-    title: "Solutions - Ninewatt",
-    description: t("overview.subtitle"),
-  };
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "solutions" });
+  return buildMetadata({
+    locale,
+    path: "/solutions",
+    title: t("meta.index.title"),
+    description: t("meta.index.description"),
+  });
 }
 
 const platformProducts = [

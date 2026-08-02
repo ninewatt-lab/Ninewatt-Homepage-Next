@@ -1,13 +1,21 @@
+import { buildMetadata } from "@/lib/seo";
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import ContactForm from "@/components/ContactForm";
 
-export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations("contact");
-  return {
-    title: `${t("title")} - Ninewatt`,
-    description: t("subtitle"),
-  };
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "contact" });
+  return buildMetadata({
+    locale,
+    path: "/contact",
+    title: t("meta.title"),
+    description: t("meta.description"),
+  });
 }
 
 export default async function ContactPage() {

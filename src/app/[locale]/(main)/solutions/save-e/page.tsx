@@ -1,14 +1,23 @@
+import type { Metadata } from "next";
+import { buildMetadata } from "@/lib/seo";
 import { Link } from "@/i18n/navigation";
 import { getTranslations } from "next-intl/server";
 import { ProductTrackRecord, type TrackRecordItem } from "@/components/ProductTrackRecord";
 import { getProductServiceUrl } from "@/lib/cms";
 
-export async function generateMetadata() {
-  const t = await getTranslations("product");
-  return {
-    title: "Save-E - Smart Energy Insight - Ninewatt",
-    description: t("saveE.heroDesc"),
-  };
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "product" });
+  return buildMetadata({
+    locale,
+    path: "/solutions/save-e",
+    title: t("meta.saveE.title"),
+    description: t("meta.saveE.description"),
+  });
 }
 
 const trackRecord: TrackRecordItem[] = [

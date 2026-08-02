@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+import { buildMetadata } from "@/lib/seo";
 import { Link } from "@/i18n/navigation";
 import { getTranslations } from "next-intl/server";
 import {
@@ -32,6 +34,22 @@ import ScrollReveal from "@/components/ScrollReveal";
 import ProductShowcase from "@/components/ProductShowcase";
 import CountUp from "@/components/CountUp";
 import LogoMarquee from "@/components/LogoMarquee";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "home" });
+  return buildMetadata({
+    locale,
+    path: "/",
+    title: t("meta.title"),
+    description: t("meta.description"),
+    absoluteTitle: true,
+  });
+}
 
 export default async function Home({
   params,

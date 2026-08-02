@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+import { buildMetadata } from "@/lib/seo";
 import { getTranslations } from "next-intl/server";
 import { getPatents, getCertifications, getTrademarks, getTechnologyTransfers } from "@/lib/cms";
 import { InlineExpandImage, ExpandableRow, ExpandableTrigger, TrademarkGroupCard, DetailExpandableRow, DetailTriggerChevron, AccordionTableBody } from "@/components/ImageLightbox";
@@ -13,12 +15,19 @@ function patentUrl(number: string, status: string, title: string): string {
   return `https://patents.google.com/?q=${encodeURIComponent(title)}&assignee=${encodeURIComponent("나인와트")}&country=KR`;
 }
 
-export async function generateMetadata() {
-  const t = await getTranslations("company");
-  return {
-    title: `${t("patents.title")} - Ninewatt`,
-    description: t("patents.subtitle"),
-  };
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "company" });
+  return buildMetadata({
+    locale,
+    path: "/company/patents",
+    title: t("meta.patents.title"),
+    description: t("meta.patents.description"),
+  });
 }
 
 export default async function PatentsPage({

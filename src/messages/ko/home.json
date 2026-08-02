@@ -1,4 +1,8 @@
 {
+  "meta": {
+    "title": "Ninewatt - 나인와트",
+    "description": "Ninewatt 공식 홈페이지"
+  },
   "hero": {
     "badge": "CES 2026 Innovation Awards",
     "headline": "건물이 <accent>에너지</accent>를",

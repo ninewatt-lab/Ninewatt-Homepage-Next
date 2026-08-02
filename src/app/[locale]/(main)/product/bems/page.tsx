@@ -1,12 +1,21 @@
+import type { Metadata } from "next";
+import { buildMetadata } from "@/lib/seo";
 import { Link } from "@/i18n/navigation";
 import { getTranslations } from "next-intl/server";
 
-export async function generateMetadata() {
-  const t = await getTranslations("product");
-  return {
-    title: "BEMS - Building Energy Management System - Ninewatt",
-    description: t("bems.heroDesc"),
-  };
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "product" });
+  return buildMetadata({
+    locale,
+    path: "/product/bems",
+    title: t("meta.bems.title"),
+    description: t("meta.bems.description"),
+  });
 }
 
 export default async function BemsPage() {

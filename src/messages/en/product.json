@@ -1,4 +1,50 @@
 {
+  "meta": {
+    "index": {
+      "title": "Product",
+      "description": "From data analysis to cost savings — every step of energy management"
+    },
+    "sharedEss": {
+      "title": "Shared ESS - Shared ESS",
+      "description": "A new ESS business model that connects large-scale energy storage to the distribution grid at a single site, enabling multiple remote consumers to benefit from electricity cost savings through virtual net metering while providing grid stabilization when needed."
+    },
+    "peakEss": {
+      "title": "Peak Shaving ESS Optimal Control",
+      "description": "AI learns building and factory power usage patterns to precisely predict peak times and optimally control ESS charge/discharge schedules. Significantly reduces demand charges and efficiently manages contracted power capacity."
+    },
+    "bems": {
+      "title": "BEMS - Building Energy Management System",
+      "description": "Collect and analyze building energy consumption data in real time, visualizing energy usage by source, purpose, and zone. Reduce energy costs and carbon emissions with AI-based forecasting and automated control integration."
+    },
+    "solarSite": {
+      "title": "SolarScope - Solar Site Analysis Platform",
+      "description": "A site-selection platform built for independent Korean solar developers. Validate grid connectivity, land regulations, 3D shadowing, and project economics — all on one map."
+    },
+    "pvIntelligence": {
+      "title": "PV Intelligence - Solar AI Monitoring Platform",
+      "description": "Conventional monitoring systems only display generation numbers. PV Intelligence goes further: AI detects anomalies, diagnoses causes, recommends actions, and calculates loss amounts. Proven at Ninewatt's own solar plants."
+    },
+    "greenplanner": {
+      "title": "GreenPlanner - Green Remodeling Planner",
+      "description": "Predict post-renovation property values using energy simulation and public real estate data, with end-to-end government subsidy consulting included."
+    },
+    "repark": {
+      "title": "RE:park - Smart Facility Management",
+      "description": "Citizens report faults by scanning a QR code, administrators handle intake and assignment, and contractors submit completion reports. A facility management system that connects all three parties."
+    },
+    "watti": {
+      "title": "Watti - 3D Building Energy Platform",
+      "description": "Integrate and analyze building, energy, environmental, and urban data on a 3D map. Customize data types and analysis modules to build a platform tailored to your needs."
+    },
+    "opti": {
+      "title": "Opti - AI Energy Advisor",
+      "description": "Analyze building energy data through conversation and receive automated cost reduction strategies. Validated across 200+ buildings."
+    },
+    "saveE": {
+      "title": "Save-E - Smart Energy Insight",
+      "description": "Analyze 15-minute interval power consumption to identify optimal rate plans and reduce energy costs without equipment investment. All you need is a 10-digit KEPCO customer number to get started."
+    }
+  },
   "list": {
     "title": "Product",
     "subtitle": "From data analysis to cost savings — every step of energy management",
