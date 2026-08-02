@@ -1,3 +1,24 @@
+/**
+ * 공개 페이지에 노출할 특허 집계.
+ *
+ * 수치를 하드코딩하면 데이터와 갈라진다. 실제로 홈페이지는 33건,
+ * homeStats는 36건으로 서로 달랐다. 여기서 한 번만 계산해 쓰면
+ * /company/patents 목록과 항상 일치하고 표시광고 리스크가 없다.
+ *
+ * getPatents(src/lib/cms.ts)와 같은 기준으로 센다 — visible: false 는 제외.
+ */
+export function patentCounts() {
+  const domestic = domesticPatents.filter((p) => p.visible !== false);
+  return {
+    /** 목록에 실제 표시되는 총 건수 (국내 + 국제 PCT) */
+    total: domestic.length + internationalPatents.length,
+    domestic: domestic.length,
+    international: internationalPatents.length,
+    /** 등록 완료된 국내 특허 */
+    registered: domestic.filter((p) => p.status === "등록").length,
+  };
+}
+
 export interface Patent {
   id: number;
   status: "등록" | "출원" | "공개";
