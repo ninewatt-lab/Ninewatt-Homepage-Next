@@ -341,6 +341,58 @@ GEO 사유로 P3 → **P0 승격.** AI 크롤러는 JS를 거의 실행하지 �
 
 ---
 
+## ✅ Sprint 2 구현 완료 (2026-08-02)
+
+### 한 일
+
+| 항목 | 내용 |
+|---|---|
+| 중복 301 | `next.config.ts`에 `/energy/products/:path*` → `/product/:path*` 추가 |
+| 내부 링크 | `energy/page.tsx`·`EnergyHeader`·`EnergyFooter` 21곳을 `/product/*`로 |
+| 미들웨어 | energy 서브도메인 통과 목록 추가 (아래 함정 참조) |
+| 파일 삭제 | `energy/products/` 5개, `solar/` 6개, 고아된 `components/solar/` 2개 — **13파일 2,799줄** |
+| 서버 전환 | `energy/solar/sites`, `energy/contact` — 임시 `layout.tsx` 2개 제거 |
+| 데이터 추출 | 발전소 9기를 `src/data/solarPlants.ts`로 (기존 `src/data/*` 규약) |
+
+### 검증
+
+```
+빌드              성공
+lint              608건 → 605건 (삭제분만큼 감소, 신규 지적 0)
+sitemap           110 URL 유지 / energy/products 0건
+리다이렉트 최종 도착지  8개 경로 전부 200 (체인 끝까지 추적)
+전환 페이지 SSR    sites 카드 7개·주소 5회 / contact form 1·label 8 — 전환 전과 동일
+energy 서브도메인   /ko/product/bems 200, /ko/contact 200, /ko/ess 200
+```
+
+### ⚠️ 계획이 틀렸던 부분 — 2-3의 근거
+
+계획서 §7·§11.1은 `"use client"` 페이지를 "AI 엔진에게 존재하지 않는 페이지"라고 썼는데 **틀렸다.** Next.js App Router는 클라이언트 컴포넌트도 첫 요청 때 SSR하므로 본문이 초기 HTML에 들어간다. 전환 **전에** 라이브에서 확인한 결과:
+
+```
+/ko/energy/solar/sites   발전소 h3 7개, '경상북도 영천시' 3회  ← 이미 HTML에 존재
+/ko/energy/contact       form 1개, label 8개                  ← 이미 HTML에 존재
+```
+
+그래서 2-3의 실제 이득은 크롤러 접근성이 아니라 ① `generateMetadata`를 페이지에 둘 수 있어 Sprint 1의 임시 `layout.tsx` 우회를 제거 ② 클라이언트 번들 축소 ③ 발전소 데이터를 `src/data/`로 빼서 재사용 가능하게 만든 것이다. 원래 계획대로 P0 대접할 일은 아니었다.
+
+**교훈**: 렌더링 방식을 코드만 보고 단정하지 말 것. `curl`로 HTML을 직접 확인하면 30초면 끝난다.
+
+### 부수로 고친 것 — 원래 깨져 있던 리다이렉트
+
+`/ko/solar/contact` → `/ko/energy/solar/contact` → **404**였다. `/energy/solar/contact` 라우트는 존재한 적이 없는데 `/solar/:path*` 일반 규칙이 그리로 보내고 있었다. Sprint 2 전부터 깨져 있었고(next.config 리다이렉트가 페이지 파일보다 우선하므로 삭제와 무관), `/energy/contact`로 가도록 예외 규칙을 일반 규칙 **앞에** 넣었다.
+
+### 함정 — energy 서브도메인 재작성
+
+`middleware.ts`는 `energy.ninewatt.com/ko/foo` → `/ko/energy/foo`로 재작성한다. 에너지 헤더·푸터 링크를 `/product/*`로 바꾸면 이 재작성이 `/ko/energy/product/bems`를 만들어 **404**가 난다. `ENERGY_HOST_PASSTHROUGH`에 `/product`·`/solutions`·`/company`·`/contact`를 넣어 통과시켰다. 서브도메인에 본 사이트 경로가 노출되지만 canonical이 apex를 가리키므로 색인 분산은 없다.
+
+### 남은 것
+
+- [ ] `/energy/products/*` 301은 **최소 1년 유지** — 기존 색인 자산 이전에 1~3개월(최대 6개월) 걸린다
+- [ ] Search Console > 페이지에서 `/energy/products/*` 색인 제거와 `/product/*` 통합 추이 확인
+
+---
+
 # Sprint 3 — GEO 기반 (2.5일)
 
 ### 3-1. `/llms.txt` (0.25일)

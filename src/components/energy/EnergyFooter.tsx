@@ -49,12 +49,12 @@ export default function EnergyFooter() {
                 </Link>
               </li>
               <li>
-                <Link href="/energy/products/pv-intelligence" className="hover:text-white transition-colors">
+                <Link href="/product/pv-intelligence" className="hover:text-white transition-colors">
                   {nav("pvIntelligence")}
                 </Link>
               </li>
               <li>
-                <Link href="/energy/products/solar-site" className="hover:text-white transition-colors">
+                <Link href="/product/solar-site" className="hover:text-white transition-colors">
                   {nav("solarSite")}
                 </Link>
               </li>
@@ -76,12 +76,12 @@ export default function EnergyFooter() {
                 </Link>
               </li>
               <li>
-                <Link href="/energy/products/peak-ess" className="hover:text-white transition-colors">
+                <Link href="/product/peak-ess" className="hover:text-white transition-colors">
                   {nav("peakEss")}
                 </Link>
               </li>
               <li>
-                <Link href="/energy/products/shared-ess" className="hover:text-white transition-colors">
+                <Link href="/product/shared-ess" className="hover:text-white transition-colors">
                   {nav("sharedEss")}
                 </Link>
               </li>
@@ -98,7 +98,7 @@ export default function EnergyFooter() {
                 </Link>
               </li>
               <li>
-                <Link href="/energy/products/bems" className="hover:text-white transition-colors">
+                <Link href="/product/bems" className="hover:text-white transition-colors">
                   {nav("bems")}
                 </Link>
               </li>

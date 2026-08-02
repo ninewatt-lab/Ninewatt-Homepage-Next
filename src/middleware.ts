@@ -4,6 +4,21 @@ import { routing } from "./i18n/routing";
 
 const intlMiddleware = createMiddleware(routing);
 
+/**
+ * energy.ninewatt.com 에서 /energy 로 재작성하지 않고 그대로 통과시킬 경로.
+ *
+ * 이 서브도메인은 /ko/foo → /ko/energy/foo 로 재작성한다. 그런데 에너지
+ * 헤더·푸터가 본 사이트의 제품 페이지(/product/*)를 링크하므로, 통과 목록이
+ * 없으면 /ko/energy/product/bems 로 재작성되어 404가 난다.
+ */
+const ENERGY_HOST_PASSTHROUGH = [
+  "/energy",
+  "/product",
+  "/solutions",
+  "/company",
+  "/contact",
+];
+
 export default function middleware(request: NextRequest) {
   const host = request.headers.get("host") || "";
 
@@ -18,7 +33,10 @@ export default function middleware(request: NextRequest) {
     if (match) {
       const locale = match[1];
       const rest = pathname.slice(locale.length + 1); // remove /ko
-      if (!rest.startsWith("/energy")) {
+      const isPassthrough = ENERGY_HOST_PASSTHROUGH.some((p) =>
+        rest === p || rest.startsWith(`${p}/`),
+      );
+      if (!isPassthrough) {
         url.pathname = `/${locale}/energy${rest || ""}`;
         return NextResponse.rewrite(url);
       }

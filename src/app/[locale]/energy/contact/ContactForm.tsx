@@ -3,15 +3,29 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 
-export default function SolarContactPage() {
-  const t = useTranslations("solar.contact");
-  const cta = useTranslations("solar.cta");
+type InquiryType = "solar" | "ess" | "integrated" | "product" | "ppa";
+
+export default function ContactForm() {
+  const t = useTranslations("energy.contact");
   const [submitted, setSubmitted] = useState(false);
+  const [inquiryType, setInquiryType] = useState<InquiryType>("solar");
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.currentTarget;
     const formData = new FormData(form);
+
+    const typeLabel = t(`inquiryTypes.${inquiryType}`);
+
+    let details = `[${typeLabel} 문의]\n연락처: ${formData.get("phone")}\n`;
+
+    if (inquiryType === "solar" || inquiryType === "integrated") {
+      details += `발전소 용량: ${formData.get("plantCapacity") || "-"}kW\n발전소 위치: ${formData.get("plantLocation") || "-"}\n발전소 유형: ${formData.get("plantType") || "-"}\n`;
+    }
+    if (inquiryType === "ess" || inquiryType === "integrated") {
+      details += `ESS 용량: ${formData.get("essCapacity") || "-"}kWh\n배터리 제조사: ${formData.get("essManufacturer") || "-"}\nPCS 용량: ${formData.get("pcsCapacity") || "-"}kW\n`;
+    }
+    details += `\n${formData.get("message") || ""}`;
 
     try {
       const res = await fetch("/api/contact", {
@@ -19,10 +33,10 @@ export default function SolarContactPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: formData.get("name"),
-          email: formData.get("email") || `${formData.get("phone")}@solar.ninewatt.com`,
+          email: formData.get("email") || `${formData.get("phone")}@energy.ninewatt.com`,
           phone: formData.get("phone"),
-          type: "Ninewatt Solar O&M",
-          message: `[Ninewatt Solar O&M 문의]\n연락처: ${formData.get("phone")}\n발전소 용량: ${formData.get("plantCapacity")}kW\n발전소 위치: ${formData.get("plantLocation")}\n발전소 유형: ${formData.get("plantType")}\n\n${formData.get("message") || ""}`,
+          type: `Ninewatt Energy O&M - ${typeLabel}`,
+          message: details,
         }),
       });
       if (!res.ok) throw new Error("전송 실패");
@@ -34,18 +48,6 @@ export default function SolarContactPage() {
 
   return (
     <>
-      {/* Hero */}
-      <section className="pt-20 pb-12 bg-gradient-to-b from-primary/5 to-transparent">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl sm:text-5xl font-bold text-zinc-900 dark:text-white">
-            {t("title")}
-          </h1>
-          <p className="mt-4 text-lg text-zinc-500 dark:text-zinc-400 max-w-2xl mx-auto">
-            {t("subtitle")}
-          </p>
-        </div>
-      </section>
-
       <section className="py-12 pb-24">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-12">
@@ -65,6 +67,29 @@ export default function SolarContactPage() {
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-6">
+                  {/* Inquiry Type Selector */}
+                  <div>
+                    <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-3">
+                      {t("inquiryType")}
+                    </label>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">
+                      {(["solar", "ess", "integrated", "product", "ppa"] as const).map((type) => (
+                        <button
+                          key={type}
+                          type="button"
+                          onClick={() => setInquiryType(type)}
+                          className={`px-4 py-3 rounded-xl text-sm font-medium transition-colors border ${
+                            inquiryType === type
+                              ? "border-primary bg-primary/5 text-primary"
+                              : "border-zinc-200 dark:border-zinc-700 text-zinc-600 dark:text-zinc-400 hover:border-zinc-400"
+                          }`}
+                        >
+                          {t(`inquiryTypes.${type}`)}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div>
                       <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
@@ -101,43 +126,85 @@ export default function SolarContactPage() {
                     />
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                    <div>
-                      <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
-                        {t("form.plantCapacity")}
-                      </label>
-                      <input
-                        type="number"
-                        name="plantCapacity"
-                        placeholder="100"
-                        className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white focus:ring-2 focus:ring-primary/30 focus:border-primary outline-none transition-colors"
-                      />
+                  {/* PV Fields */}
+                  {(inquiryType === "solar" || inquiryType === "integrated") && (
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                      <div>
+                        <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
+                          {t("form.plantCapacity")}
+                        </label>
+                        <input
+                          type="number"
+                          name="plantCapacity"
+                          placeholder="100"
+                          className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white focus:ring-2 focus:ring-primary/30 focus:border-primary outline-none transition-colors"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
+                          {t("form.plantLocation")}
+                        </label>
+                        <input
+                          type="text"
+                          name="plantLocation"
+                          placeholder="예: 경기도 화성시"
+                          className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white focus:ring-2 focus:ring-primary/30 focus:border-primary outline-none transition-colors"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
+                          {t("form.plantType")}
+                        </label>
+                        <select
+                          name="plantType"
+                          className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white focus:ring-2 focus:ring-primary/30 focus:border-primary outline-none transition-colors"
+                        >
+                          <option value="rooftop">{t("form.plantTypeOptions.rooftop")}</option>
+                          <option value="ground">{t("form.plantTypeOptions.ground")}</option>
+                          <option value="other">{t("form.plantTypeOptions.other")}</option>
+                        </select>
+                      </div>
                     </div>
-                    <div>
-                      <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
-                        {t("form.plantLocation")}
-                      </label>
-                      <input
-                        type="text"
-                        name="plantLocation"
-                        placeholder="예: 경기도 화성시"
-                        className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white focus:ring-2 focus:ring-primary/30 focus:border-primary outline-none transition-colors"
-                      />
+                  )}
+
+                  {/* ESS Fields */}
+                  {(inquiryType === "ess" || inquiryType === "integrated") && (
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                      <div>
+                        <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
+                          {t("form.essCapacity")}
+                        </label>
+                        <input
+                          type="number"
+                          name="essCapacity"
+                          placeholder="500"
+                          className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white focus:ring-2 focus:ring-primary/30 focus:border-primary outline-none transition-colors"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
+                          {t("form.essManufacturer")}
+                        </label>
+                        <input
+                          type="text"
+                          name="essManufacturer"
+                          placeholder="예: 삼성SDI"
+                          className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white focus:ring-2 focus:ring-primary/30 focus:border-primary outline-none transition-colors"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
+                          {t("form.pcsCapacity")}
+                        </label>
+                        <input
+                          type="number"
+                          name="pcsCapacity"
+                          placeholder="250"
+                          className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white focus:ring-2 focus:ring-primary/30 focus:border-primary outline-none transition-colors"
+                        />
+                      </div>
                     </div>
-                    <div>
-                      <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
-                        {t("form.plantType")}
-                      </label>
-                      <select
-                        name="plantType"
-                        className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white focus:ring-2 focus:ring-primary/30 focus:border-primary outline-none transition-colors"
-                      >
-                        <option value="rooftop">{t("form.plantTypeOptions.rooftop")}</option>
-                        <option value="ground">{t("form.plantTypeOptions.ground")}</option>
-                        <option value="other">{t("form.plantTypeOptions.other")}</option>
-                      </select>
-                    </div>
-                  </div>
+                  )}
 
                   <div>
                     <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
@@ -164,7 +231,7 @@ export default function SolarContactPage() {
             {/* Contact Info Sidebar */}
             <div className="lg:col-span-2">
               <div className="bg-zinc-50 dark:bg-zinc-900 rounded-2xl p-8 border border-zinc-100 dark:border-zinc-800 sticky top-24">
-                <h3 className="text-lg font-semibold text-zinc-900 dark:text-white mb-6">
+                <h3 className="text-xl font-semibold text-zinc-900 dark:text-white mb-6">
                   연락처
                 </h3>
 
@@ -175,7 +242,7 @@ export default function SolarContactPage() {
                     </svg>
                     <div>
                       <p className="text-sm text-zinc-500">전화</p>
-                      <a href="tel:070-8866-7226" className="text-sm font-medium text-zinc-900 dark:text-white hover:text-primary transition-colors">
+                      <a href="tel:070-8866-7226" className="text-base font-medium text-zinc-900 dark:text-white hover:text-primary transition-colors">
                         070-8866-7226
                       </a>
                     </div>
@@ -187,7 +254,7 @@ export default function SolarContactPage() {
                     </svg>
                     <div>
                       <p className="text-sm text-zinc-500">이메일</p>
-                      <a href="mailto:ninewatt@ninewatt.com" className="text-sm font-medium text-zinc-900 dark:text-white hover:text-primary transition-colors">
+                      <a href="mailto:ninewatt@ninewatt.com" className="text-base font-medium text-zinc-900 dark:text-white hover:text-primary transition-colors">
                         ninewatt@ninewatt.com
                       </a>
                     </div>
@@ -200,11 +267,11 @@ export default function SolarContactPage() {
                     </svg>
                     <div>
                       <p className="text-sm text-zinc-500">본사</p>
-                      <p className="text-sm font-medium text-zinc-900 dark:text-white">
+                      <p className="text-base font-medium text-zinc-900 dark:text-white">
                         인천광역시 연수구 컨벤시아대로 204, 104호 (22004)
                       </p>
                       <p className="text-sm text-zinc-500 mt-2">기업부설연구소</p>
-                      <p className="text-sm font-medium text-zinc-900 dark:text-white">
+                      <p className="text-base font-medium text-zinc-900 dark:text-white">
                         서울특별시 강남구 강남대로162길 22, 2·4F (06028)
                       </p>
                     </div>
@@ -213,10 +280,10 @@ export default function SolarContactPage() {
 
                 <div className="mt-8 pt-6 border-t border-zinc-200 dark:border-zinc-700">
                   <p className="text-sm text-zinc-500 mb-3">상담 가능 시간</p>
-                  <p className="text-sm font-medium text-zinc-900 dark:text-white">
+                  <p className="text-base font-medium text-zinc-900 dark:text-white">
                     평일 09:00 ~ 18:00
                   </p>
-                  <p className="text-xs text-zinc-400 mt-1">
+                  <p className="text-sm text-zinc-400 mt-1">
                     긴급 장애 신고는 24시간 접수 가능
                   </p>
                 </div>
