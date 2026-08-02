@@ -1,3 +1,4 @@
+import ProductJsonLd from "@/components/ProductJsonLd";
 import type { Metadata } from "next";
 import { buildMetadata } from "@/lib/seo";
 import { Link } from "@/i18n/navigation";
@@ -29,6 +30,12 @@ export default async function BemsPage() {
 
   return (
     <>
+    <ProductJsonLd
+      path="/product/bems"
+      metaKey="meta.bems"
+      category="Building Energy Management System (BEMS)"
+    />
+
       {/* Hero */}
       <section className="border-b border-border px-6 pb-20 pt-16">
         <div className="mx-auto max-w-5xl">

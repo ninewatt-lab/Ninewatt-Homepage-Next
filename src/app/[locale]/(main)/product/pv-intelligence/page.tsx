@@ -1,3 +1,4 @@
+import ProductJsonLd from "@/components/ProductJsonLd";
 import type { Metadata } from "next";
 import { buildMetadata } from "@/lib/seo";
 import { Link } from "@/i18n/navigation";
@@ -38,6 +39,12 @@ export default async function PVIntelligencePage() {
 
   return (
     <>
+    <ProductJsonLd
+      path="/product/pv-intelligence"
+      metaKey="meta.pvIntelligence"
+      category="Solar PV Monitoring"
+    />
+
       {/* Hero */}
       <section className="border-b border-border px-6 pb-20 pt-16">
         <div className="mx-auto max-w-5xl">
