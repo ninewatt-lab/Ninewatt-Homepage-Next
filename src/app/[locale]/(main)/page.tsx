@@ -1,3 +1,4 @@
+import { patentCounts } from "@/data/patents";
 import type { Metadata } from "next";
 import { buildMetadata } from "@/lib/seo";
 import { Link } from "@/i18n/navigation";
@@ -63,7 +64,9 @@ export default async function Home({
     { value: "30+", label: t("stats.employees") },
     { value: "60+", label: t("stats.projects") },
     { value: "96.81%", label: t("stats.growth") },
-    { value: "33", label: t("stats.patents") },
+    // 하드코딩 "33"은 /company/patents 가 실제 표시하는 36건과 어긋나 있었다.
+    // patents.ts 에서 집계해 두 페이지가 항상 일치하게 한다.
+    { value: String(patentCounts().total), label: t("stats.patents") },
   ];
 
   return (

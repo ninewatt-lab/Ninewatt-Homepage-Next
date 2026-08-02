@@ -34,6 +34,17 @@
     }
   },
   "about": {
+    "definition": "Ninewatt est une entreprise de technologie énergétique qui utilise l'IA pour analyser les données des bâtiments et de l'énergie afin de réduire les factures d'électricité. Fondée en 2019, elle exploite des ESS partagés et d'écrêtage de pointe, assure l'O&M de centrales solaires, la gestion énergétique des bâtiments (BEMS) et les PPA d'entreprise.",
+    "globalNote": "Siège à Incheon et centre R&D à Séoul, avec des activités au Japon, au Royaume-Uni, en France et aux États-Unis.",
+    "statsTitle": "En bref",
+    "statsFounded": "Création",
+    "statsEmployees": "Spécialistes",
+    "statsProjects": "Projets réalisés",
+    "statsGrowth": "Croissance annuelle du CA",
+    "statsPatents": "Brevets",
+    "statsPatentsNote": "{registered} enregistrés",
+    "statsCountries": "Pays",
+    "statsCountriesValue": "4",
     "title": "Qui sommes-nous",
     "subtitle": "Par nos technologies energetiques au service de la transition verte (GX), nous contribuons aux villes intelligentes et a une societe neutre en carbone.",
     "vision": "Vision",

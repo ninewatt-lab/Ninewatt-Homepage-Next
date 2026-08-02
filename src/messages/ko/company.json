@@ -34,6 +34,17 @@
     }
   },
   "about": {
+    "definition": "나인와트는 건물과 에너지 데이터를 AI로 분석해 전기요금을 낮추는 에너지 기술 기업입니다. 2019년 설립 이후 공용ESS·피크저감ESS 운영, 태양광 발전소 O&M, 건물에너지관리(BEMS), 기업 PPA를 제공하고 있습니다.",
+    "globalNote": "인천 본사와 서울 R&D 센터를 두고 있으며, 일본·영국·프랑스·미국에서 사업을 진행하고 있습니다.",
+    "statsTitle": "한눈에 보기",
+    "statsFounded": "설립",
+    "statsEmployees": "전문 인력",
+    "statsProjects": "수행 프로젝트",
+    "statsGrowth": "연평균 매출 성장률",
+    "statsPatents": "보유 특허",
+    "statsPatentsNote": "등록 {registered}건",
+    "statsCountries": "해외 진출",
+    "statsCountriesValue": "4개국",
     "title": "회사소개",
     "subtitle": "GX 실현을 이끄는 에너지 기술로, 스마트시티와 탄소중립 사회에 기여합니다.",
     "vision": "비전",
