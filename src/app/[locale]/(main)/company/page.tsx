@@ -1,13 +1,22 @@
+import type { Metadata } from "next";
+import { buildMetadata } from "@/lib/seo";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { getOrganization, getCompanyInfo } from "@/lib/cms";
 
-export async function generateMetadata() {
-  const t = await getTranslations("company");
-  return {
-    title: "Company - Ninewatt",
-    description: `${t("about.title")}. ${t("about.subtitle")}`,
-  };
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "company" });
+  return buildMetadata({
+    locale,
+    path: "/company",
+    title: t("meta.index.title"),
+    description: t("meta.index.description"),
+  });
 }
 
 export default async function CompanyPage({

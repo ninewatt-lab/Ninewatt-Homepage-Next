@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+import { buildMetadata } from "@/lib/seo";
 import { getMedia } from "@/lib/cms";
 import { getTranslations } from "next-intl/server";
 import MediaContent from "./MediaSection";
@@ -6,13 +8,15 @@ export async function generateMetadata({
   params,
 }: {
   params: Promise<{ locale: string }>;
-}) {
+}): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "company" });
-  return {
-    title: `${t("media.title")} - Ninewatt`,
-    description: t("media.subtitle"),
-  };
+  return buildMetadata({
+    locale,
+    path: "/company/media",
+    title: t("meta.media.title"),
+    description: t("meta.media.description"),
+  });
 }
 
 export default async function MediaPage({

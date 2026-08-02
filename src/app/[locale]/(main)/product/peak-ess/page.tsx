@@ -1,13 +1,22 @@
+import type { Metadata } from "next";
+import { buildMetadata } from "@/lib/seo";
 import { Link } from "@/i18n/navigation";
 import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 
-export async function generateMetadata() {
-  const t = await getTranslations("product");
-  return {
-    title: `${t("peakEss.heroTitle").replace("\n", " ")} - Ninewatt`,
-    description: t("peakEss.heroDesc"),
-  };
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "product" });
+  return buildMetadata({
+    locale,
+    path: "/product/peak-ess",
+    title: t("meta.peakEss.title"),
+    description: t("meta.peakEss.description"),
+  });
 }
 
 export default async function PeakEssPage() {

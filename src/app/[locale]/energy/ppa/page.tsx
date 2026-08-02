@@ -1,5 +1,23 @@
+import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
+import { buildMetadata } from "@/lib/seo";
 import { Link } from "@/i18n/navigation";
 import Image from "next/image";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "energy" });
+  return buildMetadata({
+    locale,
+    path: "/energy/ppa",
+    title: t("meta.ppa.title"),
+    description: t("meta.ppa.description"),
+  });
+}
 
 export default function PPAPage() {
   return (

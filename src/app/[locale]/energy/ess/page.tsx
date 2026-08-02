@@ -1,5 +1,23 @@
+import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
+import { buildMetadata } from "@/lib/seo";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "ess" });
+  return buildMetadata({
+    locale,
+    path: "/energy/ess",
+    title: t("meta.index.title"),
+    description: t("meta.index.description"),
+  });
+}
 
 function HeroSection() {
   const t = useTranslations("ess.hero");

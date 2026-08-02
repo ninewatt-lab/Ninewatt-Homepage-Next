@@ -1,13 +1,22 @@
+import type { Metadata } from "next";
+import { buildMetadata } from "@/lib/seo";
 import { getTranslations } from "next-intl/server";
 import { getRndProjects } from "@/lib/cms";
 import { RndContent } from "./RndContent";
 
-export async function generateMetadata() {
-  const t = await getTranslations("solutions");
-  return {
-    title: "R&D 과제 - Ninewatt",
-    description: t("rnd.subtitle"),
-  };
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "solutions" });
+  return buildMetadata({
+    locale,
+    path: "/solutions/rnd",
+    title: t("meta.rnd.title"),
+    description: t("meta.rnd.description"),
+  });
 }
 
 export default async function RndPage({

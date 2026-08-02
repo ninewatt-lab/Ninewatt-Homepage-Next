@@ -1,13 +1,22 @@
+import type { Metadata } from "next";
+import { buildMetadata } from "@/lib/seo";
 import { getTranslations } from "next-intl/server";
 import { getAwards } from "@/lib/cms";
 import { InlineExpandImage } from "@/components/ImageLightbox";
 
-export async function generateMetadata() {
-  const t = await getTranslations("company");
-  return {
-    title: `${t("awards.title")} - Ninewatt`,
-    description: t("awards.subtitle"),
-  };
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "company" });
+  return buildMetadata({
+    locale,
+    path: "/company/awards",
+    title: t("meta.awards.title"),
+    description: t("meta.awards.description"),
+  });
 }
 
 export default async function AwardsPage({

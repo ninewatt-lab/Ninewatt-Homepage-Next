@@ -1,13 +1,22 @@
+import type { Metadata } from "next";
+import { buildMetadata } from "@/lib/seo";
 import { Link } from "@/i18n/navigation";
 import { getTranslations } from "next-intl/server";
 import { getProductServiceUrl } from "@/lib/cms";
 
-export async function generateMetadata() {
-  const t = await getTranslations("product");
-  return {
-    title: "Opti - AI Energy Advisor - Ninewatt",
-    description: t("opti.heroDesc"),
-  };
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "product" });
+  return buildMetadata({
+    locale,
+    path: "/solutions/opti",
+    title: t("meta.opti.title"),
+    description: t("meta.opti.description"),
+  });
 }
 
 export default async function OptiPage() {

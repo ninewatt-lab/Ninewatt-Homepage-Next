@@ -1,12 +1,21 @@
+import type { Metadata } from "next";
+import { buildMetadata } from "@/lib/seo";
 import { getTranslations } from "next-intl/server";
 import { ServicesContent } from "./ServicesContent";
 
-export async function generateMetadata() {
-  const t = await getTranslations("solutions");
-  return {
-    title: `${t("services.title")} - Ninewatt`,
-    description: t("services.title"),
-  };
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "solutions" });
+  return buildMetadata({
+    locale,
+    path: "/solutions/services",
+    title: t("meta.services.title"),
+    description: t("meta.services.description"),
+  });
 }
 
 export default async function ServicesPage() {

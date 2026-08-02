@@ -1,12 +1,21 @@
+import type { Metadata } from "next";
+import { buildMetadata } from "@/lib/seo";
 import { getTranslations } from "next-intl/server";
 import { CasesContent } from "./CasesContent";
 
-export async function generateMetadata() {
-  const t = await getTranslations("solutions");
-  return {
-    title: `${t("cases.title")} - Ninewatt`,
-    description: t("cases.subtitle"),
-  };
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "solutions" });
+  return buildMetadata({
+    locale,
+    path: "/solutions/cases",
+    title: t("meta.cases.title"),
+    description: t("meta.cases.description"),
+  });
 }
 
 export default async function CasesPage() {

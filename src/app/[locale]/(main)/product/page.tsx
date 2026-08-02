@@ -1,12 +1,21 @@
+import type { Metadata } from "next";
+import { buildMetadata } from "@/lib/seo";
 import { Link } from "@/i18n/navigation";
 import { getTranslations } from "next-intl/server";
 
-export async function generateMetadata() {
-  const t = await getTranslations("product");
-  return {
-    title: "Product - Ninewatt",
-    description: t("list.subtitle"),
-  };
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "product" });
+  return buildMetadata({
+    locale,
+    path: "/product",
+    title: t("meta.index.title"),
+    description: t("meta.index.description"),
+  });
 }
 
 const categories = [

@@ -1,14 +1,23 @@
+import type { Metadata } from "next";
+import { buildMetadata } from "@/lib/seo";
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 import { getTranslations } from "next-intl/server";
 import { getProductServiceUrl } from "@/lib/cms";
 
-export async function generateMetadata() {
-  const t = await getTranslations("product");
-  return {
-    title: "SolarScope - Solar Site Analysis Platform - Ninewatt",
-    description: t("solarScope.heroDesc"),
-  };
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "product" });
+  return buildMetadata({
+    locale,
+    path: "/product/solar-site",
+    title: t("meta.solarSite.title"),
+    description: t("meta.solarSite.description"),
+  });
 }
 
 const S3_BASE =
