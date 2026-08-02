@@ -277,13 +277,13 @@ function ProductsSection() {
   const t = useTranslations("energy.hub.products");
 
   const pvProducts = [
-    { key: "pvIntelligence", href: "/energy/products/pv-intelligence" },
-    { key: "solarSite", href: "/energy/products/solar-site" },
+    { key: "pvIntelligence", href: "/product/pv-intelligence" },
+    { key: "solarSite", href: "/product/solar-site" },
   ];
 
   const essProducts = [
-    { key: "peakEss", href: "/energy/products/peak-ess" },
-    { key: "sharedEss", href: "/energy/products/shared-ess" },
+    { key: "peakEss", href: "/product/peak-ess" },
+    { key: "sharedEss", href: "/product/shared-ess" },
   ];
 
   const renderCard = (product: { key: string; href: string }) => (
@@ -344,7 +344,7 @@ function ProductsSection() {
             </p>
           </Link>
           <Link
-            href="/energy/products/bems"
+            href="/product/bems"
             className="block border-t border-zinc-200 dark:border-zinc-800 pt-5 pb-2 hover:border-primary transition-colors group"
           >
             <h3 className="text-base font-semibold text-zinc-900 dark:text-white group-hover:text-primary transition-colors">

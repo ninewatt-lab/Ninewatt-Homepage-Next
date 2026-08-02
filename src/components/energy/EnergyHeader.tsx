@@ -27,8 +27,8 @@ const navItems: NavItem[] = [
       { href: "/energy/solar/services", labelKey: "solarServices" },
       { href: "/energy/solar/monitoring", labelKey: "solarMonitoring" },
       { href: "/energy/solar/sites", labelKey: "sites" },
-      { href: "/energy/products/pv-intelligence", labelKey: "pvIntelligence", separator: true },
-      { href: "/energy/products/solar-site", labelKey: "solarSite" },
+      { href: "/product/pv-intelligence", labelKey: "pvIntelligence", separator: true },
+      { href: "/product/solar-site", labelKey: "solarSite" },
     ],
   },
   {
@@ -38,12 +38,12 @@ const navItems: NavItem[] = [
       { href: "/energy/ess", labelKey: "essOm" },
       { href: "/energy/ess/services", labelKey: "essServices" },
       { href: "/energy/ess/monitoring", labelKey: "essMonitoring" },
-      { href: "/energy/products/peak-ess", labelKey: "peakEss", separator: true },
-      { href: "/energy/products/shared-ess", labelKey: "sharedEss" },
+      { href: "/product/peak-ess", labelKey: "peakEss", separator: true },
+      { href: "/product/shared-ess", labelKey: "sharedEss" },
     ],
   },
   { href: "/energy/ppa", labelKey: "ppa" },
-  { href: "/energy/products/bems", labelKey: "bems" },
+  { href: "/product/bems", labelKey: "bems" },
 ];
 
 export default function EnergyHeader() {
@@ -216,10 +216,10 @@ export default function EnergyHeader() {
             <Link href="/energy/solar/sites" onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 text-sm font-medium text-zinc-700 dark:text-zinc-300 hover:text-primary rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-800/50 pl-6">
               {t("sites")}
             </Link>
-            <Link href="/energy/products/pv-intelligence" onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 text-sm font-medium text-zinc-700 dark:text-zinc-300 hover:text-primary rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-800/50 pl-6">
+            <Link href="/product/pv-intelligence" onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 text-sm font-medium text-zinc-700 dark:text-zinc-300 hover:text-primary rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-800/50 pl-6">
               {t("pvIntelligence")}
             </Link>
-            <Link href="/energy/products/solar-site" onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 text-sm font-medium text-zinc-700 dark:text-zinc-300 hover:text-primary rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-800/50 pl-6">
+            <Link href="/product/solar-site" onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 text-sm font-medium text-zinc-700 dark:text-zinc-300 hover:text-primary rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-800/50 pl-6">
               {t("solarSite")}
             </Link>
 
@@ -236,10 +236,10 @@ export default function EnergyHeader() {
             <Link href="/energy/ess/monitoring" onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 text-sm font-medium text-zinc-700 dark:text-zinc-300 hover:text-primary rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-800/50 pl-6">
               {t("essMonitoring")}
             </Link>
-            <Link href="/energy/products/peak-ess" onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 text-sm font-medium text-zinc-700 dark:text-zinc-300 hover:text-primary rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-800/50 pl-6">
+            <Link href="/product/peak-ess" onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 text-sm font-medium text-zinc-700 dark:text-zinc-300 hover:text-primary rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-800/50 pl-6">
               {t("peakEss")}
             </Link>
-            <Link href="/energy/products/shared-ess" onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 text-sm font-medium text-zinc-700 dark:text-zinc-300 hover:text-primary rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-800/50 pl-6">
+            <Link href="/product/shared-ess" onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 text-sm font-medium text-zinc-700 dark:text-zinc-300 hover:text-primary rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-800/50 pl-6">
               {t("sharedEss")}
             </Link>
 
@@ -248,7 +248,7 @@ export default function EnergyHeader() {
               <Link href="/energy/ppa" onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 text-sm font-medium text-zinc-700 dark:text-zinc-300 hover:text-primary rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-800/50">
                 {t("ppa")}
               </Link>
-              <Link href="/energy/products/bems" onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 text-sm font-medium text-zinc-700 dark:text-zinc-300 hover:text-primary rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-800/50">
+              <Link href="/product/bems" onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 text-sm font-medium text-zinc-700 dark:text-zinc-300 hover:text-primary rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-800/50">
                 {t("bems")}
               </Link>
             </div>
