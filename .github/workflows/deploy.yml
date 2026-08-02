@@ -49,11 +49,15 @@ jobs:
           ECR_REGISTRY: ${{ steps.ecr-login.outputs.registry }}
           TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          # 검색엔진 소유확인. 서버 전용 변수라 런타임에 읽히므로 재빌드 불필요.
+          # 시크릿 미설정 시 빈 값 → layout.tsx가 meta 태그를 아예 출력하지 않는다.
+          NAVER_SITE_VERIFICATION: ${{ secrets.NAVER_SITE_VERIFICATION }}
+          GOOGLE_SITE_VERIFICATION: ${{ secrets.GOOGLE_SITE_VERIFICATION }}
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
-          envs: ECR_REGISTRY,TEAMS_WEBHOOK_URL,ANTHROPIC_API_KEY
+          envs: ECR_REGISTRY,TEAMS_WEBHOOK_URL,ANTHROPIC_API_KEY,NAVER_SITE_VERIFICATION,GOOGLE_SITE_VERIFICATION
           script: |
             aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin ${ECR_REGISTRY}
             IMAGE_TAG="${ECR_REGISTRY}/ninewatt-homepage:${{ github.sha }}"
@@ -68,4 +72,6 @@ jobs:
               -p 3000:3000 \
               -e "TEAMS_WEBHOOK_URL=$TEAMS_WEBHOOK_URL" \
               -e "ANTHROPIC_API_KEY=$ANTHROPIC_API_KEY" \
+              -e "NAVER_SITE_VERIFICATION=$NAVER_SITE_VERIFICATION" \
+              -e "GOOGLE_SITE_VERIFICATION=$GOOGLE_SITE_VERIFICATION" \
               ${IMAGE_TAG}
