@@ -1,4 +1,38 @@
 {
+  "meta": {
+    "index": {
+      "title": "Company",
+      "description": "Qui sommes-nous. Par nos technologies energetiques au service de la transition verte (GX), nous contribuons aux villes intelligentes et a une societe neutre en carbone."
+    },
+    "history": {
+      "title": "Historique",
+      "description": "Le parcours de croissance de Ninewatt depuis sa creation en 2019 jusqu'a aujourd'hui"
+    },
+    "awards": {
+      "title": "Prix et distinctions",
+      "description": "Reconnus pour notre innovation en technologie energetique avec de nombreuses recompenses"
+    },
+    "patents": {
+      "title": "Brevets et certifications",
+      "description": "Detenteurs de propriete intellectuelle cle dans le secteur de l'IA energetique"
+    },
+    "papers": {
+      "title": "Publications",
+      "description": "Articles academiques et resultats de recherche en IA energetique et big data"
+    },
+    "media": {
+      "title": "Médias",
+      "description": "Actualités, communiqués de presse et contenus vidéo liés à Ninewatt"
+    },
+    "career": {
+      "title": "Recrutement",
+      "description": "Nous recherchons des talents pour batir ensemble une culture de croissance"
+    },
+    "global": {
+      "title": "Activites internationales",
+      "description": "Deploiement de nos solutions energetiques dans 4 pays — Japon, Royaume-Uni, France et Etats-Unis"
+    }
+  },
   "about": {
     "title": "Qui sommes-nous",
     "subtitle": "Par nos technologies energetiques au service de la transition verte (GX), nous contribuons aux villes intelligentes et a une societe neutre en carbone.",

@@ -1,4 +1,50 @@
 {
+  "meta": {
+    "index": {
+      "title": "Product",
+      "description": "De l'analyse des données à la réduction des coûts — chaque étape de la gestion énergétique"
+    },
+    "sharedEss": {
+      "title": "ESS Partagé - Shared ESS",
+      "description": "Un nouveau modèle d'affaires ESS qui connecte un stockage d'énergie de grande capacité au réseau de distribution sur un seul site, permettant à de nombreux consommateurs distants de bénéficier de réductions de coûts d'électricité via la compensation virtuelle tout en stabilisant le réseau électrique selon les besoins."
+    },
+    "peakEss": {
+      "title": "ESS Écrêtement de Pointe",
+      "description": "L'IA apprend les schémas de consommation des bâtiments et usines pour prédire précisément les heures de pointe et contrôler de manière optimale les cycles de charge/décharge de l'ESS. Réduction significative des frais de demande et gestion efficace de la capacité contractuelle."
+    },
+    "bems": {
+      "title": "BEMS - Building Energy Management System",
+      "description": "Collectez et analysez en temps réel les données de consommation énergétique des bâtiments, en visualisant l'utilisation par source, usage et zone. Réduisez les coûts énergétiques et les émissions de carbone grâce à la prévision IA et au contrôle automatisé."
+    },
+    "solarSite": {
+      "title": "SolarScope - Solar Site Analysis Platform",
+      "description": "Plateforme d'analyse de sites dédiée aux développeurs solaires indépendants coréens. Validez la connectivité réseau, la réglementation foncière, les ombres 3D et la rentabilité — le tout sur une seule carte."
+    },
+    "pvIntelligence": {
+      "title": "PV Intelligence - Solar AI Monitoring Platform",
+      "description": "Les systèmes de monitoring classiques ne font qu'afficher la production. PV Intelligence va plus loin : l'IA détecte les anomalies, diagnostique les causes, guide les actions et calcule les montants de perte. Technologie éprouvée sur les propres centrales de Ninewatt."
+    },
+    "greenplanner": {
+      "title": "GreenPlanner - Green Remodeling Planner",
+      "description": "Grâce à la simulation énergétique et aux données immobilières publiques, estimez la valeur de votre bien après rénovation et bénéficiez d'un accompagnement complet pour les financements publics."
+    },
+    "repark": {
+      "title": "RE:park - Smart Facility Management",
+      "description": "Les citoyens signalent les pannes par QR code, les gestionnaires traitent la réception et l'affectation, et les prestataires rendent compte de l'exécution. Un système de gestion des installations reliant ces trois acteurs."
+    },
+    "watti": {
+      "title": "Watti - 3D Building Energy Platform",
+      "description": "Analyse intégrée de données bâtiment, énergie, environnement et urbanisme sur une carte 3D. Personnalisez les types de données et les modules d'analyse pour construire une plateforme adaptée à vos besoins."
+    },
+    "opti": {
+      "title": "Opti - AI Energy Advisor",
+      "description": "Analysez vos données énergétiques de bâtiment par la conversation et recevez automatiquement des stratégies de réduction des coûts. Solution éprouvée dans plus de 200 bâtiments."
+    },
+    "saveE": {
+      "title": "Save-E - Smart Energy Insight",
+      "description": "Analysez la consommation électrique par tranche de 15 minutes pour identifier le tarif optimal. Réduisez vos coûts énergétiques même sans investissement en équipements. Il suffit d'un numéro client KEPCO à 10 chiffres pour commencer."
+    }
+  },
   "list": {
     "title": "Product",
     "subtitle": "De l'analyse des données à la réduction des coûts — chaque étape de la gestion énergétique",

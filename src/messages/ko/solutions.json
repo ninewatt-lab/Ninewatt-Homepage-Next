@@ -1,4 +1,22 @@
 {
+  "meta": {
+    "index": {
+      "title": "Solutions",
+      "description": "데이터 수집부터 AI 분석까지, 건물 에너지 관리의 전 과정을 아우르는 솔루션"
+    },
+    "services": {
+      "title": "시스템개발 수행 이력",
+      "description": "시스템개발 수행 이력"
+    },
+    "cases": {
+      "title": "수행사례",
+      "description": "국내 공공기관·지자체 및 해외 파트너 대상 다수 솔루션 제공 실적"
+    },
+    "rnd": {
+      "title": "R&D 수행 이력",
+      "description": "정부 R&D 과제 수행을 통한 기술력 확보"
+    }
+  },
   "nav": {
     "coreSolutions": "핵심 솔루션",
     "cases": "수행사례",

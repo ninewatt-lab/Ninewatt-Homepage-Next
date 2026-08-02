@@ -1,4 +1,38 @@
 {
+  "meta": {
+    "index": {
+      "title": "Company",
+      "description": "About Us. Leading the realization of GX through energy technology, contributing to smart cities and a carbon-neutral society."
+    },
+    "history": {
+      "title": "History",
+      "description": "Ninewatt's journey of growth from our founding in 2019 to the present"
+    },
+    "awards": {
+      "title": "Awards",
+      "description": "Recognized for energy technology innovation with numerous awards"
+    },
+    "patents": {
+      "title": "Patents & Certifications",
+      "description": "Holding core intellectual property in the energy AI technology sector"
+    },
+    "papers": {
+      "title": "Papers",
+      "description": "Academic papers and research achievements in energy AI and big data"
+    },
+    "media": {
+      "title": "Media",
+      "description": "News, press releases, and video content related to Ninewatt"
+    },
+    "career": {
+      "title": "Careers",
+      "description": "We are looking for talent to build a culture of growth together"
+    },
+    "global": {
+      "title": "Global Business",
+      "description": "Expanding energy solutions across 4 countries — Japan, UK, France, and the USA"
+    }
+  },
   "about": {
     "title": "About Us",
     "subtitle": "Leading the realization of GX through energy technology, contributing to smart cities and a carbon-neutral society.",

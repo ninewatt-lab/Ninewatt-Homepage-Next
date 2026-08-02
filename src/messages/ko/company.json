@@ -1,4 +1,38 @@
 {
+  "meta": {
+    "index": {
+      "title": "Company",
+      "description": "회사소개. GX 실현을 이끄는 에너지 기술로, 스마트시티와 탄소중립 사회에 기여합니다."
+    },
+    "history": {
+      "title": "주요 연혁",
+      "description": "2019년 설립부터 현재까지, 나인와트의 성장 과정입니다"
+    },
+    "awards": {
+      "title": "수상 내역",
+      "description": "에너지 기술 혁신을 인정받아 다수의 수상 실적을 보유하고 있습니다"
+    },
+    "patents": {
+      "title": "특허 & 인증",
+      "description": "에너지 AI 기술 분야의 핵심 지식재산권을 보유하고 있습니다"
+    },
+    "papers": {
+      "title": "논문",
+      "description": "에너지 AI·빅데이터 분야의 학술 논문 및 연구 성과입니다"
+    },
+    "media": {
+      "title": "Media",
+      "description": "나인와트 관련 뉴스, 보도자료 및 영상 콘텐츠"
+    },
+    "career": {
+      "title": "채용안내",
+      "description": "함께 성장하는 문화를 만들어갈 인재를 찾습니다"
+    },
+    "global": {
+      "title": "글로벌 사업",
+      "description": "일본, 영국, 프랑스, 미국 — 4개국에서 에너지 솔루션을 확장하고 있습니다"
+    }
+  },
   "about": {
     "title": "회사소개",
     "subtitle": "GX 실현을 이끄는 에너지 기술로, 스마트시티와 탄소중립 사회에 기여합니다.",

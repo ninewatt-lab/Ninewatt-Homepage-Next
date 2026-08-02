@@ -1,4 +1,8 @@
 {
+  "meta": {
+    "title": "Ninewatt — Intelligence Énergétique du Bâtiment",
+    "description": "Plateforme d'analyse et d'optimisation énergétique des bâtiments par IA"
+  },
   "hero": {
     "badge": "CES 2026 Innovation Awards",
     "headline": "Faire parler <accent>l'énergie</accent>",

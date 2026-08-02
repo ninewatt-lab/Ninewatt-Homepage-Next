@@ -1,4 +1,22 @@
 {
+  "meta": {
+    "index": {
+      "title": "Solutions",
+      "description": "データ収集からAI分析まで、建物エネルギー管理の全プロセスをカバーするソリューション"
+    },
+    "services": {
+      "title": "システム開発実績",
+      "description": "システム開発実績"
+    },
+    "cases": {
+      "title": "実績紹介",
+      "description": "国内の公共機関・自治体及び海外パートナー向けに多数のソリューションを提供"
+    },
+    "rnd": {
+      "title": "R&D実績",
+      "description": "政府R&D課題の遂行による技術力の確保"
+    }
+  },
   "nav": {
     "coreSolutions": "コアソリューション",
     "cases": "実績紹介",

@@ -1,4 +1,22 @@
 {
+  "meta": {
+    "index": {
+      "title": "Solutions",
+      "description": "Des solutions couvrant l'ensemble du processus de gestion énergétique des bâtiments, de la collecte de données à l'analyse par IA"
+    },
+    "services": {
+      "title": "Historique de développement de systèmes",
+      "description": "Historique de développement de systèmes"
+    },
+    "cases": {
+      "title": "Études de cas",
+      "description": "Un bilan éprouvé de solutions livrées aux institutions publiques, collectivités locales et partenaires internationaux"
+    },
+    "rnd": {
+      "title": "Historique R&D",
+      "description": "Développement de l'expertise technique à travers des projets R&D financés par l'État"
+    }
+  },
   "nav": {
     "coreSolutions": "Solutions principales",
     "cases": "Études de cas",
