@@ -34,6 +34,17 @@
     }
   },
   "about": {
+    "definition": "Ninewatt is an energy technology company that uses AI to analyze building and energy data to cut electricity costs. Founded in 2019, it operates shared and peak-shaving ESS, provides solar plant O&M, building energy management (BEMS), and corporate PPA.",
+    "globalNote": "Headquartered in Incheon with an R&D center in Seoul, operating in Japan, the United Kingdom, France, and the United States.",
+    "statsTitle": "At a glance",
+    "statsFounded": "Founded",
+    "statsEmployees": "Specialists",
+    "statsProjects": "Projects delivered",
+    "statsGrowth": "Annual revenue growth",
+    "statsPatents": "Patents",
+    "statsPatentsNote": "{registered} registered",
+    "statsCountries": "Countries",
+    "statsCountriesValue": "4",
     "title": "About Us",
     "subtitle": "Leading the realization of GX through energy technology, contributing to smart cities and a carbon-neutral society.",
     "vision": "Vision",

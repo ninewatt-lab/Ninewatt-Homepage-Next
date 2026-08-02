@@ -3,6 +3,7 @@ import { buildMetadata } from "@/lib/seo";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { getOrganization, getCompanyInfo } from "@/lib/cms";
+import { patentCounts } from "@/data/patents";
 
 export async function generateMetadata({
   params,
@@ -43,6 +44,26 @@ export default async function CompanyPage({
     tags?: string[];
   }>;
 
+  // 특허 건수는 patents.ts 에서 집계한다. 하드코딩하면 /company/patents 목록과
+  // 갈라진다(실제로 홈 33건 / homeStats 36건으로 어긋나 있었다).
+  const patents = patentCounts();
+
+  const stats: { value: string; label: string; note?: string }[] = [
+    { value: "2019", label: t("about.statsFounded") },
+    { value: "30+", label: t("about.statsEmployees") },
+    { value: "60+", label: t("about.statsProjects") },
+    { value: "96.81%", label: t("about.statsGrowth") },
+    {
+      value: String(patents.total),
+      label: t("about.statsPatents"),
+      note: t("about.statsPatentsNote", { registered: patents.registered }),
+    },
+    {
+      value: t("about.statsCountriesValue"),
+      label: t("about.statsCountries"),
+    },
+  ];
+
   return (
     <>
       {/* Hero */}
@@ -52,6 +73,33 @@ export default async function CompanyPage({
           <p className="mt-4 max-w-2xl text-lg text-muted">
             {t("about.subtitle")}
           </p>
+          {/* 회사 한 줄 정의. 문맥 없이도 성립해야 검색·AI 엔진이 인용할 수 있다 */}
+          <p className="mt-6 max-w-3xl text-base leading-relaxed">
+            {t("about.definition")}
+          </p>
+          <p className="mt-3 max-w-3xl text-base leading-relaxed text-muted">
+            {t("about.globalNote")}
+          </p>
+        </div>
+      </section>
+
+      {/* 한눈에 보기 — 수치는 전부 src/data 에서 산출한다 */}
+      <section className="border-b border-border px-6 py-16">
+        <div className="mx-auto max-w-5xl">
+          <h2 className="text-2xl font-bold">{t("about.statsTitle")}</h2>
+          <dl className="mt-8 grid grid-cols-2 gap-x-8 gap-y-10 md:grid-cols-3">
+            {stats.map((stat) => (
+              <div key={stat.label}>
+                <dd className="text-3xl font-bold tracking-tight">
+                  {stat.value}
+                </dd>
+                <dt className="mt-1 text-sm text-muted">{stat.label}</dt>
+                {stat.note && (
+                  <p className="mt-0.5 text-xs text-muted/80">{stat.note}</p>
+                )}
+              </div>
+            ))}
+          </dl>
         </div>
       </section>
 

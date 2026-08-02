@@ -34,6 +34,17 @@
     }
   },
   "about": {
+    "definition": "ナインワットは、建物とエネルギーのデータをAIで分析し電気料金を削減するエネルギー技術企業です。2019年の設立以来、共有型ESS・ピークカットESSの運用、太陽光発電所のO&M、建物エネルギー管理（BEMS）、企業向けPPAを提供しています。",
+    "globalNote": "仁川本社とソウルR&Dセンターを拠点に、日本・英国・フランス・米国で事業を展開しています。",
+    "statsTitle": "会社概要",
+    "statsFounded": "設立",
+    "statsEmployees": "専門人材",
+    "statsProjects": "実績プロジェクト",
+    "statsGrowth": "年平均売上成長率",
+    "statsPatents": "保有特許",
+    "statsPatentsNote": "登録{registered}件",
+    "statsCountries": "海外進出",
+    "statsCountriesValue": "4カ国",
     "title": "会社紹介",
     "subtitle": "GX実現を牽引するエネルギー技術で、スマートシティとカーボンニュートラル社会に貢献します。",
     "vision": "ビジョン",
