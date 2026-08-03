@@ -4,6 +4,39 @@ import { routing } from "@/i18n/routing";
 export const SITE_URL = "https://ninewatt.com";
 
 /**
+ * 에너지 사업부의 정식 호스트.
+ *
+ * 경로는 그대로 두고 호스트만 바꾼다. /energy 접두사를 벗기면 안 된다 —
+ * next.config.ts의 /:locale/solar → /:locale/energy/solar 리다이렉트가
+ * middleware보다 먼저 실행되므로, 접두사 없는 주소(energy.ninewatt.com/ko/solar)는
+ * 308로 되돌아온다. canonical이 리다이렉트되는 URL을 가리키면 무시될 수 있다.
+ * 실제로 200을 반환하고 EnergyHeader가 링크하는 주소는 /ko/energy/solar 쪽이다.
+ *
+ * 여기를 SITE_URL로 되돌리면 서브도메인이 스스로를 중복으로 선언하게 되고,
+ * 내부 링크가 향하는 URL과 색인 대상이 어긋난다.
+ */
+export const ENERGY_SITE_URL = "https://energy.ninewatt.com";
+
+const ENERGY_PREFIX = "/energy";
+
+export function isEnergyPath(path: string): boolean {
+  return path === ENERGY_PREFIX || path.startsWith(`${ENERGY_PREFIX}/`);
+}
+
+/**
+ * 요청 Host가 에너지 서브도메인인지. middleware의 판정과 같은 기준을 쓴다.
+ * robots·sitemap이 호스트마다 자기 URL만 내보내도록 하는 데 쓴다.
+ */
+export function isEnergyHost(host: string | null | undefined): boolean {
+  return (host ?? "").startsWith("energy.");
+}
+
+/** 내부 라우트 경로가 공개되는 호스트 */
+export function siteUrlFor(path: string): string {
+  return isEnergyPath(path) ? ENERGY_SITE_URL : SITE_URL;
+}
+
+/**
  * OG 기본 이미지 (1200×630).
  *
  * Sprint 4에서 제작 후 "/images/og-default.png" 형태로 지정한다.
@@ -96,9 +129,9 @@ export function localePath(locale: string, path: string): string {
   return `/${locale}${path === "/" ? "" : path}`;
 }
 
-/** 절대 URL. sitemap·JSON-LD용 */
+/** 공개 절대 URL. canonical·sitemap·JSON-LD용 */
 export function absoluteUrl(locale: string, path: string): string {
-  return `${SITE_URL}${localePath(locale, path)}`;
+  return `${siteUrlFor(path)}${localePath(locale, path)}`;
 }
 
 /** 해당 경로에 실제 번역이 존재하는 로케일 목록 */
@@ -134,7 +167,9 @@ export function buildMetadata({
 }: BuildMetadataInput): Metadata {
   const image = ogImage ?? OG_DEFAULT_IMAGE;
   const locales = localesFor(path);
-  const url = localePath(locale, path);
+  // 절대 URL로 발급한다. 상대 경로는 metadataBase(=SITE_URL)에 붙으므로
+  // 에너지 페이지가 메인 도메인을 canonical로 선언해버린다.
+  const url = absoluteUrl(locale, path);
 
   // 번역이 없는 로케일 변형은 색인에서 제외한다.
   // 한국어 본문을 /en/ 아래에서 영어로 선언하면 hreflang 클러스터가 무효화된다.
@@ -150,8 +185,8 @@ export function buildMetadata({
     alternates: {
       canonical: url,
       languages: {
-        ...Object.fromEntries(locales.map((l) => [l, localePath(l, path)])),
-        "x-default": localePath(xDefault, path),
+        ...Object.fromEntries(locales.map((l) => [l, absoluteUrl(l, path)])),
+        "x-default": absoluteUrl(xDefault, path),
       },
     },
     openGraph: {
