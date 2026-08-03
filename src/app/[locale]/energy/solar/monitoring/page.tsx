@@ -177,7 +177,7 @@ export default function MonitoringPage() {
       {/* Hero */}
       <section className="pt-24 pb-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <p className="text-xs text-primary font-medium tracking-[0.2em] uppercase">PV Intelligence</p>
+          <p className="text-xs text-primary font-medium tracking-[0.2em] uppercase">PV REMS</p>
           <h1 className="mt-3 text-4xl sm:text-5xl font-bold text-zinc-900 dark:text-white max-w-2xl">
             {t("title")}
           </h1>

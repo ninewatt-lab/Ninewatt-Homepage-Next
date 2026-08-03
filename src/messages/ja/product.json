@@ -21,8 +21,8 @@
       "description": "韓国の独立太陽光開発事業者のための適地分析プラットフォームです。電力網接続性、土地規制、3D陰影、収益性まで、地図上でまとめて検証できます。"
     },
     "pvIntelligence": {
-      "title": "PV Intelligence - Solar AI Monitoring Platform",
-      "description": "従来のモニタリングシステムは発電量を表示するだけです。PV IntelligenceはAIが異常を検知し、原因を分析し、対処を案内し、損失額まで算出します。Ninewatt自社発電所で実証済みの技術です。"
+      "title": "PV REMS - Solar AI Monitoring Platform",
+      "description": "従来のモニタリングシステムは発電量を表示するだけです。PV REMSはAIが異常を検知し、原因を分析し、対処を案内し、損失額まで算出します。Ninewatt自社発電所で実証済みの技術です。"
     },
     "greenplanner": {
       "title": "GreenPlanner - Green Remodeling Planner",
@@ -461,7 +461,7 @@
   },
   "pvIntelligence": {
     "heroSubtitle": "発電量を見せるだけでなく、収益を増やすAI",
-    "heroDesc": "従来のモニタリングシステムは発電量を表示するだけです。PV IntelligenceはAIが異常を検知し、原因を分析し、対処を案内し、損失額まで算出します。Ninewatt自社発電所で実証済みの技術です。",
+    "heroDesc": "従来のモニタリングシステムは発電量を表示するだけです。PV REMSはAIが異常を検知し、原因を分析し、対処を案内し、損失額まで算出します。Ninewatt自社発電所で実証済みの技術です。",
     "requestDemo": "デモを申し込む",
     "goToService": "サービスへ移動",
     "downloadPdf": "PDFダウンロード",
@@ -476,7 +476,7 @@
       "損失額がわからないため、緊急性の判断ができません。"
     ],
 
-    "diffTitle": "PV Intelligenceは違います",
+    "diffTitle": "PV REMSは違います",
     "diffSubtitle": "単なるモニタリングではなく、AI運用パートナー",
     "diffItems": [
       { "title": "AI異常検知 + 原因分析 + 対処案内", "desc": "単純なアラートではなく「なぜ低下したか、何をすべきか、放置するといくら損するか」までお伝えします。" },
@@ -496,7 +496,7 @@
     ],
 
     "aiDetectionTitle": "こんな経験、ありませんか？",
-    "aiDetectionSubtitle": "現場でよく起こる問題を、PV Intelligenceがどう見つけるかをご紹介します。",
+    "aiDetectionSubtitle": "現場でよく起こる問題を、PV REMSがどう見つけるかをご紹介します。",
     "aiDetectionScenarios": [
       { "situation": "7カ所のうち1カ所だけ発電量がガクッと落ちた", "what": "残り6カ所は正常範囲なのに、清羅倉庫棟だけ朝から発電効率13%。天候の問題ではありません。", "action": "AIが系統連系側の異常と判断し、MCCBの点検を案内します。放置すると月約138万ウォンの損失。" },
       { "situation": "午後になると特定のインバーター出力が落ちる", "what": "午前は問題ないのに、午後2時からインバーター#2の出力が30%減少。隣のサイトは正常です。", "action": "時間帯別の交差比較で午後の影またはストリング汚れの可能性を指摘し、現場で確認すべきポイントをお伝えします。" },
@@ -541,7 +541,7 @@
 
     "proofTitle": "自社発電所での実証",
     "proofSubtitle": "Ninewatt自社の太陽光発電所でまず検証しています",
-    "proofDesc": "Ninewattは5～10カ所のサイト（各100kW級）の自社太陽光発電所を運営しています。PV Intelligenceのすべての機能は、自社発電所で先に実証してからお客様に提供しています。",
+    "proofDesc": "Ninewattは5～10カ所のサイト（各100kW級）の自社太陽光発電所を運営しています。PV REMSのすべての機能は、自社発電所で先に実証してからお客様に提供しています。",
     "proofPoints": [
       "自社発電所の運用データでAIモデルを継続学習",
       "「AIで月XX万円の損失防止」実績を証拠資料として提供",
@@ -560,7 +560,7 @@
     ],
 
     "ctaTitle": "数字を見るだけのモニタリングはもう終わり。AIで収益を高めましょう",
-    "ctaDesc": "PV Intelligenceのデモで、AIが異常を検知し損失額を算出するプロセスを直接ご確認ください。自社発電所の実証データでご説明します。",
+    "ctaDesc": "PV REMSのデモで、AIが異常を検知し損失額を算出するプロセスを直接ご確認ください。自社発電所の実証データでご説明します。",
     "ctaDemo": "デモ申込",
     "ctaBrochure": "PDFパンフレット"
   },

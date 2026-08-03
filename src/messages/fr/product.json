@@ -21,8 +21,8 @@
       "description": "Plateforme d'analyse de sites dédiée aux développeurs solaires indépendants coréens. Validez la connectivité réseau, la réglementation foncière, les ombres 3D et la rentabilité — le tout sur une seule carte."
     },
     "pvIntelligence": {
-      "title": "PV Intelligence - Solar AI Monitoring Platform",
-      "description": "Les systèmes de monitoring classiques ne font qu'afficher la production. PV Intelligence va plus loin : l'IA détecte les anomalies, diagnostique les causes, guide les actions et calcule les montants de perte. Technologie éprouvée sur les propres centrales de Ninewatt."
+      "title": "PV REMS - Solar AI Monitoring Platform",
+      "description": "Les systèmes de monitoring classiques ne font qu'afficher la production. PV REMS va plus loin : l'IA détecte les anomalies, diagnostique les causes, guide les actions et calcule les montants de perte. Technologie éprouvée sur les propres centrales de Ninewatt."
     },
     "greenplanner": {
       "title": "GreenPlanner - Green Remodeling Planner",
@@ -461,7 +461,7 @@
   },
   "pvIntelligence": {
     "heroSubtitle": "Au-delà des chiffres — une IA qui augmente vos revenus",
-    "heroDesc": "Les systèmes de monitoring classiques ne font qu'afficher la production. PV Intelligence va plus loin : l'IA détecte les anomalies, diagnostique les causes, guide les actions et calcule les montants de perte. Technologie éprouvée sur les propres centrales de Ninewatt.",
+    "heroDesc": "Les systèmes de monitoring classiques ne font qu'afficher la production. PV REMS va plus loin : l'IA détecte les anomalies, diagnostique les causes, guide les actions et calcule les montants de perte. Technologie éprouvée sur les propres centrales de Ninewatt.",
     "requestDemo": "Demander une démonstration",
     "goToService": "Accéder au service",
     "downloadPdf": "Télécharger le PDF",
@@ -476,7 +476,7 @@
       "Sans connaître le montant de la perte, impossible de juger l'urgence."
     ],
 
-    "diffTitle": "PV Intelligence est différent",
+    "diffTitle": "PV REMS est différent",
     "diffSubtitle": "Pas un simple monitoring — votre partenaire IA d'exploitation",
     "diffItems": [
       { "title": "Détection IA + Analyse des causes + Guide d'action", "desc": "Pas de simples alertes — on vous dit « pourquoi la production a baissé, quoi faire, et combien vous perdez si vous n'agissez pas »." },
@@ -496,7 +496,7 @@
     ],
 
     "aiDetectionTitle": "Ça vous dit quelque chose ?",
-    "aiDetectionSubtitle": "Voici comment PV Intelligence détecte les problèmes courants sur le terrain.",
+    "aiDetectionSubtitle": "Voici comment PV REMS détecte les problèmes courants sur le terrain.",
     "aiDetectionScenarios": [
       { "situation": "Une centrale sur sept s'est brusquement arrêtée de produire", "what": "Les six autres fonctionnent normalement, mais le site de l'entrepôt Cheongna affiche 13 % d'efficacité depuis ce matin. Ce n'est pas la météo.", "action": "L'IA identifie un probable problème de raccordement réseau et recommande de vérifier le MCCB. Sans intervention, environ 1,38 M₩ de perte par mois." },
       { "situation": "Un onduleur perd systématiquement de la puissance l'après-midi", "what": "Le matin, tout va bien, mais à partir de 14h l'onduleur #2 perd 30 % de sa puissance. Le site voisin fonctionne normalement.", "action": "La comparaison croisée horaire identifie un ombrage l'après-midi ou une contamination de string, et indique précisément ce qu'il faut vérifier sur place." },
@@ -541,7 +541,7 @@
 
     "proofTitle": "Éprouvé sur nos propres centrales",
     "proofSubtitle": "Validé d'abord sur les centrales solaires de Ninewatt",
-    "proofDesc": "Ninewatt exploite 5 à 10 sites de centrales solaires propres (~100 kW chacune). Chaque fonctionnalité de PV Intelligence est validée sur nos propres centrales avant d'être proposée aux clients.",
+    "proofDesc": "Ninewatt exploite 5 à 10 sites de centrales solaires propres (~100 kW chacune). Chaque fonctionnalité de PV REMS est validée sur nos propres centrales avant d'être proposée aux clients.",
     "proofPoints": [
       "Modèles IA continuellement entraînés sur les données d'exploitation de nos propres centrales",
       "« L'IA a évité XX k€ de pertes mensuelles » — résultats réels fournis comme preuves documentées",
@@ -560,7 +560,7 @@
     ],
 
     "ctaTitle": "Arrêtez de simplement regarder les chiffres — laissez l'IA booster vos revenus",
-    "ctaDesc": "Découvrez dans une démo live comment PV Intelligence détecte les anomalies et calcule les pertes. Nous vous guiderons avec les données réelles de nos propres centrales.",
+    "ctaDesc": "Découvrez dans une démo live comment PV REMS détecte les anomalies et calcule les pertes. Nous vous guiderons avec les données réelles de nos propres centrales.",
     "ctaDemo": "Demander une démo",
     "ctaBrochure": "Brochure PDF"
   },

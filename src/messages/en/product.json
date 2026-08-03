@@ -21,8 +21,8 @@
       "description": "A site-selection platform built for independent Korean solar developers. Validate grid connectivity, land regulations, 3D shadowing, and project economics — all on one map."
     },
     "pvIntelligence": {
-      "title": "PV Intelligence - Solar AI Monitoring Platform",
-      "description": "Conventional monitoring systems only display generation numbers. PV Intelligence goes further: AI detects anomalies, diagnoses causes, recommends actions, and calculates loss amounts. Proven at Ninewatt's own solar plants."
+      "title": "PV REMS - Solar AI Monitoring Platform",
+      "description": "Conventional monitoring systems only display generation numbers. PV REMS goes further: AI detects anomalies, diagnoses causes, recommends actions, and calculates loss amounts. Proven at Ninewatt's own solar plants."
     },
     "greenplanner": {
       "title": "GreenPlanner - Green Remodeling Planner",
@@ -331,7 +331,7 @@
   },
   "pvIntelligence": {
     "heroSubtitle": "Beyond showing numbers — AI that makes you earn more",
-    "heroDesc": "Conventional monitoring systems only display generation numbers. PV Intelligence goes further: AI detects anomalies, diagnoses causes, recommends actions, and calculates loss amounts. Proven at Ninewatt's own solar plants.",
+    "heroDesc": "Conventional monitoring systems only display generation numbers. PV REMS goes further: AI detects anomalies, diagnoses causes, recommends actions, and calculates loss amounts. Proven at Ninewatt's own solar plants.",
     "requestDemo": "Request Demo",
     "goToService": "Go to Service",
     "downloadPdf": "Download PDF",
@@ -346,7 +346,7 @@
       "Without knowing the loss amount, you can't judge how urgent it is."
     ],
 
-    "diffTitle": "PV Intelligence Is Different",
+    "diffTitle": "PV REMS Is Different",
     "diffSubtitle": "Not just monitoring — your AI operations partner",
     "diffItems": [
       { "title": "AI Anomaly Detection + Root Cause Analysis + Action Guidance", "desc": "Not just alerts — it tells you \"why output dropped, what to do, and how much you'll lose if you don't act.\"" },
@@ -366,7 +366,7 @@
     ],
 
     "aiDetectionTitle": "Sound familiar?",
-    "aiDetectionSubtitle": "Here's how PV Intelligence catches the problems that actually happen in the field.",
+    "aiDetectionSubtitle": "Here's how PV REMS catches the problems that actually happen in the field.",
     "aiDetectionScenarios": [
       { "situation": "One out of seven plants just stopped producing", "what": "The other six are running fine, but the Cheongna warehouse site has been at 13% efficiency since morning. It's not the weather.", "action": "AI flags a likely grid interconnection issue and recommends checking the MCCB. Left alone, that's roughly ₩1.38M lost per month." },
       { "situation": "One inverter keeps dropping output every afternoon", "what": "Mornings are fine, but from 2 PM onward inverter #2 loses 30% output. The site next door is unaffected.", "action": "Hourly cross-comparison pinpoints afternoon shading or string contamination as likely causes, and tells you exactly what to check on-site." },
@@ -411,7 +411,7 @@
 
     "proofTitle": "Proven at Our Own Plants",
     "proofSubtitle": "Validated first at Ninewatt's own solar power plants",
-    "proofDesc": "Ninewatt operates 5–10 of its own solar plant sites (~100kW each). Every PV Intelligence feature is validated at our own plants before being offered to customers.",
+    "proofDesc": "Ninewatt operates 5–10 of its own solar plant sites (~100kW each). Every PV REMS feature is validated at our own plants before being offered to customers.",
     "proofPoints": [
       "AI models continuously trained on our own plant operational data",
       "\"AI prevented ₩XX million in monthly losses\" — real results provided as documented proof",
@@ -430,7 +430,7 @@
     ],
 
     "ctaTitle": "Stop just watching numbers — let AI boost your revenue",
-    "ctaDesc": "See how PV Intelligence detects anomalies and calculates loss amounts in a live demo. We'll walk you through with real data from our own plants.",
+    "ctaDesc": "See how PV REMS detects anomalies and calculates loss amounts in a live demo. We'll walk you through with real data from our own plants.",
     "ctaDemo": "Request Demo",
     "ctaBrochure": "PDF Brochure"
   },

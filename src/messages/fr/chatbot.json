@@ -57,7 +57,7 @@
     "errorBody": "Échec de l'envoi. Veuillez réessayer plus tard."
   },
   "static": {
-    "products": "Ninewatt opère 7 produits principaux :\n\n- **Shared-ESS / Peak-ESS** : Gestion des systèmes de stockage d'énergie\n- **BEMS** : Système de gestion énergétique des bâtiments\n- **Solar-Site** : Analyse de faisabilité de sites solaires\n- **PV Intelligence** : Supervision des centrales solaires\n- **GreenPlanner** : Simulation de rénovation verte\n- **RE:park** : Gestion d'installations par QR code\n\nDites-moi lequel vous intéresse.",
+    "products": "Ninewatt opère 7 produits principaux :\n\n- **Shared-ESS / Peak-ESS** : Gestion des systèmes de stockage d'énergie\n- **BEMS** : Système de gestion énergétique des bâtiments\n- **Solar-Site** : Analyse de faisabilité de sites solaires\n- **PV REMS** : Supervision des centrales solaires\n- **GreenPlanner** : Simulation de rénovation verte\n- **RE:park** : Gestion d'installations par QR code\n\nDites-moi lequel vous intéresse.",
     "solutions": "Nos solutions phares :\n\n- **Opti** : Conseiller IA en énergie pour bâtiments\n- **Watti** : Analyse énergétique 3D des bâtiments\n- **Save-E** : Optimisation des coûts énergétiques\n\nNous avons livré plus de 60 projets dans le monde. Quel secteur ou cas d'usage vous intéresse ?",
     "company": "**Ninewatt** est une entreprise tech IA & énergie qui mène la GX (Green Transformation) pour un futur durable.\n\n- Siège : Incheon / R&D : Séoul\n- 30+ employés, 60+ projets, 36+ brevets\n- Présence : Japon, Royaume-Uni, France, USA\n- Contact : ninewatt@ninewatt.com / +82 70-8866-7226"
   }

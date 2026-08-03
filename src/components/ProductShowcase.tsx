@@ -94,7 +94,7 @@ const products: Product[] = [
   },
   {
     id: "pv-intelligence",
-    label: "PV Intelligence",
+    label: "PV REMS",
     titleKey: "showcase.pvIntelligence.title",
     descriptionKey: "showcase.pvIntelligence.description",
     href: "/product/pv-intelligence",
@@ -104,27 +104,27 @@ const products: Product[] = [
       images: [
         {
           src: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/PVIntelligence/PV_Intelligence_2.png",
-          alt: "PV Intelligence Dashboard",
+          alt: "PV REMS Dashboard",
         },
         {
           src: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/PVIntelligence/PV_Intelligence_3.png",
-          alt: "PV Intelligence Site Map",
+          alt: "PV REMS Site Map",
         },
         {
           src: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/PVIntelligence/PV_Intelligence_4.png",
-          alt: "PV Intelligence Cross-Site Analysis",
+          alt: "PV REMS Cross-Site Analysis",
         },
         {
           src: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/PVIntelligence/PV_Intelligence_5.png",
-          alt: "PV Intelligence Revenue Analysis",
+          alt: "PV REMS Revenue Analysis",
         },
         {
           src: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/PVIntelligence/PV_Intelligence_6.png",
-          alt: "PV Intelligence AI Alerts",
+          alt: "PV REMS AI Alerts",
         },
         {
           src: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/PVIntelligence/PV_Intelligence_1.png",
-          alt: "PV Intelligence String Layout",
+          alt: "PV REMS String Layout",
         },
       ],
     },

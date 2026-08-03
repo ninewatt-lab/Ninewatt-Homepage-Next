@@ -26,7 +26,7 @@ const LABELS: Record<string, string> = {
   "/product/peak-ess": "피크저감 ESS — AI 부하 예측 기반 충·방전 최적제어",
   "/product/bems": "BEMS — 건물에너지관리시스템",
   "/product/solar-site": "SolarScope — 태양광 후보지 규제·발전량·수익성 분석",
-  "/product/pv-intelligence": "PV Intelligence — 태양광 AI 모니터링·이상진단",
+  "/product/pv-intelligence": "PV REMS — 태양광 AI 모니터링·이상진단",
   "/product/greenplanner": "GreenPlanner — 그린리모델링 시뮬레이션",
   "/product/repark": "RE:park — QR 기반 시설물 관리",
   "/solutions": "솔루션 전체",

@@ -57,7 +57,7 @@
     "errorBody": "Submission failed. Please try again later."
   },
   "static": {
-    "products": "Ninewatt operates 7 core products:\n\n- **Shared-ESS / Peak-ESS**: Energy storage operation\n- **BEMS**: Building energy management system\n- **Solar-Site**: Solar site feasibility analysis\n- **PV Intelligence**: Solar farm monitoring\n- **GreenPlanner**: Green remodeling simulation\n- **RE:park**: QR-based facility management\n\nLet me know which one interests you most.",
+    "products": "Ninewatt operates 7 core products:\n\n- **Shared-ESS / Peak-ESS**: Energy storage operation\n- **BEMS**: Building energy management system\n- **Solar-Site**: Solar site feasibility analysis\n- **PV REMS**: Solar farm monitoring\n- **GreenPlanner**: Green remodeling simulation\n- **RE:park**: QR-based facility management\n\nLet me know which one interests you most.",
     "solutions": "Our flagship solutions:\n\n- **Opti**: AI-powered building energy advisor\n- **Watti**: 3D building energy analysis\n- **Save-E**: Building energy cost optimization\n\nWe've delivered 60+ projects globally. Which industry or use case interests you?",
     "company": "**Ninewatt** is an AI-energy tech company driving GX (Green Transformation) for a sustainable future.\n\n- HQ: Incheon / R&D: Seoul\n- 30+ employees, 60+ projects, 36+ patents\n- Global presence: Japan, UK, France, USA\n- Contact: ninewatt@ninewatt.com / +82 70-8866-7226"
   }
