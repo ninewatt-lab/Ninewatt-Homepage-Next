@@ -1,5 +1,9 @@
 // Knowledge base for the Ninewatt chatbot.
 // The static portion is sent with cache_control to reduce per-call cost.
+//
+// NOTE: COMPANY_KNOWLEDGE is also served publicly at /llms.txt, so everything
+// below must read as fact about Ninewatt. Assistant-facing instructions belong
+// in the system prompt assembled at call time, not in here.
 
 import { STRUCTURED_KNOWLEDGE } from "./knowledgeBase";
 
@@ -18,7 +22,7 @@ Ninewatt is an AI-powered energy technology company driving GX (Green Transforma
 - **Peak-ESS** (/product/peak-ess) — Peak shaving / demand-response ESS for industrial customers.
 - **BEMS** (/product/bems) — Building Energy Management System for offices, factories, hospitals.
 - **Solar-Site** (/product/solar-site) — Solar PV site feasibility analysis (rooftop / land).
-- **PV Intelligence** (/product/pv-intelligence) — AI monitoring & diagnostics for solar farms.
+- **PV REMS** (/product/pv-intelligence) — AI monitoring & diagnostics for solar farms. Previously named "PV RTU" and "PV Intelligence".
 - **GreenPlanner** (/product/greenplanner) — Green remodeling simulation for existing buildings.
 - **RE:park** (/product/repark) — QR-based facility/asset management for renewable parks.
 

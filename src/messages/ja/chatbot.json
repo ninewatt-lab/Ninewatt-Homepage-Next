@@ -57,7 +57,7 @@
     "errorBody": "送信に失敗しました。しばらく経ってから再度お試しください。"
   },
   "static": {
-    "products": "Ninewatt は 7 つのコア製品を提供しています:\n\n- **Shared-ESS / Peak-ESS**: 蓄電池運用・管理\n- **BEMS**: 建物エネルギー管理システム\n- **Solar-Site**: 太陽光用地の事業性分析\n- **PV Intelligence**: 太陽光発電所モニタリング\n- **GreenPlanner**: グリーンリモデリングシミュレーション\n- **RE:park**: QR ベースの施設管理\n\nご興味のある製品をお知らせください。",
+    "products": "Ninewatt は 7 つのコア製品を提供しています:\n\n- **Shared-ESS / Peak-ESS**: 蓄電池運用・管理\n- **BEMS**: 建物エネルギー管理システム\n- **Solar-Site**: 太陽光用地の事業性分析\n- **PV REMS**: 太陽光発電所モニタリング\n- **GreenPlanner**: グリーンリモデリングシミュレーション\n- **RE:park**: QR ベースの施設管理\n\nご興味のある製品をお知らせください。",
     "solutions": "代表的なソリューション:\n\n- **Opti**: AI 建物エネルギーアドバイザー\n- **Watti**: 3D 建物エネルギー分析\n- **Save-E**: 建物エネルギーコスト最適化\n\n国内外で 60+ プロジェクトを実施しました。どの業種・事例がお知りになりたいですか?",
     "company": "**Ninewatt** は GX(Green Transformation)技術で持続可能な未来を実現する AI・エネルギーテック企業です。\n\n- 本社: 仁川 / R&D: ソウル\n- 従業員 30+、プロジェクト 60+、特許 36+\n- グローバル展開: 日本・英国・フランス・米国\n- 連絡先: ninewatt@ninewatt.com / +82 70-8866-7226"
   }

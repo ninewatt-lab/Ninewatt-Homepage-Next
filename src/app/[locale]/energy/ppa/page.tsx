@@ -161,7 +161,7 @@ export default function PPAPage() {
               {
                 num: "03",
                 title: "AI 모니터링 & 최적화",
-                desc: "PV Intelligence로 발전량을 예측하고, ESS 연계 최적화로 안정적인 전력 공급과 비용 절감을 동시에 달성합니다.",
+                desc: "PV REMS로 발전량을 예측하고, ESS 연계 최적화로 안정적인 전력 공급과 비용 절감을 동시에 달성합니다.",
               },
             ].map((item) => (
               <div

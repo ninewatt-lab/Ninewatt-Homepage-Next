@@ -6,7 +6,7 @@
     },
     "monitoring": {
       "title": "AI 모니터링 시스템",
-      "description": "PV Intelligence — 발전량을 보여주는 것을 넘어, AI가 이상을 감지하고 손실 금액까지 산출합니다"
+      "description": "PV REMS — 발전량을 보여주는 것을 넘어, AI가 이상을 감지하고 손실 금액까지 산출합니다"
     },
     "services": {
       "title": "O&M 서비스",
@@ -128,7 +128,7 @@
   },
   "monitoring": {
     "title": "AI 모니터링 시스템",
-    "subtitle": "PV Intelligence — 발전량을 보여주는 것을 넘어, AI가 이상을 감지하고 손실 금액까지 산출합니다",
+    "subtitle": "PV REMS — 발전량을 보여주는 것을 넘어, AI가 이상을 감지하고 손실 금액까지 산출합니다",
     "features": {
       "crossCompare": {
         "title": "다중 사이트 교차 비교",
@@ -380,7 +380,7 @@
       "sites": "발전소 현황",
       "contact": "문의하기",
       "mainSite": "나인와트 홈페이지",
-      "pvIntelligence": "PV Intelligence"
+      "pvIntelligence": "PV REMS"
     }
   }
 }

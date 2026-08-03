@@ -30,7 +30,7 @@
     "products": "제품",
     "peakEss": "피크저감형 ESS",
     "sharedEss": "공유형 ESS",
-    "pvIntelligence": "PV Intelligence",
+    "pvIntelligence": "PV REMS",
     "solarSite": "SolarScope",
     "bems": "BEMS",
     "ppa": "직접PPA",
@@ -143,7 +143,7 @@
         "description": "배전망 연계형 공유 에너지저장장치로, 다수 수용가가 하나의 ESS를 공유하여 비용을 절감합니다."
       },
       "pvIntelligence": {
-        "title": "PV Intelligence",
+        "title": "PV REMS",
         "description": "AI 기반 태양광 발전소 통합 관제 시스템. 이상 감지, 원인 분석, 손실 금액 산출까지 자동화합니다."
       },
       "solarSite": {
@@ -205,7 +205,7 @@
     "productServices": "에너지 솔루션",
     "links": {
       "mainSite": "나인와트 홈페이지",
-      "pvIntelligence": "PV Intelligence"
+      "pvIntelligence": "PV REMS"
     }
   }
 }

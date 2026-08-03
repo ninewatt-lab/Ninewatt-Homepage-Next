@@ -52,7 +52,7 @@ export default async function PVIntelligencePage() {
             Solar AI Monitoring Platform
           </p>
           <h1 className="mt-6 text-5xl font-bold tracking-tight md:text-7xl">
-            PV Intelligence
+            PV REMS
           </h1>
           <p className="mt-3 text-xl text-muted md:text-2xl">
             {t("pvIntelligence.heroSubtitle")}
@@ -169,7 +169,7 @@ export default async function PVIntelligencePage() {
                     <p className="mt-1 text-base leading-relaxed text-muted">{scenario.what}</p>
                   </div>
                   <div className="border-l-2 border-primary pl-4">
-                    <p className="text-sm font-medium text-primary">PV Intelligence가 하는 일</p>
+                    <p className="text-sm font-medium text-primary">PV REMS가 하는 일</p>
                     <p className="mt-1 text-base leading-relaxed text-muted">{scenario.action}</p>
                   </div>
                 </div>

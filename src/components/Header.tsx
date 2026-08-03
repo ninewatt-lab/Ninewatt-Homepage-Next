@@ -6,6 +6,7 @@ import { useTheme } from "./ThemeProvider";
 import { useTranslations, useLocale } from "next-intl";
 import { useRouter, usePathname } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
+import { patentCounts } from "@/data/patents";
 import NinewattLogo from "./icons/NinewattLogo";
 
 /* ──────────────────────────────────────────────
@@ -65,7 +66,7 @@ const productNav: NavItemWithChildren = {
       ],
     },
     {
-      titleKey: "productMenu.pv",
+      titleKey: "productMenu.ems",
       items: [
         {
           href: "/product/bems",
@@ -79,7 +80,7 @@ const productNav: NavItemWithChildren = {
         },
         {
           href: "/product/pv-intelligence",
-          labelKey: "productMenu.pvRtuLabel",
+          labelKey: "productMenu.pvRemsLabel",
           descKey: "productMenu.pvIntelligenceDesc",
           icon: (
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
@@ -317,6 +318,10 @@ const companyNav: NavItemWithChildren = {
 
 const megaMenuItems: NavItemWithChildren[] = [solutionsNav, productNav, companyNav];
 
+/* DOM ids linking each trigger to its mega-menu panel (aria-controls / focus moves). */
+const triggerId = (labelKey: string) => `nav-trigger-${labelKey.replace(/\./g, "-")}`;
+const panelId = (labelKey: string) => `nav-panel-${labelKey.replace(/\./g, "-")}`;
+
 const localeLabels: Record<string, { short: string; native: string }> = {
   ko: { short: "KO", native: "한국어" },
   en: { short: "EN", native: "English" },
@@ -340,6 +345,7 @@ export default function Header() {
   const mousePosRef = useRef<{ x: number; y: number; t: number }[]>([]);
   const headerRef = useRef<HTMLElement>(null);
   const langRef = useRef<HTMLDivElement>(null);
+  const pendingPanelFocus = useRef(false);
   const t = useTranslations("common");
   const locale = useLocale();
   const router = useRouter();
@@ -351,17 +357,17 @@ export default function Header() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Close mega menu on Escape
+  // Close mega menu on Escape, returning focus to the trigger it was opened from
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        setActiveMenu(null);
-        setLangOpen(false);
-      }
+      if (e.key !== "Escape") return;
+      if (activeMenu) document.getElementById(triggerId(activeMenu))?.focus();
+      setActiveMenu(null);
+      setLangOpen(false);
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, []);
+  }, [activeMenu]);
 
   // Close language dropdown on outside click
   useEffect(() => {
@@ -429,6 +435,42 @@ export default function Header() {
     }, 150);
   }, []);
 
+  const focusFirstPanelLink = useCallback((labelKey: string) => {
+    document
+      .getElementById(panelId(labelKey))
+      ?.querySelector<HTMLAnchorElement>("a[href]")
+      ?.focus();
+  }, []);
+
+  // ArrowDown opens the panel, then focus lands here once `inert` has lifted
+  useEffect(() => {
+    if (!activeMenu || !pendingPanelFocus.current) return;
+    pendingPanelFocus.current = false;
+    focusFirstPanelLink(activeMenu);
+  }, [activeMenu, focusFirstPanelLink]);
+
+  // The panel sits outside the nav in the DOM, so tabbing never reaches it in
+  // trigger order. ArrowDown is the way keyboard users get inside.
+  const handleTriggerKeyDown = useCallback(
+    (e: React.KeyboardEvent, labelKey: string) => {
+      if (e.key !== "ArrowDown") return;
+      e.preventDefault();
+      if (activeMenu === labelKey) {
+        focusFirstPanelLink(labelKey);
+      } else {
+        pendingPanelFocus.current = true;
+        setActiveMenu(labelKey);
+      }
+    },
+    [activeMenu, focusFirstPanelLink]
+  );
+
+  // Close once focus leaves the header entirely (tabbing past the last item)
+  const handleHeaderBlur = useCallback((e: React.FocusEvent<HTMLElement>) => {
+    if (e.currentTarget.contains(e.relatedTarget as Node | null)) return;
+    setActiveMenu(null);
+  }, []);
+
   const handleDropdownEnter = useCallback(() => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
     if (switchMenuRef.current) clearTimeout(switchMenuRef.current);
@@ -449,10 +491,15 @@ export default function Header() {
     return t(key);
   };
 
+  // Descriptions may interpolate live figures (e.g. patent count) so the menu
+  // can't drift from /company/patents. Unused values are ignored by next-intl.
+  const resolveDesc = (key: string) => t(key, { count: patentCounts().total });
+
   return (
     <>
       <header
         ref={headerRef}
+        onBlur={handleHeaderBlur}
         className={`fixed top-0 z-50 w-full border-b transition-all duration-200 ${
           activeMenu
             ? "bg-background border-transparent"
@@ -477,6 +524,16 @@ export default function Header() {
               >
                 <Link
                   href={item.href}
+                  id={triggerId(item.labelKey)}
+                  aria-haspopup="true"
+                  aria-expanded={activeMenu === item.labelKey}
+                  aria-controls={panelId(item.labelKey)}
+                  onFocus={() => setActiveMenu(item.labelKey)}
+                  onKeyDown={(e) => handleTriggerKeyDown(e, item.labelKey)}
+                  // The header never remounts, and focus stays on the trigger after
+                  // navigating. Without this the panel would sit open over the new
+                  // page — a keyboard user has no pointer-leave to close it.
+                  onClick={() => setActiveMenu(null)}
                   className={`inline-flex items-center gap-1 rounded-lg px-4 py-2 text-lg font-medium transition-colors duration-200 ${
                     activeMenu === item.labelKey
                       ? "text-primary"
@@ -607,6 +664,11 @@ export default function Header() {
               {megaMenuItems.map((item) => (
                 <div
                   key={item.labelKey}
+                  id={panelId(item.labelKey)}
+                  /* Panels stay mounted for crawlers, so `inert` is what keeps the
+                     hidden ones out of the tab order and the a11y tree. */
+                  inert={activeMenu !== item.labelKey}
+                  aria-labelledby={triggerId(item.labelKey)}
                   className={`transition-opacity duration-200 ${
                     activeMenu === item.labelKey
                       ? "opacity-100"
@@ -649,7 +711,7 @@ export default function Header() {
                                     )}
                                   </span>
                                   <span className="text-sm leading-relaxed text-muted">
-                                    {t(subItem.descKey)}
+                                    {resolveDesc(subItem.descKey)}
                                   </span>
                                 </div>
                               </>
@@ -776,7 +838,7 @@ export default function Header() {
                   <div
                     className={`overflow-hidden transition-all duration-300 ${
                       mobileExpanded === item.labelKey
-                        ? "max-h-[600px] opacity-100"
+                        ? "max-h-190 opacity-100"
                         : "max-h-0 opacity-0"
                     }`}
                   >
@@ -804,7 +866,7 @@ export default function Header() {
                                     )}
                                   </span>
                                   <span className="ml-0 text-xs text-muted">
-                                    {t(subItem.descKey)}
+                                    {resolveDesc(subItem.descKey)}
                                   </span>
                                 </div>
                               </>
@@ -833,6 +895,19 @@ export default function Header() {
                           })}
                         </div>
                       ))}
+
+                      {/* On mobile the top-level row is a toggle, not a link, so
+                          the overview page needs its own entry here. */}
+                      <Link
+                        href={item.href}
+                        onClick={() => { setMobileOpen(false); setMobileExpanded(null); }}
+                        className="mt-2 flex items-center gap-1.5 rounded-lg px-3 py-2.5 text-sm font-medium text-primary transition-colors hover:bg-surface"
+                      >
+                        {t(item.viewAllKey)}
+                        <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-3.5 w-3.5">
+                          <path d="M4 2L8 6L4 10" />
+                        </svg>
+                      </Link>
                     </div>
                   </div>
                 </div>

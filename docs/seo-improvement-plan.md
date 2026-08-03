@@ -36,7 +36,13 @@
    - 국내 B2B 리드 유입에는 네이버가 구글만큼 중요하다. 절대 빠뜨리지 말 것
    - HTML 태그 방식이면 아래 `verification` 필드로 처리 (§3.3)
 3. **Bing Webmaster Tools** — 해외(en/ja/fr) 트래픽 대비. Search Console에서 가져오기 가능
-4. 등록 후 각 콘솔에 `https://ninewatt.com/sitemap.xml` 제출
+4. 등록 후 각 콘솔에 **사이트맵 2개**를 제출
+   - `https://ninewatt.com/sitemap.xml` — 본 사이트 (100 URL)
+   - `https://energy.ninewatt.com/sitemap.xml` — 에너지 사업부 (10 URL, ko 전용)
+   - 에너지 콘텐츠의 정식 호스트는 `energy.ninewatt.com`이다. `sitemap.ts`·`robots.ts`가
+     요청 Host를 보고 자기 URL만 내보내므로 두 사이트맵은 서로 겹치지 않는다.
+     도메인 속성(DNS TXT)으로 등록했다면 서브도메인이 이미 커버되므로 속성을
+     따로 만들 필요 없이 같은 속성에서 두 URL을 제출하면 된다.
 
 > 등록 직후 데이터는 안 쌓인다. 색인 반영까지 2–4주, 순위 안정화까지 2–3개월 걸린다는 전제로 일정을 잡을 것.
 
