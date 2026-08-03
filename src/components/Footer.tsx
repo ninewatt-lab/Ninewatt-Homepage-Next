@@ -42,7 +42,7 @@ const footerSections: FooterSection[] = [
       { label: "RE:park", href: "/product/repark", isLiteral: true },
       { label: "SolarScope", href: "/product/solar-site", isLiteral: true },
       {
-        label: "PV Intelligence",
+        label: "PV REMS",
         href: "/product/pv-intelligence",
         isLiteral: true,
       },
@@ -51,12 +51,14 @@ const footerSections: FooterSection[] = [
   {
     titleKey: "nav.company",
     href: "/company",
+    // Order mirrors the Company mega menu (소개 → 성과) so the two never drift
     links: [
       { label: "companyMenu.media", href: "/company/media" },
+      { label: "companyMenu.career", href: "/company/career" },
       { label: "companyMenu.awards", href: "/company/awards" },
       { label: "companyMenu.history", href: "/company/history" },
       { label: "companyMenu.patents", href: "/company/patents" },
-      { label: "companyMenu.career", href: "/company/career" },
+      { label: "companyMenu.papers", href: "/company/papers" },
       { label: "nav.contact", href: "/contact" },
     ],
   },

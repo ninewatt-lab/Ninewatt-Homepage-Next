@@ -39,7 +39,7 @@ const categories = [
     ],
   },
   {
-    titleKey: "productMenu.pv" as const,
+    titleKey: "productMenu.ems" as const,
     products: [
       {
         href: "/product/bems" as const,
@@ -50,7 +50,7 @@ const categories = [
       },
       {
         href: "/product/pv-intelligence" as const,
-        nameKey: "productMenu.pvRtuLabel" as const,
+        nameKey: "productMenu.pvRemsLabel" as const,
         badge: null,
         tagline: "Solar Plant Monitoring System",
         descKey: "list.pvIntelligenceDesc" as const,

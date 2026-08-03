@@ -32,10 +32,10 @@ export default function ProductNav() {
       ],
     },
     {
-      label: t("productMenu.pv"),
+      label: t("productMenu.ems"),
       items: [
         { href: "/product/bems", label: "BEMS" },
-        { href: "/product/pv-intelligence", label: t("productMenu.pvRtuLabel") },
+        { href: "/product/pv-intelligence", label: t("productMenu.pvRemsLabel") },
       ],
     },
     {
