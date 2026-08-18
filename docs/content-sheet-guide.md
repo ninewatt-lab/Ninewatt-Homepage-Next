@@ -135,6 +135,12 @@ pnpm check:media '<주소>'   # 특정 시트를 지정
 환경변수는 [`.env.example`](../.env.example)의 "콘텐츠 시트" 절을 참고하세요.
 `MEDIA_SHEET_CSV_URL`을 비워두면 정적 데이터를 쓰므로 로컬 개발에는 설정이 필요 없습니다.
 
+**운영 설정은 GitHub Secrets에서 합니다.** EC2에 직접 접속할 필요가 없습니다 —
+[`.github/workflows/deploy.yml`](../.github/workflows/deploy.yml)이 시크릿을 읽어
+`docker run -e`로 컨테이너에 주입합니다. 저장소 Settings > Secrets and variables >
+Actions 에서 `MEDIA_SHEET_CSV_URL`, `REVALIDATE_SECRET` 두 개를 등록한 뒤 재배포하세요.
+환경변수는 컨테이너 시작 시점에만 적용되므로, 시크릿을 나중에 추가했다면 재배포해야 반영됩니다.
+
 ### 캐시
 
 `fetch`에 `revalidate: 600` + `tags: ["media"]`를 걸었습니다.
