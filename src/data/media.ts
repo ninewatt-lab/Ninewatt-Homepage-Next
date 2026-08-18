@@ -1,5 +1,13 @@
+/**
+ * 아래 두 배열은 이제 "폴백"이다.
+ * 평상시 소스는 홍보 담당자가 관리하는 Google Sheet이고(MEDIA_SHEET_CSV_URL),
+ * 시트를 읽지 못하거나 유효한 행이 하나도 없을 때만 이 데이터가 쓰인다.
+ * 시트 서식과 운영 방법은 docs/content-sheet-guide.md 참고.
+ */
 export interface MediaItem {
   title: string;
+  /** 영문 제목. ko 외 로케일에서 이 값이 있으면 title 대신 노출된다(시트의 title_en 열). */
+  titleEn?: string;
   date: string;
   origin: string;
   link: string;

@@ -11,6 +11,10 @@
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
+    // scripts/*.mts 는 번들러를 거치지 않고 node가 직접 실행한다.
+    // 네이티브 TS 실행은 import 경로에 .ts 확장자를 요구하므로 허용한다.
+    // noEmit: true 라 번들 출력에는 영향이 없다.
+    "allowImportingTsExtensions": true,
     "jsx": "react-jsx",
     "incremental": true,
     "plugins": [

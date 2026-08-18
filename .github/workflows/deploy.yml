@@ -53,11 +53,15 @@ jobs:
           # 시크릿 미설정 시 빈 값 → layout.tsx가 meta 태그를 아예 출력하지 않는다.
           NAVER_SITE_VERIFICATION: ${{ secrets.NAVER_SITE_VERIFICATION }}
           GOOGLE_SITE_VERIFICATION: ${{ secrets.GOOGLE_SITE_VERIFICATION }}
+          # 미디어(뉴스·영상) 시트. 시크릿으로 두면 시트를 옮겨도 커밋 없이 바꿀 수 있다.
+          # 미설정 시 빈 값 → src/data/media.ts 정적 데이터로 동작한다(기존과 동일).
+          MEDIA_SHEET_CSV_URL: ${{ secrets.MEDIA_SHEET_CSV_URL }}
+          REVALIDATE_SECRET: ${{ secrets.REVALIDATE_SECRET }}
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
-          envs: ECR_REGISTRY,TEAMS_WEBHOOK_URL,ANTHROPIC_API_KEY,NAVER_SITE_VERIFICATION,GOOGLE_SITE_VERIFICATION
+          envs: ECR_REGISTRY,TEAMS_WEBHOOK_URL,ANTHROPIC_API_KEY,NAVER_SITE_VERIFICATION,GOOGLE_SITE_VERIFICATION,MEDIA_SHEET_CSV_URL,REVALIDATE_SECRET
           script: |
             aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin ${ECR_REGISTRY}
             IMAGE_TAG="${ECR_REGISTRY}/ninewatt-homepage:${{ github.sha }}"
@@ -74,4 +78,6 @@ jobs:
               -e "ANTHROPIC_API_KEY=$ANTHROPIC_API_KEY" \
               -e "NAVER_SITE_VERIFICATION=$NAVER_SITE_VERIFICATION" \
               -e "GOOGLE_SITE_VERIFICATION=$GOOGLE_SITE_VERIFICATION" \
+              -e "MEDIA_SHEET_CSV_URL=$MEDIA_SHEET_CSV_URL" \
+              -e "REVALIDATE_SECRET=$REVALIDATE_SECRET" \
               ${IMAGE_TAG}

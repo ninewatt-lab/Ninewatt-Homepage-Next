@@ -12,7 +12,9 @@ import { organization } from "@/data/organization";
 import { career } from "@/data/career";
 import { globalBusiness } from "@/data/globalBusiness";
 import { products } from "@/data/products";
-import { newsArticles, videos } from "@/data/media";
+import { newsArticles, videos, type MediaItem } from "@/data/media";
+import { fromSheet } from "@/lib/sheet";
+import { parseMediaRow } from "@/lib/media-schema";
 import { papers } from "@/data/papers";
 
 // Collections
@@ -146,8 +148,42 @@ export async function getProductServiceUrl(slug: string): Promise<string | null>
   return product?.serviceUrl || null;
 }
 
-export async function getMedia(_locale: string) {
-  const sortedNews = [...newsArticles].sort((a, b) => b.date.localeCompare(a.date));
-  const sortedVideos = [...videos].sort((a, b) => b.date.localeCompare(a.date));
-  return { news: sortedNews, videos: sortedVideos };
+/* ── Media (뉴스·영상) ──────────────────────────────────────────────
+   src/data 중 유일하게 시트를 소스로 쓰는 컬렉션이다. 나머지는 아직 정적이며,
+   여기서 검증된 방식을 awards → history → papers 순으로 넓힐 계획이다.
+   자세한 판단 기준은 docs/content-sheet-guide.md 의 "다음 컬렉션" 절 참고. */
+
+/**
+ * 보도자료는 국문 원문이라 로케일별 번역본이 없다.
+ * ko가 아니면 title_en이 있을 때만 영문 제목으로 바꾼다 — ja/fr 독자에게도
+ * 국문 제목보다는 영문 제목이 낫고, 없으면 원문을 그대로 둔다.
+ */
+function localizeMedia(items: MediaItem[], locale: string): MediaItem[] {
+  if (locale === "ko") return items;
+  return items.map((item) => (item.titleEn ? { ...item, title: item.titleEn } : item));
+}
+
+export async function getMedia(locale: string) {
+  const items = await fromSheet<MediaItem>({
+    url: process.env.MEDIA_SHEET_CSV_URL,
+    tag: "media",
+    fallback: [...newsArticles, ...videos],
+    parseRow: parseMediaRow,
+  });
+
+  // 같은 링크를 두 번 붙여넣는 실수를 흡수한다(MediaSection이 link를 React key로 쓴다).
+  // 시트에서 위에 있는 행이 이긴다 — 편집자가 먼저 보는 행이 남아야 납득이 된다.
+  const seen = new Set<string>();
+  const unique = items.filter((item) => {
+    if (seen.has(item.link)) return false;
+    seen.add(item.link);
+    return true;
+  });
+  const localized = localizeMedia(unique, locale);
+  const byDateDesc = (a: MediaItem, b: MediaItem) => b.date.localeCompare(a.date);
+
+  return {
+    news: localized.filter((i) => i.type === "article").sort(byDateDesc),
+    videos: localized.filter((i) => i.type === "video").sort(byDateDesc),
+  };
 }

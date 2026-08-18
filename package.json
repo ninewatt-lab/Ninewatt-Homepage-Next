@@ -7,7 +7,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "check:media": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/check-media-sheet.mts",
+    "export:media": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/export-media-csv.mts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.91.1",
