@@ -109,6 +109,8 @@ interface FromSheetOptions<T> {
   parseRow: (row: Record<string, string>) => T | null;
   /** ISR 재검증 주기(초). 기본 10분. */
   revalidate?: number;
+  /** 응답 대기 상한(ms). 기본 8초. */
+  timeoutMs?: number;
 }
 
 /** 게시된 시트를 읽어 검증된 항목 배열로 돌려준다. 실패는 전부 폴백으로 흡수한다. */
@@ -118,11 +120,17 @@ export async function fromSheet<T>({
   fallback,
   parseRow,
   revalidate = 600,
+  timeoutMs = 8000,
 }: FromSheetOptions<T>): Promise<T[]> {
   if (!url) return fallback;
 
   try {
-    const res = await fetch(url, { next: { revalidate, tags: [tag] } });
+    // 타임아웃이 없으면 시트가 응답을 끄는 동안 페이지 렌더가 함께 멈춘다.
+    // 끊기면 아래 catch가 폴백으로 흡수한다.
+    const res = await fetch(url, {
+      next: { revalidate, tags: [tag] },
+      signal: AbortSignal.timeout(timeoutMs),
+    });
     if (!res.ok) throw new Error(`HTTP ${res.status} ${res.statusText}`);
 
     const records = parseCsvRecords(await res.text());

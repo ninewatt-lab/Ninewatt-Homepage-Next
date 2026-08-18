@@ -47,7 +47,15 @@ export function readMediaRow(row: Record<string, string>): MediaRowResult {
   // 편집자가 "영상"이라고 적는 경우가 자연스럽다. 그 외 값은 뉴스로 본다.
   const rawType = row.type?.trim().toLowerCase() ?? "";
   const type = rawType === "video" || rawType === "영상" ? "video" : "article";
-  const image = row.image || (type === "video" ? youtubeThumbnail(link) : "");
+
+  // image 칸에 "사진없음" 같은 메모를 적으면 <img src="사진없음">이 되어 깨진 이미지가 뜬다.
+  // MediaSection에는 이미 "이미지 없음" 플레이스홀더가 있으므로, URL이 아니면 비워서 그쪽으로 보낸다.
+  const rawImage = row.image ?? "";
+  const image = /^https?:\/\//.test(rawImage)
+    ? rawImage
+    : type === "video"
+      ? youtubeThumbnail(link)
+      : "";
 
   return {
     ok: true,
