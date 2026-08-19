@@ -11,8 +11,10 @@ interface ServiceProject {
   title: string;
   detail?: {
     description: string;
-    images: string[];
-    link: string;
+    /** 스크린샷이 없는 사업도 있다. 없으면 갤러리를 통째로 건너뛴다. */
+    images?: string[];
+    /** 공개 URL이 없는 사업도 있다(6건 중 3건). 렌더는 이미 조건부였는데 타입만 필수였다. */
+    link?: string;
   };
 }
 
@@ -106,20 +108,21 @@ function ServiceRow({ project, index }: { project: ServiceProject; index: number
             >
               <div className="overflow-hidden">
                 <div className="px-4 py-6 bg-secondary/20">
-                  {/* Image gallery */}
+                  {/* Image gallery — 스크린샷이 있는 사업만 */}
+                  {(project.detail!.images?.length ?? 0) > 0 && (
                   <div className="mb-4">
                     <div className="relative aspect-[16/9] w-full max-w-3xl overflow-hidden rounded-lg border border-border/50 bg-black/5 dark:bg-white/5">
                       <Image
-                        src={project.detail!.images[activeImage]}
+                        src={project.detail!.images![activeImage]}
                         alt={project.title}
                         fill
                         sizes="(max-width: 768px) 100vw, 768px"
                         className="object-contain"
                       />
                     </div>
-                    {project.detail!.images.length > 1 && (
+                    {project.detail!.images!.length > 1 && (
                       <div className="mt-3 flex gap-2">
-                        {project.detail!.images.map((img, i) => (
+                        {project.detail!.images!.map((img, i) => (
                           <button
                             key={i}
                             onClick={(e) => {
@@ -138,6 +141,7 @@ function ServiceRow({ project, index }: { project: ServiceProject; index: number
                       </div>
                     )}
                   </div>
+                  )}
 
                   {/* Description */}
                   <p className="text-base text-foreground/90 leading-relaxed max-w-3xl">
