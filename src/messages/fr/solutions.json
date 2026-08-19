@@ -145,7 +145,9 @@
       { "client": "Province de Gyeonggi (경기도)", "period": "2024.05~2024.12", "title": "Plateforme de gestion des ressources de demande ESS basée sur l'IA", "detail": { "description": "Plateforme de gestion intégrée recensant 300 sites ESS de la province de Gyeonggi, avec données de charge/décharge en temps réel sur 8 sites. Un simulateur de rentabilité ESS et un contrôle optimal par IA générative ont réduit la pointe quotidienne moyenne de 70 kW sur deux sites nouvellement construits, le modèle de prévision atteignant un CVRMSE de 7,08 %. Réalisé avec LS ELECTRIC dans le cadre du programme du ministère du Commerce, de l'Industrie et de l'Énergie." } },
       { "client": "LS Electric Co., Ltd.", "period": "2024.01~2024.12", "title": "Service avancé de reporting d'analyse énergétique (ver2.0)" },
       { "client": "Hyundai EnGV Co., Ltd. (현대엔지비)", "period": "2023.12~2024.06", "title": "Développement d'algorithmes et simulations d'efficacité énergétique pour hub de mobilité future" },
-      { "client": "LS Electric Co., Ltd.", "period": "2023.04~2023.08", "title": "Amélioration du Energy Reporting Service dans Smart Diagnostics MVP3.0" }
+      { "client": "LS Electric Co., Ltd.", "period": "2023.04~2023.08", "title": "Amélioration du Energy Reporting Service dans Smart Diagnostics MVP3.0" },
+      { "client": "Université nationale d'Incheon (인천대학교)", "period": "2022.12~2023.05", "title": "Système de surveillance des gaz à effet de serre basé sur les données pour l'Université nationale d'Incheon" },
+      { "client": "NIA (한국지능정보사회진흥원)", "period": "2022.06~2022.12", "title": "Constitution d'un jeu de données d'images de graines de plantes indigènes" }
     ],
     "ctaTitle": "Proposez un partenariat en développement de systèmes",
     "ctaText": "Intéressé par une collaboration en développement de systèmes ?",
