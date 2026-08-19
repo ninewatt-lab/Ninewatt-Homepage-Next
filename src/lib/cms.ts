@@ -54,6 +54,7 @@ interface PatentDoc {
   country?: string;
   thumbnailUrl?: string;
   imageUrls?: string[];
+  googlePatentsPending?: boolean;
 }
 
 function generateImageUrls(thumbnailUrl: string | undefined, pageCount: number | undefined): string[] | undefined {

@@ -29,6 +29,13 @@ export interface Patent {
   thumbnailUrl?: string;
   pageCount?: number;
   visible?: boolean;
+  /**
+   * 등록 직후라 Google Patents에 아직 색인되지 않은 특허.
+   * 등록 특허는 기본적으로 원문에 직접 링크하는데, 색인 전이면 그 주소가 404다.
+   * 이 플래그를 켜면 검색 링크로 대신 보낸다. 색인되면 플래그만 지우면 된다.
+   * (확인: https://patents.google.com/patent/KR<등록번호 뒤 4자리 제거>B1/ko 가 200인가)
+   */
+  googlePatentsPending?: boolean;
 }
 
 export interface InternationalPatent {
@@ -59,8 +66,14 @@ export const domesticPatents: Patent[] = [
   { id: 13, status: "등록", date: "2024.09.19", number: "1027088340000", title: "에너지 효율화 대상 건물을 선정하는 서버 및 이를 위한 에너지 효율화 대상 건물 선정 방법", applicant: "주식회사 나인와트", thumbnailUrl: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/documents/patents/thumbnails/%EC%97%90%EB%84%88%EC%A7%80+%ED%9A%A8%EC%9C%A8%ED%99%94+%EB%8C%80%EC%83%81+%EA%B1%B4%EB%AC%BC%EC%9D%84+%EC%84%A0%EC%A0%95%ED%95%98%EB%8A%94+%EC%84%9C%EB%B2%84+%EB%B0%8F+%EC%9D%B4%EB%A5%BC+%EC%9D%B4%EC%9A%A9%ED%95%9C+%EC%97%90%EB%84%88%EC%A7%80+%ED%9A%A8%EC%9C%A8%ED%99%94+%EB%8C%80%EC%83%81+%EA%B1%B4%EB%AC%BC+%EC%84%A0%EC%A0%95+%EB%B0%A9%EB%B2%95.jpg" , pageCount: 13 },
   { id: 14, status: "등록", date: "2024.06.24", number: "1026791800000", title: "빌딩 에너지 데이터 기반 충전기 설치 장소 결정 방법 및 그 장치", applicant: "주식회사 나인와트", thumbnailUrl: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/documents/patents/thumbnails/%EB%B9%8C%EB%94%A9+%EC%97%90%EB%84%88%EC%A7%80+%EB%8D%B0%EC%9D%B4%ED%84%B0+%EA%B8%B0%EB%B0%98+%EC%B6%A9%EC%A0%84%EA%B8%B0+%EC%84%A4%EC%B9%98+%EC%9E%A5%EC%86%8C+%EA%B2%B0%EC%A0%95+%EB%B0%A9%EB%B2%95+%EB%B0%8F+%EA%B7%B8+%EC%9E%A5%EC%B9%98.jpg" , pageCount: 9 },
   { id: 15, status: "등록", date: "2023.11.13", number: "1026033240000", title: "스마트 미터를 이용한 블루투스 기반의 무선 원격 검침 시스템, 방법 및 이를 위한 장치", applicant: "한국에너지기술연구원, 주식회사 나인와트", thumbnailUrl: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/documents/patents/thumbnails/%EC%8A%A4%EB%A7%88%ED%8A%B8+%EB%AF%B8%ED%84%B0%EB%A5%BC+%EC%9D%B4%EC%9A%A9%ED%95%9C+%EB%B8%94%EB%A3%A8%ED%88%AC%EC%8A%A4+%EA%B8%B0%EB%B0%98%EC%9D%98+%EB%AC%B4%EC%84%A0+%EC%9B%90%EA%B2%A9+%EA%B2%80%EC%B9%A8+%EC%8B%9C%EC%8A%A4%ED%85%9C%2C+%EB%B0%A9%EB%B2%95+%EB%B0%8F+%EC%9D%B4%EB%A5%BC+%EC%9C%84%ED%95%9C+%EC%9E%A5%EC%B9%98.jpg" , pageCount: 15 },
-  { id: 16, status: "공개", date: "2019.12.16", number: "1020190168167", title: "감응형 냉난방 제어시스템의 구동 방법", applicant: "주식회사 나인와트", thumbnailUrl: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/documents/patents/thumbnails/%EA%B0%90%EC%9D%91%ED%98%95+%EB%83%89%EB%82%9C%EB%B0%A9+%EC%A0%9C%EC%96%B4+%EC%8B%9C%EC%8A%A4%ED%85%9C%EC%9D%98+%EA%B5%AC%EB%8F%99+%EB%B0%A9%EB%B2%95.jpg" , pageCount: 13 },
+  { id: 16, status: "등록", date: "2026.05.06", number: "1029628470000", title: "감응형 냉난방 제어시스템의 구동 방법", applicant: "주식회사 나인와트", googlePatentsPending: true, thumbnailUrl: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/documents/patents/thumbnails/%EA%B0%90%EC%9D%91%ED%98%95+%EB%83%89%EB%82%9C%EB%B0%A9+%EC%A0%9C%EC%96%B4+%EC%8B%9C%EC%8A%A4%ED%85%9C%EC%9D%98+%EA%B5%AC%EB%8F%99+%EB%B0%A9%EB%B2%95.jpg" , pageCount: 13 },
   { id: 17, status: "출원", date: "2024.12.02", number: "1020240176906", title: "건물 쉐이프 모델링 생성 시스템 및 방법", applicant: "주식회사 나인와트", thumbnailUrl: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/documents/patents/thumbnails/%EA%B1%B4%EB%AC%BC+%EC%89%90%EC%9D%B4%ED%94%84+%EB%AA%A8%EB%8D%B8%EB%A7%81+%EC%83%9D%EC%84%B1+%EC%8B%9C%EC%8A%A4%ED%85%9C+%EB%B0%8F+%EB%B0%A9%EB%B2%95.jpg" , pageCount: 11 },
+  /* 아래 6건은 2025년 하반기 출원으로, 특허청 공개(출원일+18개월) 전이라 웹에 감춘다.
+     명세서 전문(49~66p)이 특허청 공개보다 먼저 노출되면 해외 출원 시 신규성 판단에
+     영향이 갈 수 있다. 국내 출원 자체는 자기공지 예외로 보호되지만 PCT·개별국은 별개다.
+     공개 예정일: 27.04.29 / 27.05.27 / 27.06.02(3건) / 27.06.05.
+     그 시점 이후 visible 플래그를 지우면 목록과 patentCounts()에 자동 반영된다.
+     최초 비공개 결정: 04e77f6 (2026-03-31) */
   { id: 18, status: "출원", date: "2025.10.29", number: "1020250159223", title: "RAG LLM 기반의 리트로핏 대상물의 에너지 운영 시뮬레이션 장치", applicant: "주식회사 나인와트", thumbnailUrl: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/documents/patents/thumbnails/RAG+LLM+%EA%B8%B0%EB%B0%98%EC%9D%98+%EB%A6%AC%ED%8A%B8%EB%A1%9C%ED%95%8F+%EB%8C%80%EC%83%81%EB%AC%BC%EC%9D%98+%EC%97%90%EB%84%88%EC%A7%80+%EC%9A%B4%EC%98%81+%EC%8B%9C%EB%AE%AC%EB%A0%88%EC%9D%B4%EC%85%98+%EC%9E%A5%EC%B9%98.jpg" , pageCount: 52, visible: false },
   { id: 19, status: "출원", date: "2025.12.02", number: "1020250187778", title: "공유형 에너지 저장 시스템의 용량 배분 방법 및 시스템", applicant: "주식회사 나인와트", thumbnailUrl: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/documents/patents/thumbnails/%EA%B3%B5%EC%9C%A0%ED%98%95+%EC%97%90%EB%84%88%EC%A7%80+%EC%A0%80%EC%9E%A5+%EC%8B%9C%EC%8A%A4%ED%85%9C%EC%9D%98+%EC%9A%A9%EB%9F%89+%EB%B0%B0%EB%B6%84+%EB%B0%A9%EB%B2%95+%EB%B0%8F+%EC%8B%9C%EC%8A%A4%ED%85%9C.jpg" , pageCount: 59, visible: false },
   { id: 20, status: "출원", date: "2025.11.27", number: "1020250183997", title: "공유형 에너지 저장 시스템의 운영 방법 및 시스템", applicant: "주식회사 나인와트", thumbnailUrl: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/documents/patents/thumbnails/%EA%B3%B5%EC%9C%A0%ED%98%95+%EC%97%90%EB%84%88%EC%A7%80+%EC%A0%80%EC%9E%A5+%EC%8B%9C%EC%8A%A4%ED%85%9C%EC%9D%98+%EC%9A%B4%EC%98%81+%EB%B0%A9%EB%B2%95+%EB%B0%8F+%EC%8B%9C%EC%8A%A4%ED%85%9C.jpg" , pageCount: 56, visible: false },
