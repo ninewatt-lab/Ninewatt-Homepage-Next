@@ -53,7 +53,7 @@
     "optiLink": "제품 알아보기",
     "solutionsTitle": "에너지 데이터·AI·시뮬레이션",
     "solutionsDesc": "데이터 수집부터 도시 에너지 시뮬레이션까지.",
-    "globalTitle": "4개국 진출, 33건 특허",
+    "globalTitle": "{countries}개국 진출, {patents}건 특허",
     "globalDesc": "일본·영국·프랑스·미국에서 사업을 전개하고 있습니다.",
     "explore": "자세히 보기"
   },

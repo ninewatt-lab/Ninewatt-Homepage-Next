@@ -1,4 +1,5 @@
 import { patentCounts } from "@/data/patents";
+import { globalBusiness } from "@/data/globalBusiness";
 import type { Metadata } from "next";
 import { buildMetadata } from "@/lib/seo";
 import { Link } from "@/i18n/navigation";
@@ -139,7 +140,13 @@ export default async function Home({
                     Global
                   </p>
                   <h3 className="mt-4 text-lg font-bold transition-colors group-hover:text-primary">
-                    {t("cards.globalTitle")}
+                    {/* 수치는 데이터에서 산출한다. 공개 페이지의 실적 수치는
+                        표시광고법 대상이라 하드코딩하면 목록과 갈라진다.
+                        (실제로 이 문구만 33건으로 남아 목록 36건과 어긋나 있었다) */}
+                    {t("cards.globalTitle", {
+                      countries: globalBusiness.countries.length,
+                      patents: patentCounts().total,
+                    })}
                   </h3>
                   <p className="mt-2 text-sm text-muted">
                     {t("cards.globalDesc")}

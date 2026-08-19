@@ -6,8 +6,8 @@ import { InlineExpandImage, ExpandableRow, ExpandableTrigger, TrademarkGroupCard
 import type { TechnologyTransfer } from "@/data/technologyTransfers";
 
 /** Google Patents 링크 생성 — 등록 특허는 직접 링크, 출원/공개 특허는 검색 링크 */
-function patentUrl(number: string, status: string, title: string): string {
-  if (status === "등록") {
+function patentUrl(number: string, status: string, title: string, googlePatentsPending?: boolean): string {
+  if (status === "등록" && !googlePatentsPending) {
     // 등록번호 1024763030000 → KR102476303B1 (뒤 4자리 제거 + B1)
     const regNo = number.replace(/0{4}$/, "");
     return `https://patents.google.com/patent/KR${regNo}B1/ko`;
@@ -183,7 +183,7 @@ export default async function PatentsPage({
               </thead>
               <AccordionTableBody>
                 {domesticRegistered.map((p, i) => (
-                  <ExpandableRow key={p.id} accordionKey={`dr-${p.id}`} thumbnailUrl={p.thumbnailUrl} imageUrls={p.imageUrls} alt={p.title} colSpan={5} footer={<PatentLink number={p.number} status={p.status} title={p.title} />}>
+                  <ExpandableRow key={p.id} accordionKey={`dr-${p.id}`} thumbnailUrl={p.thumbnailUrl} imageUrls={p.imageUrls} alt={p.title} colSpan={5} footer={<PatentLink number={p.number} status={p.status} title={p.title} googlePatentsPending={p.googlePatentsPending} />}>
                     <td className="py-3 pr-3 text-muted">{i + 1}</td>
                     <td className="py-3 pr-3 whitespace-nowrap tabular-nums text-muted">{p.date}</td>
                     <td className="py-3 pr-3 tabular-nums text-xs text-muted">{p.number}</td>
@@ -213,7 +213,7 @@ export default async function PatentsPage({
                 </thead>
                 <AccordionTableBody>
                   {domesticPending.map((p, i) => (
-                    <ExpandableRow key={p.id} accordionKey={`dp-${p.id}`} thumbnailUrl={p.thumbnailUrl} imageUrls={p.imageUrls} alt={p.title} colSpan={5} footer={<PatentLink number={p.number} status={p.status} title={p.title} />}>
+                    <ExpandableRow key={p.id} accordionKey={`dp-${p.id}`} thumbnailUrl={p.thumbnailUrl} imageUrls={p.imageUrls} alt={p.title} colSpan={5} footer={<PatentLink number={p.number} status={p.status} title={p.title} googlePatentsPending={p.googlePatentsPending} />}>
                       <td className="py-3 pr-3 text-muted">{i + 1}</td>
                       <td className="py-3 pr-3 whitespace-nowrap tabular-nums text-muted">{p.date}</td>
                       <td className="py-3 pr-3 tabular-nums text-xs text-muted">{p.number}</td>
@@ -351,10 +351,10 @@ export default async function PatentsPage({
   );
 }
 
-function PatentLink({ number, status, title }: { number: string; status: string; title: string }) {
+function PatentLink({ number, status, title, googlePatentsPending }: { number: string; status: string; title: string; googlePatentsPending?: boolean }) {
   return (
     <a
-      href={patentUrl(number, status, title)}
+      href={patentUrl(number, status, title, googlePatentsPending)}
       target="_blank"
       rel="noopener noreferrer"
       className="inline-flex items-center gap-1 text-xs text-blue-600 hover:underline"
