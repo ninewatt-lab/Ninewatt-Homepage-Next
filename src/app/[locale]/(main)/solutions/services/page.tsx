@@ -26,8 +26,10 @@ export default async function ServicesPage() {
     title: string;
     detail?: {
       description: string;
-      images: string[];
-      link: string;
+      /* 둘 다 선택 필드다. 스크린샷이나 링크가 없는 사업이 있고,
+         여기서 필수로 선언하면 t.raw 캐스트가 실제 데이터에 대해 거짓말을 한다. */
+      images?: string[];
+      link?: string;
     };
   }>;
 
