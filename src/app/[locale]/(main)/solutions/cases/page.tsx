@@ -26,8 +26,10 @@ export default async function CasesPage() {
     desc: string;
     detail?: {
       description: string;
-      images: string[];
-      link: string;
+      /* 둘 다 선택 필드다. 여기서 필수로 선언하면 t.raw 캐스트가
+         실제 데이터에 대해 거짓말을 하고, 타입 검사가 무력화된다. */
+      images?: string[];
+      link?: string;
     };
   }>;
   const stats = t.raw("cases.stats") as Array<{ value: string; label: string }>;
