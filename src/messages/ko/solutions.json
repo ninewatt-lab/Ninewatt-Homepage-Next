@@ -142,6 +142,7 @@
       { "client": "경기연구원", "period": "2024.09~2025.08", "title": "경기도 광역 도시생태현황지도 및 RE100 플랫폼 서비스 구축" },
       { "client": "엘에스일렉트릭(주)", "period": "2024.07~2024.07", "title": "피크저감형 ESS 최적제어 알고리즘 개발" },
       { "client": "한국건설기술연구원", "period": "2024.06~2024.11", "title": "지역 단위 탄소배출량 가시화 시스템 개발", "detail": { "description": "건물·도로 단위의 탄소 및 교통 배출량을 3D 지도로 가시화하고, 시나리오별 에너지 사용량 예측·탄소배출 저감률 분석·에너지 성능 진단·그린리모델링 시뮬레이션까지 제공하는 탄소종합지도 플랫폼입니다.", "images": ["https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/projects/Carbon-Neutral_1.png", "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/projects/Carbon-Neutral_2.png", "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/projects/Carbon-Neutral_4.png", "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/projects/Carbon-Neutral_3.png"] } },
+      { "client": "경기도", "period": "2024.05~2024.12", "title": "AI기반 ESS 수요자원 관리 플랫폼 구축", "detail": { "description": "경기도 내 ESS 300개소의 자원 정보를 등록하고 8개소의 실시간 충방전 데이터를 연동한 통합관리 플랫폼입니다. ESS 설치 경제성 시뮬레이터와 생성형 AI 기반 최적제어를 개발해 신규 구축 2개소에서 일평균 최대수요전력 70kW를 절감했고, 전력사용량 예측모델은 CVRMSE 7.08%를 기록했습니다. 산업통상자원부 미래 지역에너지 생태계 활성화 사업으로 LS ELECTRIC과 함께 수행했습니다." } },
       { "client": "엘에스일렉트릭(주)", "period": "2024.01~2024.12", "title": "고도화된 에너지 분석 레포팅 Service(ver2.0)" },
       { "client": "현대엔지비주식회사", "period": "2023.12~2024.06", "title": "미래 모빌리티 허브 에너지 효율화 알고리즘 및 시뮬레이션 개발" },
       { "client": "엘에스일렉트릭(주)", "period": "2023.04~2023.08", "title": "스마트진단 MVP3.0 내 Energy Reporting Service 고도화" }
