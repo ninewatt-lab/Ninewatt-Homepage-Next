@@ -53,7 +53,7 @@
     "optiLink": "詳しく見る",
     "solutionsTitle": "エネルギーデータ・AI・シミュレーション",
     "solutionsDesc": "データ収集から都市エネルギーシミュレーションまで。",
-    "globalTitle": "4カ国展開、33件の特許",
+    "globalTitle": "{countries}カ国展開、{patents}件の特許",
     "globalDesc": "日本・英国・フランス・米国で事業を展開しています。",
     "explore": "詳しく見る"
   },
