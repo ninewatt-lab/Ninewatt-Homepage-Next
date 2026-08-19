@@ -1,16 +1,16 @@
 export const rndProjects = [
   {
     agency: "중소기업기술정보진흥원",
-    research: "빅데이터분석 기반 에너지절감 AI플랫폼 개발",
+    research: "빅데이터 분석기반 건물에너지 절감 AI플랫폼",
     lead: "나인와트",
-    period: "21.07~21.12",
+    period: "19.07~21.12",
     status: "완료" as const,
     detail: {
       goal: "에너지절감 기술과 결합된 에너지절감 교육 프로세스 개발",
       contents: [{ item: "에너지절감 및 서비스 성능 향상개발" }, { item: "상용화 AI 플랫폼 개발" }],
-      budget: "5억원 (총 6.25억원)",
+      budget: "5억원 (총 5.97억원)",
       department: "중소벤처기업부",
-      category: "창업성장기술개발(일반,R&D)",
+      category: "창업성장기술개발 (TIPS, 민간투자주도형 기술창업지원)",
     },
   },
   {
@@ -90,10 +90,10 @@ export const rndProjects = [
     },
   },
   {
-    agency: "중소벤처기업부",
+    agency: "중소기업기술정보진흥원",
     research: "그린리모델링 대상 건물 선별 및 성능개선을 위한 도시단위 광역진단 기술",
     lead: "나인와트",
-    period: "22.04~24.12",
+    period: "22.04~25.06",
     status: "완료" as const,
     detail: {
       goal: "탄소중립 실현을 위한 그린리모델링 도시단위 광역진단 플랫폼 구현",
@@ -102,9 +102,9 @@ export const rndProjects = [
         { item: "데이터 기반의 도시단위 광역 진단 모델 개발" },
         { item: "그린리모델링 생태계 조성을 위한 정책 마련" },
       ],
-      budget: "5억원 (총 6.25억원)",
+      budget: "6.81억원 (총 9.34억원)",
       department: "중소벤처기업부",
-      category: "그린뉴딜유망기업100",
+      category: "그린벤처 프로그램R&D (그린뉴딜유망기업100)",
     },
   },
   {
@@ -123,6 +123,43 @@ export const rndProjects = [
       budget: "3.5억원 (총 4.63억원)",
       department: "국토교통부",
       category: "국토교통기술사업화를위한이어달리기사업",
+    },
+  },
+  {
+    agency: "한국산업기술진흥원",
+    research: "전력 송배전 선로부하를 고려한 공유형 ESS 설치 전 사전 진단 기술개발",
+    lead: "나인와트",
+    period: "25.04~25.12",
+    status: "완료" as const,
+    detail: {
+      budget: "0.3억원 (총 0.45억원)",
+      department: "산업통상자원부",
+      category: "2025년 스케일업기술사업화프로그램",
+    },
+  },
+  {
+    agency: "과학기술사업화진흥원",
+    research:
+      "AI 기반 도시 단위 건물 에너지 통합 관리 R&D 효율화를 위한 온톨로지 연계 데이터레이크 및 다중 에이전트 기술 개발",
+    lead: "나인와트",
+    period: "26.04~26.06",
+    status: "완료" as const,
+    detail: {
+      budget: "0.195억원 (총 0.26억원)",
+      department: "과학기술사업화진흥원",
+      category: "연구개발서비스기업 혁신성장지원_주문연구기업 성장사다리 구축(혁신 도약)",
+    },
+  },
+  {
+    agency: "한국에너지기술평가원",
+    research: "경북지역 풍력에너지 클러스터 인재양성사업",
+    lead: "나인와트(공동)",
+    period: "21.04~25.12",
+    status: "완료" as const,
+    detail: {
+      budget: "정부지원금 없음 (총 1억원)",
+      department: "산업통상자원부",
+      category: "에너지인력양성(R&D)",
     },
   },
   {
@@ -147,10 +184,15 @@ export const rndProjects = [
   },
   {
     agency: "한국환경산업기술원",
-    research: "수열원 시스템 동절기 효율향상 및 AI 기반 최적 운영 제어 기술 개발",
+    research: "수열원 변동 대응 대규모 중앙집중형 수열에너지 실증플랜트 기술 개발",
     lead: "장한기술(주) / 나인와트",
     period: "25.04~29.12",
     status: "수행중" as const,
+    detail: {
+      budget: "13억원 (총 17.33억원)",
+      department: "기후환경에너지부",
+      category: "2024년 신기후체제 대응 환경기술개발",
+    },
   },
   {
     agency: "한국연구재단",
@@ -161,7 +203,7 @@ export const rndProjects = [
   },
   {
     agency: "국토교통과학기술진흥원",
-    research: "건물부분 탄소중립 가속화를 위한 건물에너지 소비 데이터 통합관리 기반기술 개발",
+    research: "건물부문 탄소중립 가속화를 위한 건물에너지 소비 데이터 통합관리 기반기술 개발",
     lead: "건설기술연구원 / 나인와트",
     period: "23.04~26.12",
     status: "수행중" as const,
@@ -193,6 +235,31 @@ export const rndProjects = [
       budget: "13.125억원 (총 14.56억원)",
       department: "국토교통부",
       category: "협력거점형 국토교통 국제협력 연구개발사업",
+    },
+  },
+  {
+    agency: "한국산업기술진흥원",
+    research: "AI기반 예지보전형 HVAC+Chiller 통합제어 하이브리드 ESS 냉각시스템 개발",
+    lead: "나인와트(공동)",
+    period: "26.04~28.12",
+    status: "수행중" as const,
+    detail: {
+      budget: "3.08억원 (총 4.6억원)",
+      department: "산업통상자원부",
+      category: "2026년도 월드클래스플러스사업 (월드클래스 기업 R&D 지원)",
+    },
+  },
+  {
+    agency: "한국에너지기술평가원",
+    research:
+      "배전망·커뮤니티 부하 완화를 위한 공유형 ESS 중심 디지털트윈-양자 최적화 기반 분산 에너지 자원 통합 운영 플랫폼 개발",
+    lead: "나인와트",
+    period: "26.07~29.06",
+    status: "수행중" as const,
+    detail: {
+      budget: "5억원 (총 6.67억원)",
+      department: "산업통상자원부",
+      category: "2025년 한-싱가포르 에너지국제공동R&D 신규지원",
     },
   },
 ];

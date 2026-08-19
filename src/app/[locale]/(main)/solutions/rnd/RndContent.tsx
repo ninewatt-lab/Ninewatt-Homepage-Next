@@ -150,14 +150,16 @@ function ProjectRow({ project, index, labels }: { project: RndProject; index: nu
                   )}
 
                   <div className="grid gap-4 md:grid-cols-2 text-sm">
-                    <div className="md:col-span-2">
-                      <h4 className="font-semibold text-sm uppercase tracking-wider text-muted mb-1.5">
-                        {labels.goal}
-                      </h4>
-                      <p className="text-foreground/90 leading-relaxed">
-                        {project.detail!.goal}
-                      </p>
-                    </div>
+                    {project.detail!.goal && (
+                      <div className="md:col-span-2">
+                        <h4 className="font-semibold text-sm uppercase tracking-wider text-muted mb-1.5">
+                          {labels.goal}
+                        </h4>
+                        <p className="text-foreground/90 leading-relaxed">
+                          {project.detail!.goal}
+                        </p>
+                      </div>
+                    )}
 
                     {project.detail!.contents.length > 0 && (
                       <div className="md:col-span-2">

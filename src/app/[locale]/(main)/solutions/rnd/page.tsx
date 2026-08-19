@@ -33,9 +33,12 @@ export default async function RndPage({
     lead: p.lead,
     period: p.period,
     status: p.status as "수행중" | "완료",
-    detail: p.detail?.goal
+    // goal이 아니라 detail 존재로 판단한다. 출처(연구과제 xlsx)에 사업비·소관부처·
+    // 사업구분은 있지만 연구목표·연구내용이 없는 과제가 있고, goal로 게이트하면
+    // 가진 데이터까지 통째로 버려진다. 빈 goal은 RndContent가 알아서 숨긴다.
+    detail: p.detail
       ? {
-          goal: p.detail.goal,
+          goal: p.detail.goal ?? "",
           contents: ((p.detail.contents ?? []) as Array<{ item?: string | null } | string>).map((c) =>
             typeof c === "string" ? c : (c as { item?: string | null }).item ?? ""
           ),
