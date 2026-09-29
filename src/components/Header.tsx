@@ -265,6 +265,16 @@ const companyNav: NavItemWithChildren = {
             </svg>
           ),
         },
+        {
+          href: "/lab",
+          labelKey: "companyMenu.lab",
+          descKey: "companyMenu.labDesc",
+          icon: (
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
+              <path d="M9 3h6M10 3v6.5L4.5 19a1.5 1.5 0 001.3 2.2h12.4a1.5 1.5 0 001.3-2.2L14 9.5V3" /><path d="M7 15h10" />
+            </svg>
+          ),
+        },
       ],
     },
     {

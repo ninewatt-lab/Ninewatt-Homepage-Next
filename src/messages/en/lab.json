@@ -1,0 +1,150 @@
+{
+  "meta": {
+    "title": "Ninewatt Lab",
+    "description": "Projects Ninewatt is building or experimenting with in-house. We share ideas and experiments before they become products."
+  },
+  "hero": {
+    "eyebrow": "Ninewatt Lab",
+    "title": "Research in progress",
+    "desc": "We share ideas and experiments before they become products, including the ones still being refined and the ones that changed direction."
+  },
+  "status": {
+    "concept": "Concept",
+    "experimenting": "Experimenting",
+    "graduated": "Now a product",
+    "paused": "Paused"
+  },
+  "list": {
+    "viewProject": "View project"
+  },
+  "detail": {
+    "back": "Ninewatt Lab",
+    "film": "From drawing to model",
+    "why": "Why we're building it",
+    "chapterNav": "Film chapters",
+    "disclaimer": "Scenes taken directly from the real drawings (client and architect details removed) and the 3D model. No audio.",
+    "graduated": "View product page"
+  },
+  "cta": {
+    "title": "Looking for people to experiment with",
+    "desc": "If you'd like to propose a joint development or pilot, or want to work on problems like these together, get in touch.",
+    "collab": "Propose a collaboration",
+    "join": "See open positions"
+  },
+  "projects": {
+    "ai-building-workspace": {
+      "name": "AI Building Workspace",
+      "tagline": "Understand the drawing. Turn the building into data.",
+      "summary": "A workspace that reads DXF drawings, computes room boundaries and areas, and turns them into a 3D building model you can check against the drawings. We're testing it on real green-remodeling drawings.",
+      "tags": [
+        "DXF",
+        "Drawing layer analysis",
+        "3D modeling",
+        "Area takeoff"
+      ],
+      "coverAlt": "Axonometric of the 3D building model AI Building Workspace built from the drawings, with the unconfirmed roof in orange",
+      "why": [
+        "Most building information still lives as lines and text on drawings. Every time someone needs an area or a quantity, a person has to read the drawing again and copy numbers into a spreadsheet, and later it is hard to tell where those numbers came from.",
+        "AI Building Workspace turns a single drawing into building data you can verify. AI reads the drawing, a person reviews the result, and every figure keeps its evidence."
+      ],
+      "chapters": [
+        "Original floor plan",
+        "Room boundaries",
+        "Original elevation",
+        "Drawing vs. model overlay",
+        "3D model",
+        "Ground floor inside",
+        "Upper floor inside",
+        "Inside the waiting room"
+      ],
+      "case": {
+        "title": "Tested on real drawings",
+        "intro": "We fed in one full set of green-remodeling drawings (DXF) for a small public health clinic. The ground floor is the clinic; the upper floor is staff housing. Client and architect details are removed; only the drawing linework is redrawn.",
+        "stats": {
+          "lines": "Drawing lines",
+          "dimensions": "Dimensions",
+          "layers": "Layers",
+          "rooms": "Room zones (both floors)"
+        },
+        "figures": {
+          "plan": {
+            "title": "Original ground-floor plan",
+            "caption": "Redrawn from the DXF's wall, opening and dimension layers only. Scale 1:100, overall 10,500 × 9,800 mm."
+          },
+          "rooms": {
+            "title": "Computed room boundaries",
+            "caption": "Closed regions are found from wall and opening lines and labelled with the room names in the drawing. Two areas with no partition line are grouped and flagged for boundary review."
+          },
+          "model": {
+            "title": "3D model built from the drawings",
+            "caption": "Walls, floors and openings are raised from the plans and elevations. The roof, which the drawings alone can't settle, is left marked as unconfirmed (orange) by the model itself."
+          },
+          "interior1": {
+            "title": "Ground floor inside · clinic",
+            "caption": "The model is cut 1.4 m above the floor and viewed from above. Each room's floor-finish grid lines up with the room layout in the drawings; labels sit at the centre of the room boundaries computed from the drawing layers."
+          },
+          "interior2": {
+            "title": "Upper floor inside · staff housing",
+            "caption": "The upper floor cut the same way. The living room and kitchen/dining are open to each other, so they are computed as one area. Balconies are open to the outside and are not counted as rooms."
+          }
+        },
+        "compare": {
+          "title": "Elevation overlay",
+          "caption": "The drawn front elevation and the model's front view share the same scale and origin. Drag the slider or switch to overlay to see how closely the lines match.",
+          "drawing": "Drawn elevation",
+          "model": "3D model",
+          "overlay": "Overlay",
+          "split": "Side by side",
+          "handle": "Comparison position",
+          "legend": "Red: drawing · Grey: model"
+        },
+        "areas": {
+          "title": "Room areas",
+          "basis": "Measured to the inner wall face · computed automatically from drawing layers",
+          "room": "Room",
+          "area": "Area (m²)",
+          "state": "Status",
+          "auto": "Computed",
+          "review": "Boundary review needed",
+          "notedLabel": "Works area noted on the drawing",
+          "notedScope": "Ceilings and floors of clinic, waiting room, multipurpose room and entrance",
+          "computedLabel": "Computed total for the same rooms",
+          "diffLabel": "Difference",
+          "note": "The next step is to confirm whether the noted figure uses wall centrelines or includes an allowance. Rather than forcing the numbers to match, we keep a record of where the gap comes from.",
+          "floors": {
+            "f1": "Ground floor · clinic",
+            "f2": "Upper floor · staff housing"
+          }
+        },
+        "rooms": {
+          "waiting": "Waiting room",
+          "clinic": "Clinic · treatment & dispensary",
+          "multipurpose": "Multipurpose room",
+          "stair": "Stairwell · boiler room",
+          "entrance": "Entrance",
+          "toilet": "Toilet",
+          "livingKitchen": "Living room · kitchen/dining",
+          "masterBedroom": "Main bedroom",
+          "bedroom": "Bedroom"
+        },
+        "findings": {
+          "title": "What matched and what didn't yet",
+          "confirmedTitle": "Matches the drawings",
+          "openTitle": "Still to be confirmed",
+          "confirmed": [
+            "Ground-floor overall dimensions and room zones match the drawn plan.",
+            "Front windows, entrance door and the gable outline line up with the drawn elevation.",
+            "The model's floor-finish zones on each floor line up with the room layout in the drawings."
+          ],
+          "open": [
+            "The roof form can't be settled from the front elevation alone and stays unconfirmed; it needs checking against the roof plan.",
+            "The balcony railing, accessible ramp and entrance steps are not in the model yet.",
+            "Two areas with no partition line (clinic/dispensary, stairwell/boiler room) need their boundaries confirmed by a person.",
+            "The upper-floor stairwell and bathroom have no room names in the drawings, so they are missing from the area table.",
+            "There is a gap between the works area noted on the drawing and the computed area."
+          ]
+        }
+      }
+    }
+  }
+}

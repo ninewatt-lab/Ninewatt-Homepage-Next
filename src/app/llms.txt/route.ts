@@ -44,6 +44,8 @@ const LABELS: Record<string, string> = {
   "/company/papers": "논문·학술발표",
   "/company/media": "언론 보도",
   "/company/career": "채용",
+  "/lab": "Ninewatt Lab — 사내 실험·프로토타입 프로젝트",
+  "/lab/ai-building-workspace": "AI Building Workspace — DXF 도면에서 실 경계·면적 계산과 3D 건물 모델 생성 (실제 도면으로 시험 중)",
   "/contact": "문의하기",
   "/energy": "나인와트 에너지 — 신재생에너지 O&M",
   "/energy/ess": "ESS 운영 서비스",

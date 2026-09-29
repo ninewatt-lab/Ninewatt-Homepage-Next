@@ -1,0 +1,150 @@
+{
+  "meta": {
+    "title": "Ninewatt Lab",
+    "description": "Les projets que Ninewatt développe ou expérimente en interne. Nous partageons nos idées et nos expériences avant qu'elles ne deviennent des produits."
+  },
+  "hero": {
+    "eyebrow": "Ninewatt Lab",
+    "title": "Recherches en cours",
+    "desc": "Nous partageons nos idées et nos expériences avant qu'elles ne deviennent des produits, y compris celles encore en cours d'affinage et celles qui ont changé de direction."
+  },
+  "status": {
+    "concept": "Concept",
+    "experimenting": "En expérimentation",
+    "graduated": "Devenu un produit",
+    "paused": "En pause"
+  },
+  "list": {
+    "viewProject": "Voir le projet"
+  },
+  "detail": {
+    "back": "Ninewatt Lab",
+    "film": "Du plan à la maquette",
+    "why": "Pourquoi ce projet",
+    "chapterNav": "Chapitres du film",
+    "disclaimer": "Images tirées directement des vrais plans (informations du maître d'ouvrage et de l'architecte retirées) et de la maquette 3D. Sans son.",
+    "graduated": "Voir la page produit"
+  },
+  "cta": {
+    "title": "Nous cherchons des partenaires d'expérimentation",
+    "desc": "Si vous souhaitez proposer un co-développement ou un projet pilote, ou travailler avec nous sur ce type de problème, contactez-nous.",
+    "collab": "Proposer une collaboration",
+    "join": "Voir les offres d'emploi"
+  },
+  "projects": {
+    "ai-building-workspace": {
+      "name": "AI Building Workspace",
+      "tagline": "Comprendre le plan. Faire du bâtiment une donnée.",
+      "summary": "Un espace de travail qui lit les plans DXF, calcule les limites et les surfaces des pièces, puis en tire une maquette 3D que l'on peut confronter aux plans. Nous le testons sur de vrais plans de rénovation énergétique.",
+      "tags": [
+        "DXF",
+        "Analyse des calques",
+        "Modélisation 3D",
+        "Calcul des surfaces"
+      ],
+      "coverAlt": "Axonométrie de la maquette 3D créée à partir des plans par AI Building Workspace, toiture non confirmée en orange",
+      "why": [
+        "L'essentiel des informations d'un bâtiment reste enfermé dans les traits et les textes des plans. Chaque fois qu'il faut une surface ou une quantité, quelqu'un doit relire le plan et recopier les chiffres dans un tableau, et il devient ensuite difficile de savoir d'où viennent ces chiffres.",
+        "AI Building Workspace transforme un simple plan en données de bâtiment vérifiables. L'IA lit le plan, une personne valide le résultat, et chaque chiffre conserve sa justification."
+      ],
+      "chapters": [
+        "Plan d'origine",
+        "Limites des pièces",
+        "Élévation d'origine",
+        "Superposition plan / maquette",
+        "Maquette 3D",
+        "Intérieur du rez-de-chaussée",
+        "Intérieur de l'étage",
+        "Dans la salle d'attente"
+      ],
+      "case": {
+        "title": "Testé sur de vrais plans",
+        "intro": "Nous avons injecté un jeu complet de plans (DXF) de rénovation énergétique d'un petit centre de santé public. Le rez-de-chaussée accueille le centre, l'étage un logement de fonction. Les informations sur le maître d'ouvrage et l'architecte sont retirées ; seuls les traits du plan sont redessinés.",
+        "stats": {
+          "lines": "Traits du plan",
+          "dimensions": "Cotes",
+          "layers": "Calques",
+          "rooms": "Zones (deux niveaux)"
+        },
+        "figures": {
+          "plan": {
+            "title": "Plan d'origine du rez-de-chaussée",
+            "caption": "Redessiné à partir des seuls calques murs, ouvertures et cotes du DXF. Échelle 1/100, emprise 10 500 × 9 800 mm."
+          },
+          "rooms": {
+            "title": "Limites des pièces calculées",
+            "caption": "Les zones fermées sont déduites des traits de murs et d'ouvertures, puis nommées d'après le plan. Deux zones sans cloison dessinée sont regroupées et signalées pour vérification."
+          },
+          "model": {
+            "title": "Maquette 3D issue des plans",
+            "caption": "Murs, planchers et ouvertures sont montés à partir des plans et élévations. La toiture, que les plans seuls ne permettent pas de trancher, est laissée « non confirmée » (orange) par la maquette elle-même."
+          },
+          "interior1": {
+            "title": "Intérieur du rez-de-chaussée · centre de santé",
+            "caption": "La maquette est coupée à 1,4 m au-dessus du sol et vue d'en haut. Le calepinage du sol de chaque pièce coïncide avec la distribution des plans ; les étiquettes sont placées au centre des limites calculées à partir des calques."
+          },
+          "interior2": {
+            "title": "Intérieur de l'étage · logement de fonction",
+            "caption": "L'étage est coupé de la même façon. Le séjour et la cuisine/salle à manger communiquent sans cloison et sont donc calculés comme une seule zone. Les balcons, ouverts sur l'extérieur, ne sont pas comptés comme des pièces."
+          }
+        },
+        "compare": {
+          "title": "Superposition avec l'élévation",
+          "caption": "L'élévation principale dessinée et la vue de face de la maquette partagent la même échelle et la même origine. Faites glisser le curseur ou passez en superposition pour voir à quel point les traits coïncident.",
+          "drawing": "Élévation dessinée",
+          "model": "Maquette 3D",
+          "overlay": "Superposer",
+          "split": "Côte à côte",
+          "handle": "Position de comparaison",
+          "legend": "Rouge : plan · Gris : maquette"
+        },
+        "areas": {
+          "title": "Surfaces des pièces",
+          "basis": "Mesurées au nu intérieur des murs · calculées automatiquement à partir des calques",
+          "room": "Pièce",
+          "area": "Surface (m²)",
+          "state": "État",
+          "auto": "Calculée",
+          "review": "Limite à vérifier",
+          "notedLabel": "Surface de travaux indiquée sur le plan",
+          "notedScope": "Plafonds et sols du cabinet, de la salle d'attente, de la salle polyvalente et de l'entrée",
+          "computedLabel": "Total calculé pour les mêmes pièces",
+          "diffLabel": "Écart",
+          "note": "Prochaine étape : vérifier si la valeur indiquée est prise à l'axe des murs ou inclut une marge. Plutôt que de forcer les chiffres à coïncider, nous gardons la trace de l'origine de l'écart.",
+          "floors": {
+            "f1": "Rez-de-chaussée · centre de santé",
+            "f2": "Étage · logement de fonction"
+          }
+        },
+        "rooms": {
+          "waiting": "Salle d'attente",
+          "clinic": "Cabinet · soins et préparation",
+          "multipurpose": "Salle polyvalente",
+          "stair": "Cage d'escalier · chaufferie",
+          "entrance": "Entrée",
+          "toilet": "Toilettes",
+          "livingKitchen": "Séjour · cuisine/salle à manger",
+          "masterBedroom": "Chambre principale",
+          "bedroom": "Chambre"
+        },
+        "findings": {
+          "title": "Ce qui concorde, et ce qui reste à faire",
+          "confirmedTitle": "Concorde avec les plans",
+          "openTitle": "Reste à confirmer",
+          "confirmed": [
+            "Les dimensions hors tout et les zones du rez-de-chaussée correspondent au plan.",
+            "Les fenêtres, la porte d'entrée et le profil du pignon se superposent à l'élévation dessinée.",
+            "Les zones de revêtement de sol de la maquette coïncident, à chaque niveau, avec la distribution des plans."
+          ],
+          "open": [
+            "La forme de la toiture ne peut pas être tranchée à partir de la seule élévation et reste non confirmée ; il faut la confronter au plan de toiture.",
+            "Le garde-corps du balcon, la rampe d'accès et les marches d'entrée ne sont pas encore dans la maquette.",
+            "Deux zones sans cloison dessinée (cabinet/préparation, escalier/chaufferie) doivent être vérifiées par une personne.",
+            "La cage d'escalier et la salle de bains de l'étage n'ont pas de nom sur les plans ; elles manquent donc au tableau des surfaces.",
+            "Il existe un écart entre la surface de travaux indiquée sur le plan et la surface calculée."
+          ]
+        }
+      }
+    }
+  }
+}

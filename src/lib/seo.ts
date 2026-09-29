@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { routing } from "@/i18n/routing";
+import { labProjects } from "@/data/labProjects";
 
 export const SITE_URL = "https://ninewatt.com";
 
@@ -105,6 +106,10 @@ export const ROUTES: readonly RouteDef[] = [
   { path: "/company/papers", priority: 0.6, freq: "monthly" },
   { path: "/company/media", priority: 0.7, freq: "weekly" },
   { path: "/company/career", priority: 0.7, freq: "weekly" },
+
+  // Lab — 사내 실험 프로젝트. 상세는 src/data/labProjects.ts 에서 파생
+  { path: "/lab", priority: 0.6, freq: "monthly" },
+  ...labProjects.map(({ slug }): RouteDef => ({ path: `/lab/${slug}`, priority: 0.5, freq: "monthly" })),
 
   // 전환
   { path: "/contact", priority: 0.9, freq: "yearly" },
