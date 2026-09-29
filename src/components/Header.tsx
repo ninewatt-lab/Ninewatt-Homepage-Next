@@ -265,6 +265,16 @@ const companyNav: NavItemWithChildren = {
             </svg>
           ),
         },
+        {
+          href: "/lab",
+          labelKey: "companyMenu.lab",
+          descKey: "companyMenu.labDesc",
+          icon: (
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
+              <path d="M9 3h6M10 3v6.5L4.5 19a1.5 1.5 0 001.3 2.2h12.4a1.5 1.5 0 001.3-2.2L14 9.5V3" /><path d="M7 15h10" />
+            </svg>
+          ),
+        },
       ],
     },
     {
@@ -660,7 +670,9 @@ export default function Header() {
         >
           <div className="bg-background shadow-lg shadow-black/5">
             <div className="mx-auto max-w-7xl px-6 py-6">
-              <div className="grid *:col-start-1 *:row-start-1">
+              {/* minmax(0,1fr): an auto track would grow to the widest panel's
+                  max-content and push the right column past the viewport at lg. */}
+              <div className="grid grid-cols-[minmax(0,1fr)] *:col-start-1 *:row-start-1">
               {megaMenuItems.map((item) => (
                 <div
                   key={item.labelKey}
@@ -743,7 +755,7 @@ export default function Header() {
                     ))}
 
                     {/* Right side: Overview link with divider */}
-                    <div className="ml-auto flex flex-col items-start border-l border-border pl-10 pt-3 gap-3">
+                    <div className="ml-auto flex min-w-0 flex-col items-start border-l border-border pl-10 pt-3 gap-3">
                       <Link
                         href={item.href}
                         onClick={() => setActiveMenu(null)}

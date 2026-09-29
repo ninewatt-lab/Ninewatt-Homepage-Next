@@ -55,6 +55,7 @@ const footerSections: FooterSection[] = [
     links: [
       { label: "companyMenu.media", href: "/company/media" },
       { label: "companyMenu.career", href: "/company/career" },
+      { label: "companyMenu.lab", href: "/lab" },
       { label: "companyMenu.awards", href: "/company/awards" },
       { label: "companyMenu.history", href: "/company/history" },
       { label: "companyMenu.patents", href: "/company/patents" },

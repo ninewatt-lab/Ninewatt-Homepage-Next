@@ -17,6 +17,7 @@ export default getRequestConfig(async ({ requestLocale }) => {
   const company = (await import(`../messages/${locale}/company.json`)).default;
   const contact = (await import(`../messages/${locale}/contact.json`)).default;
   const chatbot = (await import(`../messages/${locale}/chatbot.json`)).default;
+  const lab = (await import(`../messages/${locale}/lab.json`)).default;
 
   let solar = {};
   try {
@@ -49,6 +50,7 @@ export default getRequestConfig(async ({ requestLocale }) => {
       company,
       contact,
       chatbot,
+      lab,
       solar,
       energy,
       ess,

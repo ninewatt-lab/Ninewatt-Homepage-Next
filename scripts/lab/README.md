@@ -1,0 +1,86 @@
+# Lab 도판·영상 만들기 (AI Building Workspace)
+
+`/lab/ai-building-workspace` 의 도판과 영상을 실제 DXF 도면과 glb 모델에서 다시 만드는 스크립트다.
+꾸민 목업이 아니라 입력 파일에서 그대로 뽑은 결과만 쓰는 것이 원칙이다.
+
+## 익명화 규칙
+
+- 도면 제목, 기관명, 설계사무소, 건축사 성명, 연락처는 `TEX`·`TXT`·`2`·`0` 레이어에 있다.
+  스크립트는 선 레이어만 골라 그리므로 이 레이어들은 출력에 나오지 않는다.
+- 그리는 레이어를 추가할 때는 그 레이어에 글자(TEXT/MTEXT/블록 속성)가 없는지 먼저 확인한다.
+- 원본 DXF·glb·blend 는 `public/temp/`(git 제외)에만 둔다. 저장소에 커밋하지 않는다.
+- 결과 이미지는 게시 전에 눈으로 한 번 더 확인한다.
+
+## 준비
+
+```bash
+python3 -m venv /tmp/lab-venv && /tmp/lab-venv/bin/pip install -r scripts/lab/requirements.txt
+```
+
+그 밖에 Blender(4.0 에서 확인), ffmpeg 가 필요하다. 한글 라벨은 macOS 의 Apple SD Gothic Neo 를 쓴다.
+
+## 순서
+
+```bash
+PY=/tmp/lab-venv/bin/python
+BLENDER=/Applications/Blender.app/Contents/MacOS/Blender
+DXF=public/temp/<도면>.dxf
+GLB=public/temp/<모델>.glb
+W=/tmp/lab-work && mkdir -p $W/tt $W/ex $W/walk
+
+# 1. 층별 평면 선도 + 실 경계 계산 (실 면적 JSON 출력 → labProjects.ts 의 areas, rooms-<층>.json 저장)
+$PY scripts/lab/dxf_plan_figures.py $DXF $W 1f
+$PY scripts/lab/dxf_plan_figures.py $DXF $W 2f
+
+# 2. 정면도 선도
+$PY scripts/lab/dxf_elevation.py $DXF $W/elev-dxf.png
+
+# 3. 모델 렌더링
+R="$BLENDER -b --factory-startup --python scripts/lab/blender_render.py --"
+$R $GLB $W/elev-model-line.png front
+$R $GLB $W/model-axo-line.png axo
+$R $GLB $W/tt turntable                      # 약 4분
+$R $GLB $W/ex explode                        # 약 3분
+$R $GLB $W/walk walk                         # 약 1분
+$R $GLB $W/cut1.png cut1 $W/rooms-1f.json    # 층별 단면 + 라벨 위치
+$R $GLB $W/cut2.png cut2 $W/rooms-2f.json
+$R $GLB $W/cut1-video.png cut1 $W/rooms-1f.json video
+$R $GLB $W/cut2-video.png cut2 $W/rooms-2f.json video
+
+# 4. 단면에 실 이름·면적 라벨
+$PY scripts/lab/label_cutaway.py $W/cut1.png $W/fig-cut1.png
+$PY scripts/lab/label_cutaway.py $W/cut2.png $W/fig-cut2.png
+$PY scripts/lab/label_cutaway.py $W/cut1-video.png $W/vcut1.png
+$PY scripts/lab/label_cutaway.py $W/cut2-video.png $W/vcut2.png
+
+# 5. 도면 ↔ 모델 겹쳐 보기 (--register 로 정합 오차 확인. 0 근처가 아니면 blender_render.py front 카메라 보정)
+$PY scripts/lab/elevation_overlay.py $W/elev-dxf.png $W/elev-model-line.png $W/elev-overlay.png --register
+
+# 5-1. 영상 (39초)
+$PY scripts/lab/compose_video.py $W
+ffmpeg -framerate 30 -i $W/vf/%05d.jpg -c:v libx264 -preset slow -crf 20 -pix_fmt yuv420p -movflags +faststart $W/case.mp4
+aws s3 cp $W/case.mp4 s3://ninewatt-homepage/videos/lab/<새 파일명>.mp4 --content-type video/mp4
+
+# 6. 사이트용 이미지
+$PY scripts/lab/export_web.py $W public/lab/ai-building-workspace
+```
+
+## 값을 바꿀 때 같이 바꿀 곳
+
+| 바꾸는 것 | 같이 맞출 곳 |
+|---|---|
+| 평면 `BOX` (dxf_plan_figures.py) | 도판 크기 → `labProjects.ts` figures 의 width/height |
+| 정면 `BOX` (dxf_elevation.py) | `blender_render.py` front 카메라의 중심·ortho_scale |
+| 실 면적 결과 | `labProjects.ts` areas, 문구의 면적 설명 |
+| 단면 카메라·라벨 (blender_render.py cut1/cut2) | 라벨 위치는 rooms-<층>.json 으로 자동 계산된다. 평면 PRESETS 의 origin 이 틀리면 라벨이 실 밖에 찍힌다 |
+| 영상 타임라인 (compose_video.py) | `labProjects.ts` video.chapters / duration, 각 로케일 `lab.json` chapters |
+| 이미지 내용 | 파일 이름도 바꾼다 (같은 URL 은 이미지 캐시가 예전 것을 준다) |
+
+## 알려진 한계
+
+- 실 경계는 벽·창호선으로 닫힌 영역을 찾는 방식이라, 칸막이 선이 없는 공간은 한 영역으로 묶인다
+  (도판에서 "경계 검토 필요"로 표시). 이것은 **제품의 AI 인식 결과가 아니라 도판용 계산**이다.
+  페이지에서도 "도면 레이어로 자동 계산"으로만 표기한다.
+- 좌표(`BOX`, 평면 `origin`, 카메라 위치)는 이 도면 한 세트에 맞춘 값이다. 다른 도면에는 새로 잡아야 한다.
+- 단면은 Boolean(EXACT)으로 자르고, 실패한 메시(이 모델에선 동쪽 외벽)만 FAST 로 다시 자른다.
+- 도면에 실 이름이 없는 공간(2층 계단실·욕실)과 바깥으로 열린 베란다는 면적 표에 나오지 않는다.
