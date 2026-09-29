@@ -660,7 +660,9 @@ export default function Header() {
         >
           <div className="bg-background shadow-lg shadow-black/5">
             <div className="mx-auto max-w-7xl px-6 py-6">
-              <div className="grid *:col-start-1 *:row-start-1">
+              {/* minmax(0,1fr): an auto track would grow to the widest panel's
+                  max-content and push the right column past the viewport at lg. */}
+              <div className="grid grid-cols-[minmax(0,1fr)] *:col-start-1 *:row-start-1">
               {megaMenuItems.map((item) => (
                 <div
                   key={item.labelKey}
@@ -743,7 +745,7 @@ export default function Header() {
                     ))}
 
                     {/* Right side: Overview link with divider */}
-                    <div className="ml-auto flex flex-col items-start border-l border-border pl-10 pt-3 gap-3">
+                    <div className="ml-auto flex min-w-0 flex-col items-start border-l border-border pl-10 pt-3 gap-3">
                       <Link
                         href={item.href}
                         onClick={() => setActiveMenu(null)}
