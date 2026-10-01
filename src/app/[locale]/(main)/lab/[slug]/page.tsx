@@ -120,6 +120,52 @@ function CaseStudy({ cs, t, k }: { cs: LabCaseStudy; t: LabTranslate; k: string 
           </div>
         ))}
 
+        {cs.materials && (
+          <div className="mt-20">
+            <h3 className="text-xl font-bold">{t(`${c}.materials.title`)}</h3>
+            <p className="mt-2 max-w-3xl text-sm leading-relaxed text-muted">{t(`${c}.materials.intro`)}</p>
+            <div className="mt-8 grid gap-6 md:grid-cols-3">
+              {cs.materials.images.map((img) => (
+                <figure key={img.key}>
+                  <div className="overflow-hidden rounded-xl border border-border bg-surface">
+                    <Image
+                      src={img.src}
+                      alt={t(`${c}.materials.images.${img.key}`)}
+                      width={img.width}
+                      height={img.height}
+                      sizes="(min-width: 768px) 33vw, 100vw"
+                      className="h-auto w-full"
+                    />
+                  </div>
+                  <figcaption className="mt-2 text-sm text-muted">
+                    <span className="text-xs font-semibold text-foreground">FIG. {++n}</span>
+                    <span className="ml-2">{t(`${c}.materials.images.${img.key}`)}</span>
+                  </figcaption>
+                </figure>
+              ))}
+            </div>
+            <div className="mt-8 overflow-x-auto rounded-xl border border-border">
+              <table className="w-full text-left text-sm">
+                <thead className="bg-surface text-xs text-muted">
+                  <tr>
+                    <th scope="col" className="px-5 py-3 font-medium">{t(`${c}.materials.place`)}</th>
+                    <th scope="col" className="px-5 py-3 font-medium">{t(`${c}.materials.finish`)}</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-border">
+                  {cs.materials.rows.map((row) => (
+                    <tr key={row}>
+                      <td className="whitespace-nowrap px-5 py-3 align-top">{t(`${c}.materials.rows.${row}.place`)}</td>
+                      <td className="px-5 py-3 text-muted">{t(`${c}.materials.rows.${row}.finish`)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <p className="mt-3 text-sm leading-relaxed text-muted">{t(`${c}.materials.note`)}</p>
+          </div>
+        )}
+
         {cs.comparison && (
           <figure className="mt-16">
             <LabCompare

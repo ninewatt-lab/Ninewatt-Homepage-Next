@@ -55,6 +55,8 @@
         "Maquette 3D",
         "Intérieur du rez-de-chaussée",
         "Intérieur de l'étage",
+        "Extérieur avec finitions",
+        "Rez-de-chaussée avec finitions",
         "Dans la salle d'attente"
       ],
       "case": {
@@ -87,6 +89,48 @@
             "title": "Intérieur de l'étage · logement de fonction",
             "caption": "L'étage est coupé de la même façon. Le séjour et la cuisine/salle à manger communiquent sans cloison et sont donc calculés comme une seule zone. Les balcons, ouverts sur l'extérieur, ne sont pas comptés comme des pièces."
           }
+        },
+        "materials": {
+          "title": "Finitions tirées des plans",
+          "intro": "Les finitions indiquées sur les plans d'exécution sont appliquées telles quelles à la même maquette, puis rendues. Couleurs et textures sont des approximations de chaque type de finition, pas des références de produits.",
+          "images": {
+            "exterior": "Extérieur · enduit et toiture en zinc",
+            "cutaway": "Rez-de-chaussée · dalles vinyle et murs peints",
+            "interior": "Salle d'attente · à hauteur d'œil"
+          },
+          "place": "Emplacement",
+          "finish": "Finition indiquée sur les plans",
+          "rows": {
+            "wall": {
+              "place": "Murs extérieurs",
+              "finish": "Isolation extérieure PF 100 mm + enduit"
+            },
+            "roof": {
+              "place": "Toiture",
+              "finish": "Zinc 0,7 mm (forme de toiture non confirmée)"
+            },
+            "window": {
+              "place": "Menuiseries",
+              "finish": "Fenêtres coulissantes PVC · double vitrage basse émissivité teinté 24 mm"
+            },
+            "floor1": {
+              "place": "Sol du rez-de-chaussée",
+              "finish": "Dalles vinyle grand passage (carrelage grès cérame aux toilettes)"
+            },
+            "wall1": {
+              "place": "Murs · plafonds du rez-de-chaussée",
+              "finish": "Peinture à l'eau · plaque de plâtre peinte (faïence et plafond SMC aux toilettes)"
+            },
+            "floor2": {
+              "place": "Sol de l'étage",
+              "finish": "Revêtement vinyle en lés"
+            },
+            "wall2": {
+              "place": "Murs · plafonds de l'étage",
+              "finish": "Papier peint · plaque de plâtre avec papier de plafond"
+            }
+          },
+          "note": "Le mobilier et les luminaires ne figurent pas sur les plans et n'ont donc pas été ajoutés. L'éclairage intérieur est placé approximativement au centre du plafond de chaque pièce."
         },
         "compare": {
           "title": "Superposition avec l'élévation",

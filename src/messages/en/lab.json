@@ -55,6 +55,8 @@
         "3D model",
         "Ground floor inside",
         "Upper floor inside",
+        "Exterior with finishes",
+        "Ground floor with finishes",
         "Inside the waiting room"
       ],
       "case": {
@@ -87,6 +89,48 @@
             "title": "Upper floor inside · staff housing",
             "caption": "The upper floor cut the same way. The living room and kitchen/dining are open to each other, so they are computed as one area. Balconies are open to the outside and are not counted as rooms."
           }
+        },
+        "materials": {
+          "title": "Finishes from the drawings",
+          "intro": "The finishes noted on the construction drawings are applied to the same model and rendered. Colours and textures are approximations of each finish type, not specific product specifications.",
+          "images": {
+            "exterior": "Exterior · stucco walls and zinc roof",
+            "cutaway": "Ground floor · vinyl deco tile floors, painted walls",
+            "interior": "Waiting room · eye level"
+          },
+          "place": "Location",
+          "finish": "Finish noted on the drawings",
+          "rows": {
+            "wall": {
+              "place": "Exterior walls",
+              "finish": "100 mm PF board external insulation + stucco"
+            },
+            "roof": {
+              "place": "Roof",
+              "finish": "0.7 mm zinc (roof form unconfirmed)"
+            },
+            "window": {
+              "place": "Windows",
+              "finish": "Double sliding PVC windows · 24 mm tinted low-E double glazing"
+            },
+            "floor1": {
+              "place": "Ground floor",
+              "finish": "Heavy-traffic vinyl deco tile (porcelain tile in the toilet)"
+            },
+            "wall1": {
+              "place": "Ground-floor walls · ceilings",
+              "finish": "Water-based paint · painted gypsum board (ceramic wall tile and SMC ceiling in the toilet)"
+            },
+            "floor2": {
+              "place": "Upper floor",
+              "finish": "Vinyl sheet flooring"
+            },
+            "wall2": {
+              "place": "Upper-floor walls · ceilings",
+              "finish": "Wallpaper · gypsum board with ceiling paper"
+            }
+          },
+          "note": "Furniture and light fittings are not in the drawings, so none were added. Interior lights are placed approximately at the centre of each room's ceiling."
         },
         "compare": {
           "title": "Elevation overlay",

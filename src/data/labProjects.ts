@@ -23,6 +23,8 @@ export interface LabCaseStudy {
   stats: { key: string; value: string }[];
   /** 순서대로 보여줄 도판. 제목·설명은 messages 의 case.figures.<key> */
   figures: (LabImage & { key: string })[];
+  /** 도면 주석의 마감재를 입힌 사실적 렌더링. 마감재 표의 행 키는 messages 의 case.materials.rows */
+  materials?: { images: (LabImage & { key: string })[]; rows: string[] };
   /** 같은 축척·원점으로 맞춘 도면 ↔ 모델 비교 이미지 */
   comparison?: { drawing: LabImage; model: LabImage; overlay: LabImage };
   /** 도면 레이어로 계산한 층별 실 면적(㎡). review=칸막이 선이 없어 여러 실이 묶인 영역 */
@@ -64,12 +66,12 @@ export const labProjects: LabProject[] = [
     cover: `${ABW}/case-cover.webp`,
     og: `${ABW}/case-og.jpg`,
     video: {
-      // 실제 도면에서 뽑은 도판 + 3D 모델 외관·층별 단면·실내. 기관·설계사 정보는 들어 있지 않다.
-      src: `${S3}/videos/lab/ai-building-workspace-case-v2.mp4`,
+      // 실제 도면에서 뽑은 도판 + 3D 모델 외관·층별 단면 + 마감재 적용 렌더링. 기관·설계사 정보는 들어 있지 않다.
+      src: `${S3}/videos/lab/ai-building-workspace-case-v3.mp4`,
       poster: `${ABW}/case-cover.webp`,
-      duration: 39,
-      uploadDate: "2026-09-29",
-      chapters: [0, 4, 8, 12, 16, 24, 29, 34],
+      duration: 47,
+      uploadDate: "2026-10-01",
+      chapters: [0, 4, 8, 12, 16, 24, 29, 34, 38, 42],
     },
     caseStudy: {
       // 입력 DXF(그린리모델링 설계 도면 1세트)의 실제 규모
@@ -86,6 +88,15 @@ export const labProjects: LabProject[] = [
         { key: "interior1", src: `${ABW}/interior-1f.webp`, width: 1800, height: 1125 },
         { key: "interior2", src: `${ABW}/interior-2f.webp`, width: 1800, height: 1125 },
       ],
+      materials: {
+        images: [
+          { key: "exterior", src: `${ABW}/photo-exterior.webp`, width: 1800, height: 1125 },
+          { key: "cutaway", src: `${ABW}/photo-1f.webp`, width: 1800, height: 1125 },
+          { key: "interior", src: `${ABW}/photo-waiting-room.webp`, width: 1800, height: 1125 },
+        ],
+        // 1층 평면도·정면도·단면상세도·지붕평면도 주석의 마감 표기
+        rows: ["wall", "roof", "window", "floor1", "wall1", "floor2", "wall2"],
+      },
       comparison: {
         drawing: { src: `${ABW}/elevation-drawing.webp`, width: 1461, height: 960 },
         model: { src: `${ABW}/elevation-model.webp`, width: 1461, height: 960 },
