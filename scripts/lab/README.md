@@ -26,7 +26,7 @@ PY=/tmp/lab-venv/bin/python
 BLENDER=/Applications/Blender.app/Contents/MacOS/Blender
 DXF=public/temp/<도면>.dxf
 GLB=public/temp/<모델>.glb
-W=/tmp/lab-work && mkdir -p $W/tt $W/ex $W/walk
+W=/tmp/lab-work && mkdir -p $W/tt $W/ex $W/pext $W/pwalk
 
 # 1. 층별 평면 선도 + 실 경계 계산 (실 면적 JSON 출력 → labProjects.ts 의 areas, rooms-<층>.json 저장)
 $PY scripts/lab/dxf_plan_figures.py $DXF $W 1f
@@ -36,16 +36,26 @@ $PY scripts/lab/dxf_plan_figures.py $DXF $W 2f
 $PY scripts/lab/dxf_elevation.py $DXF $W/elev-dxf.png
 
 # 3. 모델 렌더링
-R="$BLENDER -b --factory-startup --python scripts/lab/blender_render.py --"
-$R $GLB $W/elev-model-line.png front
-$R $GLB $W/model-axo-line.png axo
-$R $GLB $W/tt turntable                      # 약 4분
-$R $GLB $W/ex explode                        # 약 3분
-$R $GLB $W/walk walk                         # 약 1분
-$R $GLB $W/cut1.png cut1 $W/rooms-1f.json    # 층별 단면 + 라벨 위치
-$R $GLB $W/cut2.png cut2 $W/rooms-2f.json
-$R $GLB $W/cut1-video.png cut1 $W/rooms-1f.json video
-$R $GLB $W/cut2-video.png cut2 $W/rooms-2f.json video
+# zsh 는 변수에 담은 명령을 단어로 나누지 않으므로 함수로 쓴다
+R() { "$BLENDER" -b --factory-startup --python scripts/lab/blender_render.py -- "$GLB" "$@"; }
+P() { "$BLENDER" -b --factory-startup --python scripts/lab/blender_photo.py -- "$GLB" "$@"; }
+R $W/elev-model-line.png front
+R $W/model-axo-line.png axo
+R $W/tt turntable                      # 약 4분
+R $W/ex explode                        # 약 3분
+R $W/cut1.png cut1 $W/rooms-1f.json    # 층별 단면 + 라벨 위치
+R $W/cut2.png cut2 $W/rooms-2f.json
+R $W/cut1-video.png cut1 $W/rooms-1f.json video
+R $W/cut2-video.png cut2 $W/rooms-2f.json video
+
+# 3-1. 마감재 적용 사실적 렌더링 (Cycles, M2 Pro GPU 기준 약 1시간 반)
+P $W/photo-ext.png ext $W/rooms-1f.json $W/rooms-2f.json
+P $W/photo-cut1.png cut1 $W/rooms-1f.json $W/rooms-2f.json
+P $W/photo-walk.png walk $W/rooms-1f.json $W/rooms-2f.json
+P $W/vcut1-photo.png cut1 $W/rooms-1f.json $W/rooms-2f.json video
+P $W/pext ext-orbit $W/rooms-1f.json $W/rooms-2f.json video     # 120프레임
+P $W/pwalk walk-anim $W/rooms-1f.json $W/rooms-2f.json video    # 120프레임
+# 재질·빛을 맞출 때는 끝에 draft 를 붙이면 절반 해상도·저샘플로 빨리 본다
 
 # 4. 단면에 실 이름·면적 라벨
 $PY scripts/lab/label_cutaway.py $W/cut1.png $W/fig-cut1.png
@@ -56,7 +66,7 @@ $PY scripts/lab/label_cutaway.py $W/cut2-video.png $W/vcut2.png
 # 5. 도면 ↔ 모델 겹쳐 보기 (--register 로 정합 오차 확인. 0 근처가 아니면 blender_render.py front 카메라 보정)
 $PY scripts/lab/elevation_overlay.py $W/elev-dxf.png $W/elev-model-line.png $W/elev-overlay.png --register
 
-# 5-1. 영상 (39초)
+# 5-1. 영상 (47초)
 $PY scripts/lab/compose_video.py $W
 ffmpeg -framerate 30 -i $W/vf/%05d.jpg -c:v libx264 -preset slow -crf 20 -pix_fmt yuv420p -movflags +faststart $W/case.mp4
 aws s3 cp $W/case.mp4 s3://ninewatt-homepage/videos/lab/<새 파일명>.mp4 --content-type video/mp4

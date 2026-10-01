@@ -49,6 +49,11 @@ webp(fit(axo, 1800), "model-axo.webp")
 for src, dst in (("fig-cut1.png", "interior-1f.webp"), ("fig-cut2.png", "interior-2f.webp")):
     webp(fit(load(src), 1800), dst)
 
+# 마감재 적용 사실적 렌더링 (blender_photo.py)
+for src, dst in (("photo-ext.png", "photo-exterior.webp"), ("photo-cut1.png", "photo-1f.webp"),
+                 ("photo-walk.png", "photo-waiting-room.webp")):
+    webp(fit(load(src), 1800), dst)
+
 # 정면 비교 3장은 같은 크기·정렬을 유지해야 하므로 자르지 않는다
 for src, dst in (("elev-dxf.png", "elevation-drawing.webp"), ("elev-model-line.png", "elevation-model.webp"),
                  ("elev-overlay.png", "elevation-overlay.webp")):

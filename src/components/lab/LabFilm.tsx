@@ -66,7 +66,7 @@ export function LabFilm({
 
       {chapters.length > 0 && (
         <nav aria-label={chapterNavLabel} className="mt-6">
-          <ol className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+          <ol className="grid grid-cols-2 gap-2 sm:grid-cols-5">
             {chapters.map((c, i) => (
               <li key={c.start}>
                 <button
