@@ -97,7 +97,8 @@ for floor in ("1f", "2f"):
         poly = Polygon(r["polygon"])
         boundary = poly.exterior
         room = {"key": key, "floor": floor, "names": r["names"], "review": r["review"],
-                "outdoor": bool(r.get("outdoor")), "L": boundary.length, "A": poly.area,
+                # A 는 단순화 전 경계로 잰 값(rooms-<층>.json area_m2)을 써서 도판·뷰어와 같은 숫자가 되게 한다
+                "outdoor": bool(r.get("outdoor")), "L": boundary.length, "A": r["area_m2"],
                 "finish": dict(zip(("floor", "wall", "ceiling"), FINISH[key])), "polygon": r["polygon"],
                 "label": r["model_xy"]}
         if room["outdoor"]:

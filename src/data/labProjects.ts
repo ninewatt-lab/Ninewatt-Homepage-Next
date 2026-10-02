@@ -97,10 +97,10 @@ export const labProjects: LabProject[] = [
     og: `${ABW}/case-og.jpg`,
     video: {
       // 실제 도면에서 뽑은 도판 + 3D 모델 외관·층별 단면 + 마감재 적용 렌더링. 기관·설계사 정보는 들어 있지 않다.
-      src: `${S3}/videos/lab/ai-building-workspace-case-v3.mp4`,
+      src: `${S3}/videos/lab/ai-building-workspace-case-v4.mp4`,
       poster: `${ABW}/case-cover.webp`,
       duration: 47,
-      uploadDate: "2026-10-01",
+      uploadDate: "2026-10-02",
       chapters: [0, 4, 8, 12, 16, 24, 29, 34, 38, 42],
     },
     caseStudy: {
@@ -115,15 +115,15 @@ export const labProjects: LabProject[] = [
         { key: "plan", src: `${ABW}/plan.webp`, width: 1400, height: 1619 },
         { key: "rooms", src: `${ABW}/rooms.webp`, width: 1400, height: 1619 },
         { key: "model", src: `${ABW}/model-axo.webp`, width: 1800, height: 1233 },
-        { key: "interior1", src: `${ABW}/interior-1f.webp`, width: 1800, height: 1125 },
-        { key: "interior2", src: `${ABW}/interior-2f.webp`, width: 1800, height: 1125 },
+        { key: "interior1", src: `${ABW}/interior-1f-r2.webp`, width: 1800, height: 1125 },
+        { key: "interior2", src: `${ABW}/interior-2f-r2.webp`, width: 1800, height: 1125 },
       ],
       viewer: { data: `${ABW}/viewer/viewer.json`, replaces: "model" },
       materials: {
         images: [
-          { key: "exterior", src: `${ABW}/photo-exterior.webp`, width: 1800, height: 1125 },
-          { key: "cutaway", src: `${ABW}/photo-1f.webp`, width: 1800, height: 1125 },
-          { key: "interior", src: `${ABW}/photo-waiting-room.webp`, width: 1800, height: 1125 },
+          { key: "exterior", src: `${ABW}/photo-exterior-r2.webp`, width: 1800, height: 1125 },
+          { key: "cutaway", src: `${ABW}/photo-1f-r2.webp`, width: 1800, height: 1125 },
+          { key: "interior", src: `${ABW}/photo-waiting-room-r2.webp`, width: 1800, height: 1125 },
         ],
         // 1층 평면도·정면도·단면상세도·지붕평면도 주석의 마감 표기
         rows: ["wall", "roof", "window", "floor1", "wall1", "floor2", "wall2"],
