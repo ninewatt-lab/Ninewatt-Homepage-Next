@@ -63,8 +63,6 @@ function Figure({
 
 function CaseStudy({ cs, t, k }: { cs: LabCaseStudy; t: LabTranslate; k: string }) {
   const c = `${k}.case`;
-  const confirmed = t.raw(`${c}.findings.confirmed`) as string[];
-  const open = t.raw(`${c}.findings.open`) as string[];
   const [plan, rooms, ...rest] = cs.figures;
   let n = 0;
 
@@ -351,28 +349,6 @@ function CaseStudy({ cs, t, k }: { cs: LabCaseStudy; t: LabTranslate; k: string 
             )}
           </div>
         )}
-
-        <div className="mt-20">
-          <h3 className="text-xl font-bold">{t(`${c}.findings.title`)}</h3>
-          <div className="mt-6 grid gap-6 md:grid-cols-2">
-            <div className="rounded-xl border border-border p-6">
-              <p className="text-sm font-semibold text-primary">{t(`${c}.findings.confirmedTitle`)}</p>
-              <ul className="mt-4 space-y-3">
-                {confirmed.map((item, i) => (
-                  <li key={i} className="border-l-2 border-primary pl-3 text-sm leading-relaxed">{item}</li>
-                ))}
-              </ul>
-            </div>
-            <div className="rounded-xl border border-border p-6">
-              <p className="text-sm font-semibold text-amber-700 dark:text-amber-400">{t(`${c}.findings.openTitle`)}</p>
-              <ul className="mt-4 space-y-3">
-                {open.map((item, i) => (
-                  <li key={i} className="border-l-2 border-amber-500 pl-3 text-sm leading-relaxed">{item}</li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </div>
       </div>
     </section>
   );

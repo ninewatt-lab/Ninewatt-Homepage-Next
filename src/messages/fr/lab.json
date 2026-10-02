@@ -255,23 +255,6 @@
           "toilet2": "Toilettes",
           "verandaWestSouth": "Véranda (ouest et sud)",
           "verandaEast": "Véranda (est)"
-        },
-        "findings": {
-          "title": "Ce qui concorde, et ce qui reste à faire",
-          "confirmedTitle": "Concorde avec les plans",
-          "openTitle": "Reste à confirmer",
-          "confirmed": [
-            "Les dimensions hors tout et les zones du rez-de-chaussée correspondent au plan.",
-            "Les fenêtres, la porte d'entrée et le profil du pignon se superposent à l'élévation dessinée.",
-            "Les zones de revêtement de sol de la maquette coïncident, à chaque niveau, avec la distribution des plans."
-          ],
-          "open": [
-            "La forme de la toiture ne peut pas être tranchée à partir de la seule élévation et reste non confirmée ; il faut la confronter au plan de toiture.",
-            "Le garde-corps du balcon, la rampe d'accès et les marches d'entrée ne sont pas encore dans la maquette.",
-            "Trois zones sans cloison dessinée (cabinet/préparation, escalier/chaufferie, séjour/cuisine de l'étage) doivent être vérifiées par une personne.",
-            "La cage d'escalier de l'étage n'a ni nom ni limite fermée sur les plans ; elle manque donc aux quantités.",
-            "Il existe un écart entre la surface de travaux indiquée sur le plan et la surface calculée."
-          ]
         }
       }
     }

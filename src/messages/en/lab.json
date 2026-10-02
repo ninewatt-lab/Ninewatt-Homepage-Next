@@ -255,23 +255,6 @@
           "toilet2": "Toilet",
           "verandaWestSouth": "Veranda (west & south)",
           "verandaEast": "Veranda (east)"
-        },
-        "findings": {
-          "title": "What matched and what didn't yet",
-          "confirmedTitle": "Matches the drawings",
-          "openTitle": "Still to be confirmed",
-          "confirmed": [
-            "Ground-floor overall dimensions and room zones match the drawn plan.",
-            "Front windows, entrance door and the gable outline line up with the drawn elevation.",
-            "The model's floor-finish zones on each floor line up with the room layout in the drawings."
-          ],
-          "open": [
-            "The roof form can't be settled from the front elevation alone and stays unconfirmed; it needs checking against the roof plan.",
-            "The balcony railing, accessible ramp and entrance steps are not in the model yet.",
-            "Three areas with no partition line (clinic/dispensary, stairwell/boiler room, upper-floor living/kitchen) need their boundaries confirmed by a person.",
-            "The upper-floor stairwell has no room name or closed boundary in the drawings, so it is missing from the quantities.",
-            "There is a gap between the works area noted on the drawing and the computed area."
-          ]
         }
       }
     }
