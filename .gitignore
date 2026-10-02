@@ -51,3 +51,6 @@ prod_dump.sql
 .gstack/
 .claude/skills/gstack/
 public/temp/
+
+# python
+__pycache__/

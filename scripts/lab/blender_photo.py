@@ -224,6 +224,7 @@ M = {
     "floor1": top_only(floor_1f()),
     "floor2": top_only(floor_2f()),
     "joint": plain("Tile joint", "#7d776e", 0.7),
+    "tile": plain("Porcelain tile", "#e4e4e1", 0.35),
     "slab": plain("Concrete slab", "#c9c6bf", 0.85, bump=0.15),
     "zinc": plain("Real zinc roof", "#4f5559", 0.38, metal=0.85, bump=0.05, bump_scale=20),
     "pvc": plain("PVC window frame", "#eeeeec", 0.3),
@@ -248,6 +249,11 @@ def pick(o):
         return M["glass"]
     if "FloorJoint" in n:
         return M["joint"]
+    # 실별 바닥 마감 판 (예: VIS_F1_대기실_Floor). 재질 이름이 마감 종류를 알려 준다
+    if n.endswith("_Floor") or "_Floor." in n:
+        if "porcelain" in mats:
+            return M["tile"]
+        return M["floor2" if f2 else "floor1"]
     if "ContinuousCeiling" in n:
         return M["ceiling"]
     if "Floor_" in n:

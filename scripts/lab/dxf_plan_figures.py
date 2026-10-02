@@ -26,29 +26,20 @@ from ezdxf.addons.drawing.matplotlib import MatplotlibBackend
 from shapely.geometry import LineString, Point, Polygon
 from shapely.ops import polylabel, unary_union
 
+from plan_common import ACCENT, DRAW_LAYERS, FLAG, FONT, INK, PRESETS
+
 DXF, OUT = sys.argv[1], sys.argv[2]
 FLOOR = sys.argv[3] if len(sys.argv) > 3 else "1f"
 
-FONT = "/System/Library/Fonts/AppleSDGothicNeo.ttc"  # macOS 한글 폰트
 font_manager.fontManager.addfont(FONT)
 plt.rcParams["font.family"] = font_manager.FontProperties(fname=FONT).get_name()
 
-INK = "#1f2933"
-ACCENT = "#2f8a9c"
-FLAG = "#d9822b"
-
-# 공사도면 > 층별 평면도(신설) 시트의 도면 영역(도면 좌표, mm)과 모델 좌표 원점.
-# origin: 이 도면 좌표가 glb 모델의 (x, y) = (-0.17 m 또는 0.73 m, -0.17 m) 모서리. 벽선 외곽으로 맞췄다.
-PRESETS = {
-    "1f": {"box": (362300, 239800, 378300, 262300), "origin": (365954, 245733), "model": (-0.17, -0.17),
-           "files": ("fig-plan.png", "fig-rooms.png")},
-    "2f": {"box": (405500, 239500, 420600, 262000), "origin": (409148, 245421), "model": (0.73, -0.17),
-           "files": ("fig-plan-2f.png", "fig-rooms-2f.png")},
-}
 PRESET = PRESETS[FLOOR]
 BOX = PRESET["box"]
-DRAW_LAYERS = {"WAL", "WIN", "HA1", "fin", "ETC", "SYM", "DIM", "PAR", "FIV", "TOL", "BAR2", "ELE",
-               "AA-XXXX-JUMT1"}
+# 바깥으로 열린 공간(베란다·발코니). 벽·창호만으로는 닫히지 않아 난간(PAR)·외곽선(G1·ETC·0)을 더해 경계를 닫는다.
+# 이 레이어들은 실내에 가구·설비 선도 있어 실내 실 경계에는 쓰지 않는다.
+OUTDOOR_NAMES = {"베란다", "발코니"}
+OUTDOOR_LAYERS = {"PAR", "G1", "ETC", "0"}
 ROOM_LAYERS = {"WAL", "WIN", "COL"}
 LABEL_LAYER = "PS-TEXT a"  # 실 이름만 있는 레이어
 
@@ -109,46 +100,55 @@ for e in msp.query(f'TEXT[layer=="{LABEL_LAYER}"]'):
     if text == "조제실":  # "처치 및" / "조제실" 은 한 실의 두 줄
         continue
     labels.append(((p[0], p[1]), "처치 및 조제실" if text == "처치및" else text))
+labels += PRESET.get("extra_labels", [])
 
 # ── 실 경계: 벽·창호선을 두껍게 합쳐 닫힌 구멍을 찾는다 ──
 BUF = 60  # mm. 벽선 사이 작은 틈을 메우는 폭
-segs, arcs = [], []
-for e in msp:
-    if e.dxf.layer not in ROOM_LAYERS or not within(e):
-        continue
-    for v in (e.virtual_entities() if e.dxftype() == "INSERT" else [e]):
-        t = v.dxftype()
-        if t == "LINE":
-            segs.append(LineString([(v.dxf.start.x, v.dxf.start.y), (v.dxf.end.x, v.dxf.end.y)]))
-        elif t == "LWPOLYLINE":
-            pts = [p[:2] for p in v.get_points()]
-            if v.closed:
-                pts.append(pts[0])
-            if len(pts) > 1:
-                segs.append(LineString(pts))
-        elif t == "ARC":
-            arcs.append(v)
-# 문 열림 호가 개구부를 막아 주므로 벽 집합에 넣는다. 대신 문이 열리는 쪽 실에
-# 부채꼴만큼 홈이 생기니, 그 부채꼴은 아래에서 해당 실에 다시 붙인다.
-sectors = []
-for a in arcs:
-    pts = [(p.x, p.y) for p in a.flattening(50)]
-    segs.append(LineString(pts))
-    sectors.append(Polygon([(a.dxf.center.x, a.dxf.center.y)] + pts))
-walls = unary_union([s.buffer(BUF, cap_style=2, join_style=2) for s in segs])
-parts = [walls] if walls.geom_type == "Polygon" else list(walls.geoms)
-holes = [Polygon(r) for p in parts for r in p.interiors]
-holes = [h.buffer(BUF, join_style=2) for h in holes if h.area > 0.8e6]  # 벽 내측 면으로 되돌림
+
+
+def closed_regions(layers):
+    """layers 의 선으로 닫힌 영역(구멍)과 문 열림 부채꼴."""
+    segs, arcs = [], []
+    for e in msp:
+        if e.dxf.layer not in layers or not within(e):
+            continue
+        for v in (e.virtual_entities() if e.dxftype() == "INSERT" else [e]):
+            t = v.dxftype()
+            if t == "LINE":
+                segs.append(LineString([(v.dxf.start.x, v.dxf.start.y), (v.dxf.end.x, v.dxf.end.y)]))
+            elif t == "LWPOLYLINE":
+                pts = [p[:2] for p in v.get_points()]
+                if v.closed:
+                    pts.append(pts[0])
+                if len(pts) > 1:
+                    segs.append(LineString(pts))
+            elif t == "ARC":
+                arcs.append(v)
+    # 문 열림 호가 개구부를 막아 주므로 벽 집합에 넣는다. 대신 문이 열리는 쪽 실에
+    # 부채꼴만큼 홈이 생기니, 그 부채꼴은 아래에서 해당 실에 다시 붙인다.
+    sectors = []
+    for a in arcs:
+        pts = [(p.x, p.y) for p in a.flattening(50)]
+        segs.append(LineString(pts))
+        sectors.append(Polygon([(a.dxf.center.x, a.dxf.center.y)] + pts))
+    walls = unary_union([s.buffer(BUF, cap_style=2, join_style=2) for s in segs])
+    parts = [walls] if walls.geom_type == "Polygon" else list(walls.geoms)
+    holes = [Polygon(r) for p in parts for r in p.interiors]
+    return [h.buffer(BUF, join_style=2) for h in holes if h.area > 0.8e6], sectors  # 벽 내측 면으로 되돌림
+
 
 rooms = []
-for h in holes:
-    names = [t for (pt, t) in labels if h.contains(Point(pt))]
-    if not names:
-        continue
-    for s in sectors:
-        if s.is_valid and h.buffer(BUF).intersection(s).area > 0.3 * s.area:
-            h = h.union(s.buffer(BUF, join_style=2)).buffer(-BUF, join_style=2).buffer(BUF, join_style=2)
-    rooms.append({"poly": h, "names": names, "area": h.area / 1e6})
+for outdoor, layers in ((False, ROOM_LAYERS), (True, ROOM_LAYERS | OUTDOOR_LAYERS)):
+    holes, sectors = closed_regions(layers)
+    for h in holes:
+        # 같은 이름이 여러 번 찍힌 영역(베란다 L자)은 하나로 친다
+        names = list(dict.fromkeys(t for (pt, t) in labels if h.contains(Point(pt))))
+        if not names or outdoor != bool(OUTDOOR_NAMES & set(names)):
+            continue
+        for s in sectors:
+            if s.is_valid and h.buffer(BUF).intersection(s).area > 0.3 * s.area:
+                h = h.union(s.buffer(BUF, join_style=2)).buffer(-BUF, join_style=2).buffer(BUF, join_style=2)
+        rooms.append({"poly": h, "names": names, "area": h.area / 1e6, "outdoor": outdoor})
 
 # ── A: 평면 선도 ──
 fig, ax = base_axes()
@@ -175,11 +175,42 @@ save(fig, PRESET["files"][1])
 
 ox, oy = PRESET["origin"]
 mx, my = PRESET["model"]
+
+
+def to_model(x, y):
+    return [round((x - ox) / 1000 + mx, 3), round((y - oy) / 1000 + my, 3)]
+
+
 out = []
 for r in sorted(rooms, key=lambda r: -r["area"]):
     lx, ly = polylabel(r["poly"], tolerance=10).coords[0]
+    outline = r["poly"].simplify(15, preserve_topology=True).exterior.coords
     out.append({"names": r["names"], "area_m2": round(r["area"], 2), "review": len(r["names"]) > 1,
-                "model_xy": [round((lx - ox) / 1000 + mx, 3), round((ly - oy) / 1000 + my, 3)]})
+                "outdoor": r["outdoor"],
+                "model_xy": to_model(lx, ly),
+                "polygon": [to_model(x, y) for x, y in outline]})  # 웹 뷰어 클릭 영역
 with open(f"{OUT}/rooms-{FLOOR}.json", "w", encoding="utf-8") as f:
     json.dump(out, f, ensure_ascii=False, indent=1)
+
+# ── C: 웹 뷰어 바닥에 까는 평면 (투명 배경, 글자 없음). 화소 ↔ 모델 좌표가 정확히 맞도록
+#      bbox_inches 없이 BOX 그대로 저장하고, 범위를 모델 좌표로 함께 기록한다 ──
+fig, ax = base_axes()
+# ezdxf 가 그리면서 figure 크기를 바꾸므로 BOX 비율로 되돌리고, 축을 그림 전체에 꽉 채운다
+ax.set_aspect("auto")
+ax.set_position([0, 0, 1, 1])
+fig.set_size_inches(8, 8 * (y1 - y0) / (x1 - x0))
+ax.set_xlim(x0, x1)
+ax.set_ylim(y0, y1)
+overlay = f"{OUT}/plan-overlay-{FLOOR}.png"
+fig.savefig(overlay, facecolor="white", dpi=250)
+plt.close(fig)
+from PIL import Image  # noqa: E402
+im = Image.open(overlay).convert("L")
+alpha = im.point(lambda v: 255 - v)  # 흰 바탕 → 투명, 선 → 불투명
+rgba = Image.new("RGBA", im.size, (31, 41, 51, 0))
+rgba.putalpha(alpha)
+rgba.save(overlay)
+with open(f"{OUT}/plan-overlay-{FLOOR}.json", "w") as f:
+    json.dump({"bounds": to_model(x0, y0) + to_model(x1, y1), "size": list(rgba.size)}, f)
+
 print(json.dumps([{k: r[k] for k in ("names", "area_m2")} for r in out], ensure_ascii=False))
