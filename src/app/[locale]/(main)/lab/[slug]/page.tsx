@@ -11,6 +11,7 @@ import LabStatusBadge from "@/components/lab/LabStatusBadge";
 import LabCta, { type LabTranslate } from "@/components/lab/LabCta";
 import { LabFilm } from "@/components/lab/LabFilm";
 import LabCompare from "@/components/lab/LabCompare";
+import LabModelViewer, { type ViewerLabels } from "@/components/lab/LabModelViewer";
 
 type Params = Promise<{ locale: string; slug: string }>;
 
@@ -67,11 +68,13 @@ function CaseStudy({ cs, t, k }: { cs: LabCaseStudy; t: LabTranslate; k: string 
   const [plan, rooms, ...rest] = cs.figures;
   let n = 0;
 
-  const noted = cs.areas?.noted;
-  const allRooms = cs.areas?.floors.flatMap((f) => f.rooms) ?? [];
+  const tk = cs.takeoff;
+  const noted = tk?.noted;
   const computed = noted
-    ? noted.rooms.reduce((sum, key) => sum + (allRooms.find((r) => r.key === key)?.area ?? 0), 0)
+    ? noted.rooms.reduce((sum, key) => sum + (tk!.data.rooms.find((r) => r.key === key)?.A ?? 0), 0)
     : 0;
+  const fin = (key: string | null) => (key ? t(`${c}.takeoff.finishes.${key}`) : "–");
+  const won = (v: number) => v.toLocaleString("ko-KR");
 
   return (
     <section className="border-t border-border px-6 py-24">
@@ -106,7 +109,23 @@ function CaseStudy({ cs, t, k }: { cs: LabCaseStudy; t: LabTranslate; k: string 
           </div>
         )}
 
-        {rest.map((f) => (
+        {rest.map((f) =>
+          cs.viewer?.replaces === f.key ? (
+            <figure key={f.key} className="mt-16">
+              <LabModelViewer
+                dataUrl={cs.viewer.data}
+                poster={{ src: f.src, width: f.width, height: f.height }}
+                posterAlt={t(`${c}.figures.${f.key}.title`)}
+                labels={t.raw("detail.viewer") as ViewerLabels}
+                roomNames={t.raw(`${c}.rooms`) as Record<string, string>}
+              />
+              <figcaption className="mt-3 text-sm leading-relaxed text-muted">
+                <span className="text-xs font-semibold text-foreground">FIG. {++n}</span>
+                <span className="ml-2 font-semibold text-foreground">{t(`${c}.figures.${f.key}.title`)}</span>
+                <span className="mt-1 block">{t(`${c}.figures.${f.key}.caption`)}</span>
+              </figcaption>
+            </figure>
+          ) : (
           <div key={f.key} className="mt-16">
             <Figure
               n={++n}
@@ -118,7 +137,8 @@ function CaseStudy({ cs, t, k }: { cs: LabCaseStudy; t: LabTranslate; k: string 
               sizes="(min-width: 1024px) 64rem, 100vw"
             />
           </div>
-        ))}
+          ),
+        )}
 
         {cs.materials && (
           <div className="mt-20">
@@ -187,44 +207,128 @@ function CaseStudy({ cs, t, k }: { cs: LabCaseStudy; t: LabTranslate; k: string 
           </figure>
         )}
 
-        {cs.areas && (
+        {tk && (
           <div className="mt-20">
-            <h3 className="text-xl font-bold">{t(`${c}.areas.title`)}</h3>
-            <p className="mt-2 text-sm text-muted">{t(`${c}.areas.basis`)}</p>
-            <div className="mt-6 overflow-x-auto rounded-xl border border-border">
-              <table className="w-full text-left text-sm">
+            <h3 className="text-xl font-bold">{t(`${c}.takeoff.title`)}</h3>
+            <p className="mt-2 max-w-3xl text-sm leading-relaxed text-muted">{t(`${c}.takeoff.intro`)}</p>
+
+            <div className="mt-8 grid gap-10 md:grid-cols-2">
+              {tk.figures.map((f) => (
+                <Figure
+                  key={f.key}
+                  n={++n}
+                  src={f.src}
+                  width={f.width}
+                  height={f.height}
+                  title={t(`${c}.takeoff.figures.${f.key}.title`)}
+                  caption={t(`${c}.takeoff.figures.${f.key}.caption`)}
+                  sizes="(min-width: 768px) 50vw, 100vw"
+                />
+              ))}
+            </div>
+
+            <h4 className="mt-14 font-semibold">{t(`${c}.takeoff.roomsTitle`)}</h4>
+            <p className="mt-1 text-sm text-muted">
+              {t(`${c}.takeoff.basis`, { height: tk.data.ceilingHeight.toFixed(2) })}
+            </p>
+            <div className="mt-4 overflow-x-auto rounded-xl border border-border">
+              <table className="w-full min-w-[40rem] text-left text-sm">
                 <thead className="bg-surface text-xs text-muted">
                   <tr>
-                    <th scope="col" className="px-5 py-3 font-medium">{t(`${c}.areas.room`)}</th>
-                    <th scope="col" className="px-5 py-3 text-right font-medium">{t(`${c}.areas.area`)}</th>
-                    <th scope="col" className="px-5 py-3 font-medium">{t(`${c}.areas.state`)}</th>
+                    <th scope="col" className="px-4 py-3 font-medium">{t(`${c}.takeoff.col.room`)}</th>
+                    <th scope="col" className="px-4 py-3 text-right font-medium">L (m)</th>
+                    <th scope="col" className="px-4 py-3 text-right font-medium">A (㎡)</th>
+                    <th scope="col" className="px-4 py-3 text-right font-medium">WA (㎡)</th>
+                    <th scope="col" className="px-4 py-3 font-medium">{t(`${c}.takeoff.col.floor`)}</th>
+                    <th scope="col" className="px-4 py-3 font-medium">{t(`${c}.takeoff.col.wall`)}</th>
+                    <th scope="col" className="px-4 py-3 font-medium">{t(`${c}.takeoff.col.ceiling`)}</th>
                   </tr>
                 </thead>
-                {cs.areas.floors.map((floor) => (
-                  <tbody key={floor.key} className="divide-y divide-border border-t border-border">
+                {(["1f", "2f"] as const).map((floor) => (
+                  <tbody key={floor} className="divide-y divide-border border-t border-border">
                     <tr className="bg-surface/60">
-                      <th scope="rowgroup" colSpan={3} className="px-5 py-2 text-xs font-semibold text-foreground">
-                        {t(`${c}.areas.floors.${floor.key}`)}
+                      <th scope="rowgroup" colSpan={7} className="px-4 py-2 text-xs font-semibold text-foreground">
+                        {t(`${c}.areas.floors.f${floor[0]}`)}
                       </th>
                     </tr>
-                    {floor.rooms.map((r) => (
-                      <tr key={r.key}>
-                        <td className="px-5 py-3">{t(`${c}.rooms.${r.key}`)}</td>
-                        <td className="px-5 py-3 text-right tabular-nums">{r.area.toFixed(2)}</td>
-                        <td className="px-5 py-3">
-                          <span className={r.review ? "text-amber-700 dark:text-amber-400" : "text-muted"}>
-                            {t(`${c}.areas.${r.review ? "review" : "auto"}`)}
-                          </span>
-                        </td>
-                      </tr>
-                    ))}
+                    {tk.data.rooms
+                      .filter((r) => r.floor === floor)
+                      .map((r) => (
+                        <tr key={r.key}>
+                          <td className="px-4 py-3">
+                            {t(`${c}.rooms.${r.key}`)}
+                            {r.review && (
+                              <span className="ml-2 whitespace-nowrap rounded border border-amber-500/60 px-1.5 py-0.5 text-[11px] text-amber-700 dark:text-amber-400">
+                                {t(`${c}.areas.review`)}
+                              </span>
+                            )}
+                          </td>
+                          <td className="px-4 py-3 text-right tabular-nums">{r.L.toFixed(1)}</td>
+                          <td className="px-4 py-3 text-right tabular-nums">{r.A.toFixed(1)}</td>
+                          <td className="whitespace-nowrap px-4 py-3 text-right tabular-nums">
+                            {r.WA !== null
+                              ? r.WA.toFixed(1)
+                              : t(`${c}.takeoff.railing`, { length: (r.railing ?? 0).toFixed(1) })}
+                          </td>
+                          <td className="px-4 py-3 text-muted">{fin(r.finish.floor)}</td>
+                          <td className="px-4 py-3 text-muted">
+                            {r.outdoor ? fin("fbRailing") : fin(r.finish.wall)}
+                          </td>
+                          <td className="px-4 py-3 text-muted">{fin(r.finish.ceiling)}</td>
+                        </tr>
+                      ))}
                   </tbody>
                 ))}
               </table>
             </div>
 
+            <h4 className="mt-12 font-semibold">{t(`${c}.takeoff.materialsTitle`)}</h4>
+            <div className="mt-4 overflow-x-auto rounded-xl border border-border">
+              <table className="w-full min-w-[36rem] text-left text-sm">
+                <thead className="bg-surface text-xs text-muted">
+                  <tr>
+                    <th scope="col" className="px-4 py-3 font-medium">{t(`${c}.takeoff.col.material`)}</th>
+                    <th scope="col" className="px-4 py-3 text-right font-medium">{t(`${c}.takeoff.col.qty`)}</th>
+                    <th scope="col" className="px-4 py-3 font-medium">{t(`${c}.takeoff.col.unit`)}</th>
+                    <th scope="col" className="px-4 py-3 text-right font-medium">{t(`${c}.takeoff.col.price`)}</th>
+                    <th scope="col" className="px-4 py-3 text-right font-medium">{t(`${c}.takeoff.col.amount`)}</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-border">
+                  {tk.data.materials.map((m) => (
+                    <tr key={m.key}>
+                      <td className="px-4 py-3">{t(`${c}.takeoff.materialNames.${m.key}`)}</td>
+                      <td className="px-4 py-3 text-right tabular-nums">{m.qty.toFixed(1)}</td>
+                      <td className="px-4 py-3 text-muted">{m.unit}</td>
+                      <td className="px-4 py-3 text-right tabular-nums">{won(m.price)}</td>
+                      <td className="px-4 py-3 text-right tabular-nums">{won(m.amount)}</td>
+                    </tr>
+                  ))}
+                  <tr className="bg-surface font-semibold">
+                    <td className="px-4 py-3" colSpan={4}>
+                      {t(`${c}.takeoff.total`)}
+                    </td>
+                    <td className="px-4 py-3 text-right tabular-nums">{won(tk.data.total)}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p className="mt-3 text-sm leading-relaxed text-muted">{t(`${c}.takeoff.priceNote`)}</p>
+
+            <a
+              href={tk.report}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-6 inline-flex items-center gap-2 rounded-full border border-border px-5 py-2.5 text-sm font-semibold transition-colors hover:bg-surface"
+            >
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-4 w-4" aria-hidden="true">
+                <path d="M8 2v8m0 0L5 7m3 3l3-3M3 13h10" />
+              </svg>
+              {t(`${c}.takeoff.download`)}
+            </a>
+
             {noted && (
-              <div className="mt-6 rounded-xl border border-border p-5">
+              <div className="mt-10 rounded-xl border border-border p-5">
                 <p className="text-xs text-muted">{t(`${c}.areas.notedScope`)}</p>
                 <dl className="mt-3 grid gap-4 sm:grid-cols-3">
                   <div>

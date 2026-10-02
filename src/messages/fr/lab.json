@@ -23,7 +23,37 @@
     "why": "Pourquoi ce projet",
     "chapterNav": "Chapitres du film",
     "disclaimer": "Images tirées directement des vrais plans (informations du maître d'ouvrage et de l'architecte retirées) et de la maquette 3D. Sans son.",
-    "graduated": "Voir la page produit"
+    "graduated": "Voir la page produit",
+    "viewer": {
+      "open": "Explorer en 3D",
+      "loading": "Chargement de la maquette 3D…",
+      "hint": "Glisser pour tourner · molette/pincer pour zoomer · clic droit/deux doigts pour déplacer",
+      "reset": "Vue initiale",
+      "level": "Partie visible",
+      "levels": {
+        "all": "Ensemble",
+        "noRoof": "Sans toiture",
+        "f1": "Rez-de-chaussée"
+      },
+      "look": "Rendu",
+      "looks": {
+        "material": "Finitions",
+        "line": "Trait"
+      },
+      "plan": "Superposer le plan",
+      "roomHint": "Touchez un sol pour voir la pièce",
+      "roomHintAll": "Retirez la toiture ou affichez le rez-de-chaussée pour toucher les pièces",
+      "area": "Surface",
+      "status": "État",
+      "auto": "Calculée",
+      "review": "Limite à vérifier",
+      "close": "Fermer",
+      "roofNote": "Forme de toiture non confirmée",
+      "unsupported": "La 3D ne peut pas s'afficher dans ce navigateur. Activez l'accélération matérielle ou essayez un autre navigateur.",
+      "perimeter": "Périmètre",
+      "wallArea": "Surface murale",
+      "railing": "Garde-corps"
+    }
   },
   "cta": {
     "title": "Nous cherchons des partenaires d'expérimentation",
@@ -66,7 +96,7 @@
           "lines": "Traits du plan",
           "dimensions": "Cotes",
           "layers": "Calques",
-          "rooms": "Zones (deux niveaux)"
+          "rooms": "Zones (vérandas comprises)"
         },
         "figures": {
           "plan": {
@@ -79,7 +109,7 @@
           },
           "model": {
             "title": "Maquette 3D issue des plans",
-            "caption": "Murs, planchers et ouvertures sont montés à partir des plans et élévations. La toiture, que les plans seuls ne permettent pas de trancher, est laissée « non confirmée » (orange) par la maquette elle-même."
+            "caption": "Faites-la tourner directement dans le navigateur. Retirez des niveaux et touchez une pièce pour voir la surface calculée à partir des plans, ou posez le plan au sol pour le confronter à la maquette. La toiture, que les plans seuls ne permettent pas de trancher, reste un élément non confirmé."
           },
           "interior1": {
             "title": "Intérieur du rez-de-chaussée · centre de santé",
@@ -142,13 +172,65 @@
           "handle": "Position de comparaison",
           "legend": "Rouge : plan · Gris : maquette"
         },
+        "takeoff": {
+          "title": "Métré à partir des plans",
+          "intro": "Le périmètre (L), la surface au sol (A) et la surface murale (WA) sont mesurés à partir des limites des pièces, puis les finitions indiquées sur les plans y sont associées pour obtenir les quantités par matériau. Les surfaces des fenêtres et portes issues de la maquette 3D sont déduites des murs. Les montants utilisent des prix unitaires d'exemple.",
+          "figures": {
+            "1f": {
+              "title": "Plan de métré · rez-de-chaussée",
+              "caption": "Les couleurs indiquent les revêtements de sol ; les traits rouges sont les fenêtres et portes déduites des murs. Les pointillés orange signalent des zones sans cloison dessinée, à vérifier."
+            },
+            "2f": {
+              "title": "Plan de métré · étage",
+              "caption": "Les vérandas sont fermées par les traits de garde-corps (PAR) ; la partie de leur limite qui ne touche pas le bâtiment est estimée comme longueur de garde-corps."
+            }
+          },
+          "roomsTitle": "Quantités par pièce",
+          "basis": "L périmètre · A surface au sol · WA = L × hauteur sous plafond {height} m − surface des baies (portes intérieures déduites des deux côtés)",
+          "col": {
+            "room": "Pièce",
+            "floor": "Sol",
+            "wall": "Murs",
+            "ceiling": "Plafond",
+            "material": "Matériau",
+            "qty": "Quantité",
+            "unit": "Unité",
+            "price": "Prix unitaire d'exemple (KRW)",
+            "amount": "Montant (KRW)"
+          },
+          "railing": "Garde-corps {length} m",
+          "materialsTitle": "Quantités et montants d'exemple par matériau",
+          "total": "Total (exemple)",
+          "priceNote": "* Les prix unitaires sont des exemples supposant des tarifs courants, fourniture et pose comprises ; il ne s'agit pas d'un devis. La cage d'escalier de l'étage (sans nom sur les plans) ainsi que la démolition, les fluides et l'électricité ne sont pas inclus.",
+          "download": "Télécharger le métré en PDF (coréen)",
+          "finishes": {
+            "decoTile": "Dalles vinyle",
+            "porcelainFloor": "Grès cérame",
+            "vinylSheet": "Vinyle en lés",
+            "epoxy": "Étanchéité époxy",
+            "paintInt": "Peinture à l'eau",
+            "ceramicWall": "Faïence murale",
+            "wallpaper": "Papier peint",
+            "gypsumPaint": "Plaque de plâtre · peinture",
+            "gypsumPaper": "Plaque de plâtre · papier",
+            "smcCeiling": "SMC",
+            "fbRailing": "Garde-corps en fer plat"
+          },
+          "materialNames": {
+            "decoTile": "Dalles vinyle grand passage",
+            "porcelainFloor": "Carrelage de sol en grès cérame",
+            "vinylSheet": "Revêtement vinyle en lés",
+            "epoxy": "Étanchéité époxy",
+            "paintInt": "Peinture intérieure à l'eau",
+            "ceramicWall": "Faïence murale",
+            "wallpaper": "Papier peint",
+            "gypsumPaint": "Ossature métallique + plaque de plâtre + peinture",
+            "gypsumPaper": "Ossature métallique + plaque de plâtre + papier de plafond",
+            "smcCeiling": "Plafond en panneaux SMC",
+            "fbRailing": "Garde-corps en fer plat"
+          }
+        },
         "areas": {
-          "title": "Surfaces des pièces",
-          "basis": "Mesurées au nu intérieur des murs · calculées automatiquement à partir des calques",
-          "room": "Pièce",
-          "area": "Surface (m²)",
-          "state": "État",
-          "auto": "Calculée",
           "review": "Limite à vérifier",
           "notedLabel": "Surface de travaux indiquée sur le plan",
           "notedScope": "Plafonds et sols du cabinet, de la salle d'attente, de la salle polyvalente et de l'entrée",
@@ -169,7 +251,10 @@
           "toilet": "Toilettes",
           "livingKitchen": "Séjour · cuisine/salle à manger",
           "masterBedroom": "Chambre principale",
-          "bedroom": "Chambre"
+          "bedroom": "Chambre",
+          "toilet2": "Toilettes",
+          "verandaWestSouth": "Véranda (ouest et sud)",
+          "verandaEast": "Véranda (est)"
         },
         "findings": {
           "title": "Ce qui concorde, et ce qui reste à faire",
@@ -183,8 +268,8 @@
           "open": [
             "La forme de la toiture ne peut pas être tranchée à partir de la seule élévation et reste non confirmée ; il faut la confronter au plan de toiture.",
             "Le garde-corps du balcon, la rampe d'accès et les marches d'entrée ne sont pas encore dans la maquette.",
-            "Deux zones sans cloison dessinée (cabinet/préparation, escalier/chaufferie) doivent être vérifiées par une personne.",
-            "La cage d'escalier et la salle de bains de l'étage n'ont pas de nom sur les plans ; elles manquent donc au tableau des surfaces.",
+            "Trois zones sans cloison dessinée (cabinet/préparation, escalier/chaufferie, séjour/cuisine de l'étage) doivent être vérifiées par une personne.",
+            "La cage d'escalier de l'étage n'a ni nom ni limite fermée sur les plans ; elle manque donc aux quantités.",
             "Il existe un écart entre la surface de travaux indiquée sur le plan et la surface calculée."
           ]
         }
