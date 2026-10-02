@@ -46,12 +46,12 @@ axo = trim(load("model-axo-line.png"))
 webp(fit(axo, 1800), "model-axo.webp")
 
 # 층별 내부 단면 (label_cutaway.py 결과). 라벨 위치가 렌더와 맞물려 있어 자르지 않는다
-for src, dst in (("fig-cut1.png", "interior-1f.webp"), ("fig-cut2.png", "interior-2f.webp")):
+for src, dst in (("fig-cut1.png", "interior-1f-r2.webp"), ("fig-cut2.png", "interior-2f-r2.webp")):
     webp(fit(load(src), 1800), dst)
 
 # 마감재 적용 사실적 렌더링 (blender_photo.py)
-for src, dst in (("photo-ext.png", "photo-exterior.webp"), ("photo-cut1.png", "photo-1f.webp"),
-                 ("photo-walk.png", "photo-waiting-room.webp")):
+for src, dst in (("photo-ext.png", "photo-exterior-r2.webp"), ("photo-cut1.png", "photo-1f-r2.webp"),
+                 ("photo-walk.png", "photo-waiting-room-r2.webp")):
     webp(fit(load(src), 1800), dst)
 
 # 물량 산출 마킹 도면 (quantity_takeoff.py). 위·아래 치수선 여백은 잘라낸다
