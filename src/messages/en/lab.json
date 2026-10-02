@@ -23,7 +23,37 @@
     "why": "Why we're building it",
     "chapterNav": "Film chapters",
     "disclaimer": "Scenes taken directly from the real drawings (client and architect details removed) and the 3D model. No audio.",
-    "graduated": "View product page"
+    "graduated": "View product page",
+    "viewer": {
+      "open": "Explore in 3D",
+      "loading": "Loading the 3D model…",
+      "hint": "Drag to rotate · wheel/pinch to zoom · right-drag/two-finger drag to pan",
+      "reset": "Reset view",
+      "level": "Visible part",
+      "levels": {
+        "all": "Whole",
+        "noRoof": "Roof off",
+        "f1": "Ground floor"
+      },
+      "look": "Style",
+      "looks": {
+        "material": "Finishes",
+        "line": "Line"
+      },
+      "plan": "Overlay drawing",
+      "roomHint": "Tap a floor to see the room",
+      "roomHintAll": "Take the roof off or show the ground floor to tap rooms",
+      "area": "Area",
+      "status": "Status",
+      "auto": "Computed",
+      "review": "Boundary review needed",
+      "close": "Close",
+      "roofNote": "Roof form unconfirmed",
+      "unsupported": "3D can't be displayed in this browser. Turn on hardware acceleration or try another browser.",
+      "perimeter": "Perimeter",
+      "wallArea": "Wall area",
+      "railing": "Railing"
+    }
   },
   "cta": {
     "title": "Looking for people to experiment with",
@@ -66,7 +96,7 @@
           "lines": "Drawing lines",
           "dimensions": "Dimensions",
           "layers": "Layers",
-          "rooms": "Room zones (both floors)"
+          "rooms": "Room zones (incl. verandas)"
         },
         "figures": {
           "plan": {
@@ -79,7 +109,7 @@
           },
           "model": {
             "title": "3D model built from the drawings",
-            "caption": "Walls, floors and openings are raised from the plans and elevations. The roof, which the drawings alone can't settle, is left marked as unconfirmed (orange) by the model itself."
+            "caption": "Turn it around right in the browser. Take floors off and tap a room to see the area computed from the drawings, or lay the drawn plan on the floor to check it against the model. The roof, which the drawings alone can't settle, is an unconfirmed element."
           },
           "interior1": {
             "title": "Ground floor inside · clinic",
@@ -142,13 +172,65 @@
           "handle": "Comparison position",
           "legend": "Red: drawing · Grey: model"
         },
+        "takeoff": {
+          "title": "Quantity takeoff from the drawings",
+          "intro": "Perimeter (L), floor area (A) and wall area (WA) are measured from the room boundaries, then the finishes noted on the drawings are attached to produce quantities per material. Window and door areas taken from the 3D model are deducted from the walls. Amounts use example unit prices.",
+          "figures": {
+            "1f": {
+              "title": "Quantity markup drawing · ground floor",
+              "caption": "Colours show floor finishes; red lines are windows and doors deducted from wall area. Orange dashes mark zones with no partition line that need boundary review."
+            },
+            "2f": {
+              "title": "Quantity markup drawing · upper floor",
+              "caption": "Veranda boundaries are closed with the parapet (PAR) lines; the part of the boundary not touching the building is estimated as railing length."
+            }
+          },
+          "roomsTitle": "Quantities by room",
+          "basis": "L perimeter · A floor area · WA = L × ceiling height {height} m − window/door area (interior doors deducted on both sides)",
+          "col": {
+            "room": "Room",
+            "floor": "Floor",
+            "wall": "Wall",
+            "ceiling": "Ceiling",
+            "material": "Material",
+            "qty": "Quantity",
+            "unit": "Unit",
+            "price": "Example unit price (KRW)",
+            "amount": "Amount (KRW)"
+          },
+          "railing": "Railing {length} m",
+          "materialsTitle": "Quantities and example amounts by material",
+          "total": "Total (example)",
+          "priceNote": "* Unit prices are examples assuming typical market rates including materials and labour; they are not a real estimate. The upper-floor stairwell (unnamed in the drawings) and demolition, MEP and electrical works are not included.",
+          "download": "Download the takeoff report PDF (Korean)",
+          "finishes": {
+            "decoTile": "Vinyl deco tile",
+            "porcelainFloor": "Porcelain tile",
+            "vinylSheet": "Vinyl sheet",
+            "epoxy": "Epoxy waterproofing",
+            "paintInt": "Water-based paint",
+            "ceramicWall": "Ceramic wall tile",
+            "wallpaper": "Wallpaper",
+            "gypsumPaint": "Gypsum board · paint",
+            "gypsumPaper": "Gypsum board · ceiling paper",
+            "smcCeiling": "SMC",
+            "fbRailing": "Steel flat-bar railing"
+          },
+          "materialNames": {
+            "decoTile": "Heavy-traffic vinyl deco tile",
+            "porcelainFloor": "Porcelain floor tile",
+            "vinylSheet": "Vinyl sheet flooring",
+            "epoxy": "Epoxy waterproofing",
+            "paintInt": "Interior water-based paint",
+            "ceramicWall": "Ceramic wall tile",
+            "wallpaper": "Wallpaper",
+            "gypsumPaint": "Steel ceiling grid + gypsum board + paint",
+            "gypsumPaper": "Steel ceiling grid + gypsum board + ceiling paper",
+            "smcCeiling": "SMC ceiling panels",
+            "fbRailing": "Steel flat-bar railing"
+          }
+        },
         "areas": {
-          "title": "Room areas",
-          "basis": "Measured to the inner wall face · computed automatically from drawing layers",
-          "room": "Room",
-          "area": "Area (m²)",
-          "state": "Status",
-          "auto": "Computed",
           "review": "Boundary review needed",
           "notedLabel": "Works area noted on the drawing",
           "notedScope": "Ceilings and floors of clinic, waiting room, multipurpose room and entrance",
@@ -169,7 +251,10 @@
           "toilet": "Toilet",
           "livingKitchen": "Living room · kitchen/dining",
           "masterBedroom": "Main bedroom",
-          "bedroom": "Bedroom"
+          "bedroom": "Bedroom",
+          "toilet2": "Toilet",
+          "verandaWestSouth": "Veranda (west & south)",
+          "verandaEast": "Veranda (east)"
         },
         "findings": {
           "title": "What matched and what didn't yet",
@@ -183,8 +268,8 @@
           "open": [
             "The roof form can't be settled from the front elevation alone and stays unconfirmed; it needs checking against the roof plan.",
             "The balcony railing, accessible ramp and entrance steps are not in the model yet.",
-            "Two areas with no partition line (clinic/dispensary, stairwell/boiler room) need their boundaries confirmed by a person.",
-            "The upper-floor stairwell and bathroom have no room names in the drawings, so they are missing from the area table.",
+            "Three areas with no partition line (clinic/dispensary, stairwell/boiler room, upper-floor living/kitchen) need their boundaries confirmed by a person.",
+            "The upper-floor stairwell has no room name or closed boundary in the drawings, so it is missing from the quantities.",
             "There is a gap between the works area noted on the drawing and the computed area."
           ]
         }

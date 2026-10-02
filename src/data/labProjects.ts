@@ -10,6 +10,8 @@
  * llms.txt 라벨(src/app/llms.txt/route.ts)만 손으로 추가한다.
  */
 
+import takeoffData from "./lab/ai-building-workspace-takeoff.json";
+
 export type LabStatus = "concept" | "experimenting" | "graduated" | "paused";
 
 export interface LabImage {
@@ -23,16 +25,44 @@ export interface LabCaseStudy {
   stats: { key: string; value: string }[];
   /** 순서대로 보여줄 도판. 제목·설명은 messages 의 case.figures.<key> */
   figures: (LabImage & { key: string })[];
+  /** 직접 돌려 보는 3D 뷰어. viewer.json 은 scripts/lab/viewer_data.py 가 만든다.
+   *  poster 는 이 도판(figures 의 key)을 대신해 처음에 보여 줄 이미지 */
+  viewer?: { data: string; replaces: string };
   /** 도면 주석의 마감재를 입힌 사실적 렌더링. 마감재 표의 행 키는 messages 의 case.materials.rows */
   materials?: { images: (LabImage & { key: string })[]; rows: string[] };
   /** 같은 축척·원점으로 맞춘 도면 ↔ 모델 비교 이미지 */
   comparison?: { drawing: LabImage; model: LabImage; overlay: LabImage };
-  /** 도면 레이어로 계산한 층별 실 면적(㎡). review=칸막이 선이 없어 여러 실이 묶인 영역 */
-  areas?: {
-    floors: { key: string; rooms: { key: string; area: number; review?: boolean }[] }[];
-    /** 도면 주석에 적힌 공사면적과, 같은 범위 실들의 계산 합계 비교 */
+  /** 도면 기반 물량 산출 (scripts/lab/quantity_takeoff.py 의 takeoff.json) */
+  takeoff?: {
+    data: Takeoff;
+    /** 층별 물량 마킹 도면 */
+    figures: (LabImage & { key: string })[];
+    /** 내려받는 내역서 PDF */
+    report: string;
+    /** 도면 주석에 적힌 공사면적과, 같은 범위 실들의 산출 합계 비교 */
     noted: { value: number; rooms: string[] };
   };
+}
+
+/** 물량 산출 결과. 길이 m, 면적 ㎡, 금액 원. review = 칸막이 선이 없어 여러 실이 묶인 영역 */
+export interface Takeoff {
+  ceilingHeight: number;
+  rooms: {
+    key: string;
+    floor: string;
+    review: boolean;
+    outdoor: boolean;
+    L: number;
+    A: number;
+    WA: number | null;
+    openingArea: number | null;
+    openings: number;
+    railing: number | null;
+    finish: { floor: string | null; wall: string | null; ceiling: string | null };
+  }[];
+  /** 예시 단가 적용. price·amount 는 실제 견적이 아니다 */
+  materials: { key: string; unit: string; qty: number; price: number; amount: number }[];
+  total: number;
 }
 
 export interface LabProject {
@@ -79,7 +109,7 @@ export const labProjects: LabProject[] = [
         { key: "lines", value: "14,682" },
         { key: "dimensions", value: "396" },
         { key: "layers", value: "38" },
-        { key: "rooms", value: "9" },
+        { key: "rooms", value: "12" },
       ],
       figures: [
         { key: "plan", src: `${ABW}/plan.webp`, width: 1400, height: 1619 },
@@ -88,6 +118,7 @@ export const labProjects: LabProject[] = [
         { key: "interior1", src: `${ABW}/interior-1f.webp`, width: 1800, height: 1125 },
         { key: "interior2", src: `${ABW}/interior-2f.webp`, width: 1800, height: 1125 },
       ],
+      viewer: { data: `${ABW}/viewer/viewer.json`, replaces: "model" },
       materials: {
         images: [
           { key: "exterior", src: `${ABW}/photo-exterior.webp`, width: 1800, height: 1125 },
@@ -102,28 +133,13 @@ export const labProjects: LabProject[] = [
         model: { src: `${ABW}/elevation-model.webp`, width: 1461, height: 960 },
         overlay: { src: `${ABW}/elevation-overlay.webp`, width: 1461, height: 960 },
       },
-      areas: {
-        floors: [
-          {
-            key: "f1",
-            rooms: [
-              { key: "waiting", area: 17.86 },
-              { key: "clinic", area: 15.29, review: true },
-              { key: "multipurpose", area: 14.33 },
-              { key: "stair", area: 8.38, review: true },
-              { key: "entrance", area: 4.81 },
-              { key: "toilet", area: 4.03 },
-            ],
-          },
-          {
-            key: "f2",
-            rooms: [
-              { key: "livingKitchen", area: 23.12, review: true },
-              { key: "masterBedroom", area: 12.75 },
-              { key: "bedroom", area: 7.45 },
-            ],
-          },
+      takeoff: {
+        data: takeoffData as Takeoff,
+        figures: [
+          { key: "1f", src: `${ABW}/takeoff-1f.webp`, width: 1400, height: 1803 },
+          { key: "2f", src: `${ABW}/takeoff-2f.webp`, width: 1400, height: 1689 },
         ],
+        report: `${ABW}/takeoff-report.pdf`,
         // 1층 평면도 주석: "진료실,대기실,다목적실,현관 천정,바닥 공사 … 공사면적 60.00㎡"
         noted: { value: 60.0, rooms: ["clinic", "waiting", "multipurpose", "entrance"] },
       },

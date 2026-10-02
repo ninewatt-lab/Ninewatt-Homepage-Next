@@ -54,6 +54,14 @@ for src, dst in (("photo-ext.png", "photo-exterior.webp"), ("photo-cut1.png", "p
                  ("photo-walk.png", "photo-waiting-room.webp")):
     webp(fit(load(src), 1800), dst)
 
+# 물량 산출 마킹 도면 (quantity_takeoff.py). 위·아래 치수선 여백은 잘라낸다
+for src, dst, crop in (("fig-takeoff-1f.png", "takeoff-1f.webp", (0.04, 0.12, 1.0, 0.80)),
+                       ("fig-takeoff-2f.png", "takeoff-2f.webp", (0.0, 0.12, 1.0, 0.92))):
+    if os.path.exists(os.path.join(WORK, src)):
+        im = load(src)
+        w, h = im.size
+        webp(fit(im.crop((int(crop[0] * w), int(crop[1] * h), int(crop[2] * w), int(crop[3] * h))), 1400), dst)
+
 # 정면 비교 3장은 같은 크기·정렬을 유지해야 하므로 자르지 않는다
 for src, dst in (("elev-dxf.png", "elevation-drawing.webp"), ("elev-model-line.png", "elevation-model.webp"),
                  ("elev-overlay.png", "elevation-overlay.webp")):

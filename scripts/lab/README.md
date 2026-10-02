@@ -73,6 +73,17 @@ aws s3 cp $W/case.mp4 s3://ninewatt-homepage/videos/lab/<새 파일명>.mp4 --co
 
 # 6. 사이트용 이미지
 $PY scripts/lab/export_web.py $W public/lab/ai-building-workspace
+
+# 6-1. 물량 산출 (L·A·WA, 자재별 물량, 예시 금액) → takeoff.json, 마킹 도면, 내역서 PDF
+$BLENDER -b --factory-startup --python scripts/lab/blender_openings.py -- $GLB $W/openings.json   # 창·문 크기
+$PY scripts/lab/quantity_takeoff.py $DXF $W
+python3 scripts/lab/takeoff_report.py $W public/lab/ai-building-workspace/takeoff-report.pdf      # Chrome 필요
+cp $W/takeoff.json src/data/lab/ai-building-workspace-takeoff.json    # 페이지 표 데이터 (names 필드는 빼도 된다)
+$PY scripts/lab/export_web.py $W public/lab/ai-building-workspace    # takeoff-1f/2f.webp 포함
+
+# 7. 웹 3D 뷰어 데이터 (모델 glb + 실 경계 폴리곤 + 도면 평면). 1번 단계의 rooms-*.json, plan-overlay-* 를 쓴다
+$BLENDER -b --factory-startup --python scripts/lab/blender_web_export.py -- $GLB $W/model-web.glb
+$PY scripts/lab/viewer_data.py $W public/lab/ai-building-workspace/viewer
 ```
 
 ## 값을 바꿀 때 같이 바꿀 곳
@@ -84,6 +95,9 @@ $PY scripts/lab/export_web.py $W public/lab/ai-building-workspace
 | 실 면적 결과 | `labProjects.ts` areas, 문구의 면적 설명 |
 | 단면 카메라·라벨 (blender_render.py cut1/cut2) | 라벨 위치는 rooms-<층>.json 으로 자동 계산된다. 평면 PRESETS 의 origin 이 틀리면 라벨이 실 밖에 찍힌다 |
 | 영상 타임라인 (compose_video.py) | `labProjects.ts` video.chapters / duration, 각 로케일 `lab.json` chapters |
+| 웹 뷰어 재질 (blender_web_export.py SPEC) | 웹에는 반사 환경맵이 없어 금속성을 올리면 까맣게 보인다. 조명은 LabModelCanvas.tsx |
+| 도면 실 이름 | plan_common.py 의 KEYS 와 각 로케일 lab.json 의 case.rooms |
+| 실별 마감 · 예시 단가 | quantity_takeoff.py 의 FINISH · PRICE, 각 로케일 lab.json 의 case.takeoff.finishes · materialNames |
 | 이미지 내용 | 파일 이름도 바꾼다 (같은 URL 은 이미지 캐시가 예전 것을 준다) |
 
 ## 알려진 한계
@@ -94,3 +108,8 @@ $PY scripts/lab/export_web.py $W public/lab/ai-building-workspace
 - 좌표(`BOX`, 평면 `origin`, 카메라 위치)는 이 도면 한 세트에 맞춘 값이다. 다른 도면에는 새로 잡아야 한다.
 - 단면은 Boolean(EXACT)으로 자르고, 실패한 메시(이 모델에선 동쪽 외벽)만 FAST 로 다시 자른다.
 - 도면에 실 이름이 없는 공간(2층 계단실·욕실)과 바깥으로 열린 베란다는 면적 표에 나오지 않는다.
+- 모델의 실별 바닥 마감 판은 `VIS_F1_<실 이름>_Floor` 처럼 이름 끝이 `_Floor` 다(`Floor_0` 은 구조 슬래브).
+  재질 분류할 때 둘 다 바닥으로 잡아야 한다.
+- 물량 산출의 천장고는 모델 기준 2.74 m 하나로 쓴다. 창·문은 중심이 실 경계에서 0.35 m 안이면 그 실 벽의 것으로 본다.
+  베란다 난간 길이는 경계 중 실내 실에서 0.6 m 넘게 떨어진 부분으로 추정한다. 2층 계단실은 닫힌 경계가 없어 빠진다.
+- 3D 뷰어 확인은 헤드리스 브라우저에서 WebGL 이 없어 안 된다. 헤드 모드 브라우저로 본다.

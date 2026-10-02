@@ -1,0 +1,289 @@
+{
+ "ceilingHeight": 2.74,
+ "rooms": [
+  {
+   "key": "waiting",
+   "floor": "1f",
+   "review": false,
+   "outdoor": false,
+   "L": 25.82,
+   "A": 17.88,
+   "WA": 60.86,
+   "openingArea": 9.9,
+   "openings": 3,
+   "railing": null,
+   "finish": {
+    "floor": "decoTile",
+    "wall": "paintInt",
+    "ceiling": "gypsumPaint"
+   }
+  },
+  {
+   "key": "clinic",
+   "floor": "1f",
+   "review": true,
+   "outdoor": false,
+   "L": 18.17,
+   "A": 15.3,
+   "WA": 41.51,
+   "openingArea": 8.28,
+   "openings": 3,
+   "railing": null,
+   "finish": {
+    "floor": "decoTile",
+    "wall": "paintInt",
+    "ceiling": "gypsumPaint"
+   }
+  },
+  {
+   "key": "multipurpose",
+   "floor": "1f",
+   "review": false,
+   "outdoor": false,
+   "L": 15.81,
+   "A": 14.34,
+   "WA": 35.65,
+   "openingArea": 7.68,
+   "openings": 3,
+   "railing": null,
+   "finish": {
+    "floor": "decoTile",
+    "wall": "paintInt",
+    "ceiling": "gypsumPaint"
+   }
+  },
+  {
+   "key": "stair",
+   "floor": "1f",
+   "review": true,
+   "outdoor": false,
+   "L": 17.62,
+   "A": 8.37,
+   "WA": 42.48,
+   "openingArea": 5.79,
+   "openings": 4,
+   "railing": null,
+   "finish": {
+    "floor": "decoTile",
+    "wall": "paintInt",
+    "ceiling": null
+   }
+  },
+  {
+   "key": "entrance",
+   "floor": "1f",
+   "review": false,
+   "outdoor": false,
+   "L": 10.32,
+   "A": 4.8,
+   "WA": 18.1,
+   "openingArea": 10.17,
+   "openings": 3,
+   "railing": null,
+   "finish": {
+    "floor": "decoTile",
+    "wall": "paintInt",
+    "ceiling": "gypsumPaint"
+   }
+  },
+  {
+   "key": "toilet",
+   "floor": "1f",
+   "review": false,
+   "outdoor": false,
+   "L": 8.3,
+   "A": 4.03,
+   "WA": 21.65,
+   "openingArea": 1.08,
+   "openings": 1,
+   "railing": null,
+   "finish": {
+    "floor": "porcelainFloor",
+    "wall": "ceramicWall",
+    "ceiling": "smcCeiling"
+   }
+  },
+  {
+   "key": "verandaWestSouth",
+   "floor": "2f",
+   "review": false,
+   "outdoor": true,
+   "L": 35.66,
+   "A": 23.63,
+   "WA": null,
+   "openingArea": null,
+   "openings": 0,
+   "railing": 17.96,
+   "finish": {
+    "floor": "epoxy",
+    "wall": null,
+    "ceiling": null
+   }
+  },
+  {
+   "key": "livingKitchen",
+   "floor": "2f",
+   "review": true,
+   "outdoor": false,
+   "L": 30.31,
+   "A": 23.13,
+   "WA": 70.62,
+   "openingArea": 12.43,
+   "openings": 5,
+   "railing": null,
+   "finish": {
+    "floor": "vinylSheet",
+    "wall": "wallpaper",
+    "ceiling": "gypsumPaper"
+   }
+  },
+  {
+   "key": "masterBedroom",
+   "floor": "2f",
+   "review": false,
+   "outdoor": false,
+   "L": 16.29,
+   "A": 12.75,
+   "WA": 38.53,
+   "openingArea": 6.12,
+   "openings": 2,
+   "railing": null,
+   "finish": {
+    "floor": "vinylSheet",
+    "wall": "wallpaper",
+    "ceiling": "gypsumPaper"
+   }
+  },
+  {
+   "key": "bedroom",
+   "floor": "2f",
+   "review": false,
+   "outdoor": false,
+   "L": 11.0,
+   "A": 7.46,
+   "WA": 27.43,
+   "openingArea": 2.7,
+   "openings": 1,
+   "railing": null,
+   "finish": {
+    "floor": "vinylSheet",
+    "wall": "wallpaper",
+    "ceiling": "gypsumPaper"
+   }
+  },
+  {
+   "key": "verandaEast",
+   "floor": "2f",
+   "review": false,
+   "outdoor": true,
+   "L": 12.56,
+   "A": 3.94,
+   "WA": null,
+   "openingArea": null,
+   "openings": 0,
+   "railing": 6.64,
+   "finish": {
+    "floor": "epoxy",
+    "wall": null,
+    "ceiling": null
+   }
+  },
+  {
+   "key": "toilet2",
+   "floor": "2f",
+   "review": false,
+   "outdoor": false,
+   "L": 7.73,
+   "A": 3.42,
+   "WA": 20.68,
+   "openingArea": 0.49,
+   "openings": 1,
+   "railing": null,
+   "finish": {
+    "floor": "porcelainFloor",
+    "wall": "ceramicWall",
+    "ceiling": "smcCeiling"
+   }
+  }
+ ],
+ "materials": [
+  {
+   "key": "decoTile",
+   "unit": "㎡",
+   "qty": 60.7,
+   "price": 32000,
+   "amount": 1942400
+  },
+  {
+   "key": "porcelainFloor",
+   "unit": "㎡",
+   "qty": 7.4,
+   "price": 62000,
+   "amount": 458800
+  },
+  {
+   "key": "vinylSheet",
+   "unit": "㎡",
+   "qty": 43.3,
+   "price": 28000,
+   "amount": 1212400
+  },
+  {
+   "key": "epoxy",
+   "unit": "㎡",
+   "qty": 27.6,
+   "price": 38000,
+   "amount": 1048800
+  },
+  {
+   "key": "paintInt",
+   "unit": "㎡",
+   "qty": 198.6,
+   "price": 9000,
+   "amount": 1787400
+  },
+  {
+   "key": "ceramicWall",
+   "unit": "㎡",
+   "qty": 42.3,
+   "price": 58000,
+   "amount": 2453400
+  },
+  {
+   "key": "wallpaper",
+   "unit": "㎡",
+   "qty": 136.6,
+   "price": 14000,
+   "amount": 1912400
+  },
+  {
+   "key": "gypsumPaint",
+   "unit": "㎡",
+   "qty": 52.3,
+   "price": 48000,
+   "amount": 2510400
+  },
+  {
+   "key": "gypsumPaper",
+   "unit": "㎡",
+   "qty": 43.3,
+   "price": 44000,
+   "amount": 1905200
+  },
+  {
+   "key": "smcCeiling",
+   "unit": "㎡",
+   "qty": 7.4,
+   "price": 45000,
+   "amount": 333000
+  },
+  {
+   "key": "fbRailing",
+   "unit": "m",
+   "qty": 24.6,
+   "price": 130000,
+   "amount": 3198000
+  }
+ ],
+ "total": 18762200
+}
