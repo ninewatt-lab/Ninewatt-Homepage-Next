@@ -43,11 +43,11 @@ const STEPS = [
 
 const EXPO = `${ABW}/expo`;
 
-/** 부스 영상 v3 (scripts/lab/expo_film.py). 챕터 시작 초는 그 타임라인의 장면 시작과 같다 */
+/** 부스 영상 v4 (scripts/lab/expo_film.py). 챕터 시작 초는 그 타임라인의 장면 시작과 같다 */
 const FILM = {
-  src: `${EXPO}/expo-film-v3.mp4`,
+  src: `${EXPO}/expo-film-v4.mp4`,
   poster: `${EXPO}/poster.webp`,
-  chapters: [0, 5.3, 14.1, 21.4, 28.7, 34.0, 42.3, 50.6, 56.9, 64.2],
+  chapters: [0, 5.3, 14.1, 21.4, 28.7, 34.0, 39.3, 47.6, 55.9, 61.7, 68.0, 75.3],
 };
 
 const CONNECT = [

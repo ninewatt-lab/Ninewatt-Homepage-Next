@@ -113,5 +113,28 @@
    }
   ],
   "total": 74343200
+ },
+ "pv": {
+  "proposal": true,
+  "modules": 4,
+  "moduleW": 430,
+  "kw": 1.72,
+  "roof": "south slope 14.5 m2, tilt 30.7, azimuth 180 (drawing-up = north)",
+  "annualKWh": 2586,
+  "monthlyKWh": [
+   199,
+   213,
+   256,
+   251,
+   252,
+   232,
+   190,
+   212,
+   200,
+   215,
+   179,
+   187
+  ],
+  "tool": "EnergyPlus 9.0 PVWatts v5, losses 14%"
  }
 }

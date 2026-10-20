@@ -4,7 +4,7 @@ case before: 리모델링 전 (노후 외피 가정값)
 case after : 도면 공사 내용만 반영 — 외벽 외단열 PF보드 100 mm, 창호 로이 복층유리
 지붕·바닥·침기·재실·설비 가정은 두 경우가 같다. 방위: 도면 위쪽 = 북 (진북 미확정).
 
-    python3 scripts/lab/energy_idf.py <env.json> before|after <out.idf> <weather.epw>
+    python3 scripts/lab/energy_idf.py <env.json> before|after <out.idf> <weather.epw> [태양광 W]
     energyplus -x -r -w <weather.epw> -d <out_dir> <out.idf>   # EnergyPlus 9.0
 """
 import json
@@ -14,6 +14,9 @@ env = json.load(open(sys.argv[1]))
 case = sys.argv[2]
 out = sys.argv[3]
 epw = sys.argv[4]
+# 선택: 태양광(PVWatts) 직류 용량 W. 도면에 없는 추가 제안이라 기본은 없음.
+# 모델의 남측 지붕면(14.5 ㎡, 경사 30.7°)에 430 W 모듈 4장(세로)이 들어간다 → 1720
+pv_w = float(sys.argv[5]) if len(sys.argv) > 5 else 0
 
 # 도면상 실내 문(외기에 면하지 않음)인데 광선이 계단실 창으로 빠져 외부로 잡힌 것
 INTERNAL = {"F1_StairSouth_0", "F1_LobbyInner_0", "F2_StairSouth_0", "F2_MasterSouthInternal_0"}
@@ -138,6 +141,13 @@ for fl, z0 in (("F1", 0.0), ("F2", H)):
     a(f"ThermostatSetpoint:DualSetpoint,{zn}_SP,{hs},{cs};")
     a(f"ZoneControl:Thermostat,{zn}_TC,{zn},HVACType,ThermostatSetpoint:DualSetpoint,{zn}_SP;")
     a(f"HVACTemplate:Zone:IdealLoadsAirSystem,{zn},;")
+
+if pv_w:
+    a(f"""Generator:PVWatts,PV,5,{pv_w:.0f},Standard,FixedRoofMounted,0.14,TiltAzimuth,30.7,180,,0.4;
+ElectricLoadCenter:Generators,PV Gens,PV,Generator:PVWatts,{pv_w:.0f},,;
+ElectricLoadCenter:Inverter:PVWatts,PV Inverter,1.1,0.96;
+ElectricLoadCenter:Distribution,PV Dist,PV Gens,Baseload,0,,,DirectCurrentWithInverter,PV Inverter;
+Output:Meter,ElectricityProduced:Facility,Monthly;""")
 
 a("""Output:Meter,DistrictHeating:Facility,Monthly;
 Output:Meter,DistrictCooling:Facility,Monthly;
