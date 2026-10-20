@@ -18,8 +18,20 @@
     "estimate": "Remodeling estimate (example unit prices)"
   },
   "film": {
-    "title": "The 47-second version",
-    "disclaimer": "Built from a real drawing. The client and design office are not shown."
+    "title": "The 78-second film",
+    "disclaimer": "Made from the real drawing, the 3D model and EnergyPlus results. The heat-loss scene is coloured by the simulation's U-values, not thermal imaging.",
+    "chapters": [
+      "From one drawing",
+      "Reading the drawing",
+      "Drawing to model",
+      "Wall section",
+      "Insulation & windows",
+      "Where heat escapes",
+      "A year simulated",
+      "Remodeling estimate",
+      "Finishes as drawn",
+      "Ninewatt products"
+    ]
   },
   "steps": {
     "title": "Five steps",
@@ -65,7 +77,14 @@
       "Roof, floor, infiltration (0.7 ACH), occupancy and lighting are the same in both cases. Ground-floor clinic conditioned weekdays 9–18, upstairs residence at all times",
       "Tool: US DOE EnergyPlus 9.0 with Korean typical-year weather data (TMYx 2004–2018)"
     ],
-    "note": "A simplified simulation, not an official energy rating. Detailed assessment continues in Ninewatt's Energy Studio and GreenPlanner."
+    "note": "A simplified simulation, not an official energy rating. Detailed assessment continues in Ninewatt's Energy Studio and GreenPlanner.",
+    "compare": {
+      "title": "Where heat escapes",
+      "before": "Before",
+      "after": "After",
+      "handle": "Before/after comparison position",
+      "caption": "The brighter the glow, the more heat escapes. Brightness is proportional to the U-values used in the simulation; this is not thermal imaging. Drag the slider to compare."
+    }
   },
   "estimate": {
     "title": "Green remodeling estimate (example)",
@@ -109,5 +128,32 @@
     "desc": "We are looking for partners in green remodeling, design and construction, and public building assessment.",
     "contact": "Contact us",
     "lab": "All Lab projects"
+  },
+  "remodel": {
+    "title": "The green remodeling written in the drawing",
+    "intro": "The two works noted on the construction drawings, applied to the same 3D model. The lower the U-value, the less heat escapes.",
+    "sectionAlt": "Wall section: existing concrete, phenolic foam insulation and stucco added layer by layer",
+    "layers": [
+      {
+        "name": "Existing concrete",
+        "spec": "200 mm"
+      },
+      {
+        "name": "Phenolic foam insulation",
+        "spec": "100 mm"
+      },
+      {
+        "name": "Stucco finish",
+        "spec": "10 mm"
+      }
+    ],
+    "wallTitle": "External wall insulation",
+    "wallU": "Wall U-value {before} → {after} W/㎡K",
+    "wrapAlt": "The facade being re-clad from the bottom up",
+    "winTitle": "Window replacement",
+    "winSpec": "PVC double sash · 24 mm low-e double glazing",
+    "winU": "Window U-value {before} → {after} W/㎡K",
+    "area": "{area} ㎡",
+    "windows": "{count} windows · {area} ㎡"
   }
 }

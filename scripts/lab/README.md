@@ -132,3 +132,35 @@ done
 - 리모델링 전 외벽 U 1.0 · 창 4.0 은 노후 건물 가정값, 후 외벽(PF보드 100 mm 추가) · 창 1.8 은 도면 사양 기준.
   지붕 · 바닥 · 침기 · 재실은 전후 동일(보수적). 간이 결과이며 에너지효율등급이 아님을 페이지에 밝힌다.
 - 예시 견적 단가: 외단열 110,000원/㎡, 창호 450,000원/㎡ + 내부 마감은 `quantity_takeoff.py` 합계.
+
+## 부스 상영 영상 (무음 · 자막 · 81.5초 반복)
+
+기존 47초 영상(v4) 뒤에 그린리모델링 · 열화상 3D 장면과 월별 부하 애니메이션, 견적 · 제품 · QR 카드를 붙인다.
+결과는 S3 에 올리지 않고 부스 모니터에서 파일로 튼다.
+
+```bash
+V=$W/video   # base.mp4 = S3 의 ai-building-workspace-case-v4.mp4
+python3 scripts/lab/expo_cards.py $V/cards <QR.svg>                       # 카드 · 자막 · 장면 오버레이 (Chrome)
+B() { "$BLENDER" -b --factory-startup --python scripts/lab/blender_energy.py -- "$GLB" "$@"; }
+B $V/insulate insulate; B $V/thermal thermal                               # 각 150프레임
+python3 scripts/lab/expo_chart.py $V/chart                                 # 210프레임 (프레임마다 Chrome)
+python3 scripts/lab/expo_video.py $V $V/base.mp4 $V/booth.mp4
+```
+
+열화상 색은 energy_idf.py 의 열관류율(전 외벽 1.0 · 창 4.0 → 후 0.16 · 1.8)을 0–4 W/㎡K 눈금에 놓은 것이다.
+
+## 부스 영상 v3 (고급판, 78초 반복)
+
+어두운 무대 + 백색 클레이 모델 + 한 가지 글꼴(Pretendard)로 통일한 판. 3D 는 Blender, 글자·도면·차트는 HTML 타임라인을
+프레임마다 찍어(puppeteer-core) 합친다. 열화상 장면의 밝기는 열관류율 U 에 비례한다(가짜 열화상 아님을 화면에 적는다).
+
+```bash
+F=$W/film
+python3 scripts/lab/plan_vectors.py $DXF $F/plan.json                      # 1층 평면 선 (글자 제외)
+for s in section rise wrap thermal glow; do                                # 약 1,200프레임, 1.5시간
+  "$BLENDER" -b --factory-startup --python scripts/lab/blender_film.py -- "$GLB" $F/r/$s $s
+done
+python3 scripts/lab/expo_film.py $F <QR.svg> <PretendardVariable.woff2>   # film.html
+NODE_PATH=<puppeteer-core node_modules> node scripts/lab/expo_capture.cjs $F/film.html $F/cap
+ffmpeg -framerate 30 -i $F/cap/f_%05d.jpg -vf "noise=alls=3:allf=t" -c:v libx264 -preset slow -crf 17 -pix_fmt yuv420p $F/film.mp4
+```

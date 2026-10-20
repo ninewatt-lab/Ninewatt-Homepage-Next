@@ -18,6 +18,8 @@
 - 2026 대한민국 ESG 친환경 대전(10/21~23) 부스 QR용. ko · en · ja (fr 은 영어 폴백, 색인 제외).
 - Lab v1 결과 + 그린리모델링 예시 견적 + EnergyPlus 간이 시뮬레이션(전후 냉난방 −40%).
   데이터 `src/data/lab/ai-building-workspace-energy.json`, 문구 `src/messages/{ko,en,ja}/expo.json`, 만드는 법은 scripts/lab/README.md 끝.
+- 부스 영상 v3(78초)와 클레이 렌더(외벽 단면 · 외단열 · 열 손실 전후)는 `public/lab/ai-building-workspace/expo/` 에 있다.
+  이 노트북에 aws CLI 가 없어 영상(4MB)을 S3 대신 public 에 두었다. S3 로 옮기면 page.tsx 의 FILM.src 만 바꾼다.
 - 전시가 끝나면 내리거나 Lab 상세에 에너지 · 견적 섹션으로 옮길지 정한다.
 
 ## 파일 지도
@@ -62,10 +64,9 @@
 
 배포 스크립트가 예전 이미지를 지우지 않아 2026-10-02 배포 때 디스크(20GB)가 가득 차서 약 5분간 502 가 났다.
 서버에서 오래된 `ninewatt-homepage` 이미지를 지워 복구했다(ECR 에는 모두 남아 있다).
-`deploy.yml` 의 `docker run` 뒤에 `docker image prune -af --filter "until=72h" || true` 정리 단계를 넣었다(dev, 2026-10-19). **아직 main 에 배포하지 않았다** — 다음 Lab 변경과 함께 배포하고, 첫 배포 로그에서 prune 이 돌았는지 확인한다.
+`deploy.yml` 의 `docker run` 뒤에 `docker image prune -af --filter "until=72h" || true` 정리 단계를 넣었다2026-10-20 배포에서 실제로 예전 이미지가 지워지는 것을 확인했다.
 서버 접속은 EC2 Instance Connect(인스턴스 `i-00b6f8f4edafdb3b3`, AL2023, `ec2-user`)로 된다.
 
 ## 남은 일 / 아이디어
 
-- 배포 워크플로 이미지 정리: dev 에 반영됨, 다음 배포 때 함께 나간다
 - 프로젝트가 늘면 `labProjects.ts` 에 추가하고 `lab.json` 의 `projects.<slug>` 에 문구를 넣는다. 목록 · 상세 · sitemap 은 자동으로 따라온다.
