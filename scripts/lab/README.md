@@ -113,3 +113,22 @@ $PY scripts/lab/viewer_data.py $W public/lab/ai-building-workspace/viewer
 - 물량 산출의 천장고는 모델 기준 2.74 m 하나로 쓴다. 창·문은 중심이 실 경계에서 0.35 m 안이면 그 실 벽의 것으로 본다.
   베란다 난간 길이는 경계 중 실내 실에서 0.6 m 넘게 떨어진 부분으로 추정한다. 2층 계단실은 닫힌 경계가 없어 빠진다.
 - 3D 뷰어 확인은 헤드리스 브라우저에서 WebGL 이 없어 안 된다. 헤드 모드 브라우저로 본다.
+
+## 에너지 간이 시뮬레이션 · 그린리모델링 예시 견적 (/expo)
+
+결과는 `src/data/lab/ai-building-workspace-energy.json` 하나다(외피 면적, 전후 월별 냉난방 부하, 예시 견적).
+EnergyPlus 9.0(`/Applications/EnergyPlus-9-0-1`)과 기상 파일이 필요하다. 기상은 climate.onebuilding.org 의
+`KOR_KW_Sokcho.470900_TMYx.2004-2018` 을 썼다(공개 문구에는 지명 대신 "국내 표준 기상 데이터"로 적는다).
+
+```bash
+"$BLENDER" -b --factory-startup --python scripts/lab/blender_envelope.py -- "$GLB" $W/env.json
+for c in before after; do
+  python3 scripts/lab/energy_idf.py $W/env.json $c $W/$c.idf $EPW
+  /Applications/EnergyPlus-9-0-1/energyplus -x -r -w $EPW -d $W/out_$c $W/$c.idf
+done
+# out_*/eplusmtr.csv 의 DistrictHeating/Cooling(J) 월별 합 → kWh 로 바꿔 energy.json 의 energy.before/after 에 넣는다
+```
+
+- 리모델링 전 외벽 U 1.0 · 창 4.0 은 노후 건물 가정값, 후 외벽(PF보드 100 mm 추가) · 창 1.8 은 도면 사양 기준.
+  지붕 · 바닥 · 침기 · 재실은 전후 동일(보수적). 간이 결과이며 에너지효율등급이 아님을 페이지에 밝힌다.
+- 예시 견적 단가: 외단열 110,000원/㎡, 창호 450,000원/㎡ + 내부 마감은 `quantity_takeoff.py` 합계.

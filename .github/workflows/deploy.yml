@@ -81,3 +81,7 @@ jobs:
               -e "MEDIA_SHEET_CSV_URL=$MEDIA_SHEET_CSV_URL" \
               -e "REVALIDATE_SECRET=$REVALIDATE_SECRET" \
               ${IMAGE_TAG}
+
+            # 예전 이미지 정리. 지우지 않으면 디스크(20GB)가 차서 502 가 난다(2026-10-02).
+            # 실행 중인 컨테이너의 이미지는 지워지지 않고, 지운 이미지는 ECR 에 남아 있다.
+            docker image prune -af --filter "until=72h" || true

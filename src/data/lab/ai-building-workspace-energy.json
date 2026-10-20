@@ -1,0 +1,117 @@
+{
+ "envelope": {
+  "wallArea": 272.1,
+  "windowArea": 57.0,
+  "windows": 23,
+  "floorArea": 119.81
+ },
+ "assumptions": {
+  "before": {
+   "wallU": 1.0,
+   "windowU": 4.0,
+   "shgc": 0.7
+  },
+  "after": {
+   "wallU": 0.16,
+   "windowU": 1.8,
+   "shgc": 0.45
+  },
+  "roofU": 0.5,
+  "floorU": 0.6,
+  "ach": 0.7,
+  "weather": "TMYx 2004-2018",
+  "northAxis": "drawing-up"
+ },
+ "energy": {
+  "before": {
+   "heat": 8640,
+   "cool": 7470,
+   "heat_m": [
+    2523,
+    1957,
+    926,
+    307,
+    4,
+    0,
+    0,
+    0,
+    0,
+    25,
+    635,
+    2262
+   ],
+   "cool_m": [
+    0,
+    0,
+    0,
+    53,
+    318,
+    1215,
+    1983,
+    2479,
+    1099,
+    307,
+    14,
+    0
+   ]
+  },
+  "after": {
+   "heat": 3161,
+   "cool": 6510,
+   "heat_m": [
+    1037,
+    846,
+    300,
+    68,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    60,
+    847
+   ],
+   "cool_m": [
+    0,
+    0,
+    0,
+    26,
+    309,
+    986,
+    1567,
+    2057,
+    1121,
+    415,
+    29,
+    0
+   ]
+  }
+ },
+ "estimate": {
+  "items": [
+   {
+    "key": "insulation",
+    "unit": "㎡",
+    "qty": 272.1,
+    "price": 110000,
+    "amount": 29931000
+   },
+   {
+    "key": "windows",
+    "unit": "㎡",
+    "qty": 57.0,
+    "price": 450000,
+    "amount": 25650000
+   },
+   {
+    "key": "interior",
+    "unit": "식",
+    "qty": 1,
+    "price": 18762200,
+    "amount": 18762200
+   }
+  ],
+  "total": 74343200
+ }
+}

@@ -40,6 +40,14 @@ export default getRequestConfig(async ({ requestLocale }) => {
     ess = (await import(`../messages/ko/ess.json`)).default;
   }
 
+  // 전시 랜딩(/expo)은 ko·en·ja 만 번역. fr 은 영어로 보여 준다
+  let expo = {};
+  try {
+    expo = (await import(`../messages/${locale}/expo.json`)).default;
+  } catch {
+    expo = (await import(`../messages/en/expo.json`)).default;
+  }
+
   return {
     locale,
     messages: {
@@ -54,6 +62,7 @@ export default getRequestConfig(async ({ requestLocale }) => {
       solar,
       energy,
       ess,
+      expo,
     },
   };
 });

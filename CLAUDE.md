@@ -22,6 +22,7 @@ Ninewatt(나인와트) 회사 공식 홈페이지. Next.js 16 (App Router) + Tai
 - **Language**: 한국어 홈페이지 (`<html lang="ko">`)
 - **Styling**: TailwindCSS 4 (PostCSS 플러그인 방식, `@import "tailwindcss"`)
 - **Fonts**: Geist Sans / Geist Mono (next/font/google)
+- **Lab (`/lab`)**: 작업 전에 `docs/lab-handoff.md`(결정 사항 · 익명화 규칙 · 배포 주의점)를 먼저 읽는다
 
 ## Skill routing
 
