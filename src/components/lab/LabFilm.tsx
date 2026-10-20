@@ -1,8 +1,11 @@
 "use client";
 
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
-/** Lab 상세의 프로젝트 영상 + 챕터 내비게이션. */
+/**
+ * Lab 상세 · /expo 의 프로젝트 영상 + 챕터 내비게이션.
+ * 소리가 없는 영상이라 음소거로 자동 재생하고 반복한다. 동작 줄이기 설정을 켠 방문자에게는 자동 재생하지 않는다.
+ */
 
 export interface LabFilmChapter {
   start: number;
@@ -27,6 +30,17 @@ export function LabFilm({
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [active, setActive] = useState(-1);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    // 브라우저 자동재생 정책: 음소거여야 재생된다 (React 의 muted 속성은 SSR 에서 빠질 수 있어 직접 건다)
+    video.muted = true;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    video.play().catch(() => {
+      // 저전력 모드 등으로 막히면 포스터에서 멈춰 두고 사용자가 재생하게 둔다
+    });
+  }, []);
 
   const seek = useCallback((time: number) => {
     const video = videoRef.current;
@@ -53,8 +67,10 @@ export function LabFilm({
           ref={videoRef}
           className="aspect-video h-auto w-full"
           controls
+          muted
+          loop
           playsInline
-          preload="metadata"
+          preload="auto"
           poster={poster}
           aria-label={title}
           onTimeUpdate={onTimeUpdate}
