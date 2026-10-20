@@ -130,8 +130,74 @@ for i, (k, e) in enumerate(zip(ko, en)):
         f'<span class="en" style="font-size:30px">{e}</span></div>'
     )
 
+PANEL = ('position:absolute;left:64px;top:56px;background:rgba(255,255,255,.95);border-radius:20px;'
+         'padding:30px 38px;box-shadow:0 6px 24px rgba(0,0,0,.12);max-width:760px')
+env_ = energy["envelope"]
+
+
+def ins_panel(windows):
+    item = lambda n, t, e, q: (
+        f'<div style="display:flex;gap:18px;align-items:flex-start;margin-top:22px">'
+        f'<span style="flex:none;width:44px;height:44px;border-radius:12px;background:{"#f4c95d" if n == 1 else TEAL};'
+        f'color:{INK if n == 1 else "#fff"};font-weight:800;font-size:26px;display:flex;align-items:center;justify-content:center">{n}</span>'
+        f'<div><div style="font-size:34px;font-weight:800">{t} <span class="num" style="color:{TEAL}">{q}</span></div>'
+        f'<div class="en" style="font-size:24px;margin-top:4px">{e}</div></div></div>'
+    )
+    return (
+        f'<div style="{PANEL}"><div style="font-size:26px;font-weight:700;color:{TEAL}">그린리모델링 · Green remodeling</div>'
+        f'<div style="font-size:44px;font-weight:800;margin-top:8px">도면에 적힌 리모델링 공사</div>'
+        + item(1, "외벽 외단열", "External insulation · PF board 100 mm + stucco", f'{env_["wallArea"]:.1f} ㎡')
+        + (item(2, f'창호 교체 {env_["windows"]}개', f'{env_["windows"]} new windows · low-e double glazing 24 mm', f'{env_["windowArea"]:.1f} ㎡') if windows else "")
+        + "</div>"
+    )
+
+
+def legend(state):
+    """열화상 색 눈금(0–4 W/㎡K). 색 위치는 blender_energy.py 의 RAMP 와 같다."""
+    stops = [(0.0, "#313695"), (0.5, "#4575b4"), (1.0, "#fdae61"), (2.0, "#f46d43"), (4.0, "#a50026")]
+    grad = ",".join(f"{c} {u / 4 * 100:.1f}%" for u, c in stops)
+    H = 560
+    marks = ([("외벽", 1.0), ("창", 4.0)] if state == "before" else [("외벽", 0.16), ("창", 1.8)])
+    tick = lambda u, lab, side: (
+        f'<div style="position:absolute;{side}:0;bottom:{u / 4 * H - 14}px;font-size:24px;white-space:nowrap" class="num">{lab}</div>'
+    )
+    ticks = "".join(tick(u, f"{u:g}", "left") for u in (0, 1, 2, 3, 4))
+    m = "".join(
+        f'<div style="position:absolute;left:96px;bottom:{u / 4 * H - 18}px;display:flex;align-items:center;gap:10px;white-space:nowrap">'
+        f'<span style="width:0;height:0;border-top:12px solid transparent;border-bottom:12px solid transparent;border-right:16px solid {INK}"></span>'
+        f'<span style="font-size:28px;font-weight:800">{n} <span class="num">{u:g}</span></span></div>'
+        for n, u in marks
+    )
+    return (
+        f'<div style="position:absolute;right:90px;top:200px;width:300px;height:{H + 190}px;background:rgba(255,255,255,.95);'
+        f'border-radius:20px;padding:28px;box-shadow:0 6px 24px rgba(0,0,0,.12)">'
+        f'<div style="font-size:24px;font-weight:700">열관류율 U <span class="en">W/㎡K</span></div>'
+        f'<div style="position:relative;margin-top:24px;height:{H}px">'
+        f'<div style="position:absolute;left:44px;bottom:0;width:36px;height:{H}px;border-radius:8px;background:linear-gradient(to top,{grad})"></div>'
+        f'<div style="position:absolute;left:0;top:0;width:40px;height:{H}px">{ticks}</div>{m}</div>'
+        f'<div class="en" style="font-size:20px;margin-top:20px">높을수록 열이 많이 샘 · higher = more heat loss</div></div>'
+    )
+
+
+def th_panel(state):
+    lab = ("리모델링 전", "Before", "노후 외피 가정") if state == "before" else ("리모델링 후", "After", "도면 사양")
+    return (
+        f'<div style="{PANEL}"><div style="font-size:26px;font-weight:700;color:{TEAL}">에너지 시뮬레이션 · Thermal view</div>'
+        f'<div style="font-size:44px;font-weight:800;margin-top:8px">열이 새는 곳을 색으로</div>'
+        f'<div style="margin-top:22px;display:inline-flex;gap:14px;align-items:baseline;border-radius:12px;padding:10px 20px;'
+        f'background:{"#a50026" if state == "before" else "#313695"};color:#fff">'
+        f'<span style="font-size:36px;font-weight:800">{lab[0]}</span><span style="font-size:26px">{lab[1]} · {lab[2]}</span></div></div>'
+        + legend(state)
+    )
+
+
+cards["ov-ins-a"] = ins_panel(False)
+cards["ov-ins-b"] = ins_panel(True)
+cards["ov-th-before"] = th_panel("before")
+cards["ov-th-after"] = th_panel("after")
+
 for name, html in cards.items():
-    cap = name.startswith("cap-")
+    cap = name.startswith(("cap-", "ov-"))
     page = out / f"{name}.html"
     page.write_text(BASE.replace("background:#fff", "background:transparent" if cap else "background:#fff") + html)
     args = [CHROME, "--headless=new", "--disable-gpu", "--hide-scrollbars", "--window-size=1920,1080",

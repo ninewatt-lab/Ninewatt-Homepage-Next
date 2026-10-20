@@ -133,11 +133,18 @@ done
   지붕 · 바닥 · 침기 · 재실은 전후 동일(보수적). 간이 결과이며 에너지효율등급이 아님을 페이지에 밝힌다.
 - 예시 견적 단가: 외단열 110,000원/㎡, 창호 450,000원/㎡ + 내부 마감은 `quantity_takeoff.py` 합계.
 
-## 부스 상영 영상 (무음 · 자막 · 72.5초 반복)
+## 부스 상영 영상 (무음 · 자막 · 81.5초 반복)
 
-기존 47초 영상(v4) 앞뒤에 카드를 붙이고 챕터마다 한·영 자막을 얹는다. 결과는 S3 에 올리지 않고 부스 모니터에서 파일로 튼다.
+기존 47초 영상(v4) 뒤에 그린리모델링 · 열화상 3D 장면과 월별 부하 애니메이션, 견적 · 제품 · QR 카드를 붙인다.
+결과는 S3 에 올리지 않고 부스 모니터에서 파일로 튼다.
 
 ```bash
-python3 scripts/lab/expo_cards.py $W/cards <QR.svg>   # 카드 5장 + 자막 10장 (Chrome)
-# ffmpeg: intro 4s → v4 47s(자막 overlay) → 견적 6s → 에너지 7s → 제품 5s → QR 6s, 0.5s 페이드
+V=$W/video   # base.mp4 = S3 의 ai-building-workspace-case-v4.mp4
+python3 scripts/lab/expo_cards.py $V/cards <QR.svg>                       # 카드 · 자막 · 장면 오버레이 (Chrome)
+B() { "$BLENDER" -b --factory-startup --python scripts/lab/blender_energy.py -- "$GLB" "$@"; }
+B $V/insulate insulate; B $V/thermal thermal                               # 각 150프레임
+python3 scripts/lab/expo_chart.py $V/chart                                 # 210프레임 (프레임마다 Chrome)
+python3 scripts/lab/expo_video.py $V $V/base.mp4 $V/booth.mp4
 ```
+
+열화상 색은 energy_idf.py 의 열관류율(전 외벽 1.0 · 창 4.0 → 후 0.16 · 1.8)을 0–4 W/㎡K 눈금에 놓은 것이다.
