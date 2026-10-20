@@ -22,7 +22,7 @@
     "film": "Du plan à la maquette",
     "why": "Pourquoi ce projet",
     "chapterNav": "Chapitres du film",
-    "disclaimer": "Images tirées directement des vrais plans (informations du maître d'ouvrage et de l'architecte retirées) et de la maquette 3D. Sans son.",
+    "disclaimer": "Réalisé à partir des vrais plans (informations du maître d'ouvrage et de l'architecte retirées), de la maquette 3D et des résultats EnergyPlus. La scène des pertes de chaleur est colorée selon les coefficients U de la simulation, et le solaire est une proposition absente du plan. Sans son.",
     "graduated": "Voir la page produit",
     "viewer": {
       "open": "Explorer en 3D",
@@ -78,16 +78,18 @@
         "AI Building Workspace transforme un simple plan en données de bâtiment vérifiables. L'IA lit le plan, une personne valide le résultat, et chaque chiffre conserve sa justification."
       ],
       "chapters": [
-        "Plan d'origine",
-        "Limites des pièces",
-        "Élévation d'origine",
-        "Superposition plan / maquette",
-        "Maquette 3D",
-        "Intérieur du rez-de-chaussée",
-        "Intérieur de l'étage",
-        "Extérieur avec finitions",
-        "Rez-de-chaussée avec finitions",
-        "Dans la salle d'attente"
+        "D'un seul plan",
+        "Lire le plan",
+        "Du plan à la maquette",
+        "Coupe du mur",
+        "Fenêtres",
+        "Tout le bâtiment",
+        "Où la chaleur s'échappe",
+        "Une année simulée",
+        "Solaire (proposition)",
+        "Estimation de rénovation",
+        "Finitions du plan",
+        "Produits Ninewatt"
       ],
       "case": {
         "title": "Testé sur de vrais plans",

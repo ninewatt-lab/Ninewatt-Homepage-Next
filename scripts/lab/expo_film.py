@@ -1,6 +1,8 @@
 """부스 영상(고급판) 타임라인 HTML 을 만든다. expo_capture.cjs 가 이 페이지를 프레임마다 찍는다.
 
-    python3 scripts/lab/expo_film.py <film_dir> <qr.svg> <font.woff2>
+    python3 scripts/lab/expo_film.py <film_dir> <qr.svg> <font.woff2> [lab]
+
+lab 을 붙이면 Lab 상세 페이지용 편집본(film-lab.html): 전시회 이름을 빼고, QR 대신 로고 · Lab 주소로 끝난다.
 
 film_dir 에 있어야 하는 것
   plan.json          plan_vectors.py 출력 (1층 평면 선)
@@ -17,6 +19,7 @@ from pathlib import Path
 film = Path(sys.argv[1]).resolve()
 qr = Path(sys.argv[2]).read_text()
 font = Path(sys.argv[3]).resolve()
+variant = sys.argv[4] if len(sys.argv) > 4 else "expo"
 root = Path(__file__).resolve().parents[2]
 
 energy = json.loads((root / "src/data/lab/ai-building-workspace-energy.json").read_text())
@@ -33,7 +36,7 @@ rooms = [{"name": names[r["key"]].split(" · ")[0], "area": r["area"], "poly": r
 stats = {"lines": "14,682", "dims": "396", "layers": "38", "rooms": "12"}  # labProjects.ts caseStudy.stats
 
 data = {
-    "plan": plan, "rooms": rooms, "stats": stats, "anchors": anchors, "energy": energy,
+    "variant": variant, "plan": plan, "rooms": rooms, "stats": stats, "anchors": anchors, "energy": energy,
     "logo": logo_paths, "qr": qr,
     "photos": {k: (root / f"public/lab/ai-building-workspace/{k}.webp").as_uri()
                for k in ("photo-exterior-r2", "photo-1f-r2")},
@@ -106,7 +109,7 @@ scene(6, L => ({
   l1: at(el("div", "t h1", "도면 한 장으로,", L), 154, 470),
   l2: at(el("div", "t h1", "그린리모델링까지.", L), 154, 578),
   en: at(el("div", "t sub", "From a single drawing to green remodeling.", L), 160, 718),
-  expo: at(el("div", "t en", "2026 대한민국 ESG 친환경 대전", L), 160, 960),
+  expo: at(el("div", "t en", D.variant === "lab" ? "Ninewatt Lab · 실험 중인 프로젝트" : "2026 대한민국 ESG 친환경 대전", L), 160, 960),
 }), (c, t, dur) => {
   c.rule.style.width = 72 * eo((t - .4) / .9) * (1 - eo((t - dur + .8) / .45)) + "px";
   reveal(c.eye, t, .8, dur - .8); reveal(c.l1, t, 1.2, dur - .8, 34); reveal(c.l2, t, 1.6, dur - .8, 34);
@@ -371,8 +374,20 @@ scene(6.5, L => {
   return {h, s, items};
 }, (c, t, dur) => { reveal(c.h, t, .3, dur - .8); reveal(c.s, t, .5, dur - .8); c.items.forEach((e, i) => reveal(e, t, 1.1 + i * .3, dur - .8)); });
 
-// 11. QR ───────────────────────────────────────────────────────────────
-scene(8, L => {
+// 11. 끝 화면 — 전시판은 QR, Lab 판은 로고 · 주소 ───────────────────────────────
+if (D.variant === "lab") scene(7, L => {
+  const lg = at(el("div", "t", logo("#49b6ca", "#f2efea", 300), L), 120, 330);
+  const h = at(el("div", "t h2", "AI Building Workspace", L), 120, 500);
+  const s = at(el("div", "t sub", "도면을 이해하고, 건물을 데이터로. · Understanding drawings, turning buildings into data.", L), 122, 580);
+  const u = at(el("div", "t", `<span style="font-size:32px;font-weight:600;color:#49b6ca">ninewatt.com/lab</span>`, L), 120, 690);
+  const st = at(el("div", "t en", "실험 중 · EXPERIMENTING", L), 122, 748);
+  const black = el("div", "", "", L); Object.assign(black.style, {position: "absolute", inset: 0, background: "#0d0f10", opacity: 0});
+  return {lg, h, s, u, st, black};
+}, (c, t, dur) => {
+  reveal(c.lg, t, .3); reveal(c.h, t, .6); reveal(c.s, t, .8); reveal(c.u, t, 1.1); reveal(c.st, t, 1.3);
+  c.black.style.opacity = eio((t - dur + 1.0) / 1.0);
+});
+else scene(8, L => {
   const q = at(el("div", "t", `<div style="width:360px;height:360px;background:#f2efea;border-radius:28px;padding:30px">${D.qr.replace("<svg", '<svg width="300" height="300"')}</div>`, L), 1440, 360);
   const h = at(el("div", "t h2", "자세한 결과는 QR로", L), 120, 380);
   const s = at(el("div", "t en", "Scan for the full case study · 詳しくはQRで", L), 122, 458);
@@ -408,5 +423,6 @@ window.renderFrame = async (f) => {
 </script>"""
 
 page = html.replace("__FONT__", font.as_uri()).replace("__DATA__", json.dumps(data, ensure_ascii=False))
-(film / "film.html").write_text(page)
-print("film.html", len(page) // 1024, "KB")
+name = "film-lab.html" if variant == "lab" else "film.html"
+(film / name).write_text(page)
+print(name, len(page) // 1024, "KB")

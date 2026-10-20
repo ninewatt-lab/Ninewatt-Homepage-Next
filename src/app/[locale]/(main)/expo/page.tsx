@@ -7,7 +7,7 @@ import { formatClock, getLabProject } from "@/data/labProjects";
 import energyData from "@/data/lab/ai-building-workspace-energy.json";
 import { LabFilm } from "@/components/lab/LabFilm";
 import LabModelViewer, { type ViewerLabels } from "@/components/lab/LabModelViewer";
-import ExpoCompare from "@/components/lab/ExpoCompare";
+import Retrofit from "@/components/lab/Retrofit";
 
 /**
  * 2026 대한민국 ESG 친환경 대전 부스 QR 랜딩.
@@ -56,8 +56,6 @@ const CONNECT = [
   { key: "grai", href: "https://grai.ibed.cloud" },
 ] as const;
 
-const num = (v: number) => v.toLocaleString("ko-KR");
-
 export default async function ExpoPage({ params }: { params: Params }) {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "expo" });
@@ -65,26 +63,9 @@ export default async function ExpoPage({ params }: { params: Params }) {
   const project = getLabProject(SLUG)!;
   const chapterLabels = t.raw("film.chapters") as string[];
   const chapters = FILM.chapters.map((start, i) => ({ start, label: chapterLabels[i], clock: formatClock(start) }));
-  const U = energyData.assumptions;
-  const layers = t.raw("remodel.layers") as { name: string; spec: string }[];
-
   const { before, after } = energyData.energy;
-  const area = energyData.envelope.floorArea;
-  const totalBefore = before.heat + before.cool;
-  const totalAfter = after.heat + after.cool;
-  const saving = Math.round((1 - totalAfter / totalBefore) * 100);
-  const max = Math.max(before.heat, before.cool);
-  const bars = [
-    { key: "heating", before: before.heat, after: after.heat },
-    { key: "cooling", before: before.cool, after: after.cool },
-  ];
+  const saving = Math.round((1 - (after.heat + after.cool) / (before.heat + before.cool)) * 100);
   const estimate = energyData.estimate;
-  const assumptions = (t.raw("energy.assumptions") as string[]).map((line) =>
-    line
-      .replace("{wall}", energyData.envelope.wallArea.toFixed(1))
-      .replace("{windows}", String(energyData.envelope.windows))
-      .replace("{window}", energyData.envelope.windowArea.toFixed(1)),
-  );
 
   const highlights = [
     { key: "drawing", value: "14,682" },
@@ -214,187 +195,8 @@ export default async function ExpoPage({ params }: { params: Params }) {
         </div>
       </section>
 
-      {/* Remodel: 도면에 적힌 공사 (외벽 단면 · 건물 전체 적용) */}
-      <section className="border-t border-border px-6 py-20">
-        <div className="mx-auto max-w-5xl">
-          <h2 className="text-2xl font-bold md:text-3xl">{t("remodel.title")}</h2>
-          <p className="mt-3 max-w-3xl text-base leading-relaxed text-muted">{t("remodel.intro")}</p>
-          <div className="mt-10 grid gap-8 md:grid-cols-2">
-            <figure className="flex flex-col overflow-hidden rounded-xl border border-border">
-              <div className="bg-[#0d0f10]">
-                <Image src={`${EXPO}/section.webp`} alt={t("remodel.sectionAlt")} width={1800} height={1013} sizes="(min-width: 768px) 32rem, 100vw" className="h-auto w-full" />
-              </div>
-              <figcaption className="flex-1 p-5">
-                <div className="flex items-baseline justify-between gap-3">
-                  <h3 className="text-lg font-bold">{t("remodel.wallTitle")}</h3>
-                  <span className="text-sm tabular-nums text-muted">
-                    {t("remodel.area", { area: energyData.envelope.wallArea.toFixed(1) })}
-                  </span>
-                </div>
-                <ol className="mt-4 space-y-2 text-sm">
-                  {layers.map((l, i) => (
-                    <li key={l.name} className="flex items-baseline gap-3">
-                      <span className="w-5 text-xs font-semibold text-primary">{i + 1}</span>
-                      <span className="flex-1">{l.name}</span>
-                      <span className="tabular-nums text-muted">{l.spec}</span>
-                    </li>
-                  ))}
-                </ol>
-                <p className="mt-4 text-sm font-semibold tabular-nums text-primary">
-                  {t("remodel.wallU", { before: U.before.wallU.toFixed(2), after: U.after.wallU.toFixed(2) })}
-                </p>
-              </figcaption>
-            </figure>
-            <figure className="flex flex-col overflow-hidden rounded-xl border border-border">
-              <div className="bg-[#0d0f10]">
-                <Image src={`${EXPO}/wrap.webp`} alt={t("remodel.wrapAlt")} width={1800} height={1013} sizes="(min-width: 768px) 32rem, 100vw" className="h-auto w-full" />
-              </div>
-              <figcaption className="flex-1 p-5">
-                <div className="flex items-baseline justify-between gap-3">
-                  <h3 className="text-lg font-bold">{t("remodel.winTitle")}</h3>
-                  <span className="text-sm tabular-nums text-muted">
-                    {t("remodel.windows", {
-                      count: energyData.envelope.windows,
-                      area: energyData.envelope.windowArea.toFixed(1),
-                    })}
-                  </span>
-                </div>
-                <p className="mt-4 text-sm text-muted">{t("remodel.winSpec")}</p>
-                <p className="mt-4 text-sm font-semibold tabular-nums text-primary">
-                  {t("remodel.winU", { before: U.before.windowU.toFixed(1), after: U.after.windowU.toFixed(1) })}
-                </p>
-              </figcaption>
-            </figure>
-          </div>
-        </div>
-      </section>
-
-      {/* Energy */}
-      <section id="energy" className="scroll-mt-20 border-t border-border px-6 py-20">
-        <div className="mx-auto max-w-5xl">
-          <h2 className="text-2xl font-bold md:text-3xl">{t("energy.title")}</h2>
-          <p className="mt-3 max-w-3xl text-base leading-relaxed text-muted">{t("energy.intro")}</p>
-
-          <figure className="mt-10">
-            <ExpoCompare
-              before={{ src: `${EXPO}/thermal-before.webp`, width: 1800, height: 1013 }}
-              after={{ src: `${EXPO}/thermal-after.webp`, width: 1800, height: 1013 }}
-              labels={{
-                before: t("energy.compare.before"),
-                after: t("energy.compare.after"),
-                handle: t("energy.compare.handle"),
-              }}
-            />
-            <figcaption className="mt-3 text-sm leading-relaxed text-muted">
-              <span className="font-semibold text-foreground">{t("energy.compare.title")}</span>
-              <span className="ml-2">{t("energy.compare.caption")}</span>
-            </figcaption>
-          </figure>
-
-          <div className="mt-10 grid gap-10 md:grid-cols-[16rem_1fr] md:items-center">
-            <div>
-              <p className="text-sm text-muted">{t("energy.saving")}</p>
-              <p className="mt-1 text-6xl font-bold tabular-nums text-primary">−{saving}%</p>
-              <p className="mt-3 text-sm leading-relaxed text-muted">
-                {t("energy.perArea", {
-                  area: area.toFixed(1),
-                  before: (totalBefore / area).toFixed(1),
-                  after: (totalAfter / area).toFixed(1),
-                })}
-              </p>
-            </div>
-
-            <figure aria-label={t("energy.chartLabel")}>
-              <div className="flex flex-wrap gap-5 text-xs text-muted">
-                <span className="inline-flex items-center gap-2">
-                  <span className="h-2.5 w-2.5 rounded-sm bg-muted/50" aria-hidden="true" />
-                  {t("energy.before")}
-                </span>
-                <span className="inline-flex items-center gap-2">
-                  <span className="h-2.5 w-2.5 rounded-sm bg-primary" aria-hidden="true" />
-                  {t("energy.after")}
-                </span>
-              </div>
-              <div className="mt-4 space-y-6">
-                {bars.map((b) => {
-                  const pct = Math.round((1 - b.after / b.before) * 100);
-                  return (
-                    <div key={b.key}>
-                      <div className="flex items-baseline justify-between text-sm">
-                        <span className="font-semibold">{t(`energy.${b.key}`)}</span>
-                        <span className="tabular-nums text-muted">−{pct}%</span>
-                      </div>
-                      {(["before", "after"] as const).map((k) => (
-                        <div key={k} className="mt-2 flex items-center gap-3">
-                          <div className="h-5 flex-1">
-                            <div
-                              className={`h-full rounded-r ${k === "before" ? "bg-muted/50" : "bg-primary"}`}
-                              style={{ width: `${(b[k] / max) * 100}%` }}
-                              title={`${t(`energy.${b.key}`)} · ${t(`energy.${k}`)}: ${num(b[k])} ${t("energy.unit")}`}
-                            />
-                          </div>
-                          <span className="w-28 shrink-0 text-right text-xs tabular-nums text-muted">
-                            {num(b[k])} {t("energy.unit")}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                  );
-                })}
-              </div>
-            </figure>
-          </div>
-
-          <div className="mt-12 rounded-xl border border-border p-5">
-            <h3 className="text-sm font-semibold">{t("energy.assumptionsTitle")}</h3>
-            <ul className="mt-3 list-disc space-y-1.5 pl-5 text-sm leading-relaxed text-muted">
-              {assumptions.map((line) => (
-                <li key={line}>{line}</li>
-              ))}
-            </ul>
-            <p className="mt-4 text-sm leading-relaxed text-muted">{t("energy.note")}</p>
-          </div>
-        </div>
-      </section>
-
-      {/* Estimate */}
-      <section className="border-t border-border bg-surface px-6 py-20">
-        <div className="mx-auto max-w-5xl">
-          <h2 className="text-2xl font-bold md:text-3xl">{t("estimate.title")}</h2>
-          <p className="mt-3 max-w-3xl text-base leading-relaxed text-muted">{t("estimate.intro")}</p>
-          <div className="mt-8 overflow-x-auto rounded-xl border border-border bg-background">
-            <table className="w-full min-w-[36rem] text-left text-sm">
-              <thead className="bg-surface text-xs text-muted">
-                <tr>
-                  <th scope="col" className="px-4 py-3 font-medium">{t("estimate.col.item")}</th>
-                  <th scope="col" className="px-4 py-3 text-right font-medium">{t("estimate.col.qty")}</th>
-                  <th scope="col" className="px-4 py-3 text-right font-medium">{t("estimate.col.price")}</th>
-                  <th scope="col" className="px-4 py-3 text-right font-medium">{t("estimate.col.amount")}</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border">
-                {estimate.items.map((it) => (
-                  <tr key={it.key}>
-                    <td className="px-4 py-3">{t(`estimate.items.${it.key}`)}</td>
-                    <td className="whitespace-nowrap px-4 py-3 text-right tabular-nums">
-                      {it.unit === "식" ? `1 ${t("estimate.set")}` : `${it.qty.toFixed(1)} ${it.unit}`}
-                    </td>
-                    <td className="px-4 py-3 text-right tabular-nums">{it.unit === "식" ? "–" : num(it.price)}</td>
-                    <td className="px-4 py-3 text-right tabular-nums">{num(it.amount)}</td>
-                  </tr>
-                ))}
-                <tr className="bg-surface font-semibold">
-                  <td className="px-4 py-3" colSpan={3}>
-                    {t("estimate.total")}
-                  </td>
-                  <td className="px-4 py-3 text-right tabular-nums">{num(estimate.total)}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <p className="mt-3 text-sm leading-relaxed text-muted">{t("estimate.note")}</p>
-        </div>
-      </section>
+      {/* 그린리모델링 · 에너지 · 태양광 · 견적 (Lab 상세와 공유) */}
+      <Retrofit t={t} />
 
       {/* Connect */}
       <section className="border-t border-border px-6 py-20">

@@ -22,7 +22,7 @@
     "film": "From drawing to model",
     "why": "Why we're building it",
     "chapterNav": "Film chapters",
-    "disclaimer": "Scenes taken directly from the real drawings (client and architect details removed) and the 3D model. No audio.",
+    "disclaimer": "Made from the real drawings (client and architect details removed), the 3D model and EnergyPlus results. The heat-loss scene is coloured by the simulation's U-values, and solar is an additional proposal not in the drawing. No audio.",
     "graduated": "View product page",
     "viewer": {
       "open": "Explore in 3D",
@@ -78,16 +78,18 @@
         "AI Building Workspace turns a single drawing into building data you can verify. AI reads the drawing, a person reviews the result, and every figure keeps its evidence."
       ],
       "chapters": [
-        "Original floor plan",
-        "Room boundaries",
-        "Original elevation",
-        "Drawing vs. model overlay",
-        "3D model",
-        "Ground floor inside",
-        "Upper floor inside",
-        "Exterior with finishes",
-        "Ground floor with finishes",
-        "Inside the waiting room"
+        "From one drawing",
+        "Reading the drawing",
+        "Drawing to model",
+        "Wall section",
+        "Windows",
+        "Whole building",
+        "Where heat escapes",
+        "A year simulated",
+        "Solar (proposal)",
+        "Remodeling estimate",
+        "Finishes as drawn",
+        "Ninewatt products"
       ],
       "case": {
         "title": "Tested on real drawings",

@@ -20,7 +20,10 @@
   데이터 `src/data/lab/ai-building-workspace-energy.json`, 문구 `src/messages/{ko,en,ja}/expo.json`, 만드는 법은 scripts/lab/README.md 끝.
 - 부스 영상 v4(89초, 창호 · 태양광 장면 포함)와 클레이 렌더(외벽 단면 · 외단열 · 열 손실 전후)는 `public/lab/ai-building-workspace/expo/` 에 있다.
   이 노트북에 aws CLI 가 없어 영상(4MB)을 S3 대신 public 에 두었다. S3 로 옮기면 page.tsx 의 FILM.src 만 바꾼다.
-- 전시가 끝나면 내리거나 Lab 상세에 에너지 · 견적 섹션으로 옮길지 정한다.
+- 2026-10-20: Lab 상세에도 같은 섹션(`src/components/lab/Retrofit.tsx`, 문구는 expo 네임스페이스 · fr 포함)을 넣었고,
+  Lab 영상은 v4 Lab 편집본 `public/lab/ai-building-workspace/lab-film-v5.mp4`(88초, 전시회 이름 · QR 없음)로 바꿨다.
+  S3 의 예전 `ai-building-workspace-case-v4.mp4` 는 더 쓰지 않는다 — aws CLI 가 있는 PC 에서 지운다.
+- /expo 는 전시가 끝나면 내리거나 Lab 상세로 연결(리다이렉트)할지 정한다.
 
 ## 파일 지도
 
@@ -32,7 +35,7 @@
 | 물량 표 데이터 | `src/data/lab/ai-building-workspace-takeoff.json` (`quantity_takeoff.py` 결과) |
 | 문구 | `src/messages/{ko,en,ja,fr}/lab.json` (+ `common.json` 의 companyMenu.lab, labDesc) |
 | 도판 · 뷰어 데이터 · 내역서 PDF | `public/lab/ai-building-workspace/` |
-| 영상 | `s3://ninewatt-homepage/videos/lab/ai-building-workspace-case-v4.mp4` (47초, 이것 하나만 남김) |
+| 영상 | `public/lab/ai-building-workspace/lab-film-v5.mp4` (88초). S3 의 case-v4 는 지울 대상 |
 | 생성 스크립트 | `scripts/lab/` |
 | 그 밖에 Lab 을 등록한 곳 | `seo.ts` ROUTES, `llms.txt/route.ts`, `i18n/request.ts` 의 lab 네임스페이스 |
 
