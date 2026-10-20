@@ -111,6 +111,9 @@ export const ROUTES: readonly RouteDef[] = [
   { path: "/lab", priority: 0.6, freq: "monthly" },
   ...labProjects.map(({ slug }): RouteDef => ({ path: `/lab/${slug}`, priority: 0.5, freq: "monthly" })),
 
+  // 전시 랜딩 (2026 ESG 친환경 대전 부스 QR). fr 은 영어 폴백이라 색인에서 뺀다
+  { path: "/expo", priority: 0.5, freq: "monthly", locales: ["ko", "en", "ja"] },
+
   // 전환
   { path: "/contact", priority: 0.9, freq: "yearly" },
 

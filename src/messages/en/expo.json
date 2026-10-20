@@ -1,0 +1,113 @@
+{
+  "meta": {
+    "title": "From One Drawing to Green Remodeling | 2026 Korea ESG Eco Expo",
+    "description": "Ninewatt's experiment: one real green-remodeling design drawing set turned into a 3D model, a quantity takeoff, a remodeling estimate and an energy simulation."
+  },
+  "badge": "2026 Korea ESG Eco Expo · Oct 21–23",
+  "hero": {
+    "title": "From one drawing\nto green remodeling.",
+    "desc": "Our AI read one real green-remodeling design drawing set (DXF), built a 3D model and quantities from it, and used the same model to estimate the remodeling cost and the energy it would save.",
+    "imageAlt": "Exterior rendering of the 3D model built from the drawing, with the finishes noted on the drawing",
+    "ctaContact": "Talk to us",
+    "ctaLab": "See the full Lab project"
+  },
+  "highlights": {
+    "drawing": "Lines in the drawing",
+    "rooms": "Rooms found automatically",
+    "saving": "Heating and cooling energy saved (simplified simulation)",
+    "estimate": "Remodeling estimate (example unit prices)"
+  },
+  "film": {
+    "title": "The 47-second version",
+    "disclaimer": "Built from a real drawing. The client and design office are not shown."
+  },
+  "steps": {
+    "title": "Five steps",
+    "intro": "The first three steps come straight from the drawing. The last two reuse those results for an example estimate and a simplified simulation.",
+    "items": {
+      "drawing": {
+        "title": "Read the drawing",
+        "desc": "The architect's original DXF, as delivered: 14,682 lines, 396 dimensions, 38 layers."
+      },
+      "rooms": {
+        "title": "Rooms and areas",
+        "desc": "Closed regions between wall and window lines become 12 rooms. Where no partition line exists, the room is flagged for review."
+      },
+      "model": {
+        "title": "3D model",
+        "desc": "A 3D model at the drawing's scale, with the finishes from the drawing notes. Overlaid on the elevation, the lines nearly match."
+      },
+      "takeoff": {
+        "title": "Quantities and estimate",
+        "desc": "Floor, wall, facade and window areas are measured, and example unit prices are applied to the remodeling scope in the drawing."
+      },
+      "energy": {
+        "title": "Energy simulation",
+        "desc": "The model's wall and window areas and orientations feed a simplified EnergyPlus simulation, before and after remodeling."
+      }
+    }
+  },
+  "energy": {
+    "title": "How much energy would remodeling save?",
+    "intro": "We simulated the same building for one year, changing only the work specified in the drawing: 100 mm phenolic foam external insulation and low-e double-glazed windows.",
+    "saving": "Heating and cooling energy saved",
+    "before": "Before",
+    "after": "After",
+    "heating": "Heating",
+    "cooling": "Cooling",
+    "unit": "kWh/yr",
+    "perArea": "{area} ㎡ floor area: {before} → {after} kWh/㎡·yr",
+    "chartLabel": "Annual heating and cooling loads before and after remodeling",
+    "assumptionsTitle": "Assumptions",
+    "assumptions": [
+      "Wall and window areas and orientations measured on the 3D model built from the drawing (exterior walls {wall} ㎡, {windows} windows totalling {window} ㎡)",
+      "Before: wall U 1.0, window U 4.0 W/㎡K (assumed for an older building). After: wall U 0.16, window U 1.8 W/㎡K (drawing specification)",
+      "Roof, floor, infiltration (0.7 ACH), occupancy and lighting are the same in both cases. Ground-floor clinic conditioned weekdays 9–18, upstairs residence at all times",
+      "Tool: US DOE EnergyPlus 9.0 with Korean typical-year weather data (TMYx 2004–2018)"
+    ],
+    "note": "A simplified simulation, not an official energy rating. Detailed assessment continues in Ninewatt's Energy Studio and GreenPlanner."
+  },
+  "estimate": {
+    "title": "Green remodeling estimate (example)",
+    "intro": "Quantities measured on the model, applied to the remodeling scope in the drawing.",
+    "col": {
+      "item": "Work",
+      "qty": "Quantity",
+      "price": "Example unit price (KRW)",
+      "amount": "Amount (KRW)"
+    },
+    "items": {
+      "insulation": "External wall insulation (100 mm phenolic foam + stucco)",
+      "windows": "Window replacement (PVC double sash, 24 mm low-e double glazing)",
+      "interior": "Interior finishes (floors, walls, ceilings; 11 materials)"
+    },
+    "set": "lot",
+    "total": "Total (example)",
+    "note": "* Unit prices are examples assuming typical market rates for materials and labour, not a quote. Demolition, mechanical, electrical and roof work are not included."
+  },
+  "connect": {
+    "title": "Connected to Ninewatt products",
+    "intro": "We are building it so the building data from a drawing can feed the simulation and decision tools we already run.",
+    "items": {
+      "energyStudio": {
+        "name": "Energy Studio",
+        "desc": "The existing-building energy and greenhouse-gas simulator of the Korea Authority of Land & Infrastructure Safety, upgraded and operated by Ninewatt."
+      },
+      "greenplanner": {
+        "name": "GreenPlanner",
+        "desc": "A remodeling decision service for building owners: energy diagnosis, construction cost, value forecast and government funding."
+      },
+      "grai": {
+        "name": "GRAI",
+        "desc": "A green-remodeling simulation platform for public buildings: energy and carbon status, priorities and scenario analysis."
+      }
+    },
+    "more": "Learn more"
+  },
+  "cta": {
+    "title": "Try it with your own building's drawings",
+    "desc": "We are looking for partners in green remodeling, design and construction, and public building assessment.",
+    "contact": "Contact us",
+    "lab": "All Lab projects"
+  }
+}
