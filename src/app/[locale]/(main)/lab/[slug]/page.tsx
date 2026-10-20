@@ -12,6 +12,7 @@ import LabCta, { type LabTranslate } from "@/components/lab/LabCta";
 import { LabFilm } from "@/components/lab/LabFilm";
 import LabCompare from "@/components/lab/LabCompare";
 import LabModelViewer, { type ViewerLabels } from "@/components/lab/LabModelViewer";
+import Retrofit from "@/components/lab/Retrofit";
 
 type Params = Promise<{ locale: string; slug: string }>;
 
@@ -360,6 +361,7 @@ export default async function LabProjectPage({ params }: { params: Params }) {
   if (!project) notFound();
 
   const t = await getTranslations({ locale, namespace: "lab" });
+  const te = await getTranslations({ locale, namespace: "expo" });
   const key = `projects.${slug}`;
   const name = t(`${key}.name`);
   const summary = t(`${key}.summary`);
@@ -391,7 +393,7 @@ export default async function LabProjectPage({ params }: { params: Params }) {
             name: `${name} — ${t("detail.film")}`,
             description: summary,
             thumbnailUrl: `${SITE_URL}${project.video.poster}`,
-            contentUrl: project.video.src,
+            contentUrl: project.video.src.startsWith("http") ? project.video.src : `${SITE_URL}${project.video.src}`,
             uploadDate: project.video.uploadDate,
             duration: `PT${project.video.duration}S`,
             url: absoluteUrl(locale, path),
@@ -468,6 +470,20 @@ export default async function LabProjectPage({ params }: { params: Params }) {
       </section>
 
       {project.caseStudy && <CaseStudy cs={project.caseStudy} t={t} k={key} />}
+
+      {/* 2026-10 추가: 그린리모델링 · 에너지 · 태양광 · 견적 (/expo 와 같은 섹션) */}
+      {slug === "ai-building-workspace" && (
+        <>
+          <section className="border-t border-border bg-surface px-6 pb-4 pt-20">
+            <div className="mx-auto max-w-5xl">
+              <p className="text-sm font-semibold text-primary">{te("lab.eyebrow")}</p>
+              <h2 className="mt-2 text-2xl font-bold md:text-3xl">{te("lab.title")}</h2>
+              <p className="mt-4 max-w-3xl text-lg leading-relaxed text-muted">{te("lab.desc")}</p>
+            </div>
+          </section>
+          <Retrofit t={te} />
+        </>
+      )}
 
       <LabCta t={t} />
     </>

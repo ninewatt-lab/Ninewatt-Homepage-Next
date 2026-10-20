@@ -96,12 +96,13 @@ export const labProjects: LabProject[] = [
     cover: `${ABW}/case-cover.webp`,
     og: `${ABW}/case-og.jpg`,
     video: {
-      // 실제 도면에서 뽑은 도판 + 3D 모델 외관·층별 단면 + 마감재 적용 렌더링. 기관·설계사 정보는 들어 있지 않다.
-      src: `${S3}/videos/lab/ai-building-workspace-case-v4.mp4`,
-      poster: `${ABW}/case-cover.webp`,
-      duration: 47,
-      uploadDate: "2026-10-02",
-      chapters: [0, 4, 8, 12, 16, 24, 29, 34, 38, 42],
+      // 부스 영상 v4 의 Lab 편집본(scripts/lab/expo_film.py lab): 클레이 3D · 도면 · 에너지 · 견적 · 태양광 제안.
+      // 실제 도면 · 모델 · EnergyPlus 결과로 만들었고 기관 · 설계사 정보는 없다. aws CLI 가 없어 public 에 둔다
+      src: `${ABW}/lab-film-v5.mp4`,
+      poster: `${ABW}/lab-film-poster-v5.webp`,
+      duration: 88,
+      uploadDate: "2026-10-20",
+      chapters: [0, 5.3, 14.1, 21.4, 28.7, 34.0, 39.3, 47.6, 55.9, 61.7, 68.0, 75.3],
     },
     caseStudy: {
       // 입력 DXF(그린리모델링 설계 도면 1세트)의 실제 규모

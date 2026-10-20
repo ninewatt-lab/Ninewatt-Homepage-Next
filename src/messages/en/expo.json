@@ -156,6 +156,25 @@
     "winSpec": "PVC double sash · 24 mm low-e double glazing",
     "winU": "Window U-value {before} → {after} W/㎡K",
     "area": "{area} ㎡",
-    "windows": "{count} windows · {area} ㎡"
+    "windows": "{count} windows · {area} ㎡",
+    "windowAlt": "Window section: double glazing with a low-e coated pane fitted into a PVC frame",
+    "winBefore": "The existing windows are assumed to be aluminium with clear double glazing."
+  },
+  "pv": {
+    "tag": "Additional proposal — not in the drawing",
+    "title": "Adding solar",
+    "intro": "Not part of the drawing's scope: we placed as many PV modules as fit on the south roof of the same 3D model and simulated their output with the same weather data.",
+    "imageAlt": "3D model with four PV modules on the south roof",
+    "capacity": "System size",
+    "modules": "{count} × {w} W modules",
+    "annual": "Annual generation",
+    "year": "yr",
+    "chartLabel": "Monthly generation (Jan–Dec)",
+    "note": "Simplified EnergyPlus PVWatts estimate (v5, 14% system losses). Module count is what fits on the south roof (14.5 ㎡, 30.7° pitch); the roof shape and orientation are not confirmed by the drawing, so drawing-up is assumed to be north. Not included in the estimate."
+  },
+  "lab": {
+    "eyebrow": "Added October 2026",
+    "title": "Taken further: green remodeling and energy",
+    "desc": "With the same drawing and 3D model, we applied the remodeling noted on the drawing and calculated a simplified EnergyPlus simulation and an example estimate. First shown at the 2026 Korea ESG Eco Expo."
   }
 }

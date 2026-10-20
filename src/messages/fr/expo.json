@@ -1,0 +1,180 @@
+{
+  "meta": {
+    "title": "D'un seul plan à la rénovation verte | 2026 Korea ESG Eco Expo",
+    "description": "L'expérience de Ninewatt : un jeu de plans réels de rénovation verte transformé en maquette 3D, métré, estimation de rénovation et simulation énergétique."
+  },
+  "badge": "2026 Korea ESG Eco Expo · 21–23 oct.",
+  "hero": {
+    "title": "D'un seul plan\nà la rénovation verte.",
+    "desc": "Notre IA a lu un jeu de plans réels de rénovation verte (DXF), en a tiré une maquette 3D et des quantités, puis a utilisé la même maquette pour estimer le coût de la rénovation et l'énergie économisée.",
+    "imageAlt": "Rendu extérieur de la maquette 3D issue du plan, avec les finitions indiquées sur le plan",
+    "ctaContact": "Nous contacter",
+    "ctaLab": "Voir le projet Lab complet"
+  },
+  "highlights": {
+    "drawing": "Lignes du plan",
+    "rooms": "Pièces détectées automatiquement",
+    "saving": "Énergie de chauffage et de climatisation économisée (simulation simplifiée)",
+    "estimate": "Estimation de rénovation (prix unitaires indicatifs)"
+  },
+  "film": {
+    "title": "Le film de 89 secondes",
+    "disclaimer": "Réalisé à partir du plan réel, de la maquette 3D et des résultats EnergyPlus. La scène des pertes de chaleur est colorée selon les coefficients U de la simulation, ce n'est pas une thermographie. Le solaire est une proposition supplémentaire, absente du plan.",
+    "chapters": [
+      "D'un seul plan",
+      "Lire le plan",
+      "Du plan à la maquette",
+      "Coupe du mur",
+      "Fenêtres",
+      "Tout le bâtiment",
+      "Où la chaleur s'échappe",
+      "Une année simulée",
+      "Solaire (proposition)",
+      "Estimation de rénovation",
+      "Finitions du plan",
+      "Produits Ninewatt"
+    ]
+  },
+  "steps": {
+    "title": "Cinq étapes",
+    "intro": "Les trois premières étapes viennent directement du plan. Les deux dernières réutilisent ces résultats pour une estimation indicative et une simulation simplifiée.",
+    "items": {
+      "drawing": {
+        "title": "Lire le plan",
+        "desc": "Le DXF original de l'architecte, tel quel : 14 682 lignes, 396 cotes, 38 calques."
+      },
+      "rooms": {
+        "title": "Pièces et surfaces",
+        "desc": "Les zones fermées par les lignes de murs et de menuiseries forment 12 pièces. Sans ligne de cloison, la pièce est signalée pour vérification."
+      },
+      "model": {
+        "title": "Maquette 3D",
+        "desc": "Une maquette 3D à l'échelle du plan, avec les finitions des annotations. Superposées à l'élévation, les lignes coïncident presque."
+      },
+      "takeoff": {
+        "title": "Métré et estimation",
+        "desc": "Surfaces de sols, murs, façades et fenêtres mesurées, puis prix unitaires indicatifs appliqués au périmètre de rénovation du plan."
+      },
+      "energy": {
+        "title": "Simulation énergétique",
+        "desc": "Les surfaces et orientations des murs et fenêtres de la maquette alimentent une simulation EnergyPlus simplifiée, avant et après rénovation."
+      }
+    }
+  },
+  "energy": {
+    "title": "Combien d'énergie la rénovation ferait-elle économiser ?",
+    "intro": "Nous avons simulé le même bâtiment sur un an, en ne changeant que les travaux prévus au plan : isolation extérieure en mousse phénolique de 100 mm et fenêtres à double vitrage bas émissif.",
+    "saving": "Énergie de chauffage et de climatisation économisée",
+    "before": "Avant",
+    "after": "Après",
+    "heating": "Chauffage",
+    "cooling": "Climatisation",
+    "unit": "kWh/an",
+    "perArea": "{area} ㎡ de surface : {before} → {after} kWh/㎡·an",
+    "chartLabel": "Besoins annuels de chauffage et de climatisation avant et après rénovation",
+    "assumptionsTitle": "Hypothèses",
+    "assumptions": [
+      "Surfaces et orientations des murs et fenêtres mesurées sur la maquette 3D issue du plan (murs extérieurs {wall} ㎡, {windows} fenêtres pour {window} ㎡)",
+      "Avant : U mur 1,0, U fenêtre 4,0 W/㎡K (hypothèse pour un bâtiment ancien). Après : U mur 0,16, U fenêtre 1,8 W/㎡K (spécification du plan)",
+      "Toiture, plancher, infiltrations (0,7 vol/h), occupation et éclairage identiques dans les deux cas. Rez-de-chaussée (cabinet) climatisé en semaine de 9 h à 18 h, logement à l'étage en continu",
+      "Outil : EnergyPlus 9.0 (US DOE) avec données météo d'année type coréennes (TMYx 2004–2018)"
+    ],
+    "note": "Simulation simplifiée, pas un classement énergétique officiel. L'évaluation détaillée se poursuit dans Energy Studio et GreenPlanner de Ninewatt.",
+    "compare": {
+      "title": "Où la chaleur s'échappe",
+      "before": "Avant",
+      "after": "Après",
+      "handle": "Position de la comparaison avant/après",
+      "caption": "Plus la lueur est forte, plus la chaleur s'échappe. La luminosité est proportionnelle aux coefficients U de la simulation ; ce n'est pas une thermographie. Faites glisser le curseur pour comparer."
+    }
+  },
+  "estimate": {
+    "title": "Estimation de rénovation verte (indicative)",
+    "intro": "Quantités mesurées sur la maquette, appliquées au périmètre de rénovation du plan.",
+    "col": {
+      "item": "Travaux",
+      "qty": "Quantité",
+      "price": "Prix unitaire indicatif (KRW)",
+      "amount": "Montant (KRW)"
+    },
+    "items": {
+      "insulation": "Isolation extérieure des murs (mousse phénolique 100 mm + enduit)",
+      "windows": "Remplacement des fenêtres (double châssis PVC, double vitrage bas émissif 24 mm)",
+      "interior": "Finitions intérieures (sols, murs, plafonds ; 11 matériaux)"
+    },
+    "set": "forfait",
+    "total": "Total (indicatif)",
+    "note": "* Les prix unitaires sont des exemples supposant des tarifs courants, fourniture et pose comprises ; ce n'est pas un devis. Démolition, CVC, électricité et toiture non inclus."
+  },
+  "connect": {
+    "title": "Relié aux produits Ninewatt",
+    "intro": "Nous le développons pour que les données de bâtiment issues d'un plan alimentent les outils de simulation et d'aide à la décision que nous exploitons déjà.",
+    "items": {
+      "energyStudio": {
+        "name": "Energy Studio",
+        "desc": "Le simulateur énergie et gaz à effet de serre des bâtiments existants de l'Autorité coréenne de sécurité des infrastructures, amélioré et exploité par Ninewatt."
+      },
+      "greenplanner": {
+        "name": "GreenPlanner",
+        "desc": "Un service d'aide à la décision de rénovation pour les propriétaires : diagnostic énergétique, coût des travaux, prévision de valeur et aides publiques."
+      },
+      "grai": {
+        "name": "GRAI",
+        "desc": "Une plateforme de simulation de rénovation verte pour les bâtiments publics : état énergie et carbone, priorités et analyse de scénarios."
+      }
+    },
+    "more": "En savoir plus"
+  },
+  "cta": {
+    "title": "Essayez avec les plans de votre bâtiment",
+    "desc": "Nous cherchons des partenaires en rénovation verte, en conception et construction, et en évaluation de bâtiments publics.",
+    "contact": "Nous contacter",
+    "lab": "Tous les projets Lab"
+  },
+  "remodel": {
+    "title": "La rénovation verte inscrite dans le plan",
+    "intro": "Les deux travaux annotés sur les plans d'exécution, appliqués à la même maquette 3D. Plus le coefficient U est faible, moins la chaleur s'échappe.",
+    "sectionAlt": "Coupe du mur : béton existant, isolant en mousse phénolique et enduit ajoutés couche par couche",
+    "layers": [
+      {
+        "name": "Béton existant",
+        "spec": "200 mm"
+      },
+      {
+        "name": "Isolant mousse phénolique",
+        "spec": "100 mm"
+      },
+      {
+        "name": "Enduit de finition",
+        "spec": "10 mm"
+      }
+    ],
+    "wallTitle": "Isolation extérieure des murs",
+    "wallU": "U mur {before} → {after} W/㎡K",
+    "wrapAlt": "La façade revêtue de bas en haut",
+    "winTitle": "Remplacement des fenêtres",
+    "winSpec": "Double châssis PVC · double vitrage bas émissif 24 mm",
+    "winU": "U fenêtre {before} → {after} W/㎡K",
+    "area": "{area} ㎡",
+    "windows": "{count} fenêtres · {area} ㎡",
+    "windowAlt": "Coupe de fenêtre : double vitrage avec une vitre à couche bas émissive dans un cadre PVC",
+    "winBefore": "Les fenêtres existantes sont supposées en aluminium avec double vitrage clair."
+  },
+  "pv": {
+    "tag": "Proposition supplémentaire — absente du plan",
+    "title": "Ajouter du solaire",
+    "intro": "Hors du périmètre du plan : nous avons posé autant de modules photovoltaïques que possible sur le versant sud de la même maquette 3D et simulé leur production avec les mêmes données météo.",
+    "imageAlt": "Maquette 3D avec quatre modules photovoltaïques sur le versant sud",
+    "capacity": "Puissance installée",
+    "modules": "{count} modules de {w} W",
+    "annual": "Production annuelle",
+    "year": "an",
+    "chartLabel": "Production mensuelle (janv.–déc.)",
+    "note": "Estimation simplifiée EnergyPlus PVWatts (v5, pertes système 14 %). Le nombre de modules est celui qui tient sur le versant sud (14,5 ㎡, pente 30,7°) ; la forme et l'orientation de la toiture ne sont pas confirmées par le plan, le haut du plan est supposé au nord. Non inclus dans l'estimation."
+  },
+  "lab": {
+    "eyebrow": "Ajouté en octobre 2026",
+    "title": "Plus loin : rénovation verte et énergie",
+    "desc": "Avec le même plan et la même maquette 3D, nous avons appliqué la rénovation annotée sur le plan, puis calculé une simulation EnergyPlus simplifiée et une estimation indicative. Présenté pour la première fois au 2026 Korea ESG Eco Expo."
+  }
+}
