@@ -370,6 +370,18 @@ else:  # wrap · thermal · glow
             if ob.type == "LIGHT":
                 ob.hide_render = True
 
+if "pair" in args and scene in ("thermal", "glow"):
+    # 웹 페이지 전후 비교용: 카메라를 한 자리에 고정하고 리모델링 전(before)·후(after) 두 장만 그린다
+    sc.frame_set(150)
+    sc.camera.animation_data_clear()
+    sc.animation_data_clear()
+    for name, sweep in (("before", 9.0), ("after", -0.3)):
+        sc["glow"], sc["sweep"] = 1.0, sweep
+        sc.render.filepath = f"{out.rstrip('/')}/pair_{name}"
+        bpy.ops.render.render(write_still=True)
+    print("DONE pair", scene)
+    sys.exit(0)
+
 anchors = []
 frames = [1, FRAMES // 3, FRAMES * 2 // 3, FRAMES] if test else range(1, FRAMES + 1)
 for f in frames:

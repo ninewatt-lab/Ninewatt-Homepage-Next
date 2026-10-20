@@ -18,6 +18,8 @@
 - 2026 대한민국 ESG 친환경 대전(10/21~23) 부스 QR용. ko · en · ja (fr 은 영어 폴백, 색인 제외).
 - Lab v1 결과 + 그린리모델링 예시 견적 + EnergyPlus 간이 시뮬레이션(전후 냉난방 −40%).
   데이터 `src/data/lab/ai-building-workspace-energy.json`, 문구 `src/messages/{ko,en,ja}/expo.json`, 만드는 법은 scripts/lab/README.md 끝.
+- 부스 영상 v3(78초)와 클레이 렌더(외벽 단면 · 외단열 · 열 손실 전후)는 `public/lab/ai-building-workspace/expo/` 에 있다.
+  이 노트북에 aws CLI 가 없어 영상(4MB)을 S3 대신 public 에 두었다. S3 로 옮기면 page.tsx 의 FILM.src 만 바꾼다.
 - 전시가 끝나면 내리거나 Lab 상세에 에너지 · 견적 섹션으로 옮길지 정한다.
 
 ## 파일 지도

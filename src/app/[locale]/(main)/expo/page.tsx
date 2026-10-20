@@ -7,6 +7,7 @@ import { formatClock, getLabProject } from "@/data/labProjects";
 import energyData from "@/data/lab/ai-building-workspace-energy.json";
 import { LabFilm } from "@/components/lab/LabFilm";
 import LabModelViewer, { type ViewerLabels } from "@/components/lab/LabModelViewer";
+import ExpoCompare from "@/components/lab/ExpoCompare";
 
 /**
  * 2026 대한민국 ESG 친환경 대전 부스 QR 랜딩.
@@ -40,6 +41,15 @@ const STEPS = [
   { key: "energy", src: null, width: 0, height: 0 },
 ] as const;
 
+const EXPO = `${ABW}/expo`;
+
+/** 부스 영상 v3 (scripts/lab/expo_film.py). 챕터 시작 초는 그 타임라인의 장면 시작과 같다 */
+const FILM = {
+  src: `${EXPO}/expo-film-v3.mp4`,
+  poster: `${EXPO}/poster.webp`,
+  chapters: [0, 5.3, 14.1, 21.4, 28.7, 34.0, 42.3, 50.6, 56.9, 64.2],
+};
+
 const CONNECT = [
   { key: "energyStudio", href: null },
   { key: "greenplanner", href: "/product/greenplanner" },
@@ -53,9 +63,10 @@ export default async function ExpoPage({ params }: { params: Params }) {
   const t = await getTranslations({ locale, namespace: "expo" });
   const tl = await getTranslations({ locale, namespace: "lab" });
   const project = getLabProject(SLUG)!;
-  const video = project.video!;
-  const chapterLabels = tl.raw(`projects.${SLUG}.chapters`) as string[];
-  const chapters = video.chapters.map((start, i) => ({ start, label: chapterLabels[i], clock: formatClock(start) }));
+  const chapterLabels = t.raw("film.chapters") as string[];
+  const chapters = FILM.chapters.map((start, i) => ({ start, label: chapterLabels[i], clock: formatClock(start) }));
+  const U = energyData.assumptions;
+  const layers = t.raw("remodel.layers") as { name: string; spec: string }[];
 
   const { before, after } = energyData.energy;
   const area = energyData.envelope.floorArea;
@@ -135,8 +146,8 @@ export default async function ExpoPage({ params }: { params: Params }) {
         <div className="mx-auto max-w-5xl">
           <h2 className="mb-6 text-sm uppercase tracking-widest text-muted">{t("film.title")}</h2>
           <LabFilm
-            src={video.src}
-            poster={video.poster}
+            src={FILM.src}
+            poster={FILM.poster}
             title={t("meta.title")}
             chapters={chapters}
             chapterNavLabel={tl("detail.chapterNav")}
@@ -203,11 +214,82 @@ export default async function ExpoPage({ params }: { params: Params }) {
         </div>
       </section>
 
+      {/* Remodel: 도면에 적힌 공사 (외벽 단면 · 건물 전체 적용) */}
+      <section className="border-t border-border px-6 py-20">
+        <div className="mx-auto max-w-5xl">
+          <h2 className="text-2xl font-bold md:text-3xl">{t("remodel.title")}</h2>
+          <p className="mt-3 max-w-3xl text-base leading-relaxed text-muted">{t("remodel.intro")}</p>
+          <div className="mt-10 grid gap-8 md:grid-cols-2">
+            <figure className="flex flex-col overflow-hidden rounded-xl border border-border">
+              <div className="bg-[#0d0f10]">
+                <Image src={`${EXPO}/section.webp`} alt={t("remodel.sectionAlt")} width={1800} height={1013} sizes="(min-width: 768px) 32rem, 100vw" className="h-auto w-full" />
+              </div>
+              <figcaption className="flex-1 p-5">
+                <div className="flex items-baseline justify-between gap-3">
+                  <h3 className="text-lg font-bold">{t("remodel.wallTitle")}</h3>
+                  <span className="text-sm tabular-nums text-muted">
+                    {t("remodel.area", { area: energyData.envelope.wallArea.toFixed(1) })}
+                  </span>
+                </div>
+                <ol className="mt-4 space-y-2 text-sm">
+                  {layers.map((l, i) => (
+                    <li key={l.name} className="flex items-baseline gap-3">
+                      <span className="w-5 text-xs font-semibold text-primary">{i + 1}</span>
+                      <span className="flex-1">{l.name}</span>
+                      <span className="tabular-nums text-muted">{l.spec}</span>
+                    </li>
+                  ))}
+                </ol>
+                <p className="mt-4 text-sm font-semibold tabular-nums text-primary">
+                  {t("remodel.wallU", { before: U.before.wallU.toFixed(2), after: U.after.wallU.toFixed(2) })}
+                </p>
+              </figcaption>
+            </figure>
+            <figure className="flex flex-col overflow-hidden rounded-xl border border-border">
+              <div className="bg-[#0d0f10]">
+                <Image src={`${EXPO}/wrap.webp`} alt={t("remodel.wrapAlt")} width={1800} height={1013} sizes="(min-width: 768px) 32rem, 100vw" className="h-auto w-full" />
+              </div>
+              <figcaption className="flex-1 p-5">
+                <div className="flex items-baseline justify-between gap-3">
+                  <h3 className="text-lg font-bold">{t("remodel.winTitle")}</h3>
+                  <span className="text-sm tabular-nums text-muted">
+                    {t("remodel.windows", {
+                      count: energyData.envelope.windows,
+                      area: energyData.envelope.windowArea.toFixed(1),
+                    })}
+                  </span>
+                </div>
+                <p className="mt-4 text-sm text-muted">{t("remodel.winSpec")}</p>
+                <p className="mt-4 text-sm font-semibold tabular-nums text-primary">
+                  {t("remodel.winU", { before: U.before.windowU.toFixed(1), after: U.after.windowU.toFixed(1) })}
+                </p>
+              </figcaption>
+            </figure>
+          </div>
+        </div>
+      </section>
+
       {/* Energy */}
       <section id="energy" className="scroll-mt-20 border-t border-border px-6 py-20">
         <div className="mx-auto max-w-5xl">
           <h2 className="text-2xl font-bold md:text-3xl">{t("energy.title")}</h2>
           <p className="mt-3 max-w-3xl text-base leading-relaxed text-muted">{t("energy.intro")}</p>
+
+          <figure className="mt-10">
+            <ExpoCompare
+              before={{ src: `${EXPO}/thermal-before.webp`, width: 1800, height: 1013 }}
+              after={{ src: `${EXPO}/thermal-after.webp`, width: 1800, height: 1013 }}
+              labels={{
+                before: t("energy.compare.before"),
+                after: t("energy.compare.after"),
+                handle: t("energy.compare.handle"),
+              }}
+            />
+            <figcaption className="mt-3 text-sm leading-relaxed text-muted">
+              <span className="font-semibold text-foreground">{t("energy.compare.title")}</span>
+              <span className="ml-2">{t("energy.compare.caption")}</span>
+            </figcaption>
+          </figure>
 
           <div className="mt-10 grid gap-10 md:grid-cols-[16rem_1fr] md:items-center">
             <div>
