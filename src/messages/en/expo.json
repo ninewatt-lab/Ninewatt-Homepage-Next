@@ -18,16 +18,18 @@
     "estimate": "Remodeling estimate (example unit prices)"
   },
   "film": {
-    "title": "The 78-second film",
-    "disclaimer": "Made from the real drawing, the 3D model and EnergyPlus results. The heat-loss scene is coloured by the simulation's U-values, not thermal imaging.",
+    "title": "The 89-second film",
+    "disclaimer": "Made from the real drawing, the 3D model and EnergyPlus results. The heat-loss scene is coloured by the simulation's U-values, not thermal imaging. Solar is an additional proposal, not part of the drawing.",
     "chapters": [
       "From one drawing",
       "Reading the drawing",
       "Drawing to model",
       "Wall section",
-      "Insulation & windows",
+      "Windows",
+      "Whole building",
       "Where heat escapes",
       "A year simulated",
+      "Solar (proposal)",
       "Remodeling estimate",
       "Finishes as drawn",
       "Ninewatt products"

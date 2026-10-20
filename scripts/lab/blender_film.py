@@ -6,7 +6,11 @@ scene
   rise      바닥에 깔린 1층 평면 위로 벽이 아래에서부터 세워진다. 카메라는 위에서 내려온다 (240프레임)
   section   외벽 단면 확대. 기존 콘크리트 200 → PF보드 100 → 스타코 10 이 차례로 붙는다 (240프레임)
             <out_dir>/anchors.json 에 라벨 위치(화면 비율 좌표)를 프레임마다 쓴다
+  window    창호 단면. 기존 창(알루미늄 · 일반 복층유리, 가정)이 빠지고 PVC 창틀과
+            로이 복층유리 24 mm(유리 두 장, 한 장에 로이 코팅)가 차례로 끼워진다 (180프레임)
   wrap      건물 전체 외벽이 아래에서 위로 마감되고, 이어서 창호가 바뀐다 (180프레임)
+  pv        남측 지붕면에 태양광 모듈 4장(430 W, 세로)이 차례로 놓이고 빛이 한 번 훑는다 (180프레임)
+            도면에 없는 추가 제안이다. 지붕 형태는 미확정(UNCONFIRMED)이고 도면 위쪽을 북으로 가정했다
   thermal   열이 새는 곳이 호박색으로 빛난다. 밝기 = 열관류율 U (전 외벽 1.0 · 창 4.0 → 후 0.16 · 1.8).
             위에서 아래로 리모델링 후 값으로 바뀐다 (270프레임)
   glow      thermal 과 같은 움직임의 발광만(나머지 검정). 합성에서 흐리게 겹쳐 번짐(bloom)으로 쓴다
@@ -26,7 +30,7 @@ from mathutils import Vector
 args = sys.argv[sys.argv.index("--") + 1:]
 glb, out, scene = args[:3]
 test = "test" in args
-FRAMES = {"rise": 240, "section": 240, "wrap": 180, "thermal": 270, "glow": 270}[scene]
+FRAMES = {"rise": 240, "section": 240, "window": 180, "wrap": 180, "pv": 180, "thermal": 270, "glow": 270}[scene]
 
 bpy.ops.wm.read_factory_settings(use_empty=True)
 sc = bpy.context.scene
@@ -165,7 +169,7 @@ def stage(center=(5.25, 4.9)):
     floor.name = "Stage"
     w = M("stage")
     bsdf = w.n("ShaderNodeBsdfPrincipled")
-    bsdf.inputs["Roughness"].default_value = 0.8 if scene == "section" else 0.55
+    bsdf.inputs["Roughness"].default_value = 0.8 if scene in ("section", "window") else 0.55
     # 건물에서 멀어질수록 배경색으로 녹아드는 바닥
     tc = w.n("ShaderNodeTexCoord")
     vec = w.n("ShaderNodeVectorMath", operation="DISTANCE")
@@ -352,19 +356,135 @@ elif scene == "section":
     tgt = (0.25, 0.0, 0.9)
     orbit(cam, tgt, [(1, 22, 30, 7.8), (240, 13, 26, 6.9)])
 
+elif scene == "window":
+    stage(center=(0.0, 0.0))
+    # 창 하나(폭 1.2 m, 높이 1.4 m)를 xz 평면에 세운다. y = 두께 방향
+    W, H, P = 1.2, 1.4, 0.07
+
+    def box(name, size, loc, col, rough=0.5, metal=0.0, glass=False, coat=False):
+        bpy.ops.mesh.primitive_cube_add(size=1)
+        ob = bpy.context.active_object
+        ob.name = name
+        ob.scale = size
+        ob.location = loc
+        bev = ob.modifiers.new("b", "BEVEL")
+        bev.width, bev.segments = 0.003, 2
+        w = M(name)
+        bsdf = w.n("ShaderNodeBsdfPrincipled")
+        bsdf.inputs["Base Color"].default_value = srgb(col)
+        bsdf.inputs["Roughness"].default_value = rough
+        bsdf.inputs["Metallic"].default_value = metal
+        if glass:
+            # 유리: 굴절 대신 옅은 반투명 + 가장자리 반사로 읽히게 한다
+            bsdf.inputs["Alpha"].default_value = 0.16
+            w.m.surface_render_method = "BLENDED"
+        if coat:
+            # 로이 코팅: 청록으로 옅게 비치는 막
+            bsdf.inputs["Alpha"].default_value = 0.28
+            bsdf.inputs["Emission Color"].default_value = srgb(TEAL)
+            bsdf.inputs["Emission Strength"].default_value = 0.6
+        w.link(bsdf.outputs[0], w.out.inputs["Surface"])
+        ob.data.materials.append(w.m)
+        return ob
+
+    def frame(name, depth, col, rough, metal):
+        parts = [box(f"{name}_{i}", s_, l_, col, rough, metal) for i, (s_, l_) in enumerate((
+            ((W, depth, P), (0, 0, H - P / 2)), ((W, depth, P), (0, 0, P / 2)),
+            ((P, depth, H - 2 * P), (-W / 2 + P / 2, 0, H / 2)), ((P, depth, H - 2 * P), (W / 2 - P / 2, 0, H / 2))))]
+        root = bpy.data.objects.new(name, None)
+        sc.collection.objects.link(root)
+        for o in parts:
+            o.parent = root
+        return root
+
+    def slide(ob, frames):
+        """frames = [(frame, (dx, dy, dz)), …] — 제자리 기준 이동량"""
+        home = ob.location.copy()
+        for f, d in frames:
+            ob.location = home + Vector(d)
+            ob.keyframe_insert("location", frame=f)
+
+    gw, gh = W - 2 * P + 0.02, H - 2 * P + 0.02
+    # 기존: 알루미늄 창틀 + 일반 복층유리(가정)
+    old = frame("old", 0.05, "#a9aeb2", 0.45, 0.55)
+    og = [box(f"old_g{i}", (gw, 0.005, gh), (0, y, H / 2), "#cfe0dc", 0.05, glass=True) for i, y in enumerate((-0.008, 0.008))]
+    for o in og:
+        o.parent = old
+    slide(old, [(1, (0, 0, 0)), (40, (0, 0, 0)), (80, (-2.6, 0, 0))])
+    # 새 창: PVC 창틀(흰색) → 유리 두 장(5 + 14 공기층 + 5 = 24 mm), 바깥쪽 유리 안쪽 면에 로이 코팅
+    new = frame("new", 0.09, "#efede8", 0.55, 0.0)
+    slide(new, [(1, (2.6, 0, 0)), (70, (2.6, 0, 0)), (110, (0, 0, 0))])
+    g1 = box("new_g1", (gw, 0.005, gh), (0, -0.0095, H / 2), "#e6eeee", 0.04, glass=True)
+    g2 = box("new_g2", (gw, 0.005, gh), (0, 0.0095, H / 2), "#e6eeee", 0.04, glass=True)
+    coat = box("lowe", (gw * 0.995, 0.0008, gh * 0.995), (0, 0.0068, H / 2), "#49b6ca", 0.2, coat=True, glass=True)
+    slide(g1, [(1, (0, 0, 2.2)), (100, (0, 0, 2.2)), (130, (0, 0, 0))])
+    slide(g2, [(1, (0, 0, 2.6)), (112, (0, 0, 2.6)), (145, (0, 0, 0))])
+    slide(coat, [(1, (0, 0, 2.6)), (112, (0, 0, 2.6)), (145, (0, 0, 0))])
+    cam = camera(55)
+    orbit(cam, (0.0, 0.0, 0.72), [(1, -32, 14, 6.6), (180, -22, 11, 6.0)])
+
 else:  # wrap · thermal · glow
     if scene == "wrap":
         key("wrap", [(1, -0.2), (20, -0.2), (105, 6.6)])
         key("win", [(1, -0.2), (100, -0.2), (160, 6.6)])
         az = [(1, -58, 26, 31), (FRAMES, -48, 25, 30)]
+    elif scene == "pv":
+        az = [(1, -22, 40, 35), (FRAMES, -8, 36, 33)]
     else:
         key("glow", [(1, 0.0), (12, 0.0), (55, 1.0)])
         key("sweep", [(1, 9.0), (110, 9.0), (200, -0.3)])
         az = [(1, -48, 25, 30), (FRAMES, -30, 23, 29)]
     load_building()
     stage()
+
+    if scene == "pv":
+        # 남측 지붕면: 처마 (y 6.32, z 6.30) → 용마루 (y 8.15, z 7.39), 경사 30.7°, x 0.73–8.85 (모서리 45° 추녀)
+        up = Vector((0, 8.15 - 6.32, 7.39 - 6.30)).normalized()
+        nrm = Vector((0, -0.51, 0.86)).normalized()
+        eave = Vector((0, 6.32, 6.30))
+        MW, MH, T = 1.134, 1.722, 0.035          # 430 W 모듈 (세로)
+        w = M("pv")
+        bsdf = w.n("ShaderNodeBsdfPrincipled")
+        bsdf.inputs["Roughness"].default_value = 0.12
+        bsdf.inputs["Metallic"].default_value = 0.2
+        # 셀 격자: 벽돌 무늬의 줄눈을 셀 사이 선으로 쓴다
+        brick = w.n("ShaderNodeTexBrick")
+        brick.offset = 0.0
+        brick.inputs["Color1"].default_value = srgb("#0f1720")
+        brick.inputs["Color2"].default_value = srgb("#111a24")
+        brick.inputs["Mortar"].default_value = srgb("#5d6670")
+        brick.inputs["Scale"].default_value = 9.0
+        brick.inputs["Mortar Size"].default_value = 0.012
+        brick.inputs["Brick Width"].default_value = 0.6
+        brick.inputs["Row Height"].default_value = 0.3
+        w.link(w.n("ShaderNodeTexCoord").outputs["UV"], brick.inputs["Vector"])
+        w.link(brick.outputs["Color"], bsdf.inputs["Base Color"])
+        # 빛이 한 번 훑는 띠 (x 위치 기준)
+        key("glint", [(1, -2.0), (120, -2.0), (165, 11.0)])
+        sep = w.n("ShaderNodeSeparateXYZ")
+        w.link(w.n("ShaderNodeNewGeometry").outputs["Position"], sep.inputs[0])
+        band = w.math("LESS_THAN", w.math("ABSOLUTE", w.math("SUBTRACT", sep.outputs["X"], w.prop("glint"))), 0.35)
+        bsdf.inputs["Emission Color"].default_value = srgb("#fff1d6")
+        w.link(w.math("MULTIPLY", band, 2.5), bsdf.inputs["Emission Strength"])
+        w.link(bsdf.outputs[0], w.out.inputs["Surface"])
+        s_mid = 0.2 + MH / 2
+        for i in range(4):
+            x = 4.79 + (i - 1.5) * (MW + 0.02)
+            bpy.ops.mesh.primitive_cube_add(size=1)
+            ob = bpy.context.active_object
+            ob.name = f"PV_{i}"
+            ob.scale = (MW, MH, T)
+            home = eave + up * s_mid + nrm * (0.06 + T / 2) + Vector((x, 0, 0))
+            ob.rotation_euler = up.to_track_quat("Y", "Z").to_euler()
+            bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
+            ob.data.materials.append(w.m)
+            ob.location = home + Vector((0, 0, 1.4))
+            ob.keyframe_insert("location", frame=1)
+            ob.keyframe_insert("location", frame=36 + i * 14)
+            ob.location = home
+            ob.keyframe_insert("location", frame=62 + i * 14)
     cam = camera(50)
-    orbit(cam, CENTER, az)
+    orbit(cam, (5.0, 5.0, 3.8) if scene == "pv" else CENTER, az)
     if scene == "glow":
         for ob in sc.objects:
             if ob.type == "LIGHT":

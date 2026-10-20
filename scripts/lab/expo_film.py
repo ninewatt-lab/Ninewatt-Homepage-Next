@@ -37,7 +37,7 @@ data = {
     "logo": logo_paths, "qr": qr,
     "photos": {k: (root / f"public/lab/ai-building-workspace/{k}.webp").as_uri()
                for k in ("photo-exterior-r2", "photo-1f-r2")},
-    "frames": {s: (film / "r" / s).as_uri() for s in ("rise", "section", "wrap", "thermal", "glow")},
+    "frames": {s: (film / "r" / s).as_uri() for s in ("rise", "section", "window", "wrap", "pv", "thermal", "glow")},
 }
 
 html = r"""<!doctype html><meta charset="utf-8"><style>
@@ -86,7 +86,7 @@ function logo(color = "#49b6ca", word = "#f2efea", w = 210) {
     D.logo.map((d, i) => `<path fill-rule="evenodd" d="${d}" fill="${i === 0 ? color : word}"/>`).join("") + "</svg>";
 }
 function chapter(layer, n, ko, en) {
-  const c = el("div", "t chap", `${String(n).padStart(2, "0")}`, layer); at(c, 120, 112);
+  const c = el("div", "t chap", typeof n === "number" ? String(n).padStart(2, "0") : n, layer); at(c, 120, 112);
   const r = el("div", "rule", "", layer); at(r, 120, 150);
   const h = el("div", "t h2", ko, layer); at(h, 120, 172);
   const s = el("div", "t en", en, layer); at(s, 122, 252);
@@ -214,6 +214,23 @@ scene(8, L => {
   c.u.querySelector(".num").textContent = fmt(1.0 + (0.16 - 1.0) * k, 2);
 });
 
+// 4-1. 창호 교체 ───────────────────────────────────────────────────────
+scene(6, L => {
+  const img = seq(L, "window", "full inset");
+  const ch = chapter(L, 3, "창호 교체", "Windows replaced with low-e double glazing, as in the drawing");
+  const tag = (ko, en) => el("div", "t", `<div style="font-size:34px;font-weight:700">${ko}</div><div class="en" style="margin-top:4px;letter-spacing:.04em">${en}</div>`, L);
+  const oldT = at(tag("기존 창", "ALUMINIUM · CLEAR DOUBLE GLAZING (ASSUMED)"), 120, 880);
+  const newT = at(tag("새 창", "PVC FRAME · LOW-E DOUBLE GLAZING 24 mm"), 120, 880);
+  const u = at(el("div", "t", `<div class="en" style="font-size:19px;letter-spacing:.08em">창 열관류율 · U-VALUE</div>` +
+    `<div style="display:flex;align-items:baseline;gap:18px;margin-top:10px"><span class="num" style="font-size:96px;font-weight:700;letter-spacing:-.03em"></span>` +
+    `<span style="font-size:24px;color:rgba(242,239,234,.55)">W/㎡K</span></div>`, L), 1420, 760);
+  return {img, ch, oldT, newT, u};
+}, (c, t, dur) => {
+  setSeq(c.img, t, 180); c.ch(t, dur);
+  reveal(c.oldT, t, .6, 2.5); reveal(c.newT, t, 3.4, dur - .8); reveal(c.u, t, .8, dur - .8);
+  c.u.querySelector(".num").textContent = fmt(4.0 + (1.8 - 4.0) * eio((t - 3.8) / 1.4), 2);
+});
+
 // 5. 건물 전체에 적용 ─────────────────────────────────────────────────
 scene(6, L => {
   const img = seq(L, "wrap", "full inset");
@@ -286,6 +303,24 @@ scene(9, L => {
   for (const q of c.bars) { q.b.style.opacity = out; q.a.style.opacity = out; }
   c.tot.querySelector(".nb").textContent = fmt(c.tb * gb / c.sB);
   c.tot.querySelector(".na").textContent = fmt(c.ta * ga / c.sA);
+});
+
+// 7-1. 태양광 (도면에 없는 추가 제안) ─────────────────────────────────────
+scene(6.5, L => {
+  const img = seq(L, "pv", "full inset");
+  const pv = D.energy.pv;
+  const ch = chapter(L, "+", "태양광을 더하면", "An additional proposal — not part of the drawing");
+  const pill = at(el("div", "t", `<span style="display:inline-block;border:1.5px solid #ff8a3d;color:#ffb07a;border-radius:999px;padding:6px 16px;font-size:19px;font-weight:600">도면에 없는 추가 제안</span>`, L), 120, 300);
+  const spec = at(el("div", "t", `<div class="en" style="letter-spacing:.06em">SOUTH ROOF · ${pv.modules} × ${pv.moduleW} W</div>` +
+    `<div style="font-size:32px;font-weight:600;margin-top:6px">남측 지붕면 · 모듈 ${pv.modules}장 · <span class="num" style="color:#9fdbe6">${pv.kw.toFixed(2)} kW</span></div>`, L), 120, 700);
+  const gen = at(el("div", "t", `<div style="display:flex;align-items:baseline;gap:16px"><span class="num" style="font-size:96px;font-weight:700;letter-spacing:-.03em"></span>` +
+    `<span style="font-size:26px;color:rgba(242,239,234,.6)">kWh/년 발전</span></div>`, L), 120, 790);
+  const note = el("div", "note", "EnergyPlus PVWatts 간이 계산 · 지붕 형태와 방위는 미확정이며 도면 위쪽을 북으로 가정했습니다", L);
+  return {img, ch, pill, spec, gen, note, kwh: pv.annualKWh};
+}, (c, t, dur) => {
+  setSeq(c.img, t, 180); c.ch(t, dur);
+  reveal(c.pill, t, .7, dur - .8); reveal(c.spec, t, 1.6, dur - .8); reveal(c.gen, t, 2.4, dur - .8); reveal(c.note, t, 2.4, dur - .8);
+  c.gen.querySelector(".num").textContent = fmt(c.kwh * eio((t - 2.6) / 1.8));
 });
 
 // 8. 견적 ──────────────────────────────────────────────────────────────
