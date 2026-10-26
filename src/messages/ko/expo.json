@@ -112,7 +112,7 @@
     "items": {
       "energyStudio": {
         "name": "Energy Studio",
-        "desc": "국토안전원의 기존 건축물 에너지 · 온실가스 시뮬레이터. 나인와트가 고도화와 운영을 맡고 있습니다."
+        "desc": "국토안전관리원의 기존 건축물 에너지 · 온실가스 시뮬레이터. 나인와트가 고도화와 운영을 맡고 있습니다."
       },
       "greenplanner": {
         "name": "GreenPlanner",
