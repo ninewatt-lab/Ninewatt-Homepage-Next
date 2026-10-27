@@ -192,7 +192,8 @@ export function ServicesContent({ projects }: { projects: ServiceProject[] }) {
           <p className="mt-4 max-w-2xl text-lg text-muted">
             {t("services.subtitleTemplate", {
               count: projects.length,
-              partners: new Set(projects.map((p) => p.client)).size,
+              // 발주처가 없는 자체 수주 건은 client를 "-"로 둔다. 파트너 수에서는 뺀다
+              partners: new Set(projects.map((p) => p.client).filter((c) => c !== "-")).size,
             })}
           </p>
           {hasDetailProjects && (
