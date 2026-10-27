@@ -2,39 +2,96 @@
 
 import { Link } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
-import { useState, useCallback } from "react";
+import Image from "next/image";
+import { useState, useCallback, useEffect, useRef } from "react";
 
-const VIDEO_URL = "/intro-optimized.mp4";
-const POSTER_URL = "/intro-poster.jpg";
+// 끝 1초를 첫 장면과 크로스페이드한 끊김 없는 루프 (원본: S3 videos/intro.mp4)
+const VIDEO_BASE = "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/videos";
+const VIDEO_DESKTOP_URL = `${VIDEO_BASE}/hero-loop-1080.mp4`;
+const VIDEO_MOBILE_URL = `${VIDEO_BASE}/hero-loop-720.mp4`;
+const POSTER_URL = "/images/hero-poster.webp";
 
 export default function VideoHero() {
   const t = useTranslations("home");
+  const sectionRef = useRef<HTMLElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const userPausedRef = useRef(false);
   const [videoReady, setVideoReady] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
 
   const handleCanPlay = useCallback(() => {
     setVideoReady(true);
   }, []);
 
+  // 하이드레이션 전에 canplay가 이미 지나갔으면 이벤트를 다시 받지 못하므로 붙는 시점에 확인한다
+  const attachVideo = useCallback((node: HTMLVideoElement | null) => {
+    videoRef.current = node;
+    if (node && node.readyState >= HTMLMediaElement.HAVE_FUTURE_DATA) setVideoReady(true);
+  }, []);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    const section = sectionRef.current;
+    if (!video || !section) return;
+
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    if (reducedMotion.matches) {
+      video.pause();
+      return;
+    }
+
+    // 화면 밖에서는 디코딩을 멈춰 배터리 · CPU 를 아낀다
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        if (!userPausedRef.current) video.play().catch(() => {});
+      } else {
+        video.pause();
+      }
+    });
+    observer.observe(section);
+    return () => observer.disconnect();
+  }, []);
+
+  const togglePlayback = useCallback(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    if (video.paused) {
+      userPausedRef.current = false;
+      video.play().catch(() => {});
+    } else {
+      userPausedRef.current = true;
+      video.pause();
+    }
+  }, []);
+
   return (
-    <section className="relative -mt-16 h-dvh w-full overflow-hidden bg-gray-900">
-      {/* Poster fallback — shown while video loads */}
-      <div
-        className={`absolute inset-0 bg-cover bg-center transition-opacity duration-700 ${videoReady ? "opacity-0" : "opacity-100"}`}
-        style={{ backgroundImage: `url(${POSTER_URL})` }}
+    <section ref={sectionRef} className="relative -mt-16 h-dvh w-full overflow-hidden bg-gray-900">
+      {/* Poster — LCP 이미지. 영상이 준비될 때까지, 그리고 움직임 줄이기 설정에서는 계속 보인다 */}
+      <Image
+        src={POSTER_URL}
+        alt=""
+        fill
+        priority
+        sizes="100vw"
+        className={`object-cover transition-opacity duration-700 ${videoReady ? "opacity-0 motion-reduce:opacity-100" : "opacity-100"}`}
       />
 
-      {/* Background video */}
+      {/* Background video — media 를 무시하는 브라우저는 첫 source(1080p)를 쓴다 */}
       <video
+        ref={attachVideo}
         autoPlay
         muted
         loop
         playsInline
         preload="auto"
-        poster={POSTER_URL}
+        aria-hidden="true"
         onCanPlay={handleCanPlay}
-        className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ${videoReady ? "opacity-100" : "opacity-0"}`}
+        onPlay={() => setIsPlaying(true)}
+        onPause={() => setIsPlaying(false)}
+        className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 motion-reduce:hidden ${videoReady ? "opacity-100" : "opacity-0"}`}
       >
-        <source src={VIDEO_URL} type="video/mp4" />
+        <source src={VIDEO_DESKTOP_URL} type="video/mp4" media="(min-width: 768px)" />
+        <source src={VIDEO_MOBILE_URL} type="video/mp4" />
       </video>
 
       {/* Dark overlay gradient */}
@@ -124,6 +181,24 @@ export default function VideoHero() {
         </div>
       </div>
 
+      {/* 5초 넘게 자동재생되는 영상의 정지 수단 (WCAG 2.2.2) */}
+      <button
+        type="button"
+        onClick={togglePlayback}
+        aria-label={isPlaying ? t("hero.pauseVideo") : t("hero.playVideo")}
+        className="absolute right-4 top-20 z-20 flex h-9 w-9 items-center justify-center rounded-full border border-white/20 bg-black/30 text-white/70 backdrop-blur-sm transition-colors hover:border-white/50 hover:text-white motion-reduce:hidden sm:top-24 sm:right-8"
+      >
+        {isPlaying ? (
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true">
+            <rect x="2" y="1.5" width="2.5" height="9" rx="0.5" />
+            <rect x="7.5" y="1.5" width="2.5" height="9" rx="0.5" />
+          </svg>
+        ) : (
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true">
+            <path d="M3 1.8v8.4a.5.5 0 0 0 .76.43l6.9-4.2a.5.5 0 0 0 0-.86l-6.9-4.2A.5.5 0 0 0 3 1.8z" />
+          </svg>
+        )}
+      </button>
     </section>
   );
 }

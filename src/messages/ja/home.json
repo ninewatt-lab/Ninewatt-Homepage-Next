@@ -11,7 +11,9 @@
     "ctaContact": "お問い合わせ",
     "ctaProducts": "製品を見る",
     "familyLabel": "ファミリー企業",
-    "partnerLabel": "優秀協力企業"
+    "partnerLabel": "優秀協力企業",
+    "pauseVideo": "背景動画を一時停止",
+    "playVideo": "背景動画を再生"
   },
   "showcase": {
     "label": "Our Products",

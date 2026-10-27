@@ -11,7 +11,9 @@
     "ctaContact": "문의하기",
     "ctaProducts": "제품 보기",
     "familyLabel": "패밀리기업",
-    "partnerLabel": "우수협력기업"
+    "partnerLabel": "우수협력기업",
+    "pauseVideo": "배경 영상 일시정지",
+    "playVideo": "배경 영상 재생"
   },
   "showcase": {
     "label": "Our Products",
