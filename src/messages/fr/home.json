@@ -11,7 +11,9 @@
     "ctaContact": "Nous contacter",
     "ctaProducts": "Voir les produits",
     "familyLabel": "Entreprise affiliée",
-    "partnerLabel": "Partenaire clé"
+    "partnerLabel": "Partenaire clé",
+    "pauseVideo": "Mettre en pause la vidéo d'arrière-plan",
+    "playVideo": "Lire la vidéo d'arrière-plan"
   },
   "showcase": {
     "label": "Our Products",

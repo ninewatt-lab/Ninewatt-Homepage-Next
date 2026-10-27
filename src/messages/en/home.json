@@ -11,7 +11,9 @@
     "ctaContact": "Contact Us",
     "ctaProducts": "View Products",
     "familyLabel": "Family Corp.",
-    "partnerLabel": "Key Partner"
+    "partnerLabel": "Key Partner",
+    "pauseVideo": "Pause background video",
+    "playVideo": "Play background video"
   },
   "showcase": {
     "label": "Our Products",
