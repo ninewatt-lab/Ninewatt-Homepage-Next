@@ -97,6 +97,7 @@
       { "title": "京畿道 (경기도) - 中小企業気候経営支援サービス", "category": "自治体", "desc": "GHG排出量算定、エネルギー診断、PV・ESS分析、削減提案までワンストップで対応", "detail": { "description": "中小企業の炭素経営をワンクリックで支援するサービスで、Scope別炭素排出量算定、電力使用量分析・ヒートマップ、ESS設置シミュレーション、PV分析、自動レポート生成までワンストップで提供します。", "images": ["https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/projects/SME-Climate_4.png", "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/projects/SME-Climate_1.png", "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/projects/SME-Climate_2.png", "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/projects/SME-Climate_3.png"], "link": "https://climate.gg.go.kr/cbss/main/index.do" } },
       { "title": "LS Electric Global R&D Campus - SAVE-E", "category": "企業", "desc": "エネルギーソリューションの提供及び自動診断レポートシステムの構築" },
       { "title": "LS Electric - Smart Energy Insight System", "category": "企業", "desc": "顧客企業向けエネルギーソリューションの提供及び営業ツールとしての活用" },
+      { "title": "日本 楽天・アズビル・コムテック - BUILDAT 建物統合運用プラットフォーム", "category": "海外", "desc": "建物・設備・センサーのデータ、インシデント、災害・リスク情報をひとつにまとめ、複数拠点の建物運用をリアルタイムに管理" },
       { "title": "津南町 - 脱炭素プロジェクト", "category": "海外", "desc": "シナネンホールディングスと共に新潟県津南町自治体向けスマートシティ実証プロジェクト", "detail": { "description": "新潟県津南町の建物別エネルギー消費量とPV発電量を3Dエネルギーマップで可視化し、事業者マッチング・補助金支援・建物管理機能を提供するスマートシティ実証プラットフォームです。", "images": ["https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/projects/Watti-Tsunan_1.png"] } },
       { "title": "韓英国際研究課題 - AIチャットボット建物エネルギー分析プラットフォーム", "category": "海外", "desc": "韓国建設技術研究院 (KICT)、UCL (University College London) と共にAIアシスタント建物エネルギー分析技術及びプラットフォーム開発" },
       { "title": "フランス - グリーンリノベーションプラットフォーム", "category": "海外", "desc": "Toltek（建築業者向けソリューション開発スタートアップ）と業務協約を締結、フランスの建物エネルギー分析サービス" }
@@ -127,7 +128,7 @@
     "clickHint": "▸マーク付きの項目をクリックすると詳細を確認できます",
     "tableHeaders": { "client": "企業（機関名）", "period": "期間", "content": "遂行内容" },
     "projects": [
-      { "client": "-", "period": "2026.09~2026.11", "title": "SLMハルケア（船舶管理）プラットフォーム構築" },
+      { "client": "-", "period": "2026.09~2026.11", "title": "SLMハルケア（船舶管理）プラットフォーム構築", "detail": { "description": "船舶の船体（ハル）清掃作業を管理するプラットフォームで、全体運用状況ダッシュボード、船体区域別の清掃進捗の可視化、清掃ロボットのリアルタイム監視、清掃結果・証憑資料の管理及び報告書作成機能を提供します。", "images": ["https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/projects/SLM_1.png", "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/projects/SLM_2.png"] }},
       { "client": "ウリアイドゥルプラス (우리아이들플러스)", "period": "2026.09~2026.12", "title": "在庫管理システム構築" },
       { "client": "韓国エネルギー技術研究院 (KIER, 한국에너지기술연구원)", "period": "2026.07~2026.11", "title": "AIリアルタイム診断アルゴリズムに基づくUPS寿命予測モデルの検証及び試作バッテリー適用アルゴリズムの高度化" },
       { "client": "韓国エネルギー公団 新・再生可能エネルギーセンター (한국에너지공단)", "period": "2026.06~2026.12", "title": "京畿北部接境地域における再生可能エネルギー設備普及の妥当性分析研究用役" },
