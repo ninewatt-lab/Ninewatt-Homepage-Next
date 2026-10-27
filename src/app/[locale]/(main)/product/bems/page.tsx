@@ -5,21 +5,22 @@ import { Link } from "@/i18n/navigation";
 import { getTranslations } from "next-intl/server";
 import { ScreenGallery, type Screen } from "@/components/ScreenGallery";
 
+// 이미지를 같은 이름으로 다시 올렸을 때 캐시를 비우려면 ?v= 를 올린다
 const S3 = "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/projects";
 
 // 홈 대시보드 · 설비 현황
 const overviewScreens: Screen[] = [
-  { src: `${S3}/BEMS_1.png`, width: 2400, height: 1313 },
-  { src: `${S3}/BEMS_5.png`, width: 2254, height: 1714 },
+  { src: `${S3}/BEMS_1.png?v=2`, width: 2400, height: 1313 },
+  { src: `${S3}/BEMS_5.png?v=2`, width: 2254, height: 1714 },
 ];
 
 // bems.highlights 순서와 맞춘다: 대시보드 구성 → AI 분석
 const highlightScreens: Screen[][] = [
   [
-    { src: `${S3}/BEMS_2.png`, width: 2240, height: 1690 },
-    { src: `${S3}/BEMS_3.png`, width: 2252, height: 1722 },
+    { src: `${S3}/BEMS_2.png?v=2`, width: 2240, height: 1690 },
+    { src: `${S3}/BEMS_3.png?v=2`, width: 2252, height: 1722 },
   ],
-  [{ src: `${S3}/BEMS_4.png`, width: 2268, height: 1720 }],
+  [{ src: `${S3}/BEMS_4.png?v=2`, width: 2268, height: 1720 }],
 ];
 
 export async function generateMetadata({
