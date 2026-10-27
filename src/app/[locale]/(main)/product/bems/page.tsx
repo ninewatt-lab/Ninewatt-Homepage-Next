@@ -3,6 +3,24 @@ import type { Metadata } from "next";
 import { buildMetadata } from "@/lib/seo";
 import { Link } from "@/i18n/navigation";
 import { getTranslations } from "next-intl/server";
+import { ScreenGallery, type Screen } from "@/components/ScreenGallery";
+
+const S3 = "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/projects";
+
+// 홈 대시보드 · 설비 현황
+const overviewScreens: Screen[] = [
+  { src: `${S3}/BEMS_1.png`, width: 2400, height: 1313 },
+  { src: `${S3}/BEMS_5.png`, width: 2254, height: 1714 },
+];
+
+// bems.highlights 순서와 맞춘다: 대시보드 구성 → AI 분석
+const highlightScreens: Screen[][] = [
+  [
+    { src: `${S3}/BEMS_2.png`, width: 2240, height: 1690 },
+    { src: `${S3}/BEMS_3.png`, width: 2252, height: 1722 },
+  ],
+  [{ src: `${S3}/BEMS_4.png`, width: 2268, height: 1720 }],
+];
 
 export async function generateMetadata({
   params,
@@ -27,6 +45,7 @@ export default async function BemsPage() {
   const energyCategories = t.raw("bems.energyCategories") as { category: string; items: { name: string; desc: string }[] }[];
   const benefitItems = t.raw("bems.benefitItems") as { value: string; label: string }[];
   const targetItems = t.raw("bems.targetItems") as { title: string; desc: string }[];
+  const highlights = t.raw("bems.highlights") as { title: string; desc: string }[];
 
   return (
     <>
@@ -61,6 +80,28 @@ export default async function BemsPage() {
           </div>
         </div>
       </section>
+
+      {/* Product Screens */}
+      <section className="px-6 py-20">
+        <div className="mx-auto max-w-5xl">
+          <ScreenGallery screens={overviewScreens} alt="BEMS" />
+        </div>
+      </section>
+
+      {/* Highlights */}
+      {highlights.map((item, i) => (
+        <section key={i} className={`border-t border-border px-6 py-24 ${i % 2 === 0 ? "bg-surface" : ""}`}>
+          <div className="mx-auto grid max-w-5xl items-center gap-10 lg:grid-cols-5">
+            <div className={`lg:col-span-2 ${i % 2 === 1 ? "lg:order-2" : ""}`}>
+              <h2 className="text-2xl font-bold md:text-3xl">{item.title}</h2>
+              <p className="mt-4 text-lg leading-relaxed text-muted">{item.desc}</p>
+            </div>
+            <div className="lg:col-span-3">
+              <ScreenGallery screens={highlightScreens[i]} alt={item.title} sizes="(max-width: 1024px) 100vw, 600px" />
+            </div>
+          </div>
+        </section>
+      ))}
 
       {/* Core Features */}
       {coreFeatures.map((section, si) => (

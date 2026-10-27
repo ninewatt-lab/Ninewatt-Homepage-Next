@@ -827,6 +827,10 @@
     "heroSubtitle": "Visualisez l'énergie du bâtiment en données, gérez-la en coûts",
     "heroDesc": "Collectez et analysez en temps réel les données de consommation énergétique des bâtiments, en visualisant l'utilisation par source, usage et zone. Réduisez les coûts énergétiques et les émissions de carbone grâce à la prévision IA et au contrôle automatisé.",
     "requestDemo": "Nous contacter",
+    "highlights": [
+      { "title": "Un tableau de bord adapté à votre métier", "desc": "Ajoutez les graphiques et indicateurs dont vous avez besoin, puis organisez-les et redimensionnez-les librement pour créer votre propre tableau de bord. Visualisez l'essentiel d'un coup d'œil et exportez-le sous forme de rapport." },
+      { "title": "Une analyse IA qui rend les données de terrain faciles à comprendre", "desc": "L'IA explique, à partir des données de terrain, la situation principale, les évolutions et les points à vérifier, pour comprendre facilement l'état du site." }
+    ],
 
     "coreFeatures": [
       {

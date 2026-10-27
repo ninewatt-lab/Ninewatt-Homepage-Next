@@ -697,6 +697,10 @@
     "heroSubtitle": "See building energy as data, manage it as cost",
     "heroDesc": "Collect and analyze building energy consumption data in real time, visualizing energy usage by source, purpose, and zone. Reduce energy costs and carbon emissions with AI-based forecasting and automated control integration.",
     "requestDemo": "Contact Us",
+    "highlights": [
+      { "title": "A dashboard built around your work", "desc": "Add the charts and metrics you need, then freely arrange and resize them to build your own dashboard. See the information you want at a glance and export it as a report." },
+      { "title": "AI analysis that makes site data easy to understand", "desc": "AI explains key status, changes and items that need attention based on site data, helping you quickly understand what is happening on site." }
+    ],
 
     "coreFeatures": [
       {
