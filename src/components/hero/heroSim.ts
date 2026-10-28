@@ -132,6 +132,10 @@ export type Sim = {
   /** + 방전 · − 충전 */
   essKw: number;
   hpKw: number;
+  /** 해 고도 -1~1 (밤은 음수) */
+  sunAlt: number;
+  /** 어두운 정도 0(낮) ~ 1(밤) — 하늘 · 창 조명 · 가로등 */
+  dark: number;
 };
 
 export function createSim(frozen: boolean): Sim {
@@ -149,6 +153,8 @@ export function createSim(frozen: boolean): Sim {
     essSoc: frozen ? 0.62 : 0.8,
     essKw: 0,
     hpKw: 0,
+    sunAlt: 0,
+    dark: 1,
   };
   stepSim(sim, 0, frozen);
   return sim;
@@ -176,6 +182,10 @@ export function stepSim(sim: Sim, delta: number, frozen: boolean) {
   }
 
   // 태양광은 구름에 따라 ±4%, 부하는 ±1.2% 안팎으로 흔들린다
+  sim.sunAlt = Math.sin(((sim.hour - 6) / 12) * Math.PI);
+  // 해가 지평선 아래로 조금 내려간 뒤(박명)까지 서서히 어두워진다
+  const t = Math.min(1, Math.max(0, (sim.sunAlt + 0.12) / 0.4));
+  sim.dark = 1 - t * t * (3 - 2 * t);
   sim.solarKw = PV_PEAK_KW * daylight(sim.hour) * (1 + 0.04 * jitter(sim.elapsed, 1));
   const base = PEAK_KW * loadAt(sim.hour);
   sim.aiKw = base * AI_SAVING * sim.ai;
