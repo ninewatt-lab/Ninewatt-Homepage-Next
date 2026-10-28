@@ -55,8 +55,8 @@ function rect(seg: Seg, w: number, d: number, y: number, cx = 0, cz = 0) {
 
 /* ── 대지: 포장 광장 · 조경 ──────────────────────────────────────── */
 
-const SITE: [number, number] = [5.0, 3.9]; // 50 × 39 m
-const SITE_TOP = 0.012;
+export const SITE: [number, number] = [5.0, 3.9]; // 50 × 39 m
+export const SITE_TOP = 0.012;
 const TREES: [number, number, number][] = [
   // x, z, 크기
   [-2.3, -1.45, 1],
@@ -210,16 +210,59 @@ function floorPlan(index: number) {
   });
 }
 
+// 사무실 창 조명 — 커튼월 칸(bay)마다 켜지는 기준이 달라, 재실이 줄면 하나씩 꺼진다
+const windowVertex = /* glsl */ `
+  varying vec2 vUv;
+  varying vec3 vNormalObj;
+  void main() {
+    vUv = uv;
+    vNormalObj = normal;
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+  }
+`;
+const windowFragment = /* glsl */ `
+  uniform vec3 uColor;
+  uniform float uOcc;
+  uniform float uOpacity;
+  uniform float uSeed;
+  uniform float uBays;
+  varying vec2 vUv;
+  varying vec3 vNormalObj;
+  float hash(float n) { return fract(sin(n) * 43758.5453); }
+  void main() {
+    if (abs(vNormalObj.y) > 0.5) discard; // 천장 · 바닥 면은 그리지 않는다
+    float face = dot(vNormalObj, vec3(1.0, 3.0, 7.0));
+    float x = vUv.x * uBays;
+    float th = hash(floor(x) * 12.9898 + face * 78.233 + uSeed);
+    float lit = smoothstep(th - 0.04, th + 0.04, uOcc);
+    float bay = smoothstep(0.0, 0.1, fract(x)) * smoothstep(1.0, 0.9, fract(x)); // 멀리언 사이 틈
+    float ceiling = mix(0.5, 1.0, vUv.y); // 천장 조명이라 위가 밝다
+    gl_FragColor = vec4(uColor * lit * bay * ceiling * uOpacity, 1.0);
+  }
+`;
+const OFFICE_LIGHT = new THREE.Color("#ffdcae");
+
 export function Floor({ index, hovered, onHover }: { index: number; hovered: boolean; onHover: (i: number | null) => void }) {
   const sim = useSim();
   const group = useRef<THREE.Group>(null);
   const energy = useRef<THREE.Mesh>(null);
   const plan = useRef<THREE.LineSegments>(null);
+  const windows = useRef<THREE.Mesh>(null);
   const [w, d] = footprint(index);
   const y = index * FLOOR_H;
   const lobby = index === 0;
   const color = useMemo(() => new THREE.Color(), []);
   const planGeometry = useMemo(() => floorPlan(index), [index]);
+  const windowUniforms = useMemo(
+    () => ({
+      uColor: { value: OFFICE_LIGHT.clone() },
+      uOcc: { value: 0 },
+      uOpacity: { value: 0 },
+      uSeed: { value: index * 17.31 },
+      uBays: { value: Math.round(w / 0.17) },
+    }),
+    [index, w],
+  );
 
   useFrame(() => {
     const g = group.current;
@@ -236,7 +279,14 @@ export function Floor({ index, hovered, onHover }: { index: number; hovered: boo
     const hover = hovered ? 1 : 0;
     const mat = mesh.material as THREE.MeshBasicMaterial;
     mat.color.copy(color.copy(TEAL).lerp(WARM, THREE.MathUtils.smoothstep(load, 0.7, 1)).lerp(WHITE, scan * 0.5 + hover * 0.3));
-    mat.opacity = (0.08 + load * 0.45 + scan * 0.2 + hover * 0.2) * r;
+    // 밤에는 데이터 빛을 조금 낮춰 창 조명이 읽히게
+    mat.opacity = (0.08 + load * 0.45 + scan * 0.2 + hover * 0.2) * r * (1 - s.dark * 0.35);
+    // 재실(부하)만큼 창 조명이 켜진다. 로비는 밤에도 켜 둔다. 낮에는 거의 보이지 않는다
+    if (windows.current) {
+      const u = (windows.current.material as THREE.ShaderMaterial).uniforms;
+      u.uOcc.value = Math.max(lobby ? 0.55 : 0, Math.min(1, (load - 0.1) / 0.85));
+      u.uOpacity.value = (0.08 + s.dark * 0.9) * r;
+    }
     // 스캔이 지나가면 실내 평면이 X-ray 처럼 드러난다
     (lines.material as THREE.LineBasicMaterial).opacity = (0.09 + scan * 0.75 + hover * 0.45) * r;
   });
@@ -264,6 +314,17 @@ export function Floor({ index, hovered, onHover }: { index: number; hovered: boo
       <lineSegments ref={plan} geometry={planGeometry}>
         <lineBasicMaterial color="#d6f4fa" transparent depthWrite={false} />
       </lineSegments>
+      <mesh ref={windows} position={[0, DECK + glassH / 2, 0]} renderOrder={2}>
+        <boxGeometry args={[w - 0.02, glassH - 0.01, d - 0.02]} />
+        <shaderMaterial
+          vertexShader={windowVertex}
+          fragmentShader={windowFragment}
+          uniforms={windowUniforms}
+          transparent
+          blending={THREE.AdditiveBlending}
+          depthWrite={false}
+        />
+      </mesh>
       {/* 유리 — 로비는 더 투명하게. 그림자는 건물 덩어리로 떨어지도록 유리도 드리운다 */}
       <mesh position={[0, DECK + glassH / 2, 0]} castShadow>
         <boxGeometry args={[w, glassH, d]} />

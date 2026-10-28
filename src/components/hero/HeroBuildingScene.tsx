@@ -12,6 +12,7 @@ import * as THREE from "three";
 import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
 import { Blueprint, Canopy, Core, FLOW_NORM, Floor, Mullions, RISER_Z, Roofs, Site, SolarArray, TEAL } from "./BuildingModel";
 import { ESS_ANCHOR, ESS_ENTRY, ESS_PORT, EssUnits, HP_ANCHOR, HeatPumps } from "./Equipment";
+import { Lighting, Sky, StreetLights } from "./Atmosphere";
 import {
   AI_SAVING,
   BUILDING_H,
@@ -333,41 +334,6 @@ function Rig({ frozen, children }: { frozen: boolean; children: React.ReactNode 
   return <group ref={group}>{children}</group>;
 }
 
-const SUN = new THREE.Color("#fff1dc");
-const MOON = new THREE.Color("#a9c2d6");
-
-// 해는 동(+x)에서 서(-x)로, 남쪽(+z) 하늘을 지난다. 밤에는 낮고 푸른 달빛
-function Sun({ shadows, mapSize }: { shadows: boolean; mapSize: number }) {
-  const sim = useSim();
-  const ref = useRef<THREE.DirectionalLight>(null);
-  useFrame(() => {
-    const light = ref.current;
-    if (!light) return;
-    const { hour, solarKw } = sim.current;
-    const day = hour >= 6 && hour < 18;
-    const a = ((((hour - (day ? 6 : 18)) % 24) + 24) % 24 / 12) * Math.PI;
-    // 고도를 낮게 잡아 아침 · 오후 그림자가 건물 좌우로 길게 드리운다
-    light.position.set(Math.cos(a) * 12, 1.5 + Math.sin(a) * 8, 3);
-    light.intensity = day ? 0.7 + (solarKw / FLOW_NORM.solar) * 1.3 : 0.2;
-    light.color.copy(day ? SUN : MOON);
-  });
-  return (
-    <directionalLight
-      ref={ref}
-      castShadow={shadows}
-      shadow-mapSize={[mapSize, mapSize]}
-      shadow-camera-left={-6}
-      shadow-camera-right={6}
-      shadow-camera-top={6}
-      shadow-camera-bottom={-6}
-      shadow-camera-near={1}
-      shadow-camera-far={40}
-      shadow-bias={-0.0004}
-      shadow-normalBias={0.02}
-    />
-  );
-}
-
 /* ── 장면 ─────────────────────────────────────────────────────────── */
 
 function Scene({
@@ -390,11 +356,12 @@ function Scene({
       <SimDriver frozen={frozen} />
       <color attach="background" args={[BG]} />
       <fog attach="fog" args={[BG, 20, 42]} />
-      <hemisphereLight args={["#bfe6ee", "#0b1c25", 0.32]} />
-      <Sun shadows={shadows} mapSize={mapSize} />
+      <Sky />
+      <Lighting shadows={shadows} mapSize={mapSize} />
       <Rig frozen={frozen}>
         <Stage />
         <Site />
+        <StreetLights />
         <Blueprint />
         <Cables />
         {Array.from({ length: FLOORS }, (_, i) => (
