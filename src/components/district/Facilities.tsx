@@ -270,24 +270,24 @@ function BemsScan() {
   );
 }
 
-function CabinetModels({ positions }: { positions: THREE.Vector3[] }) {
+function CabinetModels({ positions, scale }: { positions: THREE.Vector3[]; scale: number }) {
   const geometry = useModelGeometry("EssCabinet");
   const material = useModelMaterial(0.55, 0.15);
   return (
     <>
       {positions.map((p, i) => (
-        <mesh key={i} geometry={geometry} material={material} position={p} scale={0.1} castShadow receiveShadow />
+        <mesh key={i} geometry={geometry} material={material} position={p} scale={scale} castShadow receiveShadow />
       ))}
     </>
   );
 }
 
-function CabinetBoxes({ positions }: { positions: THREE.Vector3[] }) {
+function CabinetBoxes({ positions, scale }: { positions: THREE.Vector3[]; scale: number }) {
   return (
     <>
       {positions.map((p, i) => (
-        <mesh key={i} position={[p.x, p.y + 0.15, p.z]} castShadow>
-          <boxGeometry args={[0.36, 0.3, 0.18]} />
+        <mesh key={i} position={[p.x, p.y + 1.5 * scale, p.z]} castShadow>
+          <boxGeometry args={[3.6 * scale, 3 * scale, 1.8 * scale]} />
           <meshStandardMaterial color="#e9ecea" roughness={0.55} />
         </mesh>
       ))}
@@ -295,10 +295,10 @@ function CabinetBoxes({ positions }: { positions: THREE.Vector3[] }) {
   );
 }
 
-function Cabinets({ positions }: { positions: THREE.Vector3[] }) {
+function Cabinets({ positions, scale = 0.1 }: { positions: THREE.Vector3[]; scale?: number }) {
   return (
-    <Suspense fallback={<CabinetBoxes positions={positions} />}>
-      <CabinetModels positions={positions} />
+    <Suspense fallback={<CabinetBoxes positions={positions} scale={scale} />}>
+      <CabinetModels positions={positions} scale={scale} />
     </Suspense>
   );
 }
@@ -344,29 +344,31 @@ function FencedPad({ x, z, w, d, color = "#b4bbbc" }: { x: number; z: number; w:
   );
 }
 
-export const PEAK_ESS = { x: -3.55, z: -2.15 };
+// 빌딩 동쪽 벽 옆 — 도로변 전주 · 전선이 카메라에서 캐비닛 앞을 가리지 않는 자리
+export const PEAK_ESS = { x: -3.55, z: -4.1, w: 2.0, d: 1.2 };
+/** 빌딩 옆에서 보이도록 실제(3.6 m 캐비닛)의 2 배로 */
+const PEAK_SCALE = 0.2;
 
 export function PeakEss() {
   const target = useFacility("peakEss");
-  const pos = useMemo(() => [new THREE.Vector3(PEAK_ESS.x - 0.2, 0.025, PEAK_ESS.z), new THREE.Vector3(PEAK_ESS.x + 0.2, 0.025, PEAK_ESS.z)], []);
+  const pos = useMemo(() => [new THREE.Vector3(PEAK_ESS.x - 0.38, 0.025, PEAK_ESS.z), new THREE.Vector3(PEAK_ESS.x + 0.38, 0.025, PEAK_ESS.z)], []);
+  // 패드 서쪽 끝 → 빌딩 동쪽 벽까지 짧은 전선관 덮개
+  const wall = TOWER.x + TOWER.w / 2;
   const trench = useMemo(() => {
-    const x0 = PEAK_ESS.x - 0.2;
-    const z0 = PEAK_ESS.z - 0.35;
-    const z1 = TOWER.z + TOWER.d / 2 + 0.2;
-    const x1 = TOWER.x + TOWER.w / 2 - 0.25;
-    return [m4(x0, 0.004, (z0 + z1) / 2, 0, 0.09, 1, z0 - z1), m4((x0 + x1) / 2, 0.004, z1, 0, x0 - x1 + 0.09, 1, 0.09)];
-  }, []);
+    const x0 = PEAK_ESS.x - PEAK_ESS.w / 2;
+    return [m4((x0 + wall) / 2, 0.004, PEAK_ESS.z, 0, x0 - wall, 1, 0.09)];
+  }, [wall]);
   return (
     <group {...target}>
-      <FencedPad x={PEAK_ESS.x} z={PEAK_ESS.z} w={1.1} d={0.7} />
-      <Cabinets positions={pos} />
+      <FencedPad x={PEAK_ESS.x} z={PEAK_ESS.z} w={PEAK_ESS.w} d={PEAK_ESS.d} />
+      <Cabinets positions={pos} scale={PEAK_SCALE} />
       {/* 빌딩 전기실까지 묻힌 전선관: 덮개 콘크리트 띠 + 외벽 접속함 */}
       <Instances matrices={trench} cast={false}>
         <boxGeometry args={[1, 0.008, 1]} />
         <meshStandardMaterial color="#8d9496" roughness={0.9} />
       </Instances>
-      <mesh position={[TOWER.x + TOWER.w / 2 - 0.25, 0.13, TOWER.z + TOWER.d / 2 + 0.04]} castShadow>
-        <boxGeometry args={[0.16, 0.2, 0.06]} />
+      <mesh position={[wall + 0.04, 0.13, PEAK_ESS.z]} castShadow>
+        <boxGeometry args={[0.06, 0.2, 0.16]} />
         <meshStandardMaterial color="#c9d0d2" roughness={0.5} />
       </mesh>
     </group>
@@ -375,24 +377,21 @@ export function PeakEss() {
 
 /* ── 북동: 공유형 ESS 단지 · 배전선 · 태양광 후보지 ─────────────────── */
 
-export const SHARED = { x: 10, z: -5.2, w: 4.4, d: 3.2 };
+export const SHARED = { x: 10, z: -5.2, w: 4.8, d: 3.4 };
+const CONTAINER_SCALE = 0.14;
 
 export function SharedEss() {
   const target = useFacility("sharedEss");
-  // 컨테이너형 ESS 4기 (냉방기 쪽이 카메라를 향한다)
-  const containers = useMemo(() => [-0.62, 0.58].flatMap((dz) => [-0.95, 0.95].map((dx) => m4(SHARED.x + dx, 0.025, SHARED.z + dz, 0, 0.1, 0.1, 0.1))), []);
-  // 케이블 트레이: 변압기 → 단지 가운데 통로를 따라 컨테이너로
-  const trays = useMemo(() => [m4(SHARED.x - 0.525, 0.36, SHARED.z - 0.02, 0, 4.25, 1, 0.09), m4(SHARED.x - 2.65, 0.36, SHARED.z + 0.59, 0, 0.09, 1, 1.22)], []);
+  // 컨테이너형 ESS 4기 — 지붕 없이 야외에 두고 보이도록 1.4 배 (냉방기 쪽이 카메라를 향한다)
+  const containers = useMemo(() => [-0.7, 0.6].flatMap((dz) => [-1.0, 1.0].map((dx) => m4(SHARED.x + dx, 0.025, SHARED.z + dz, 0, CONTAINER_SCALE, CONTAINER_SCALE, CONTAINER_SCALE))), []);
+  // 케이블 트레이: 변압기 → 두 줄 사이 통로를 따라 컨테이너로
+  const trays = useMemo(() => [m4(SHARED.x - 0.45, 0.36, SHARED.z - 0.05, 0, 4.4, 1, 0.09), m4(SHARED.x - 2.65, 0.36, SHARED.z + 0.575, 0, 0.09, 1, 1.25)], []);
   const trayPosts = useMemo(() => {
     const list: THREE.Matrix4[] = [];
-    for (let x = -2.6; x <= 1.6; x += 0.7) list.push(m4(SHARED.x + x, 0.18, SHARED.z - 0.02));
+    for (let x = -2.6; x <= 1.7; x += 0.72) list.push(m4(SHARED.x + x, 0.18, SHARED.z - 0.05));
     for (const z of [0.4, 0.9]) list.push(m4(SHARED.x - 2.65, 0.18, SHARED.z + z));
     return list;
   }, []);
-  const posts = useMemo(() => [-1.9, 0, 1.9].flatMap((dx) => [-1.3, 1.3].map((dz) => m4(SHARED.x + dx, 0.55, SHARED.z + dz))), []);
-  // 캐노피 골조: 긴 보 2 + 도리
-  const beams = useMemo(() => [-1.3, 1.3].map((dz) => m4(SHARED.x, 1.05, SHARED.z + dz, 0, 4.0 / 0.05, 1, 1)), []);
-  const purlins = useMemo(() => Array.from({ length: 9 }, (_, k) => m4(SHARED.x - 1.9 + k * 0.475, 1.07, SHARED.z, 0, 1, 1, 2.8 / 0.05)), []);
   const transformer = useMemo(() => [m4(SHARED.x - 2.9, 0, SHARED.z + 1.2, 0, 0.1, 0.1, 0.1)], []);
   return (
     <group {...target}>
@@ -405,22 +404,6 @@ export function SharedEss() {
       <Instances matrices={trayPosts}>
         <boxGeometry args={[0.02, 0.36, 0.02]} />
         <meshStandardMaterial color="#5a6569" metalness={0.6} roughness={0.4} />
-      </Instances>
-      <Instances matrices={posts}>
-        <boxGeometry args={[0.06, 1.1, 0.06]} />
-        <meshStandardMaterial color="#3a464a" metalness={0.6} roughness={0.4} />
-      </Instances>
-      <mesh position={[SHARED.x, 1.12, SHARED.z]} castShadow receiveShadow>
-        <boxGeometry args={[4.1, 0.06, 2.9]} />
-        <meshStandardMaterial color="#2f3a3e" metalness={0.5} roughness={0.5} />
-      </mesh>
-      <Instances matrices={beams}>
-        <boxGeometry args={[0.05, 0.07, 0.07]} />
-        <meshStandardMaterial color="#3a464a" metalness={0.6} roughness={0.4} />
-      </Instances>
-      <Instances matrices={purlins}>
-        <boxGeometry args={[0.035, 0.04, 0.05]} />
-        <meshStandardMaterial color="#4a575b" metalness={0.6} roughness={0.4} />
       </Instances>
       <Props node="Transformer" matrices={transformer} metalness={0.35} roughness={0.5} />
     </group>
@@ -477,7 +460,7 @@ export function EnergyFlow() {
       { points: [src, up, v(TOWER.x + 1, y, POLE_Z), v(TOWER.x + 1, 2.5, TOWER.z + TOWER.d / 2)] },
       { points: [src, up, v(OLD.x, y, POLE_Z), v(OLD.x, 1.6, OLD.z - OLD.d / 2)] },
       { points: [src, up, v(-11, y, POLE_Z), v(-11, 1.2, -5.5 + 1)] },
-      { points: [v(PEAK_ESS.x - 0.2, 0.3, PEAK_ESS.z - 0.2), v(PEAK_ESS.x - 0.9, 0.3, TOWER.z + TOWER.d / 2 + 0.3), v(TOWER.x + 1.2, 0.5, TOWER.z + TOWER.d / 2)], peak: true },
+      { points: [v(PEAK_ESS.x - 0.38, 0.45, PEAK_ESS.z), v(PEAK_ESS.x - 1.0, 0.3, PEAK_ESS.z), v(TOWER.x + TOWER.w / 2 + 0.02, 0.3, PEAK_ESS.z)], peak: true },
     ];
     return raw.map(({ points, peak }) => {
       const lengths = [0];
