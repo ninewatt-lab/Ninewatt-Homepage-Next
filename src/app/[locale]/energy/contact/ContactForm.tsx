@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
+import Email from "@/components/Email";
 
 type InquiryType = "solar" | "ess" | "integrated" | "product" | "ppa";
 
@@ -254,9 +255,7 @@ export default function ContactForm() {
                     </svg>
                     <div>
                       <p className="text-sm text-zinc-500">이메일</p>
-                      <a href="mailto:ninewatt@ninewatt.com" className="text-base font-medium text-zinc-900 dark:text-white hover:text-primary transition-colors">
-                        ninewatt@ninewatt.com
-                      </a>
+                      <Email address="ninewatt@ninewatt.com" link className="text-base font-medium text-zinc-900 dark:text-white hover:text-primary transition-colors" />
                     </div>
                   </div>
 

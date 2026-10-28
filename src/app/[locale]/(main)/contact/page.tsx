@@ -1,6 +1,7 @@
 import { buildMetadata } from "@/lib/seo";
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
+import Email from "@/components/Email";
 import ContactForm from "@/components/ContactForm";
 
 export async function generateMetadata({
@@ -84,7 +85,9 @@ export default async function ContactPage() {
               </div>
               <div className="rounded-2xl border border-border bg-surface-elevated p-6">
                 <p className="text-sm font-semibold text-primary">{t("emailInfo")}</p>
-                <p className="mt-2 text-sm text-muted">{t("emailAddress")}</p>
+                <p className="mt-2 text-sm text-muted">
+                  <Email address={t("emailAddress")} />
+                </p>
               </div>
             </div>
           </div>
