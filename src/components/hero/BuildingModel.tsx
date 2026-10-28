@@ -2,30 +2,19 @@
 
 /**
  * 히어로 3D 건물 모델 — 모델 파일 없이 코드로 만든다.
- * 등장 순서: 도면(축선 · 외곽) → 층이 아래부터 올라감 → 외피 핀 · 코어 → 옥상 태양광 · 히트펌프 · ESS
+ * 등장 순서: 도면(축선 · 외곽) → 층이 아래부터 올라감 → 커튼월 멀리언 · 코어 → 옥상 · 테라스 · 설비
+ * 설비(ESS · 히트펌프)는 Equipment.tsx.
  */
 
 import { useFrame, type ThreeEvent } from "@react-three/fiber";
 import { useMemo, useRef } from "react";
 import * as THREE from "three";
-import {
-  BUILDING_H,
-  ESS_KW,
-  FLOOR_H,
-  FLOORS,
-  HVAC_SHARE,
-  PEAK_KW,
-  PV_PEAK_KW,
-  SETBACK_FLOOR,
-  footprint,
-  reveal,
-  seeded,
-  useSim,
-} from "./heroSim";
+import { BUILDING_H, ESS_KW, FLOOR_H, FLOORS, PEAK_KW, PV_PEAK_KW, SETBACK_FLOOR, footprint, reveal, seeded, useSim } from "./heroSim";
+import { louverTexture, pavingTexture, pvTexture } from "./textures";
 
 export const TEAL = new THREE.Color("#49B6CA");
 export const WARM = new THREE.Color("#F5A54A");
-const WHITE = new THREE.Color("#E6F7FA");
+export const WHITE = new THREE.Color("#E6F7FA");
 const LINE = "#9fd3de";
 
 // 등장 연출 타임라인 (intro 0~1)
@@ -33,12 +22,16 @@ const BLUEPRINT = [0, 0.25] as const;
 const FLOOR_START = 0.15;
 const FLOOR_STEP = 0.045;
 const FLOOR_DUR = 0.1;
-const FINS = [0.7, 0.15] as const;
-const EQUIPMENT = [0.8, 0.18] as const;
+const FACADE = [0.7, 0.15] as const;
+export const EQUIPMENT = [0.8, 0.18] as const;
 
-const LOW_TOP = SETBACK_FLOOR * FLOOR_H; // 저층부 지붕(테라스) 높이
+export const LOW_TOP = SETBACK_FLOOR * FLOOR_H; // 저층부 지붕(테라스) 높이
+const DECK = 0.07; // 슬래브 · 스팬드럴 두께
 const CORE: [number, number] = [0.8, 0.6]; // 엘리베이터 · 계단 코어 8 × 6 m
 export const RISER_Z = CORE[1] / 2 + 0.05; // 전력 간선이 지나는 코어 앞면
+
+/** floor 층이 다 올라왔는지 (0~1) */
+const floorReveal = (intro: number, floor: number) => reveal(intro, FLOOR_START + floor * FLOOR_STEP, FLOOR_DUR);
 
 type Seg = (a: [number, number, number], b: [number, number, number]) => void;
 
@@ -60,6 +53,59 @@ function rect(seg: Seg, w: number, d: number, y: number, cx = 0, cz = 0) {
   for (let k = 0; k < 4; k++) seg([c[k][0], y, c[k][1]], [c[(k + 1) % 4][0], y, c[(k + 1) % 4][1]]);
 }
 
+/* ── 대지: 포장 광장 · 조경 ──────────────────────────────────────── */
+
+const SITE: [number, number] = [5.0, 3.9]; // 50 × 39 m
+const SITE_TOP = 0.012;
+const TREES: [number, number, number][] = [
+  // x, z, 크기
+  [-2.3, -1.45, 1],
+  [-2.3, -0.55, 0.85],
+  [-1.2, -1.65, 0.95],
+  [0.4, -1.65, 1.1],
+  [2.2, -1.45, 0.9],
+  [2.25, 1.55, 0.8],
+];
+
+export function Site() {
+  const sim = useSim();
+  const trees = useRef<THREE.Group>(null);
+  const paving = useMemo(() => pavingTexture([SITE[0] / 0.3, SITE[1] / 0.3]), []);
+  useFrame(() => {
+    const g = trees.current;
+    if (!g) return;
+    const r = reveal(sim.current.intro, EQUIPMENT[0], EQUIPMENT[1]);
+    g.visible = r > 0.001;
+    g.scale.set(1, Math.max(r, 0.001), 1);
+  });
+  return (
+    <>
+      <mesh position={[0, SITE_TOP / 2, 0]} receiveShadow>
+        <boxGeometry args={[SITE[0], SITE_TOP, SITE[1]]} />
+        <meshStandardMaterial map={paving} roughness={0.92} />
+      </mesh>
+      <group ref={trees}>
+        {TREES.map(([x, z, k], i) => (
+          <group key={i} position={[x, SITE_TOP, z]} scale={k}>
+            <mesh position={[0, 0.07, 0]} castShadow>
+              <cylinderGeometry args={[0.012, 0.016, 0.14, 6]} />
+              <meshStandardMaterial color="#4a3f36" roughness={0.9} />
+            </mesh>
+            <mesh position={[0, 0.2, 0]} castShadow receiveShadow>
+              <icosahedronGeometry args={[0.11, 0]} />
+              <meshStandardMaterial color="#47705f" roughness={0.85} flatShading />
+            </mesh>
+            <mesh position={[0.03, 0.29, -0.02]} castShadow>
+              <icosahedronGeometry args={[0.075, 0]} />
+              <meshStandardMaterial color="#538270" roughness={0.85} flatShading />
+            </mesh>
+          </group>
+        ))}
+      </group>
+    </>
+  );
+}
+
 /* ── 도면: 구조 축선 · 외곽선 ─────────────────────────────────────── */
 
 export function Blueprint() {
@@ -69,7 +115,7 @@ export function Blueprint() {
     () =>
       lineGeometry((seg) => {
         const [w, d] = footprint(0);
-        const y = 0.004;
+        const y = SITE_TOP + 0.003;
         // 축선 X1~X5 · Y1~Y4 와 축 번호 동그라미
         for (let k = 0; k <= 4; k++) {
           const x = -w / 2 + (k * w) / 4;
@@ -119,15 +165,15 @@ function circle(seg: Seg, cx: number, cz: number, r: number, y: number) {
   }
 }
 
-/* ── 층: 슬래브 · 에너지 볼륨 · 유리 · 실내 평면 ───────────────────── */
+/* ── 층: 스팬드럴 · 에너지 볼륨 · 유리 · 실내 평면 ─────────────────── */
 
 // 코어 · 복도 · 실 칸막이를 벽 위아래 선과 끝단 세로선으로 그린다
 function floorPlan(index: number) {
   const [w, d] = footprint(index);
   const r = seeded(100 + index);
   return lineGeometry((seg) => {
-    const lo = 0.04;
-    const hi = FLOOR_H - 0.08;
+    const lo = DECK + 0.005;
+    const hi = FLOOR_H - 0.02;
     const wall = (x0: number, z0: number, x1: number, z1: number) => {
       seg([x0, lo, z0], [x1, lo, z1]);
       seg([x0, hi, z0], [x1, hi, z1]);
@@ -171,6 +217,7 @@ export function Floor({ index, hovered, onHover }: { index: number; hovered: boo
   const plan = useRef<THREE.LineSegments>(null);
   const [w, d] = footprint(index);
   const y = index * FLOOR_H;
+  const lobby = index === 0;
   const color = useMemo(() => new THREE.Color(), []);
   const planGeometry = useMemo(() => floorPlan(index), [index]);
 
@@ -180,7 +227,7 @@ export function Floor({ index, hovered, onHover }: { index: number; hovered: boo
     const lines = plan.current;
     if (!g || !mesh || !lines) return;
     const s = sim.current;
-    const r = reveal(s.intro, FLOOR_START + index * FLOOR_STEP, FLOOR_DUR);
+    const r = floorReveal(s.intro, index);
     g.visible = r > 0.001;
     g.scale.y = Math.max(r, 0.001);
 
@@ -194,136 +241,195 @@ export function Floor({ index, hovered, onHover }: { index: number; hovered: boo
     (lines.material as THREE.LineBasicMaterial).opacity = (0.09 + scan * 0.75 + hover * 0.45) * r;
   });
 
+  const glassH = FLOOR_H - DECK;
   return (
     <group ref={group} position={[0, y, 0]}>
-      <mesh position={[0, 0.018, 0]}>
-        <boxGeometry args={[w + 0.06, 0.036, d + 0.06]} />
-        <meshStandardMaterial color="#5f7a84" roughness={0.6} metalness={0.2} />
+      {/* 슬래브 + 층 사이 불투명 스팬드럴 띠 */}
+      <mesh position={[0, DECK / 2, 0]} castShadow receiveShadow>
+        <boxGeometry args={[w + 0.03, DECK, d + 0.03]} />
+        <meshStandardMaterial color="#26363c" metalness={0.55} roughness={0.4} />
       </mesh>
       <mesh
         ref={energy}
-        position={[0, FLOOR_H / 2 + 0.02, 0]}
+        position={[0, DECK + glassH / 2, 0]}
         onPointerOver={(e: ThreeEvent<PointerEvent>) => {
           e.stopPropagation();
           onHover(index);
         }}
         onPointerOut={() => onHover(null)}
       >
-        <boxGeometry args={[w - 0.14, FLOOR_H - 0.12, d - 0.14]} />
+        <boxGeometry args={[w - 0.14, glassH - 0.04, d - 0.14]} />
         <meshBasicMaterial transparent depthWrite={false} blending={THREE.AdditiveBlending} />
       </mesh>
       <lineSegments ref={plan} geometry={planGeometry}>
         <lineBasicMaterial color="#d6f4fa" transparent depthWrite={false} />
       </lineSegments>
-      <mesh position={[0, FLOOR_H / 2 + 0.025, 0]}>
-        <boxGeometry args={[w, FLOOR_H - 0.05, d]} />
-        <meshStandardMaterial color="#7fb6c3" transparent opacity={0.06} roughness={0.08} metalness={0.6} depthWrite={false} />
+      {/* 유리 — 로비는 더 투명하게. 그림자는 건물 덩어리로 떨어지도록 유리도 드리운다 */}
+      <mesh position={[0, DECK + glassH / 2, 0]} castShadow>
+        <boxGeometry args={[w, glassH, d]} />
+        <meshStandardMaterial color="#86bccb" transparent opacity={lobby ? 0.04 : 0.08} roughness={0.05} metalness={0.85} depthWrite={false} />
       </mesh>
+      {lobby && (
+        // 로비 회전문 · 출입문 프레임 (캐노피 아래)
+        <group position={[0.4, DECK, d / 2 + 0.004]}>
+          {[-0.18, 0, 0.18].map((x) => (
+            <mesh key={x} position={[x, 0.13, 0]} castShadow>
+              <boxGeometry args={[0.01, 0.26, 0.012]} />
+              <meshStandardMaterial color="#1f2b30" metalness={0.6} roughness={0.35} />
+            </mesh>
+          ))}
+          <mesh position={[0, 0.26, 0]}>
+            <boxGeometry args={[0.37, 0.012, 0.012]} />
+            <meshStandardMaterial color="#1f2b30" metalness={0.6} roughness={0.35} />
+          </mesh>
+        </group>
+      )}
     </group>
   );
 }
 
-/* ── 외피: 멀리언 선 · 세로 핀 ────────────────────────────────────── */
+/* ── 커튼월 멀리언 (블록마다 전체 높이, 층이 올라오는 만큼 자란다) ──── */
 
-export function Facade() {
-  const sim = useSim();
-  const { geometry, offsets } = useMemo(() => {
-    const offsets: number[] = [0];
-    const pts: number[] = [];
-    const seg: Seg = (a, b) => pts.push(...a, ...b);
-    for (let i = 0; i < FLOORS; i++) {
-      const [w, d] = footprint(i);
-      const y = i * FLOOR_H;
-      rect(seg, w, d, y);
-      if (i === SETBACK_FLOOR) rect(seg, ...footprint(i - 1), y);
-      const c: [number, number][] = [
-        [-w / 2, -d / 2],
-        [w / 2, -d / 2],
-        [w / 2, d / 2],
-        [-w / 2, d / 2],
-      ];
-      for (let k = 0; k < 4; k++) {
-        const [x0, z0] = c[k];
-        const [x1, z1] = c[(k + 1) % 4];
-        const n = Math.max(2, Math.round(Math.hypot(x1 - x0, z1 - z0) / 0.34));
-        for (let j = 0; j < n; j++) {
-          const t = j / n;
-          seg([x0 + (x1 - x0) * t, y, z0 + (z1 - z0) * t], [x0 + (x1 - x0) * t, y + FLOOR_H, z0 + (z1 - z0) * t]);
-        }
-      }
-      offsets.push(pts.length / 3);
-    }
-    rect(seg, ...footprint(FLOORS - 1), BUILDING_H);
-    offsets[FLOORS] = pts.length / 3;
-    const g = new THREE.BufferGeometry();
-    g.setAttribute("position", new THREE.Float32BufferAttribute(pts, 3));
-    return { geometry: g, offsets };
-  }, []);
+type Mullion = { x: number; z: number; corner: boolean; floor0: number; floors: number };
 
-  useFrame(() => {
-    const intro = sim.current.intro;
-    let built = 0;
-    while (built < FLOORS && reveal(intro, FLOOR_START + built * FLOOR_STEP, FLOOR_DUR) > 0.6) built++;
-    geometry.setDrawRange(0, offsets[built]);
-  });
-
-  return (
-    <lineSegments geometry={geometry}>
-      <lineBasicMaterial color={LINE} transparent opacity={0.3} />
-    </lineSegments>
-  );
-}
-
-// 블록(저층부 · 고층부)의 네 면에 세로 핀을 단다
-const FIN_LAYOUT = (() => {
-  const list: { x: number; z: number; rotY: number; base: number; h: number }[] = [];
+const MULLIONS = (() => {
+  const list: Mullion[] = [];
   const blocks = [
-    { floor: 0, h: LOW_TOP },
-    { floor: SETBACK_FLOOR, h: BUILDING_H - LOW_TOP },
+    { floor0: 0, floors: SETBACK_FLOOR },
+    { floor0: SETBACK_FLOOR, floors: FLOORS - SETBACK_FLOOR },
   ];
+  const span = 0.17; // 1.7 m 커튼월 모듈
   for (const b of blocks) {
-    const [w, d] = footprint(b.floor);
-    const out = 0.035;
-    for (let x = -w / 2 + 0.34; x < w / 2 - 0.1; x += 1.02) {
-      list.push({ x, z: d / 2 + out, rotY: 0, base: b.floor * FLOOR_H, h: b.h });
-      list.push({ x, z: -d / 2 - out, rotY: 0, base: b.floor * FLOOR_H, h: b.h });
-    }
-    for (let z = -d / 2 + 0.34; z < d / 2 - 0.1; z += 1.02) {
-      list.push({ x: w / 2 + out, z, rotY: Math.PI / 2, base: b.floor * FLOOR_H, h: b.h });
-      list.push({ x: -w / 2 - out, z, rotY: Math.PI / 2, base: b.floor * FLOOR_H, h: b.h });
+    const [w, d] = footprint(b.floor0);
+    const out = 0.01;
+    for (const [len, fixed, alongX] of [
+      [w, d / 2 + out, true],
+      [w, -d / 2 - out, true],
+      [d, w / 2 + out, false],
+      [d, -w / 2 - out, false],
+    ] as const) {
+      const n = Math.round(len / span);
+      for (let k = 0; k <= n; k++) {
+        const t = -len / 2 + (k * len) / n;
+        list.push({ x: alongX ? t : fixed, z: alongX ? fixed : t, corner: k === 0 || k === n, floor0: b.floor0, floors: b.floors });
+      }
     }
   }
   return list;
 })();
 
-export function Fins() {
+export function Mullions() {
   const sim = useSim();
   const ref = useRef<THREE.InstancedMesh>(null);
   const last = useRef(-1);
-  const tmp = useMemo(() => ({ m: new THREE.Matrix4(), p: new THREE.Vector3(), q: new THREE.Quaternion(), s: new THREE.Vector3(), e: new THREE.Euler() }), []);
+  const tmp = useMemo(() => ({ m: new THREE.Matrix4(), p: new THREE.Vector3(), q: new THREE.Quaternion(), s: new THREE.Vector3() }), []);
 
   useFrame(() => {
     const mesh = ref.current;
     if (!mesh) return;
-    const r = reveal(sim.current.intro, FINS[0], FINS[1]);
-    if (r === last.current) return;
-    last.current = r;
-    FIN_LAYOUT.forEach((f, i) => {
-      const h = Math.max(0.001, f.h * r);
-      tmp.p.set(f.x, f.base + h / 2, f.z);
-      tmp.q.setFromEuler(tmp.e.set(0, f.rotY, 0));
-      tmp.s.set(1, h, 1);
+    const intro = sim.current.intro;
+    if (intro === last.current) return;
+    last.current = intro;
+    MULLIONS.forEach((m, i) => {
+      // 블록 안에서 올라온 층 수만큼 높이
+      let built = 0;
+      for (let f = 0; f < m.floors; f++) built += floorReveal(intro, m.floor0 + f);
+      const h = Math.max(0.001, built * FLOOR_H);
+      tmp.p.set(m.x, m.floor0 * FLOOR_H + h / 2, m.z);
+      tmp.s.set(m.corner ? 2.2 : 1, h, m.corner ? 2.2 : 1);
       mesh.setMatrixAt(i, tmp.m.compose(tmp.p, tmp.q, tmp.s));
     });
     mesh.instanceMatrix.needsUpdate = true;
-    mesh.visible = r > 0.001;
   });
 
   return (
-    <instancedMesh ref={ref} args={[undefined, undefined, FIN_LAYOUT.length]} frustumCulled={false}>
-      <boxGeometry args={[0.012, 1, 0.055]} />
-      <meshStandardMaterial color="#8aa6b0" metalness={0.7} roughness={0.3} />
+    <instancedMesh ref={ref} args={[undefined, undefined, MULLIONS.length]} frustumCulled={false} castShadow>
+      <boxGeometry args={[0.009, 1, 0.009]} />
+      <meshStandardMaterial color="#9db0b6" metalness={0.75} roughness={0.3} />
     </instancedMesh>
+  );
+}
+
+/* ── 지붕: 옥상 · 테라스 데크, 파라펫, 유리 난간, 설비 차폐벽 ──────── */
+
+export function Roofs() {
+  const sim = useSim();
+  const low = useRef<THREE.Group>(null);
+  const top = useRef<THREE.Group>(null);
+  const louver = useMemo(() => louverTexture("#53656b", "#2c3a3f"), []);
+  const [lw, ld] = footprint(0);
+  const [tw, td] = footprint(FLOORS - 1);
+
+  useFrame(() => {
+    const intro = sim.current.intro;
+    for (const [g, floor] of [
+      [low.current, SETBACK_FLOOR - 1],
+      [top.current, FLOORS - 1],
+    ] as const) {
+      if (!g) continue;
+      const r = floorReveal(intro, floor);
+      g.visible = r > 0.5;
+    }
+  });
+
+  // 테두리를 따라 얇은 벽(파라펫) · 난간을 두른다
+  const edge = (w: number, d: number, h: number, t: number) =>
+    [
+      [0, d / 2 - t / 2, w, t],
+      [0, -d / 2 + t / 2, w, t],
+      [w / 2 - t / 2, 0, t, d],
+      [-w / 2 + t / 2, 0, t, d],
+    ].map(([x, z, sx, sz], i) => (
+      <mesh key={i} position={[x, h / 2, z]} castShadow receiveShadow>
+        <boxGeometry args={[sx, h, sz]} />
+        <meshStandardMaterial color="#2f4047" metalness={0.5} roughness={0.45} />
+      </mesh>
+    ));
+
+  return (
+    <>
+      {/* 저층부 지붕 = 테라스 */}
+      <group ref={low} position={[0, LOW_TOP, 0]}>
+        <mesh position={[0, DECK / 2, 0]} receiveShadow castShadow>
+          <boxGeometry args={[lw + 0.03, DECK, ld + 0.03]} />
+          <meshStandardMaterial color="#3a4b52" roughness={0.85} />
+        </mesh>
+        {/* 유리 난간 + 손스침 */}
+        <group position={[0, DECK, 0]}>
+          {[
+            [0, ld / 2, lw, 0],
+            [0, -ld / 2, lw, 0],
+            [lw / 2, 0, ld, Math.PI / 2],
+            [-lw / 2, 0, ld, Math.PI / 2],
+          ].map(([x, z, len, ry], i) => (
+            <group key={i} position={[x, 0, z]} rotation={[0, ry, 0]}>
+              <mesh position={[0, 0.03, 0]}>
+                <boxGeometry args={[len, 0.06, 0.004]} />
+                <meshStandardMaterial color="#a9d6e0" transparent opacity={0.25} metalness={0.6} roughness={0.1} depthWrite={false} />
+              </mesh>
+              <mesh position={[0, 0.062, 0]} castShadow>
+                <boxGeometry args={[len, 0.006, 0.008]} />
+                <meshStandardMaterial color="#b6c5ca" metalness={0.8} roughness={0.25} />
+              </mesh>
+            </group>
+          ))}
+        </group>
+      </group>
+
+      {/* 옥상 */}
+      <group ref={top} position={[0, BUILDING_H, 0]}>
+        <mesh position={[0, DECK / 2, 0]} receiveShadow castShadow>
+          <boxGeometry args={[tw + 0.03, DECK, td + 0.03]} />
+          <meshStandardMaterial color="#3a4b52" roughness={0.85} />
+        </mesh>
+        <group position={[0, DECK, 0]}>{edge(tw + 0.03, td + 0.03, 0.05, 0.02)}</group>
+        {/* 코어 기계실을 두르는 루버 차폐벽 */}
+        <mesh position={[0, DECK + 0.07, 0]} castShadow receiveShadow>
+          <boxGeometry args={[CORE[0] + 0.12, 0.14, CORE[1] + 0.12]} />
+          <meshStandardMaterial map={louver} metalness={0.4} roughness={0.55} />
+        </mesh>
+      </group>
+    </>
   );
 }
 
@@ -348,7 +454,7 @@ export function Core() {
 
   return (
     <>
-      <mesh ref={core}>
+      <mesh ref={core} castShadow>
         <boxGeometry args={[CORE[0] - 0.02, height, CORE[1] - 0.02]} />
         <meshStandardMaterial color="#22343b" roughness={0.85} transparent opacity={0.5} depthWrite={false} />
       </mesh>
@@ -367,13 +473,13 @@ export function Canopy() {
   useFrame(() => {
     const g = ref.current;
     if (!g) return;
-    const r = reveal(sim.current.intro, FINS[0], FINS[1]);
+    const r = reveal(sim.current.intro, FACADE[0], FACADE[1]);
     g.visible = r > 0.001;
     g.scale.setScalar(Math.max(r, 0.001));
   });
   return (
     <group ref={ref} position={[0.4, FLOOR_H * 0.85, d / 2 + 0.2]}>
-      <mesh>
+      <mesh castShadow receiveShadow>
         <boxGeometry args={[1.1, 0.025, 0.4]} />
         <meshStandardMaterial color="#9fb3ba" metalness={0.5} roughness={0.3} />
       </mesh>
@@ -390,58 +496,27 @@ export function Canopy() {
 const PANELS = (() => {
   const list: { x: number; y: number; z: number }[] = [];
   const [tw, td] = footprint(FLOORS - 1);
-  // 옥상: 코어 기계실을 비켜서 배치
+  // 옥상: 코어 기계실 차폐벽을 비켜서 배치
   for (let c = 0; c < 5; c++) {
     for (let r = 0; r < 4; r++) {
       const x = -tw / 2 + 0.25 + (c + 0.5) * ((tw - 0.5) / 5);
       const z = -td / 2 + 0.2 + (r + 0.5) * ((td - 0.4) / 4);
-      if (Math.abs(x) < CORE[0] / 2 + 0.2 && Math.abs(z) < CORE[1] / 2 + 0.15) continue;
-      list.push({ x, y: BUILDING_H + 0.08, z });
+      if (Math.abs(x) < CORE[0] / 2 + 0.25 && Math.abs(z) < CORE[1] / 2 + 0.2) continue;
+      list.push({ x, y: BUILDING_H + DECK + 0.05, z });
     }
   }
   // 저층부 테라스 서쪽 띠
   const [lw] = footprint(0);
   const stripX = -(lw + tw) / 4;
-  for (let r = 0; r < 5; r++) list.push({ x: stripX, y: LOW_TOP + 0.08, z: -0.9 + r * 0.45 });
+  for (let r = 0; r < 5; r++) list.push({ x: stripX, y: LOW_TOP + DECK + 0.05, z: -0.9 + r * 0.45 });
   return list;
 })();
-
-// 모듈 셀 격자 — 멀리서도 태양광 패널로 읽히게
-function panelTexture() {
-  const c = document.createElement("canvas");
-  c.width = 96;
-  c.height = 64;
-  const g = c.getContext("2d")!;
-  g.fillStyle = "#17405a";
-  g.fillRect(0, 0, 96, 64);
-  g.strokeStyle = "rgba(170,220,235,0.5)";
-  g.lineWidth = 1;
-  for (let x = 16; x < 96; x += 16) {
-    g.beginPath();
-    g.moveTo(x + 0.5, 0);
-    g.lineTo(x + 0.5, 64);
-    g.stroke();
-  }
-  for (let y = 16; y < 64; y += 16) {
-    g.beginPath();
-    g.moveTo(0, y + 0.5);
-    g.lineTo(96, y + 0.5);
-    g.stroke();
-  }
-  g.strokeStyle = "rgba(225,238,242,0.9)";
-  g.lineWidth = 3;
-  g.strokeRect(1.5, 1.5, 93, 61);
-  const t = new THREE.CanvasTexture(c);
-  t.colorSpace = THREE.SRGBColorSpace;
-  t.anisotropy = 4;
-  return t;
-}
 
 export function SolarArray() {
   const sim = useSim();
   const ref = useRef<THREE.InstancedMesh>(null);
   const placed = useRef(-1);
-  const texture = useMemo(() => panelTexture(), []);
+  const texture = useMemo(() => pvTexture(), []);
   // 남쪽(+z, 카메라 쪽)을 향해 기운다 — 패널 면이 보이게
   const tmp = useMemo(() => ({ m: new THREE.Matrix4(), p: new THREE.Vector3(), q: new THREE.Quaternion().setFromEuler(new THREE.Euler(0.42, 0, 0)), s: new THREE.Vector3() }), []);
 
@@ -465,167 +540,12 @@ export function SolarArray() {
   });
 
   return (
-    <instancedMesh ref={ref} args={[undefined, undefined, PANELS.length]} frustumCulled={false}>
+    <instancedMesh ref={ref} args={[undefined, undefined, PANELS.length]} frustumCulled={false} castShadow receiveShadow>
       <boxGeometry args={[0.34, 0.02, 0.24]} />
       <meshStandardMaterial map={texture} emissive={TEAL} emissiveMap={texture} metalness={0.45} roughness={0.3} />
     </instancedMesh>
   );
 }
 
-/* ── 히트펌프 실외기 (테라스 동쪽) ────────────────────────────────── */
-
-const HP_UNITS = (() => {
-  const [lw] = footprint(0);
-  const [tw] = footprint(FLOORS - 1);
-  const x = (lw + tw) / 4;
-  return [-0.7, 0, 0.7].map((z) => ({ x, z }));
-})();
-export const HP_ANCHOR: [number, number, number] = [HP_UNITS[0].x, LOW_TOP + 0.55, 0];
-
-export function HeatPumps() {
-  const sim = useSim();
-  const group = useRef<THREE.Group>(null);
-  const fans = useRef<(THREE.Group | null)[]>([]);
-
-  useFrame((_, delta) => {
-    const g = group.current;
-    if (!g) return;
-    const s = sim.current;
-    const r = reveal(s.intro, EQUIPMENT[0] + 0.05, EQUIPMENT[1]);
-    g.visible = r > 0.001;
-    g.scale.set(1, Math.max(r, 0.001), 1);
-    // 팬 속도는 냉난방 전력에 비례
-    const speed = 2 + (s.hpKw / (PEAK_KW * HVAC_SHARE)) * 14;
-    fans.current.forEach((f) => {
-      if (f) f.rotation.y += Math.min(delta, 0.1) * speed;
-    });
-  });
-
-  return (
-    <group ref={group} position={[0, LOW_TOP, 0]}>
-      {HP_UNITS.map((u, i) => (
-        <group key={i} position={[u.x, 0, u.z]}>
-          <mesh position={[0, 0.12, 0]}>
-            <boxGeometry args={[0.34, 0.22, 0.46]} />
-            <meshStandardMaterial color="#c3d0d4" metalness={0.3} roughness={0.5} />
-          </mesh>
-          {[-0.11, 0.11].map((dz) => (
-            <group key={dz} position={[0, 0.235, dz]}>
-              <mesh>
-                <cylinderGeometry args={[0.095, 0.095, 0.012, 24, 1, true]} />
-                <meshStandardMaterial color="#5b6f76" side={THREE.DoubleSide} />
-              </mesh>
-              <group
-                ref={(el) => {
-                  fans.current[i * 2 + (dz > 0 ? 1 : 0)] = el;
-                }}
-              >
-                {[0, 1, 2].map((b) => (
-                  <mesh key={b} rotation={[0, (b * Math.PI) / 3, 0]}>
-                    <boxGeometry args={[0.17, 0.006, 0.03]} />
-                    <meshStandardMaterial color="#2c3c42" />
-                  </mesh>
-                ))}
-              </group>
-            </group>
-          ))}
-        </group>
-      ))}
-    </group>
-  );
-}
-
-/* ── ESS 컨테이너 ─────────────────────────────────────────────────── */
-
-const ESS_POS: [number, number, number][] = [
-  [-2.1, 0, 1.6],
-  [-2.1, 0, 1.98],
-];
-const ESS_SIZE: [number, number, number] = [0.75, 0.3, 0.27];
-const LED_COUNT = 10;
-export const ESS_ANCHOR: [number, number, number] = [-2.1, 0.72, 1.8];
-export const ESS_PORT = new THREE.Vector3(-1.72, 0.06, 1.6);
-export const ESS_ENTRY = new THREE.Vector3(-1.0, 0.06, 1.3);
-
-export function EssUnits() {
-  const sim = useSim();
-  const group = useRef<THREE.Group>(null);
-  const leds = useRef<THREE.InstancedMesh>(null);
-  const tmp = useMemo(() => ({ c: new THREE.Color(), off: new THREE.Color("#1d2b30") }), []);
-
-
-  useFrame(({ clock }) => {
-    const g = group.current;
-    const mesh = leds.current;
-    if (!g || !mesh) return;
-    const s = sim.current;
-    const r = reveal(s.intro, EQUIPMENT[0] - 0.04, EQUIPMENT[1]);
-    g.visible = r > 0.001;
-    g.scale.set(1, Math.max(r, 0.001), 1);
-
-    // 충전 중이면 틸, 방전 중이면 앰버로 잔량만큼 켜진다. 맨 위 칸이 숨 쉬듯 깜빡인다
-    const lit = Math.round(s.essSoc * LED_COUNT);
-    const mode = s.essKw < -1 ? TEAL : s.essKw > 1 ? WARM : WHITE;
-    const pulse = 0.55 + Math.sin(clock.elapsedTime * 4) * 0.45;
-    for (let u = 0; u < ESS_POS.length; u++) {
-      for (let k = 0; k < LED_COUNT; k++) {
-        if (k < lit) tmp.c.copy(mode).multiplyScalar(k === lit - 1 && Math.abs(s.essKw) > 1 ? pulse : 1);
-        else tmp.c.copy(tmp.off);
-        mesh.setColorAt(u * LED_COUNT + k, tmp.c);
-      }
-    }
-    if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true;
-  });
-
-  const ledMatrices = useMemo(() => {
-    const list: THREE.Matrix4[] = [];
-    for (const [x, , z] of ESS_POS) {
-      for (let k = 0; k < LED_COUNT; k++) {
-        const xx = x - ESS_SIZE[0] / 2 + 0.08 + (k * (ESS_SIZE[0] - 0.16)) / (LED_COUNT - 1);
-        list.push(new THREE.Matrix4().makeTranslation(xx, 0.22, z + ESS_SIZE[2] / 2 + 0.004));
-      }
-    }
-    return list;
-  }, []);
-
-  return (
-    <group ref={group}>
-      {ESS_POS.map(([x, , z], i) => (
-        <group key={i} position={[x, ESS_SIZE[1] / 2, z]}>
-          <mesh>
-            <boxGeometry args={ESS_SIZE} />
-            <meshStandardMaterial color="#dfe7ea" metalness={0.2} roughness={0.55} />
-          </mesh>
-          {/* 문짝 홈 */}
-          {[-0.2, 0, 0.2].map((dz) => (
-            <mesh key={dz} position={[dz, -0.02, ESS_SIZE[2] / 2 + 0.002]}>
-              <boxGeometry args={[0.004, ESS_SIZE[1] - 0.1, 0.002]} />
-              <meshBasicMaterial color="#8fa2a8" />
-            </mesh>
-          ))}
-        </group>
-      ))}
-      <instancedMesh
-        ref={(mesh) => {
-          leds.current = mesh;
-          if (!mesh) return;
-          // 첫 렌더 전에 instanceColor 를 만들어 두어야 셰이더가 인스턴스 색을 쓴다
-          const off = new THREE.Color("#1d2b30");
-          ledMatrices.forEach((m, i) => {
-            mesh.setMatrixAt(i, m);
-            mesh.setColorAt(i, off);
-          });
-          mesh.instanceMatrix.needsUpdate = true;
-        }}
-        args={[undefined, undefined, ledMatrices.length]}
-        frustumCulled={false}
-      >
-        <boxGeometry args={[0.035, 0.035, 0.006]} />
-        <meshBasicMaterial toneMapped={false} />
-      </instancedMesh>
-    </group>
-  );
-}
-
-/** 전력망 · ESS 에서 건물로 들어오는 경로의 최대 흐름 (EnergyFlow 정규화용) */
+/** 전력망 · ESS · 태양광의 최대 흐름 (EnergyFlow 정규화용) */
 export const FLOW_NORM = { grid: PEAK_KW, ess: ESS_KW, solar: PV_PEAK_KW };
