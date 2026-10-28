@@ -7,10 +7,11 @@
  */
 
 import { useFrame } from "@react-three/fiber";
-import { useMemo, useRef, type ReactNode } from "react";
+import { Suspense, useMemo, useRef, type ReactNode, type RefObject } from "react";
 import * as THREE from "three";
 import { EQUIPMENT, LOW_TOP, TEAL, WARM, WHITE } from "./BuildingModel";
 import { FLOORS, HVAC_SHARE, PEAK_KW, footprint, reveal, useSim } from "./heroSim";
+import { scaled, useModelGeometry, useModelMaterial } from "./models";
 import { coilTexture, fenceTexture, grilleTexture, louverTexture } from "./textures";
 
 function mat4(x: number, y: number, z: number, ry = 0, rx = 0) {
@@ -53,8 +54,88 @@ export const HP_ANCHOR: [number, number, number] = [HP_X + 0.75, LOW_TOP + 0.75,
 export function HeatPumps() {
   const sim = useSim();
   const group = useRef<THREE.Group>(null);
-  const blades = useRef<THREE.InstancedMesh>(null);
   const angle = useRef(0);
+
+  useFrame((_, delta) => {
+    const g = group.current;
+    if (!g) return;
+    const s = sim.current;
+    const r = reveal(s.intro, EQUIPMENT[0] + 0.05, EQUIPMENT[1]);
+    g.visible = r > 0.001;
+    g.scale.set(1, Math.max(r, 0.001), 1);
+    // 팬 속도는 냉난방 전력에 비례
+    angle.current += Math.min(delta, 0.1) * (2 + (s.hpKw / (PEAK_KW * HVAC_SHARE)) * 16);
+  });
+
+  return (
+    <group ref={group} position={[0, LOW_TOP + 0.07, 0]}>
+      {/* 설비 기초 */}
+      <mesh position={[HP_X, 0.006, -0.22]} receiveShadow>
+        <boxGeometry args={[0.42, 0.012, 0.98]} />
+        <meshStandardMaterial color="#8e999c" roughness={0.9} />
+      </mesh>
+      <Suspense fallback={<HeatPumpUnitsSimple angle={angle} />}>
+        <HeatPumpUnitsModel angle={angle} />
+      </Suspense>
+      {/* 냉온수 배관: 유닛 서쪽을 따라 고층부 벽으로 들어간다 */}
+      {[0.03, 0.055].map((y) => (
+        <group key={y}>
+          <mesh position={[HP_X - 0.2, y, -0.22]} rotation={[Math.PI / 2, 0, 0]} castShadow>
+            <cylinderGeometry args={[0.008, 0.008, 0.9, 10]} />
+            <meshStandardMaterial color="#c4cdd0" roughness={0.6} />
+          </mesh>
+          <mesh position={[HP_X - 0.24, y, 0.2]} rotation={[0, 0, Math.PI / 2]} castShadow>
+            <cylinderGeometry args={[0.008, 0.008, 0.08, 10]} />
+            <meshStandardMaterial color="#c4cdd0" roughness={0.6} />
+          </mesh>
+        </group>
+      ))}
+    </group>
+  );
+}
+
+// Blender 모델: 팬 날개는 슈라우드 안(모델 좌표 높이 1.72, 앞쪽 0.05)에서 돈다
+const HP_FAN_AT = new THREE.Matrix4().makeTranslation(0, 0.172, 0.005);
+
+function HeatPumpUnitsModel({ angle }: { angle: RefObject<number> }) {
+  const body = useModelGeometry("HeatPump");
+  const fan = useModelGeometry("HeatPumpFan");
+  const material = useModelMaterial(0.5, 0.25);
+  const fans = useRef<THREE.InstancedMesh>(null);
+  const tmp = useMemo(() => ({ m: new THREE.Matrix4(), r: new THREE.Matrix4(), s: new THREE.Matrix4().makeScale(0.1, 0.1, 0.1) }), []);
+
+  useFrame(() => {
+    const mesh = fans.current;
+    if (!mesh) return;
+    HP_UNITS.forEach((u, i) => {
+      // 유닛마다 날개 각도가 조금씩 달라 한꺼번에 도는 것처럼 보이지 않게
+      tmp.r.makeRotationY(angle.current + i * 0.7);
+      mesh.setMatrixAt(i, tmp.m.multiplyMatrices(u, HP_FAN_AT).multiply(tmp.r).multiply(tmp.s));
+    });
+    mesh.instanceMatrix.needsUpdate = true;
+  });
+
+  return (
+    <>
+      <instancedMesh
+        ref={(mesh) => {
+          if (!mesh) return;
+          HP_UNITS.forEach((u, i) => mesh.setMatrixAt(i, scaled(u)));
+          mesh.instanceMatrix.needsUpdate = true;
+          mesh.computeBoundingSphere();
+        }}
+        args={[body, material, HP_UNITS.length]}
+        castShadow
+        receiveShadow
+      />
+      <instancedMesh ref={fans} args={[fan, material, HP_UNITS.length]} frustumCulled={false} />
+    </>
+  );
+}
+
+// 모델을 받는 동안 보이는 코드 모델
+function HeatPumpUnitsSimple({ angle }: { angle: RefObject<number> }) {
+  const blades = useRef<THREE.InstancedMesh>(null);
   const tex = useMemo(() => ({ coil: coilTexture(), grille: grilleTexture() }), []);
   const tmp = useMemo(() => ({ m: new THREE.Matrix4(), r: new THREE.Matrix4(), b: new THREE.Matrix4().makeTranslation(0, HP_TOP + 0.005, 0) }), []);
 
@@ -69,21 +150,12 @@ export function HeatPumps() {
       panel: [mat4(w / 2 + 0.0015, foot + h / 2 - 0.005, 0)], // 점검 패널 (+x, 넓은 면)
       shroud: [mat4(0, HP_TOP + 0.007, -0.01)],
       grille: [mat4(0, HP_TOP + 0.0145, -0.01, 0, -Math.PI / 2)],
-      hub: [mat4(0, HP_TOP + 0.014, -0.01)],
-      stubs: [mat4(-0.022, foot + 0.035, d / 2 + 0.012, 0, Math.PI / 2), mat4(-0.022, foot + 0.07, d / 2 + 0.012, 0, Math.PI / 2)],
     };
   }, []);
 
-  useFrame((_, delta) => {
-    const g = group.current;
+  useFrame(() => {
     const mesh = blades.current;
-    if (!g || !mesh) return;
-    const s = sim.current;
-    const r = reveal(s.intro, EQUIPMENT[0] + 0.05, EQUIPMENT[1]);
-    g.visible = r > 0.001;
-    g.scale.set(1, Math.max(r, 0.001), 1);
-    // 팬 속도는 냉난방 전력에 비례
-    angle.current += Math.min(delta, 0.1) * (2 + (s.hpKw / (PEAK_KW * HVAC_SHARE)) * 16);
+    if (!mesh) return;
     let i = 0;
     for (const u of HP_UNITS) {
       for (let k = 0; k < 3; k++) {
@@ -96,12 +168,7 @@ export function HeatPumps() {
   });
 
   return (
-    <group ref={group} position={[0, LOW_TOP + 0.07, 0]}>
-      {/* 설비 기초 */}
-      <mesh position={[HP_X, 0.006, -0.22]} receiveShadow>
-        <boxGeometry args={[0.42, 0.012, 0.98]} />
-        <meshStandardMaterial color="#8e999c" roughness={0.9} />
-      </mesh>
+    <>
       <Parts units={HP_UNITS} locals={L.feet}>
         <boxGeometry args={[0.014, HP.foot, 0.014]} />
         <meshStandardMaterial color="#2f3a3e" />
@@ -126,32 +193,11 @@ export function HeatPumps() {
         <circleGeometry args={[HP.fanR, 32]} />
         <meshStandardMaterial map={tex.grille} transparent alphaTest={0.3} side={THREE.DoubleSide} />
       </Parts>
-      <Parts units={HP_UNITS} locals={L.hub} cast={false}>
-        <sphereGeometry args={[0.011, 16, 8, 0, Math.PI * 2, 0, Math.PI / 2]} />
-        <meshStandardMaterial color="#b9c3c6" metalness={0.4} roughness={0.4} />
-      </Parts>
-      <Parts units={HP_UNITS} locals={L.stubs} cast={false}>
-        <cylinderGeometry args={[0.005, 0.005, 0.02, 10]} />
-        <meshStandardMaterial color="#eef1f1" />
-      </Parts>
       <instancedMesh ref={blades} args={[undefined, undefined, HP_UNITS.length * 3]} frustumCulled={false}>
         <boxGeometry args={[HP.fanR * 1.8, 0.002, 0.012]} />
         <meshStandardMaterial color="#2a3438" />
       </instancedMesh>
-      {/* 냉온수 배관: 유닛 서쪽을 따라 고층부 벽으로 들어간다 */}
-      {[0.03, 0.055].map((y) => (
-        <group key={y}>
-          <mesh position={[HP_X - 0.2, y, -0.22]} rotation={[Math.PI / 2, 0, 0]} castShadow>
-            <cylinderGeometry args={[0.008, 0.008, 0.9, 10]} />
-            <meshStandardMaterial color="#c4cdd0" roughness={0.6} />
-          </mesh>
-          <mesh position={[HP_X - 0.24, y, 0.2]} rotation={[0, 0, Math.PI / 2]} castShadow>
-            <cylinderGeometry args={[0.008, 0.008, 0.08, 10]} />
-            <meshStandardMaterial color="#c4cdd0" roughness={0.6} />
-          </mesh>
-        </group>
-      ))}
-    </group>
+    </>
   );
 }
 
@@ -181,7 +227,7 @@ export function EssUnits() {
     for (const c of CABINETS) {
       const doorLeft = c.x - CAB.w / 2 + FRONT.control;
       for (let k = 0; k < LED_COUNT; k++) {
-        list.push(new THREE.Matrix4().makeTranslation(doorLeft + 0.02 + k * 0.0145, c.y + CAB.base + CAB.h - 0.022, c.z + CAB.d / 2 + 0.002));
+        list.push(new THREE.Matrix4().makeTranslation(doorLeft + 0.02 + k * 0.0145, c.y + CAB.base + CAB.h - 0.022, c.z + CAB.d / 2 + 0.006));
       }
     }
     return list;
@@ -227,7 +273,6 @@ export function EssUnits() {
 
   const [pw, pd] = PAD;
   const fenceH = 0.17;
-  const front = CAB.d / 2;
 
   return (
     <group ref={group}>
@@ -237,55 +282,9 @@ export function EssUnits() {
         <meshStandardMaterial color="#b4bbbc" roughness={0.95} />
       </mesh>
 
-      {CABINETS.map((c, i) => (
-        <group key={i} position={c}>
-          <mesh position={[0, CAB.base / 2, 0]} castShadow receiveShadow>
-            <boxGeometry args={[CAB.w + 0.01, CAB.base, CAB.d + 0.01]} />
-            <meshStandardMaterial color="#8f999c" roughness={0.7} />
-          </mesh>
-          <mesh position={[0, CAB.base + CAB.h / 2, 0]} castShadow receiveShadow>
-            <boxGeometry args={[CAB.w, CAB.h, CAB.d]} />
-            <meshStandardMaterial color="#e9ecea" roughness={0.55} metalness={0.15} />
-          </mesh>
-          {/* 지붕 캡 */}
-          <mesh position={[0, CAB.base + CAB.h + 0.006, 0]} castShadow>
-            <boxGeometry args={[CAB.w + 0.02, 0.012, CAB.d + 0.03]} />
-            <meshStandardMaterial color="#d2d8d9" roughness={0.5} />
-          </mesh>
-          {/* 도어 경계 */}
-          {[-CAB.w / 2 + FRONT.control, -CAB.w / 2 + FRONT.control + FRONT.door / 2, -CAB.w / 2 + FRONT.control + FRONT.door].map((x) => (
-            <mesh key={x} position={[x, CAB.base + CAB.h / 2, front + 0.001]}>
-              <boxGeometry args={[0.002, CAB.h - 0.03, 0.002]} />
-              <meshBasicMaterial color="#9aa5a8" />
-            </mesh>
-          ))}
-          {/* 제어반: 주황 상단 띠 · 표시창 */}
-          <mesh position={[-CAB.w / 2 + FRONT.control / 2, CAB.base + CAB.h - 0.03, front + 0.0015]}>
-            <boxGeometry args={[FRONT.control - 0.014, 0.024, 0.002]} />
-            <meshStandardMaterial color="#e5762c" roughness={0.5} />
-          </mesh>
-          <mesh position={[-CAB.w / 2 + FRONT.control / 2, CAB.base + CAB.h - 0.075, front + 0.0015]}>
-            <boxGeometry args={[0.03, 0.022, 0.002]} />
-            <meshStandardMaterial color="#1c272b" roughness={0.3} />
-          </mesh>
-          {/* 손잡이 · 경고 라벨 */}
-          {[-0.012, 0.012].map((dx) => (
-            <mesh key={dx} position={[-CAB.w / 2 + FRONT.control + FRONT.door / 2 + dx, CAB.base + CAB.h * 0.5, front + 0.004]}>
-              <boxGeometry args={[0.004, 0.032, 0.006]} />
-              <meshStandardMaterial color="#7d888b" metalness={0.6} roughness={0.3} />
-            </mesh>
-          ))}
-          <mesh position={[-CAB.w / 2 + FRONT.control + FRONT.door * 0.78, CAB.base + CAB.h - 0.06, front + 0.0015]}>
-            <boxGeometry args={[0.018, 0.018, 0.002]} />
-            <meshStandardMaterial color="#f0c22e" roughness={0.5} />
-          </mesh>
-          {/* 냉방장치 루버 그릴 */}
-          <mesh position={[CAB.w / 2 - FRONT.hvac / 2, CAB.base + CAB.h * 0.48, front + 0.002]}>
-            <boxGeometry args={[FRONT.hvac - 0.016, CAB.h * 0.62, 0.004]} />
-            <meshStandardMaterial map={tex.louver} roughness={0.6} />
-          </mesh>
-        </group>
-      ))}
+      <Suspense fallback={<EssCabinetsSimple louver={tex.louver} />}>
+        <EssCabinetsModel />
+      </Suspense>
 
       <instancedMesh
         ref={(mesh) => {
@@ -338,5 +337,76 @@ export function EssUnits() {
         </mesh>
       ))}
     </group>
+  );
+}
+
+function EssCabinetsModel() {
+  const geometry = useModelGeometry("EssCabinet");
+  const material = useModelMaterial(0.55, 0.15);
+  return (
+    <>
+      {CABINETS.map((c, i) => (
+        <mesh key={i} geometry={geometry} material={material} position={c} scale={0.1} castShadow receiveShadow />
+      ))}
+    </>
+  );
+}
+
+// 모델을 받는 동안 보이는 코드 모델
+function EssCabinetsSimple({ louver }: { louver: THREE.Texture }) {
+  const front = CAB.d / 2;
+  return (
+    <>
+      {CABINETS.map((c, i) => (
+        <group key={i} position={c}>
+          <mesh position={[0, CAB.base / 2, 0]} castShadow receiveShadow>
+            <boxGeometry args={[CAB.w + 0.01, CAB.base, CAB.d + 0.01]} />
+            <meshStandardMaterial color="#8f999c" roughness={0.7} />
+          </mesh>
+          <mesh position={[0, CAB.base + CAB.h / 2, 0]} castShadow receiveShadow>
+            <boxGeometry args={[CAB.w, CAB.h, CAB.d]} />
+            <meshStandardMaterial color="#e9ecea" roughness={0.55} metalness={0.15} />
+          </mesh>
+          {/* 지붕 캡 */}
+          <mesh position={[0, CAB.base + CAB.h + 0.006, 0]} castShadow>
+            <boxGeometry args={[CAB.w + 0.02, 0.012, CAB.d + 0.03]} />
+            <meshStandardMaterial color="#d2d8d9" roughness={0.5} />
+          </mesh>
+          {/* 도어 경계 */}
+          {[-CAB.w / 2 + FRONT.control, -CAB.w / 2 + FRONT.control + FRONT.door / 2, -CAB.w / 2 + FRONT.control + FRONT.door].map((x) => (
+            <mesh key={x} position={[x, CAB.base + CAB.h / 2, front + 0.001]}>
+              <boxGeometry args={[0.002, CAB.h - 0.03, 0.002]} />
+              <meshBasicMaterial color="#9aa5a8" />
+            </mesh>
+          ))}
+          {/* 제어반: 주황 상단 띠 · 표시창 */}
+          <mesh position={[-CAB.w / 2 + FRONT.control / 2, CAB.base + CAB.h - 0.03, front + 0.0015]}>
+            <boxGeometry args={[FRONT.control - 0.014, 0.024, 0.002]} />
+            <meshStandardMaterial color="#e5762c" roughness={0.5} />
+          </mesh>
+          <mesh position={[-CAB.w / 2 + FRONT.control / 2, CAB.base + CAB.h - 0.075, front + 0.0015]}>
+            <boxGeometry args={[0.03, 0.022, 0.002]} />
+            <meshStandardMaterial color="#1c272b" roughness={0.3} />
+          </mesh>
+          {/* 손잡이 · 경고 라벨 */}
+          {[-0.012, 0.012].map((dx) => (
+            <mesh key={dx} position={[-CAB.w / 2 + FRONT.control + FRONT.door / 2 + dx, CAB.base + CAB.h * 0.5, front + 0.004]}>
+              <boxGeometry args={[0.004, 0.032, 0.006]} />
+              <meshStandardMaterial color="#7d888b" metalness={0.6} roughness={0.3} />
+            </mesh>
+          ))}
+          <mesh position={[-CAB.w / 2 + FRONT.control + FRONT.door * 0.78, CAB.base + CAB.h - 0.06, front + 0.0015]}>
+            <boxGeometry args={[0.018, 0.018, 0.002]} />
+            <meshStandardMaterial color="#f0c22e" roughness={0.5} />
+          </mesh>
+          {/* 냉방장치 루버 그릴 */}
+          <mesh position={[CAB.w / 2 - FRONT.hvac / 2, CAB.base + CAB.h * 0.48, front + 0.002]}>
+            <boxGeometry args={[FRONT.hvac - 0.016, CAB.h * 0.62, 0.004]} />
+            <meshStandardMaterial map={louver} roughness={0.6} />
+          </mesh>
+        </group>
+      ))}
+
+    </>
   );
 }
