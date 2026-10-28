@@ -7,9 +7,10 @@
  */
 
 import { useFrame, type ThreeEvent } from "@react-three/fiber";
-import { useMemo, useRef } from "react";
+import { Suspense, useMemo, useRef } from "react";
 import * as THREE from "three";
 import { BUILDING_H, ESS_KW, FLOOR_H, FLOORS, PEAK_KW, PV_PEAK_KW, SETBACK_FLOOR, footprint, reveal, seeded, useSim } from "./heroSim";
+import { useModelGeometry, useModelMaterial } from "./models";
 import { louverTexture, pavingTexture, pvTexture } from "./textures";
 
 export const TEAL = new THREE.Color("#49B6CA");
@@ -85,23 +86,47 @@ export function Site() {
         <meshStandardMaterial map={paving} roughness={0.92} />
       </mesh>
       <group ref={trees}>
-        {TREES.map(([x, z, k], i) => (
-          <group key={i} position={[x, SITE_TOP, z]} scale={k}>
-            <mesh position={[0, 0.07, 0]} castShadow>
-              <cylinderGeometry args={[0.012, 0.016, 0.14, 6]} />
-              <meshStandardMaterial color="#4a3f36" roughness={0.9} />
-            </mesh>
-            <mesh position={[0, 0.2, 0]} castShadow receiveShadow>
-              <icosahedronGeometry args={[0.11, 0]} />
-              <meshStandardMaterial color="#47705f" roughness={0.85} flatShading />
-            </mesh>
-            <mesh position={[0.03, 0.29, -0.02]} castShadow>
-              <icosahedronGeometry args={[0.075, 0]} />
-              <meshStandardMaterial color="#538270" roughness={0.85} flatShading />
-            </mesh>
-          </group>
-        ))}
+        <Suspense fallback={<TreesSimple />}>
+          <TreesModel />
+        </Suspense>
       </group>
+    </>
+  );
+}
+
+function TreesModel() {
+  const a = useModelGeometry("TreeA");
+  const b = useModelGeometry("TreeB");
+  const material = useModelMaterial(0.85, 0);
+  return (
+    <>
+      {TREES.map(([x, z, k], i) => (
+        <mesh key={i} geometry={i % 3 === 1 ? b : a} material={material} position={[x, SITE_TOP, z]} scale={0.1 * k} rotation={[0, i * 1.3, 0]} castShadow receiveShadow />
+      ))}
+    </>
+  );
+}
+
+// 모델을 받는 동안 보이는 코드 모델
+function TreesSimple() {
+  return (
+    <>
+      {TREES.map(([x, z, k], i) => (
+        <group key={i} position={[x, SITE_TOP, z]} scale={k}>
+          <mesh position={[0, 0.07, 0]} castShadow>
+            <cylinderGeometry args={[0.012, 0.016, 0.14, 6]} />
+            <meshStandardMaterial color="#4a3f36" roughness={0.9} />
+          </mesh>
+          <mesh position={[0, 0.2, 0]} castShadow receiveShadow>
+            <icosahedronGeometry args={[0.11, 0]} />
+            <meshStandardMaterial color="#47705f" roughness={0.85} flatShading />
+          </mesh>
+          <mesh position={[0.03, 0.29, -0.02]} castShadow>
+            <icosahedronGeometry args={[0.075, 0]} />
+            <meshStandardMaterial color="#538270" roughness={0.85} flatShading />
+          </mesh>
+        </group>
+      ))}
     </>
   );
 }
