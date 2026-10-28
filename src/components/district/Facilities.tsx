@@ -18,8 +18,10 @@ import { useSim } from "@/components/hero/heroSim";
 import { useModelGeometry, useModelMaterial } from "@/components/hero/models";
 import { fenceTexture, pavingTexture } from "@/components/hero/textures";
 import { AMBER, Building, Instances, PvPanels, TEAL, facadeTextures, iconTexture, m4, poolTexture, useDistrict, useFacility } from "./common";
-import { FACILITY, PLATE, ROAD } from "./districtLayout";
-import { CAR_COLORS, Props } from "./props";
+import { FACILITY, PLATE } from "./districtLayout";
+import { BuildingModel, CAR_COLORS, Props } from "./props";
+import { ChargingCables, SurveyDrone, createSwayMaterial, tickSway } from "./Life";
+import { ContactShadows, grassTexture } from "./Streetscape";
 
 /* ── 바닥 · 도로 ──────────────────────────────────────────────────── */
 
@@ -35,31 +37,6 @@ export function Ground() {
         <boxGeometry args={[PLATE.w + 0.4, 0.8, PLATE.d + 0.4]} />
         <meshStandardMaterial color="#0d1a20" roughness={1} />
       </mesh>
-    </group>
-  );
-}
-
-export function Roads() {
-  const dashes = useMemo(() => {
-    const list: THREE.Matrix4[] = [];
-    for (let x = -PLATE.w / 2 + 0.5; x < PLATE.w / 2; x += 0.9) if (Math.abs(x - ROAD.nsX) > 0.8) list.push(m4(x, 0.035, ROAD.ewZ));
-    for (let z = -PLATE.d / 2 + 0.5; z < PLATE.d / 2; z += 0.9) if (Math.abs(z - ROAD.ewZ) > 0.8) list.push(m4(ROAD.nsX, 0.035, z, Math.PI / 2));
-    return list;
-  }, []);
-  return (
-    <group>
-      <mesh position={[0, 0.015, ROAD.ewZ]} receiveShadow>
-        <boxGeometry args={[PLATE.w, 0.03, ROAD.width]} />
-        <meshStandardMaterial color="#1f2629" roughness={0.9} />
-      </mesh>
-      <mesh position={[ROAD.nsX, 0.016, 0]} receiveShadow>
-        <boxGeometry args={[ROAD.width, 0.03, PLATE.d]} />
-        <meshStandardMaterial color="#1f2629" roughness={0.9} />
-      </mesh>
-      <Instances matrices={dashes} cast={false}>
-        <boxGeometry args={[0.38, 0.005, 0.05]} />
-        <meshStandardMaterial color="#d9dcd6" roughness={0.6} />
-      </Instances>
     </group>
   );
 }
@@ -154,22 +131,6 @@ export function RoadLamps() {
 export const TOWER = { x: -6.5, z: -4.6, w: 3.2, d: 2.4, h: 5.6 };
 const TOWER_FLOORS = 12;
 
-/** 옥상 난간 (지붕판 위로) */
-function Parapet({ x, z, w, d, h, color = "#2a3a40" }: { x: number; z: number; w: number; d: number; h: number; color?: string }) {
-  const y = h + 0.08 + 0.06;
-  const t = 0.05;
-  const m = useMemo(
-    () => [m4(x, y, z - d / 2 - 0.01, 0, (w + 0.08) / t, 1, 1), m4(x, y, z + d / 2 + 0.01, 0, (w + 0.08) / t, 1, 1), m4(x - w / 2 - 0.01, y, z, 0, 1, 1, d / t), m4(x + w / 2 + 0.01, y, z, 0, 1, 1, d / t)],
-    [x, z, w, d, y],
-  );
-  return (
-    <Instances matrices={m}>
-      <boxGeometry args={[t, 0.12, t]} />
-      <meshStandardMaterial color={color} roughness={0.8} />
-    </Instances>
-  );
-}
-
 function RoofUnitModels({ spots, scale }: { spots: [number, number, number, number][]; scale: number }) {
   const geometry = useModelGeometry("HeatPump");
   const material = useModelMaterial(0.55, 0.2);
@@ -205,71 +166,22 @@ export function OfficeTower() {
   const pvTarget = useFacility("pvRems");
   const sim = useSim();
   const facade = useMemo(() => facadeTextures({ cols: 14, rows: TOWER_FLOORS, frame: "#2e4148", glass: "#5d8f9c", litRatio: 0.3, seed: 7, band: "#22333a" }), []);
-  const lobby = useRef<THREE.Mesh>(null);
   const beacon = useRef<THREE.Mesh>(null);
-  // 옥상 서쪽에 태양광, 동쪽에 기계실 · 실외기
+  // 옥상 서쪽에 태양광, 동쪽에 기계실(모델) · 실외기
   const roofPv = useMemo(() => {
     const list: THREE.Matrix4[] = [];
     for (let c = 0; c < 3; c++) for (let r = 0; r < 4; r++) list.push(m4(TOWER.x - 1.2 + c * 0.6, ROOF_Y + 0.12, TOWER.z - 0.8 + r * 0.5, 0, 1, 1, 1, 0.38));
     return list;
   }, []);
-  // 커튼월 세로 핀 (카메라 쪽 두 면) · 모서리 기둥
-  const fins = useMemo(() => {
-    const list: THREE.Matrix4[] = [];
-    const fy = (TOWER.h + 0.47) / 2;
-    const sy = (TOWER.h - 0.47) / TOWER.h;
-    for (let k = 1; k < 7; k++) list.push(m4(TOWER.x - TOWER.w / 2 + (k * TOWER.w) / 7, fy, TOWER.z + TOWER.d / 2 + 0.03, 0, 1, sy, 1));
-    for (let k = 1; k < 5; k++) list.push(m4(TOWER.x + TOWER.w / 2 + 0.03, fy, TOWER.z - TOWER.d / 2 + (k * TOWER.d) / 5, Math.PI / 2, 1, sy, 1));
-    return list;
-  }, []);
-  const piers = useMemo(
-    () =>
-      [-1, 1].flatMap((sx) =>
-        [-1, 1].map((sz) => m4(TOWER.x + sx * (TOWER.w / 2 - 0.02), (TOWER.h + 0.24) / 2, TOWER.z + sz * (TOWER.d / 2 - 0.02))),
-      ),
-    [],
-  );
   useFrame(({ clock }) => {
-    const dark = sim.current.dark;
-    if (lobby.current) (lobby.current.material as THREE.MeshStandardMaterial).emissiveIntensity = 0.05 + dark * 0.9;
     // 항공장애등: 밤에 깜빡인다
-    if (beacon.current) beacon.current.scale.setScalar(dark > 0.3 && clock.elapsedTime % 1.6 < 0.5 ? 1 : 0.001);
+    if (beacon.current) beacon.current.scale.setScalar(sim.current.dark > 0.3 && clock.elapsedTime % 1.6 < 0.5 ? 1 : 0.001);
   });
   return (
     <>
       <group {...target}>
-        <Building x={TOWER.x} z={TOWER.z} w={TOWER.w} d={TOWER.d} h={TOWER.h} facade={facade} />
-        {/* 1층 로비: 투명한 유리 띠 (밤에 불이 켜진다) */}
-        <mesh ref={lobby} position={[TOWER.x, 0.235, TOWER.z]} castShadow receiveShadow>
-          <boxGeometry args={[TOWER.w + 0.03, 0.47, TOWER.d + 0.03]} />
-          <meshStandardMaterial color="#6e97a2" emissive="#ffe2b8" metalness={0.6} roughness={0.12} />
-        </mesh>
-        <mesh position={[TOWER.x, 0.475, TOWER.z]} castShadow>
-          <boxGeometry args={[TOWER.w + 0.08, 0.04, TOWER.d + 0.08]} />
-          <meshStandardMaterial color="#22333a" roughness={0.6} />
-        </mesh>
-        <mesh position={[TOWER.x, 0.35, TOWER.z + TOWER.d / 2 + 0.25]} castShadow>
-          <boxGeometry args={[1.6, 0.05, 0.5]} />
-          <meshStandardMaterial color="#9fb3ba" metalness={0.5} roughness={0.3} />
-        </mesh>
-        <Instances matrices={fins}>
-          <boxGeometry args={[0.025, TOWER.h, 0.07]} />
-          <meshStandardMaterial color="#3e545c" metalness={0.5} roughness={0.35} />
-        </Instances>
-        <Instances matrices={piers}>
-          <boxGeometry args={[0.1, TOWER.h + 0.24, 0.1]} />
-          <meshStandardMaterial color="#22333a" roughness={0.55} />
-        </Instances>
-        <Parapet x={TOWER.x} z={TOWER.z} w={TOWER.w} d={TOWER.d} h={TOWER.h} />
-        {/* 옥상 기계실 · 실외기 · 안테나 */}
-        <mesh position={[PENTHOUSE.x, ROOF_Y + PENTHOUSE.h / 2, PENTHOUSE.z]} castShadow receiveShadow>
-          <boxGeometry args={[PENTHOUSE.w, PENTHOUSE.h, PENTHOUSE.d]} />
-          <meshStandardMaterial color="#3a4d54" roughness={0.7} />
-        </mesh>
-        <mesh position={[PENTHOUSE.x, ROOF_Y + PENTHOUSE.h + 0.02, PENTHOUSE.z]} castShadow>
-          <boxGeometry args={[PENTHOUSE.w + 0.06, 0.04, PENTHOUSE.d + 0.06]} />
-          <meshStandardMaterial color="#25343a" roughness={0.8} />
-        </mesh>
+        {/* 커튼월 · 로비 · 캐노피 · 기계실은 Blender 모델 */}
+        <BuildingModel node="Tower" x={TOWER.x} z={TOWER.z} fallback={<Building x={TOWER.x} z={TOWER.z} w={TOWER.w} d={TOWER.d} h={TOWER.h} facade={facade} />} />
         <RoofUnits
           spots={[
             [TOWER.x + 0.65, ROOF_Y, TOWER.z + 0.7, 0],
@@ -437,10 +349,26 @@ export const PEAK_ESS = { x: -3.55, z: -2.15 };
 export function PeakEss() {
   const target = useFacility("peakEss");
   const pos = useMemo(() => [new THREE.Vector3(PEAK_ESS.x - 0.2, 0.025, PEAK_ESS.z), new THREE.Vector3(PEAK_ESS.x + 0.2, 0.025, PEAK_ESS.z)], []);
+  const trench = useMemo(() => {
+    const x0 = PEAK_ESS.x - 0.2;
+    const z0 = PEAK_ESS.z - 0.35;
+    const z1 = TOWER.z + TOWER.d / 2 + 0.2;
+    const x1 = TOWER.x + TOWER.w / 2 - 0.25;
+    return [m4(x0, 0.004, (z0 + z1) / 2, 0, 0.09, 1, z0 - z1), m4((x0 + x1) / 2, 0.004, z1, 0, x0 - x1 + 0.09, 1, 0.09)];
+  }, []);
   return (
     <group {...target}>
       <FencedPad x={PEAK_ESS.x} z={PEAK_ESS.z} w={1.1} d={0.7} />
       <Cabinets positions={pos} />
+      {/* 빌딩 전기실까지 묻힌 전선관: 덮개 콘크리트 띠 + 외벽 접속함 */}
+      <Instances matrices={trench} cast={false}>
+        <boxGeometry args={[1, 0.008, 1]} />
+        <meshStandardMaterial color="#8d9496" roughness={0.9} />
+      </Instances>
+      <mesh position={[TOWER.x + TOWER.w / 2 - 0.25, 0.13, TOWER.z + TOWER.d / 2 + 0.04]} castShadow>
+        <boxGeometry args={[0.16, 0.2, 0.06]} />
+        <meshStandardMaterial color="#c9d0d2" roughness={0.5} />
+      </mesh>
     </group>
   );
 }
@@ -451,9 +379,14 @@ export const SHARED = { x: 10, z: -5.2, w: 4.4, d: 3.2 };
 
 export function SharedEss() {
   const target = useFacility("sharedEss");
-  const pos = useMemo(() => {
-    const list: THREE.Vector3[] = [];
-    for (const dz of [-0.6, 0.55]) for (const dx of [-1.3, -0.45, 0.4, 1.25]) list.push(new THREE.Vector3(SHARED.x + dx, 0.025, SHARED.z + dz));
+  // 컨테이너형 ESS 4기 (냉방기 쪽이 카메라를 향한다)
+  const containers = useMemo(() => [-0.62, 0.58].flatMap((dz) => [-0.95, 0.95].map((dx) => m4(SHARED.x + dx, 0.025, SHARED.z + dz, 0, 0.1, 0.1, 0.1))), []);
+  // 케이블 트레이: 변압기 → 단지 가운데 통로를 따라 컨테이너로
+  const trays = useMemo(() => [m4(SHARED.x - 0.525, 0.36, SHARED.z - 0.02, 0, 4.25, 1, 0.09), m4(SHARED.x - 2.65, 0.36, SHARED.z + 0.59, 0, 0.09, 1, 1.22)], []);
+  const trayPosts = useMemo(() => {
+    const list: THREE.Matrix4[] = [];
+    for (let x = -2.6; x <= 1.6; x += 0.7) list.push(m4(SHARED.x + x, 0.18, SHARED.z - 0.02));
+    for (const z of [0.4, 0.9]) list.push(m4(SHARED.x - 2.65, 0.18, SHARED.z + z));
     return list;
   }, []);
   const posts = useMemo(() => [-1.9, 0, 1.9].flatMap((dx) => [-1.3, 1.3].map((dz) => m4(SHARED.x + dx, 0.55, SHARED.z + dz))), []);
@@ -464,7 +397,15 @@ export function SharedEss() {
   return (
     <group {...target}>
       <FencedPad x={SHARED.x} z={SHARED.z} w={SHARED.w} d={SHARED.d} color="#9da5a6" />
-      <Cabinets positions={pos} />
+      <Props node="EssContainer" matrices={containers} metalness={0.25} roughness={0.5} />
+      <Instances matrices={trays}>
+        <boxGeometry args={[1, 0.025, 1]} />
+        <meshStandardMaterial color="#8f9a9d" metalness={0.6} roughness={0.4} />
+      </Instances>
+      <Instances matrices={trayPosts}>
+        <boxGeometry args={[0.02, 0.36, 0.02]} />
+        <meshStandardMaterial color="#5a6569" metalness={0.6} roughness={0.4} />
+      </Instances>
       <Instances matrices={posts}>
         <boxGeometry args={[0.06, 1.1, 0.06]} />
         <meshStandardMaterial color="#3a464a" metalness={0.6} roughness={0.4} />
@@ -589,7 +530,7 @@ export function SolarScopeLot() {
     for (let y = 0; y < 8; y++)
       for (let x = 0; x < 8; x++) {
         const score = Math.min(1, 0.35 + x * 0.07 + y * 0.06);
-        g.fillStyle = `hsla(${190 - score * 150}, 70%, 55%, 0.55)`;
+        g.fillStyle = `hsla(${190 - score * 150}, 50%, 52%, 0.42)`;
         g.fillRect(x * 8 + 0.5, y * 8 + 0.5, 7, 7);
       }
     const t = new THREE.CanvasTexture(c);
@@ -637,6 +578,7 @@ export function SolarScopeLot() {
         <cylinderGeometry args={[0.03, 0.03, 0.24, 6]} />
         <meshStandardMaterial color="#f5a54a" roughness={0.6} />
       </Instances>
+      <SurveyDrone lot={LOT} />
       <mesh ref={scan} position={[LOT.x, 0.2, LOT.z]}>
         <boxGeometry args={[0.02, 0.4, LOT.d - 0.2]} />
         <meshBasicMaterial color="#a8eaf5" transparent opacity={0.55} blending={THREE.AdditiveBlending} depthWrite={false} />
@@ -689,6 +631,12 @@ const PARK_LAMPS: [number, number][] = [
   [-3.2, 2.6],
 ];
 const BROKEN_LAMP = 1;
+// 화단 [x, z, 반지름]: 산책로 가운데 · 구석
+const PARK_BEDS: [number, number, number][] = [
+  [-7, 4.8, 0.55],
+  [-9.9, 2.2, 0.35],
+  [-3.1, 7.4, 0.4],
+];
 const TREE_SPOTS: [number, number, number][] = [
   [-11.2, 2.0, 1],
   [-9.6, 1.6, 0.9],
@@ -711,7 +659,8 @@ function brokenLevel(t: number) {
 function TreeModels() {
   const a = useModelGeometry("TreeA");
   const b = useModelGeometry("TreeB");
-  const material = useModelMaterial(0.85, 0);
+  const material = useMemo(() => createSwayMaterial(), []);
+  useFrame(({ clock }) => tickSway(material, clock.elapsedTime));
   return (
     <>
       {TREE_SPOTS.map(([x, z, k], i) => (
@@ -729,6 +678,38 @@ export function Park() {
   const stage = useRef<"alert" | "ok" | null>(null);
   const benches = useMemo(() => [m4(-9.2, 0.04, 3.3, 0.4, 0.24, 0.24, 0.24), m4(-6.4, 0.04, 6.2, Math.PI - 0.3, 0.24, 0.24, 0.24), m4(-4.6, 0.04, 3.6, 1.1, 0.24, 0.24, 0.24)], []);
   const restroom = useMemo(() => [m4(-11, 0.04, 7.6, 0, 0.11, 0.11, 0.11)], []);
+  const grass = useMemo(() => grassTexture([PARK.w / 1.6, PARK.d / 1.6]), []);
+  const hedges = useMemo(() => {
+    // 북쪽(도로) · 동쪽(남북 도로) 가장자리, 입구 자리는 비운다
+    const top = PARK.z - PARK.d / 2 + 0.12;
+    const east = PARK.x + PARK.w / 2 - 0.12;
+    const list: THREE.Matrix4[] = [];
+    for (const [a, b] of [
+      [-11.8, -8.6],
+      [-7.4, -2.2],
+    ])
+      list.push(m4((a + b) / 2, 0.1, top, 0, b - a, 1, 1));
+    for (const [a, b] of [
+      [1.5, 3.9],
+      [5.1, 8.1],
+    ])
+      list.push(m4(east, 0.1, (a + b) / 2, Math.PI / 2, b - a, 1, 1));
+    return list;
+  }, []);
+  const beds = useMemo(() => PARK_BEDS.map(([x, z, r]) => m4(x, 0.055, z, 0, r, 1, r)), []);
+  const flowers = useMemo(() => {
+    const colors = ["#e88aa6", "#f2c94c", "#b48ad8", "#f4f1e8"].map((c) => new THREE.Color(c));
+    const list: [THREE.Matrix4, THREE.Color][] = [];
+    let seed = 3;
+    const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+    for (const [x, z, r] of PARK_BEDS)
+      for (let i = 0; i < Math.round(r * 70); i++) {
+        const a = rnd() * Math.PI * 2;
+        const d = Math.sqrt(rnd()) * (r - 0.05);
+        list.push([m4(x + Math.cos(a) * d, 0.09, z + Math.sin(a) * d), colors[Math.floor(rnd() * colors.length)]]);
+      }
+    return list;
+  }, []);
   const playground = useMemo(() => [m4(-4.4, 0.04, 6.6, -0.35, 0.2, 0.2, 0.2)], []);
   // QR 표지가 붙은 시설물: 가로등 · 벤치 · 화장실 · 놀이터
   const qrSpots = useMemo(() => [m4(-10.6, 1.0, 6.9), m4(-8, 1.0, 2.6), m4(-9.2, 0.35, 3.3), m4(-6.4, 0.35, 6.2), m4(-11, 0.62, 7.6), m4(-4.6, 0.86, 6.5)], []);
@@ -754,8 +735,34 @@ export function Park() {
     <group {...target}>
       <mesh position={[PARK.x, 0.02, PARK.z]} receiveShadow>
         <boxGeometry args={[PARK.w, 0.04, PARK.d]} />
-        <meshStandardMaterial color="#4b6e55" roughness={1} />
+        <meshStandardMaterial map={grass} roughness={1} />
       </mesh>
+      {/* 길가 생울타리 (입구는 비운다) */}
+      <Instances matrices={hedges}>
+        <boxGeometry args={[1, 0.12, 0.16]} />
+        <meshStandardMaterial color="#3d5f48" roughness={1} />
+      </Instances>
+      {/* 화단: 흙 · 꽃 */}
+      <Instances matrices={beds} cast={false}>
+        <cylinderGeometry args={[1, 1, 0.03, 24]} />
+        <meshStandardMaterial color="#5a4a3a" roughness={1} />
+      </Instances>
+      <instancedMesh
+        ref={(mesh) => {
+          if (!mesh) return;
+          flowers.forEach(([m, c], i) => {
+            mesh.setMatrixAt(i, m);
+            mesh.setColorAt(i, c);
+          });
+          mesh.instanceMatrix.needsUpdate = true;
+          if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true;
+          mesh.computeBoundingSphere();
+        }}
+        args={[undefined, undefined, flowers.length]}
+      >
+        <icosahedronGeometry args={[0.045, 0]} />
+        <meshStandardMaterial roughness={0.8} />
+      </instancedMesh>
       <mesh position={[PARK.x, 0.045, PARK.z]} rotation={[-Math.PI / 2, 0, 0]} scale={[1.35, 1, 1]} receiveShadow>
         <ringGeometry args={[2.1, 2.45, 64]} />
         <meshStandardMaterial color="#c7bfae" roughness={0.95} />
@@ -794,6 +801,20 @@ export function Park() {
 const LOTP = { x: 2.8, z: 4.8, w: 5.6, d: 6.6 };
 /** 차 모델(길이 4.5 m)을 지역 축척에 맞게 조금 키운다 */
 const CAR_SCALE = 0.13;
+// 충전 중인 차 2대 (북쪽 줄 0 · 4번 칸) ← 오른쪽 충전기
+const CHARGE_CABLES: [number, number, number][][] = [
+  [-1.8, -2.1],
+  [0.6, 0.3],
+].map(([cx, carX]) => {
+  const cz = LOTP.z - 1.6 + 0.5;
+  const row = LOTP.z - 1.6;
+  return [
+    [LOTP.x + cx, 0.2, cz],
+    [LOTP.x + cx - 0.05, 0.06, cz + 0.02],
+    [LOTP.x + carX + 0.12, 0.05, row + 0.38],
+    [LOTP.x + carX + 0.07, 0.12, row + 0.3],
+  ];
+});
 const CARPORT_LIGHTS: [number, number][] = [-1.6, 1.6].flatMap((row) => [-1.4, 0, 1.4].map((dx) => [LOTP.x + dx, LOTP.z + row - 0.15] as [number, number]));
 
 export function Parking() {
@@ -802,7 +823,7 @@ export function Parking() {
   const outline = useRef<THREE.LineSegments>(null);
   const stalls = useMemo(() => {
     const list: THREE.Matrix4[] = [];
-    for (const row of [-1.6, 1.6]) for (let k = 0; k <= 8; k++) list.push(m4(LOTP.x - 2.4 + k * 0.6, 0.035, LOTP.z + row));
+    for (const row of [-1.6, 1.6]) for (let k = 0; k <= 8; k++) list.push(m4(LOTP.x - 2.4 + k * 0.6, 0.043, LOTP.z + row));
     return list;
   }, []);
   // 카포트 골조: 기둥 · 기둥을 잇는 거더 · 패널을 받치는 외팔보
@@ -817,6 +838,15 @@ export function Parking() {
     for (const row of [-1.6, 1.6]) for (let k = 0; k < 4; k++) list.push(m4(LOTP.x - 2.1 + k * 1.4, 0.79, LOTP.z + row - 0.12, 0, 1, 1, 0.8 / 0.05, 0.18));
     return list;
   }, []);
+  // 전기차 전용 칸(충전기 옆, 초록) · 장애인 칸(파랑) · 바퀴 멈춤턱 · 차 밑 그늘
+  const paint = useMemo(
+    () => ({
+      ev: [0, 2, 4].map((k) => m4(LOTP.x - 2.1 + k * 0.6, 0.041, LOTP.z - 1.6, 0, 0.54, 1, 0.86)),
+      accessible: [m4(LOTP.x - 2.1 + 1 * 0.6, 0.041, LOTP.z + 1.6, 0, 0.54, 1, 0.86)],
+      stops: [-1.6, 1.6].flatMap((row) => Array.from({ length: 8 }, (_, k) => m4(LOTP.x - 2.1 + k * 0.6, 0.05, LOTP.z + row + (row < 0 ? -0.36 : 0.36), 0, 1, 1, 1))),
+    }),
+    [],
+  );
   // 전기차 충전기: 북쪽 줄 통로 쪽
   const chargers = useMemo(() => [1, 3, 5].map((k) => m4(LOTP.x - 2.4 + k * 0.6, 0.14, LOTP.z - 1.6 + 0.47)), []);
   const chargerScreens = useMemo(() => [1, 3, 5].map((k) => m4(LOTP.x - 2.4 + k * 0.6, 0.2, LOTP.z - 1.6 + 0.47 + 0.028)), []);
@@ -829,14 +859,16 @@ export function Parking() {
   const cars = useMemo(() => {
     const list: THREE.Matrix4[] = [];
     const colors: THREE.Color[] = [];
+    const shadows: [number, number, number, number, number][] = [];
     for (const i of [0, 1, 3, 4, 6, 7, 9, 11, 12, 14, 16]) {
       const row = i < 9 ? -1.6 : 1.6;
       const k = i % 9;
       if (k > 7) continue;
       list.push(m4(LOTP.x - 2.1 + k * 0.6, 0.04, LOTP.z + row, row < 0 ? -Math.PI / 2 : Math.PI / 2, CAR_SCALE, CAR_SCALE, CAR_SCALE));
       colors.push(CAR_COLORS[(i * 3) % CAR_COLORS.length]);
+      shadows.push([LOTP.x - 2.1 + k * 0.6, LOTP.z + row, 0.3, 0.66, 0.044]);
     }
-    return { list, colors };
+    return { list, colors, shadows };
   }, []);
   // 이상이 생기는 패널 줄 (북쪽 카포트의 가운데 세 칸)
   const flagged = useMemo(() => {
@@ -864,6 +896,19 @@ export function Parking() {
         <boxGeometry args={[0.03, 0.005, 0.9]} />
         <meshStandardMaterial color="#d9dcd6" roughness={0.6} />
       </Instances>
+      <Instances matrices={paint.ev} cast={false}>
+        <boxGeometry args={[1, 0.002, 1]} />
+        <meshStandardMaterial color="#2b5a50" roughness={0.85} />
+      </Instances>
+      <Instances matrices={paint.accessible} cast={false}>
+        <boxGeometry args={[1, 0.002, 1]} />
+        <meshStandardMaterial color="#2c4669" roughness={0.85} />
+      </Instances>
+      <Instances matrices={paint.stops}>
+        <boxGeometry args={[0.26, 0.02, 0.04]} />
+        <meshStandardMaterial color="#c9b25a" roughness={0.8} />
+      </Instances>
+      <ContactShadows spots={cars.shadows} opacity={0.6} />
       <Props node="Car" matrices={cars.list} colors={cars.colors} metalness={0.35} roughness={0.35} />
       <Instances matrices={carportPosts}>
         <boxGeometry args={[0.05, 0.76, 0.05]} />
@@ -887,6 +932,7 @@ export function Parking() {
       </Instances>
       <PvPanels matrices={panels} />
       <Lamps spots={CARPORT_LIGHTS} height={0.79} bare />
+      <ChargingCables cables={CHARGE_CABLES} />
       <lineSegments ref={outline} geometry={flagged} position={flagPos} rotation={[0.18, 0, 0]} renderOrder={4}>
         <lineBasicMaterial transparent depthTest={false} toneMapped={false} />
       </lineSegments>
@@ -930,8 +976,7 @@ export function Remodeling() {
   });
   return (
     <group {...target}>
-      <Building x={OLD.x} z={OLD.z} w={OLD.w} d={OLD.d} h={OLD.h} facade={facade} roof="#6c6256" />
-      <Parapet x={OLD.x} z={OLD.z} w={OLD.w} d={OLD.d} h={OLD.h} color="#857a6c" />
+      <BuildingModel node="OldBuilding" x={OLD.x} z={OLD.z} fallback={<Building x={OLD.x} z={OLD.z} w={OLD.w} d={OLD.d} h={OLD.h} facade={facade} roof="#6c6256" />} />
       <mesh ref={cover} position={[OLD.x, OLD.h / 2, OLD.z + OLD.d / 2 + 0.03]} castShadow>
         <boxGeometry args={[OLD.w, OLD.h, 0.05]} />
         <meshStandardMaterial color="#9fc3cc" metalness={0.3} roughness={0.4} />
@@ -959,21 +1004,25 @@ export function PvFarm() {
   const target = useFacility("pvRems");
   const panels = useMemo(() => {
     const list: THREE.Matrix4[] = [];
-    for (let r = 0; r < 5; r++) for (let c = 0; c < 6; c++) list.push(m4(FARM.x - 1.55 + c * 0.62, 0.22, FARM.z - 1.8 + r * 0.9, 0, 1.2, 1, 1.25, 0.5));
+    for (let r = 0; r < 5; r++) for (let c = 0; c < 6; c++) if (r || c) list.push(m4(FARM.x - 1.55 + c * 0.62, 0.22, FARM.z - 1.8 + r * 0.9, 0, 1.2, 1, 1.25, 0.5));
     return list;
   }, []);
+  // 북서쪽 첫 칸은 인버터 스키드 자리 · 줄 끝마다 접속반
+  const inverter = useMemo(() => [m4(FARM.x - 1.55, 0.025, FARM.z - 1.8, 0, 0.1, 0.1, 0.1)], []);
+  const combiners = useMemo(() => Array.from({ length: 5 }, (_, r) => m4(FARM.x - 1.55 + 5 * 0.62 + 0.36, 0.13, FARM.z - 1.8 + r * 0.9 - 0.1)), []);
   // 가대: 남쪽(앞)은 낮고 북쪽(뒤)은 높은 기둥 + 줄마다 가로 레일
   const posts = useMemo(() => {
     const list: THREE.Matrix4[] = [];
     for (let r = 0; r < 5; r++)
       for (let c = 0; c < 6; c++) {
+        if (!r && !c) continue;
         const x = FARM.x - 1.55 + c * 0.62;
         const z = FARM.z - 1.8 + r * 0.9;
         list.push(m4(x, 0.07, z + 0.14, 0, 1, 0.14, 1), m4(x, 0.15, z - 0.14, 0, 1, 0.3, 1));
       }
     return list;
   }, []);
-  const rails = useMemo(() => Array.from({ length: 5 }, (_, r) => m4(FARM.x, 0.2, FARM.z - 1.8 + r * 0.9, 0, 3.7 / 0.03, 1, 1)), []);
+  const rails = useMemo(() => Array.from({ length: 5 }, (_, r) => (r ? m4(FARM.x, 0.2, FARM.z - 1.8 + r * 0.9, 0, 3.7 / 0.03, 1, 1) : m4(FARM.x + 0.31, 0.2, FARM.z - 1.8, 0, 3.1 / 0.03, 1, 1))), []);
   return (
     <group {...target}>
       <FencedPad x={FARM.x} z={FARM.z} w={FARM.w} d={FARM.d} color="#4f6b55" />
@@ -986,6 +1035,11 @@ export function PvFarm() {
         <meshStandardMaterial color="#9aa5a9" metalness={0.6} roughness={0.4} />
       </Instances>
       <PvPanels matrices={panels} />
+      <Props node="Inverter" matrices={inverter} metalness={0.3} roughness={0.5} />
+      <Instances matrices={combiners}>
+        <boxGeometry args={[0.06, 0.08, 0.035]} />
+        <meshStandardMaterial color="#d9dedd" roughness={0.5} />
+      </Instances>
     </group>
   );
 }
@@ -1001,12 +1055,9 @@ export function Fillers() {
   }, []);
   return (
     <>
-      <Building x={-11} z={-5.5} w={2.4} d={2} h={1.8} facade={a} />
-      <Building x={-10.8} z={-1.9} w={2} d={1.2} h={1.2} facade={b} />
-      <Building x={6.4} z={-1.9} w={1.6} d={1} h={0.9} facade={b} />
-      <Parapet x={-11} z={-5.5} w={2.4} d={2} h={1.8} />
-      <Parapet x={-10.8} z={-1.9} w={2} d={1.2} h={1.2} color="#8f887b" />
-      <Parapet x={6.4} z={-1.9} w={1.6} d={1} h={0.9} color="#8f887b" />
+      <BuildingModel node="MidOffice" x={-11} z={-5.5} fallback={<Building x={-11} z={-5.5} w={2.4} d={2} h={1.8} facade={a} />} />
+      <BuildingModel node="ShopHouse" x={-10.8} z={-1.9} fallback={<Building x={-10.8} z={-1.9} w={2} d={1.2} h={1.2} facade={b} />} />
+      <BuildingModel node="SmallBlock" x={6.4} z={-1.9} fallback={<Building x={6.4} z={-1.9} w={1.6} d={1} h={0.9} facade={b} />} />
       <RoofUnits
         spots={[
           [-11.35, 1.28, -1.95, 0],

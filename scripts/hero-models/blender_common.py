@@ -6,6 +6,7 @@ build_hero_models.py(홈 히어로)와 ../district-models/build_district_models.
 import bmesh
 import bpy
 
+
 def srgb_to_linear(c):
     return c / 12.92 if c <= 0.04045 else ((c + 0.055) / 1.055) ** 2.4
 
@@ -76,8 +77,8 @@ def join(parts, name):
     return o
 
 
-def bake_vertex_colors(obj, ao_floor=0.35, samples=48, ground=True, smooth=False):
-    """부품 색 × AO 를 꼭짓점 색(Col)으로 굽고 재질은 비운다"""
+def bake_vertex_colors(obj, ao_floor=0.35, samples=48, ground=True, smooth=False, keep_materials=False, ground_size=40):
+    """부품 색 × AO 를 꼭짓점 색(Col)으로 굽고 재질은 비운다 (keep_materials: 재질별로 나눌 모델은 남겨 둔다)"""
     scene = bpy.context.scene
     scene.render.engine = "CYCLES"
     scene.cycles.device = "CPU"
@@ -88,7 +89,7 @@ def bake_vertex_colors(obj, ao_floor=0.35, samples=48, ground=True, smooth=False
         o.hide_render = o is not obj
     floor = None
     if ground:
-        bpy.ops.mesh.primitive_plane_add(size=40, location=(0, 0, 0))
+        bpy.ops.mesh.primitive_plane_add(size=ground_size, location=(0, 0, 0))
         floor = bpy.context.active_object
     if smooth:
         bpy.ops.object.select_all(action="DESELECT")
@@ -116,7 +117,8 @@ def bake_vertex_colors(obj, ao_floor=0.35, samples=48, ground=True, smooth=False
             col.data[li].color = (base[0] * a, base[1] * a, base[2] * a, 1.0)
     me.color_attributes.remove(me.color_attributes["AO"])
     me.color_attributes.active_color = me.color_attributes["Col"]
-    me.materials.clear()
+    if not keep_materials:
+        me.materials.clear()
 
     if floor:
         bpy.data.objects.remove(floor, do_unlink=True)
@@ -124,7 +126,7 @@ def bake_vertex_colors(obj, ao_floor=0.35, samples=48, ground=True, smooth=False
         o.hide_render = False
 
 
-def export_glb(objects, out):
+def export_glb(objects, out, meshopt=False):
     bpy.ops.object.select_all(action="DESELECT")
     for o in objects:
         o.select_set(True)
@@ -141,5 +143,7 @@ def export_glb(objects, out):
         export_texcoords=False,
         export_normals=True,
         export_yup=True,
+        # meshopt: 꼭짓점을 양자화 · 압축 (three.js GLTFLoader 가 MeshoptDecoder 로 푼다)
+        export_meshopt_compression_enable=meshopt,
     )
     print("exported", out)
