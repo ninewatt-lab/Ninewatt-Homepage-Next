@@ -29,8 +29,8 @@ export const ROAD = { ewZ: 0, nsX: -1, width: 1.2 };
 /** 시설 위치 — 라벨 앵커(머리 위)와 바닥 강조 영역 */
 export const FACILITY: Record<ProductKey, { label: [number, number, number]; zones: { x: number; z: number; w: number; d: number }[] }> = {
   bems: { label: [-6.5, 6.3, -4.6], zones: [{ x: -6.5, z: -4.6, w: 3.8, d: 3 }] },
-  peakEss: { label: [-3.55, 1.05, -2.15], zones: [{ x: -3.55, z: -2.15, w: 1.5, d: 1.1 }] },
-  sharedEss: { label: [10, 1.7, -5.2], zones: [{ x: 10, z: -5.2, w: 4.8, d: 3.6 }] },
+  peakEss: { label: [-3.55, 1.15, -4.1], zones: [{ x: -3.55, z: -4.1, w: 2.4, d: 1.6 }] },
+  sharedEss: { label: [10, 1.05, -5.2], zones: [{ x: 10, z: -5.2, w: 5.2, d: 3.8 }] },
   pvRems: {
     label: [10.9, 1.05, 6.4],
     zones: [
