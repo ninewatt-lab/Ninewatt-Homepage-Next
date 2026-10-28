@@ -23,7 +23,8 @@
         "solar": "Solaire — {kwp} kWc en toiture, sur la moyenne coréenne de {hours} heures de production par jour (environ {daily} kWh/jour)",
         "ess": "ESS — {essKw} kW / {essKwh} kWh, rendement aller-retour de {rte} % (NREL ATB). Charge en heures creuses (22 h–8 h), décharge pour réduire la pointe de jour de {cut} % (bas de la fourchette de 15–30 % d'économies de Peak ESS) et pendant la tarification de pointe 18 h–21 h",
         "heatPump": "Pompe à chaleur — air, COP {cop} (cas d'essai KS). CVC supposé à {hvac} % de la charge du bâtiment",
-        "ai": "Économies IA — environ {ai} % de réduction des coûts énergétiques annoncée pour Ninewatt Opti"
+        "ai": "Économies IA — environ {ai} % de réduction des coûts énergétiques annoncée pour Ninewatt Opti",
+        "bems": "Alertes BEMS — scènes d'exemple montrant des fonctions réelles du BEMS (alertes hors plage, analyse IA) : pointe mensuelle presque dépassée le jour, veille +{pct} % à l'étage {floor} la nuit. Le temps ralentit pendant ces scènes."
       },
       "note": "Il s'agit d'une simulation, pas de données mesurées. Une journée de semaine est condensée en {sec} secondes."
     },
@@ -71,7 +72,38 @@
         "note": "L'IA analyse chaque étage et réduit d'abord les plus chargés, jusqu'à {ai} %. Le soutirage réseau baisse d'autant que le solaire et l'ESS fournissent.",
         "chart": "Charge du bâtiment et soutirage réseau sur la journée (kW)"
       },
-      "hint": "Touchez pour le détail"
+      "hint": "Touchez pour le détail",
+      "bems": {
+        "kicker": "BEMS · Gestion énergétique du bâtiment",
+        "title": "Ninewatt BEMS",
+        "statusOk": "Surveillance",
+        "statusAlert": "1 alerte",
+        "statusOkLabel": "Rien à signaler",
+        "statusOkText": "Les relevés sont surveillés en temps réel. Une alerte part dès qu'une valeur sort de sa plage.",
+        "stage": {
+          "alert": "Alerte BEMS",
+          "ai": "Analyse IA",
+          "resolved": "Résolu"
+        },
+        "peak": {
+          "alert": "Proche d'une nouvelle pointe mensuelle de {peak} kW · {now} kW maintenant",
+          "ai": "Les unités CVC démarrent ensemble : une pointe est attendue vers 15 h. L'ESS se décharge pour garder le soutirage sous {peak} kW.",
+          "resolved": "Réseau {grid} kW · pointe maintenue à {peak} kW, pas de nouvelle prime de puissance"
+        },
+        "night": {
+          "alert": "Veille nocturne de l'étage {floor} : {now} kW · +{pct} % par rapport à la normale",
+          "ai": "L'éclairage et la CVC des salles de réunion de l'étage {floor} sont restés allumés après 22 h. Une extinction automatique planifiée est recommandée.",
+          "resolved": "Veille de l'étage {floor} revenue à la normale ({now} kW)"
+        },
+        "screenTitle": "L'écran BEMS réel",
+        "screenAlt": "Tableau de bord Ninewatt BEMS",
+        "f1": "Affiche les relevés en temps réel et envoie une alerte automatiquement quand une valeur sort de sa plage ou de sa consigne.",
+        "f2": "L'IA explique les principaux changements et ce qu'il faut vérifier, à partir des données du site.",
+        "f3": "Composez vos tableaux de bord, comparez des périodes et exportez des rapports.",
+        "cta": "En savoir plus sur le BEMS",
+        "viewIn": "Voir cet équipement dans le BEMS"
+      },
+      "productLink": "En savoir plus : {name}"
     }
   },
   "showcase": {

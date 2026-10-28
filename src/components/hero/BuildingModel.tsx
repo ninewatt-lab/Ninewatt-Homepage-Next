@@ -9,7 +9,7 @@
 import { useFrame, type ThreeEvent } from "@react-three/fiber";
 import { Suspense, useMemo, useRef } from "react";
 import * as THREE from "three";
-import { BUILDING_H, ESS_KW, FLOOR_H, FLOORS, PEAK_KW, PV_PEAK_KW, SETBACK_FLOOR, footprint, reveal, seeded, useSim } from "./heroSim";
+import { BEMS_FLOOR, BUILDING_H, ESS_KW, FLOOR_H, FLOORS, PEAK_KW, PV_PEAK_KW, SETBACK_FLOOR, footprint, reveal, seeded, useSim } from "./heroSim";
 import { fromUi, useFocusTarget } from "./focus";
 import { useModelGeometry, useModelMaterial } from "./models";
 import { louverTexture, pavingTexture, pvTexture } from "./textures";
@@ -267,6 +267,7 @@ const windowFragment = /* glsl */ `
   }
 `;
 const OFFICE_LIGHT = new THREE.Color("#ffdcae");
+const PLAN = new THREE.Color("#d6f4fa");
 
 export function Floor({ index, hovered, onHover }: { index: number; hovered: boolean; onHover: (i: number | null) => void }) {
   const sim = useSim();
@@ -291,13 +292,17 @@ export function Floor({ index, hovered, onHover }: { index: number; hovered: boo
     [index, w],
   );
 
-  useFrame(() => {
+  useFrame(({ clock }) => {
     const g = group.current;
     const mesh = energy.current;
     const lines = plan.current;
     if (!g || !mesh || !lines) return;
     const s = sim.current;
     const r = floorReveal(s.intro, index);
+    // BEMS 야간 대기전력 경보: 이 층이 앰버로 깜빡이고, 조치되면 틸로 한 번 밝아진다
+    const watched = index === BEMS_FLOOR && s.bems?.kind === "night";
+    const alarm = watched && s.bems?.stage !== "resolved" ? 0.55 + 0.45 * Math.sin(clock.elapsedTime * 6) : 0;
+    const fixed = watched && s.bems?.stage === "resolved" ? 1 - s.bems.p : 0;
     g.visible = r > 0.001;
     g.scale.y = Math.max(r, 0.001);
 
@@ -305,17 +310,20 @@ export function Floor({ index, hovered, onHover }: { index: number; hovered: boo
     const scan = Math.max(0, 1 - Math.abs(s.scanY - (y + FLOOR_H / 2)) / 0.55);
     const hover = hovered ? 1 : 0;
     const mat = mesh.material as THREE.MeshBasicMaterial;
-    mat.color.copy(color.copy(TEAL).lerp(WARM, THREE.MathUtils.smoothstep(load, 0.7, 1)).lerp(WHITE, scan * 0.5 + hover * 0.3));
+    mat.color.copy(color.copy(TEAL).lerp(WARM, Math.max(THREE.MathUtils.smoothstep(load, 0.7, 1), alarm)).lerp(WHITE, scan * 0.5 + hover * 0.3 + fixed * 0.4));
     // 밤에는 데이터 빛을 조금 낮춰 창 조명이 읽히게
-    mat.opacity = (0.08 + load * 0.45 + scan * 0.2 + hover * 0.2) * r * (1 - s.dark * 0.35);
+    mat.opacity = (0.08 + load * 0.45 + scan * 0.2 + hover * 0.2 + alarm * 0.4 + fixed * 0.3) * r * (1 - s.dark * 0.35 * (1 - alarm));
     // 재실(부하)만큼 창 조명이 켜진다. 로비는 밤에도 켜 둔다. 낮에는 거의 보이지 않는다
     if (windows.current) {
       const u = (windows.current.material as THREE.ShaderMaterial).uniforms;
-      u.uOcc.value = Math.max(lobby ? 0.55 : 0, Math.min(1, (load - 0.1) / 0.85));
+      // 야간 대기전력이 늘어난 층은 조명이 켜진 채로 남아 있다
+      u.uOcc.value = Math.max(lobby ? 0.55 : 0, index === BEMS_FLOOR && s.nightAnomaly ? 0.85 : 0, Math.min(1, (load - 0.1) / 0.85));
       u.uOpacity.value = (0.08 + s.dark * 0.9) * r;
     }
     // 스캔이 지나가면 실내 평면이 X-ray 처럼 드러난다
-    (lines.material as THREE.LineBasicMaterial).opacity = (0.09 + scan * 0.75 + hover * 0.45) * r;
+    const lm = lines.material as THREE.LineBasicMaterial;
+    lm.opacity = (0.09 + scan * 0.75 + hover * 0.45 + alarm * 0.6) * r;
+    lm.color.copy(PLAN).lerp(WARM, alarm);
   });
 
   const glassH = FLOOR_H - DECK;
@@ -534,7 +542,7 @@ export function Core() {
   const riser = useRef<THREE.Mesh>(null);
   const height = BUILDING_H + 0.18; // 엘리베이터 기계실까지
 
-  useFrame(() => {
+  useFrame(({ clock }) => {
     const s = sim.current;
     const r = reveal(s.intro, FLOOR_START, FLOOR_STEP * FLOORS + FLOOR_DUR);
     for (const m of [core.current, riser.current]) {
@@ -542,7 +550,13 @@ export function Core() {
       m.scale.y = Math.max(r, 0.001);
       m.position.y = (height * m.scale.y) / 2;
     }
-    if (riser.current) (riser.current.material as THREE.MeshBasicMaterial).opacity = 0.3 + (s.loadKw / PEAK_KW) * 0.5;
+    if (riser.current) {
+      const m = riser.current.material as THREE.MeshBasicMaterial;
+      // BEMS 피크 경보 · AI 분석 중에는 건물 전체 간선이 앰버로 깜빡인다
+      const alarm = s.bems?.kind === "peak" && s.bems.stage !== "resolved" ? 0.55 + 0.45 * Math.sin(clock.elapsedTime * 6) : 0;
+      m.color.copy(TEAL).lerp(WARM, alarm);
+      m.opacity = 0.3 + (s.loadKw / PEAK_KW) * 0.5 + alarm * 0.3;
+    }
   });
 
   return (

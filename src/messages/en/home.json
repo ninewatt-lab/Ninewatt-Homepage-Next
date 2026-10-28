@@ -23,7 +23,8 @@
         "solar": "Solar — {kwp} kWp on the roof, at Korea's average {hours} generation hours a day (about {daily} kWh/day)",
         "ess": "ESS — {essKw} kW / {essKwh} kWh, {rte}% round-trip efficiency (NREL ATB). Charges off-peak (22:00–08:00), discharges to cut the daytime peak by {cut}% (the low end of Peak ESS's 15–30% demand-charge savings) and during the 18:00–21:00 peak tariff",
         "heatPump": "Heat pump — air-source, COP {cop} (KS test case). HVAC assumed at {hvac}% of building load",
-        "ai": "AI savings — about {ai}% energy cost reduction stated for Ninewatt Opti"
+        "ai": "AI savings — about {ai}% energy cost reduction stated for Ninewatt Opti",
+        "bems": "BEMS alerts — example scenes that show real BEMS features (out-of-range alerts and AI analysis): a near-new monthly peak by day and +{pct}% standby power on floor {floor} at night. Time slows down during these scenes."
       },
       "note": "This is a simulation, not measured data. One weekday is compressed into {sec} seconds."
     },
@@ -71,7 +72,38 @@
         "note": "AI analyzes each floor and trims the busiest floors first, by up to {ai}%. Grid draw drops by what solar and the ESS supply.",
         "chart": "Building load and grid draw over the day (kW)"
       },
-      "hint": "Tap for details"
+      "hint": "Tap for details",
+      "bems": {
+        "kicker": "BEMS · Building energy management",
+        "title": "Ninewatt BEMS",
+        "statusOk": "Monitoring",
+        "statusAlert": "1 alert",
+        "statusOkLabel": "All clear",
+        "statusOkText": "Meter readings are being monitored in real time. An alert goes out as soon as a value leaves its set range.",
+        "stage": {
+          "alert": "BEMS alert",
+          "ai": "AI analysis",
+          "resolved": "Resolved"
+        },
+        "peak": {
+          "alert": "Close to a new monthly peak of {peak} kW · now {now} kW",
+          "ai": "HVAC units are starting together, so a peak is expected around 3 pm. The ESS discharges to hold grid draw under {peak} kW.",
+          "resolved": "Grid {grid} kW · peak held at {peak} kW, no new demand charge"
+        },
+        "night": {
+          "alert": "Floor {floor} night standby {now} kW · +{pct}% above normal",
+          "ai": "Meeting-room lights and HVAC on floor {floor} stayed on after 10 pm. Schedule-based auto shut-off is recommended.",
+          "resolved": "Floor {floor} standby back to normal ({now} kW)"
+        },
+        "screenTitle": "The actual BEMS screen",
+        "screenAlt": "Ninewatt BEMS dashboard",
+        "f1": "Shows meter readings in real time and sends an alert automatically when a value leaves its range or set point.",
+        "f2": "AI explains key changes and what needs checking, based on on-site data.",
+        "f3": "Build dashboards from the metrics you need, compare periods, and export reports.",
+        "cta": "Learn more about BEMS",
+        "viewIn": "View this equipment in BEMS"
+      },
+      "productLink": "Learn more about {name}"
     }
   },
   "showcase": {

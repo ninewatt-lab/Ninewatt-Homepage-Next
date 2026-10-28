@@ -9,10 +9,34 @@
  */
 
 import { useTranslations } from "next-intl";
+import Image from "next/image";
+import { Link } from "@/i18n/navigation";
 import { useEffect, useMemo, useRef, useState, type RefObject } from "react";
-import { AI_SAVING, ESS_KWH, HP_COP, PV_KWP, simulateDay, type Sim } from "./heroSim";
+import { AI_SAVING, BEMS_FLOOR, ESS_KWH, HP_COP, NIGHT_EXTRA, PEAK_CUT, PEAK_KW, PV_KWP, floorKw, simulateDay, type BemsEvent, type Sim } from "./heroSim";
 
-export type Focus = "ess" | "hp" | "solar" | "load";
+export type Focus = "ess" | "hp" | "solar" | "load" | "bems";
+
+/* ── BEMS 경보 문구 (칩 · 패널 공용) ──────────────────────────────── */
+
+type Translate = (key: string, values?: Record<string, string | number>) => string;
+export type BemsTone = "alert" | "ai" | "resolved";
+export const BEMS_TONE_COLOR: Record<BemsTone, string> = { alert: "#F5A54A", ai: "#49B6CA", resolved: "#85D2E0" };
+const MONTH_PEAK_KW = Math.round(PEAK_KW * (1 - PEAK_CUT));
+
+export function bemsMessage(t: Translate, s: { bems: BemsEvent | null; loadKw: number; gridKw: number; bemsFloorKw: number }) {
+  if (!s.bems) return null;
+  const { kind, stage } = s.bems;
+  const values = {
+    now: kind === "peak" ? s.loadKw.toFixed(1) : s.bemsFloorKw.toFixed(1),
+    peak: MONTH_PEAK_KW,
+    grid: s.gridKw.toFixed(1),
+    floor: BEMS_FLOOR + 1,
+    pct: Math.round(NIGHT_EXTRA * 100),
+  };
+  return { tone: stage as BemsTone, label: t(`bems.stage.${stage}`), text: t(`bems.${kind}.${stage}`, values) };
+}
+
+const SCREEN = { src: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/projects/BEMS_1.png?v=2", width: 2400, height: 1313 };
 
 // 어두운 표면(#0a1820)에서 밝기 · 채도 · 색각 이상 구분 검사를 통과한 계열 색
 const SERIES_A = "#2C9DB3";
@@ -24,12 +48,23 @@ const STEP = DAY[1].hour - DAY[0].hour;
 
 /* ── 실시간 값 ────────────────────────────────────────────────────── */
 
-type Snapshot = Pick<Sim, "hour" | "loadKw" | "solarKw" | "gridKw" | "essKw" | "essSoc" | "hpKw" | "aiKw">;
+type Snapshot = Pick<Sim, "hour" | "loadKw" | "solarKw" | "gridKw" | "essKw" | "essSoc" | "hpKw" | "aiKw" | "bems"> & { bemsFloorKw: number };
 
-const EMPTY: Snapshot = { hour: 0, loadKw: 0, solarKw: 0, gridKw: 0, essKw: 0, essSoc: 0, hpKw: 0, aiKw: 0 };
+const EMPTY: Snapshot = { hour: 0, loadKw: 0, solarKw: 0, gridKw: 0, essKw: 0, essSoc: 0, hpKw: 0, aiKw: 0, bems: null, bemsFloorKw: 0 };
 
 function readSim(s: Sim): Snapshot {
-  return { hour: s.hour, loadKw: s.loadKw, solarKw: s.solarKw, gridKw: s.gridKw, essKw: s.essKw, essSoc: s.essSoc, hpKw: s.hpKw, aiKw: s.aiKw };
+  return {
+    hour: s.hour,
+    loadKw: s.loadKw,
+    solarKw: s.solarKw,
+    gridKw: s.gridKw,
+    essKw: s.essKw,
+    essSoc: s.essSoc,
+    hpKw: s.hpKw,
+    aiKw: s.aiKw,
+    bems: s.bems ? { ...s.bems } : null,
+    bemsFloorKw: floorKw(s.floorLoads[BEMS_FLOOR] ?? 0),
+  };
 }
 
 // 계측기처럼 0.5초마다 갱신 (첫 값은 다음 프레임에 바로)
@@ -341,7 +376,102 @@ export default function DetailPanel({ focus, sim, onClose }: { focus: Focus; sim
         </>
       )}
 
+      {focus === "bems" && <BemsSection snap={snap} />}
+
+      {focus !== "bems" && <ProductLinks focus={focus} />}
+
       <p className="mt-4 border-t border-white/10 pt-3 text-[11px] leading-relaxed text-white/40">{t("footnote")}</p>
+    </div>
+  );
+}
+
+/* ── BEMS 패널 ────────────────────────────────────────────────────── */
+
+function BemsSection({ snap }: { snap: Snapshot }) {
+  const t = useTranslations("home.hero.detail");
+  const msg = bemsMessage(t as unknown as Translate, snap);
+  return (
+    <>
+      {/* 지금 BEMS 가 보고 있는 것 */}
+      <div
+        className="mt-4 rounded-xl border bg-white/[0.03] p-3"
+        style={{ borderColor: msg ? `${BEMS_TONE_COLOR[msg.tone]}66` : "rgba(255,255,255,0.12)" }}
+        aria-live="polite"
+      >
+        <p className="text-[11px] font-semibold tracking-wide" style={{ color: msg ? BEMS_TONE_COLOR[msg.tone] : "#85D2E0" }}>
+          {msg ? msg.label : t("bems.statusOkLabel")}
+        </p>
+        <p className="mt-1 text-[13px] leading-relaxed text-white/85">{msg ? msg.text : t("bems.statusOkText")}</p>
+      </div>
+
+      <h3 className="mt-4 text-[12px] font-semibold text-white/80">{t("bems.screenTitle")}</h3>
+      <Image
+        src={SCREEN.src}
+        width={SCREEN.width}
+        height={SCREEN.height}
+        sizes="352px"
+        alt={t("bems.screenAlt")}
+        className="mt-2 h-auto w-full rounded-lg border border-white/10"
+      />
+
+      <ul className="mt-4 space-y-2">
+        {(["f1", "f2", "f3"] as const).map((k) => (
+          <li key={k} className="flex gap-2 text-[12px] leading-relaxed text-white/70">
+            <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-primary-light" aria-hidden="true" />
+            {t(`bems.${k}`)}
+          </li>
+        ))}
+      </ul>
+
+      <Link
+        href="/product/bems"
+        className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-[12px] font-semibold text-white transition-colors hover:bg-primary-dark"
+      >
+        {t("bems.cta")}
+        <span aria-hidden="true">→</span>
+      </Link>
+    </>
+  );
+}
+
+/* ── 관련 제품 링크 ───────────────────────────────────────────────── */
+
+// 패널마다 그 설비를 다루는 제품 페이지로. 이름은 헤더 메뉴(common.productMenu)와 같게
+const PRODUCTS: Partial<Record<Focus, { href: string; nameKey?: string; name?: string }>> = {
+  ess: { href: "/product/peak-ess", nameKey: "peakEssLabel" },
+  solar: { href: "/product/pv-intelligence", nameKey: "pvRemsLabel" },
+  load: { href: "/solutions/opti", name: "Opti" },
+};
+// BEMS 에서도 보는 설비 (히트펌프는 BEMS 의 설비 효율 · COP 분석이 주 링크)
+const ALSO_IN_BEMS: Focus[] = ["ess", "load"];
+
+const primaryLink =
+  "mt-4 inline-flex items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-[12px] font-semibold text-white transition-colors hover:bg-primary-dark";
+const secondaryLink = "inline-flex items-center gap-1 text-[12px] font-semibold text-primary-light hover:text-white";
+
+function ProductLinks({ focus }: { focus: Focus }) {
+  const t = useTranslations("home.hero.detail");
+  const menu = useTranslations("common.productMenu");
+  const product = PRODUCTS[focus];
+  return (
+    <div className="flex flex-wrap items-center gap-x-4">
+      {product ? (
+        <Link href={product.href} className={primaryLink}>
+          {t("productLink", { name: product.name ?? menu(product.nameKey!) })}
+          <span aria-hidden="true">→</span>
+        </Link>
+      ) : (
+        <Link href="/product/bems" className={primaryLink}>
+          {t("bems.viewIn")}
+          <span aria-hidden="true">→</span>
+        </Link>
+      )}
+      {product && ALSO_IN_BEMS.includes(focus) && (
+        <Link href="/product/bems" className={`${secondaryLink} mt-4`}>
+          {t("bems.viewIn")}
+          <span aria-hidden="true">→</span>
+        </Link>
+      )}
     </div>
   );
 }

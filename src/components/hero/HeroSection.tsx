@@ -7,6 +7,7 @@ import { Component, useEffect, useRef, useState, type ReactNode } from "react";
 import HeroEnergyCanvas from "./HeroEnergyCanvas";
 import {
   AI_SAVING,
+  BEMS_FLOOR,
   DAY_SECONDS,
   ESS_KW,
   ESS_KWH,
@@ -16,6 +17,7 @@ import {
   GFA_M2,
   HP_COP,
   HVAC_SHARE,
+  NIGHT_EXTRA,
   PEAK_CUT,
   PEAK_KW,
   PV_HOURS,
@@ -43,8 +45,10 @@ const SIM_VALUES = {
   hvac: pct(HVAC_SHARE),
   ai: pct(AI_SAVING),
   sec: DAY_SECONDS,
+  floor: BEMS_FLOOR + 1,
+  pct: pct(NIGHT_EXTRA),
 };
-const SIM_ITEMS = ["building", "load", "solar", "ess", "heatPump", "ai"] as const;
+const SIM_ITEMS = ["building", "load", "solar", "ess", "heatPump", "ai", "bems"] as const;
 
 /** WebGL 을 만들 수 없는 브라우저에서는 2D 배경으로 대신한다 */
 class SceneBoundary extends Component<{ fallback: ReactNode; children: ReactNode }, { failed: boolean }> {

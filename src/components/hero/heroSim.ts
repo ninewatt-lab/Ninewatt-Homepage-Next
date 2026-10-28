@@ -60,6 +60,49 @@ export const HVAC_SHARE = 0.3;
 /** Opti 에너지 비용 절감 효과 (제품 소개 수치) */
 export const AI_SAVING = 0.12;
 
+/* ── BEMS 경보 장면 ───────────────────────────────────────────────── */
+// 실제 BEMS 기능(기준값 이탈 시 경보, AI 가 원인과 확인할 일을 설명)을 보여 주는 예시 시나리오.
+// 하루에 두 번: 낮 피크 갱신 임박 · 밤 특정 층 대기전력 증가. 각 단계는 경보 → AI 분석 → 조치 완료.
+
+export type BemsKind = "peak" | "night";
+export type BemsStage = "alert" | "ai" | "resolved";
+export type BemsEvent = { kind: BemsKind; stage: BemsStage; p: number };
+
+/** 야간 대기전력이 늘어나는 층 (0부터, 4 = 5층) */
+export const BEMS_FLOOR = 4;
+/** 야간 대기전력 증가 비율 (평소 대비) */
+export const NIGHT_EXTRA = 0.45;
+const NIGHT_ANOMALY_FROM = 21.3; // 이때부터 대기전력이 늘고, 경보를 거쳐 조치될 때까지 이어진다
+
+const STAGES: BemsStage[] = ["alert", "ai", "resolved"];
+const BEMS_EVENTS: { kind: BemsKind; start: number; hours: [number, number, number] }[] = [
+  { kind: "peak", start: 13.6, hours: [0.5, 0.8, 0.4] },
+  { kind: "night", start: 21.8, hours: [0.5, 0.8, 0.4] },
+];
+/** 경보 장면 동안 시간이 흐르는 속도 — 메시지를 읽을 수 있게 */
+const BEMS_SLOW = 0.3;
+
+export function bemsEventAt(hour: number): BemsEvent | null {
+  for (const e of BEMS_EVENTS) {
+    let t = hour - e.start;
+    if (t < 0) continue;
+    for (let i = 0; i < 3; i++) {
+      if (t < e.hours[i]) return { kind: e.kind, stage: STAGES[i], p: t / e.hours[i] };
+      t -= e.hours[i];
+    }
+  }
+  return null;
+}
+
+const NIGHT_EVENT = BEMS_EVENTS[1];
+/** 야간 대기전력이 실제로 늘어 있는 시간 (경보 · AI 분석이 끝나 조치될 때까지) */
+function nightAnomaly(hour: number) {
+  return hour >= NIGHT_ANOMALY_FROM && hour < NIGHT_EVENT.start + NIGHT_EVENT.hours[0] + NIGHT_EVENT.hours[1];
+}
+
+/** 층 하나의 사용량(0~1)을 kW 로 — 층별 칩 · 패널 표시용 */
+export const floorKw = (load: number) => load * (PEAK_KW / FLOORS) * 1.3;
+
 /* ── 시간 ─────────────────────────────────────────────────────────── */
 
 export const DAY_SECONDS = 40; // 하루 24시간을 한 바퀴
@@ -136,6 +179,11 @@ export type Sim = {
   sunAlt: number;
   /** 어두운 정도 0(낮) ~ 1(밤) — 하늘 · 창 조명 · 가로등 */
   dark: number;
+  /** 진행 중인 BEMS 경보 장면 */
+  bems: BemsEvent | null;
+  /** 야간 대기전력 증가 중인지 · 그 층의 평소 사용량(0~1) */
+  nightAnomaly: boolean;
+  nightBaseLoad: number;
 };
 
 export function createSim(frozen: boolean): Sim {
@@ -155,6 +203,9 @@ export function createSim(frozen: boolean): Sim {
     hpKw: 0,
     sunAlt: 0,
     dark: 1,
+    bems: null,
+    nightAnomaly: false,
+    nightBaseLoad: 0,
   };
   stepSim(sim, 0, frozen);
   return sim;
@@ -165,6 +216,7 @@ export function stepSim(sim: Sim, delta: number, frozen: boolean) {
     sim.intro = Math.min(1, sim.intro + delta / INTRO_SECONDS);
     delta = 0; // 건물이 다 지어진 뒤부터 시간이 흐른다
   }
+  if (sim.bems) delta *= BEMS_SLOW;
   sim.elapsed += delta;
   sim.hour = (START_HOUR + (sim.elapsed / DAY_SECONDS) * 24) % 24;
 
@@ -172,6 +224,13 @@ export function stepSim(sim: Sim, delta: number, frozen: boolean) {
   const after = phase - SCAN_DURATION;
   sim.scanY = !frozen && sim.intro >= 1 && phase < SCAN_DURATION ? (phase / SCAN_DURATION) * (BUILDING_H + 0.3) : -10;
   sim.ai = frozen || sim.elapsed < SCAN_DURATION || after < 0 || after > AI_WINDOW ? 0 : Math.sin((after / AI_WINDOW) * Math.PI);
+  // BEMS 경보 장면 동안에는 AI 스캔 · 절감 연출을 쉬어 화면이 겹치지 않게
+  sim.bems = sim.intro >= 1 ? bemsEventAt(sim.hour) : null;
+  if (sim.bems) {
+    sim.scanY = -10;
+    sim.ai = 0;
+  }
+  sim.nightAnomaly = nightAnomaly(sim.hour);
 
   for (let i = 0; i < FLOORS; i++) {
     const p = FLOOR_PROFILES[i];
@@ -180,6 +239,9 @@ export function stepSim(sim: Sim, delta: number, frozen: boolean) {
     // AI 최적화: 부하가 높은 층일수록 더 많이 낮춘다
     sim.floorLoads[i] = raw * (1 - AI_SAVING * sim.ai * raw);
   }
+  // 야간 대기전력 증가: 그 층만 평소보다 NIGHT_EXTRA 만큼 더 쓴다
+  sim.nightBaseLoad = sim.floorLoads[BEMS_FLOOR];
+  if (sim.nightAnomaly) sim.floorLoads[BEMS_FLOOR] *= 1 + NIGHT_EXTRA;
 
   // 태양광은 구름에 따라 ±4%, 부하는 ±1.2% 안팎으로 흔들린다
   sim.sunAlt = Math.sin(((sim.hour - 6) / 12) * Math.PI);
@@ -189,7 +251,7 @@ export function stepSim(sim: Sim, delta: number, frozen: boolean) {
   sim.solarKw = PV_PEAK_KW * daylight(sim.hour) * (1 + 0.04 * jitter(sim.elapsed, 1));
   const base = PEAK_KW * loadAt(sim.hour);
   sim.aiKw = base * AI_SAVING * sim.ai;
-  sim.loadKw = (base - sim.aiKw) * (1 + 0.012 * jitter(sim.elapsed, 2));
+  sim.loadKw = (base - sim.aiKw) * (1 + 0.012 * jitter(sim.elapsed, 2)) + (sim.nightAnomaly ? floorKw(sim.nightBaseLoad) * NIGHT_EXTRA : 0);
   sim.hpKw = sim.loadKw * HVAC_SHARE * (1 + 0.02 * jitter(sim.elapsed, 3));
 
   // ESS: 경부하(22~08시) 충전 → 낮에는 최대수요를 PEAK_CUT 만큼 낮추도록 방전 → 최대부하(18~21시)에 남은 전력 방전
