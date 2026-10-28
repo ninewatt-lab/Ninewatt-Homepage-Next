@@ -10,24 +10,8 @@ import { PerformanceMonitor } from "@react-three/drei";
 import { useEffect, useMemo, useRef, useState, type RefObject } from "react";
 import * as THREE from "three";
 import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
-import {
-  Blueprint,
-  Canopy,
-  Core,
-  ESS_ANCHOR,
-  ESS_ENTRY,
-  ESS_PORT,
-  EssUnits,
-  FLOW_NORM,
-  Facade,
-  Fins,
-  Floor,
-  HP_ANCHOR,
-  HeatPumps,
-  RISER_Z,
-  SolarArray,
-  TEAL,
-} from "./BuildingModel";
+import { Blueprint, Canopy, Core, FLOW_NORM, Floor, Mullions, RISER_Z, Roofs, Site, SolarArray, TEAL } from "./BuildingModel";
+import { ESS_ANCHOR, ESS_ENTRY, ESS_PORT, EssUnits, HP_ANCHOR, HeatPumps } from "./Equipment";
 import {
   AI_SAVING,
   BUILDING_H,
@@ -199,9 +183,14 @@ function Stage() {
   return (
     <group>
       <primitive object={grid} />
-      <mesh position={[0, -0.04, 0]}>
+      <mesh position={[0, -0.04, 0]} receiveShadow>
         <cylinderGeometry args={[3.4, 3.5, 0.08, 64]} />
-        <meshStandardMaterial color="#0b1c25" roughness={0.9} />
+        <meshStandardMaterial color="#142a33" roughness={0.9} />
+      </mesh>
+      {/* 무대 밖 바닥에 떨어지는 그림자만 받는다 */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.079, 0]} receiveShadow>
+        <planeGeometry args={[40, 40]} />
+        <shadowMaterial transparent opacity={0.45} />
       </mesh>
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.003, 0]}>
         <ringGeometry args={[3.36, 3.4, 96]} />
@@ -344,29 +333,54 @@ function Rig({ frozen, children }: { frozen: boolean; children: React.ReactNode 
   return <group ref={group}>{children}</group>;
 }
 
-function Sun() {
+const SUN = new THREE.Color("#fff1dc");
+const MOON = new THREE.Color("#a9c2d6");
+
+// 해는 동(+x)에서 서(-x)로, 남쪽(+z) 하늘을 지난다. 밤에는 낮고 푸른 달빛
+function Sun({ shadows, mapSize }: { shadows: boolean; mapSize: number }) {
   const sim = useSim();
   const ref = useRef<THREE.DirectionalLight>(null);
   useFrame(() => {
     const light = ref.current;
     if (!light) return;
     const { hour, solarKw } = sim.current;
-    const a = ((hour - 6) / 12) * Math.PI;
-    light.position.set(Math.cos(a) * 12, 3 + Math.sin(a) * 12, 6);
-    light.intensity = 0.25 + (solarKw / 18) * 0.85;
+    const day = hour >= 6 && hour < 18;
+    const a = ((((hour - (day ? 6 : 18)) % 24) + 24) % 24 / 12) * Math.PI;
+    // 고도를 낮게 잡아 아침 · 오후 그림자가 건물 좌우로 길게 드리운다
+    light.position.set(Math.cos(a) * 12, 1.5 + Math.sin(a) * 8, 3);
+    light.intensity = day ? 0.7 + (solarKw / FLOW_NORM.solar) * 1.3 : 0.2;
+    light.color.copy(day ? SUN : MOON);
   });
-  return <directionalLight ref={ref} color="#fff1dc" />;
+  return (
+    <directionalLight
+      ref={ref}
+      castShadow={shadows}
+      shadow-mapSize={[mapSize, mapSize]}
+      shadow-camera-left={-6}
+      shadow-camera-right={6}
+      shadow-camera-top={6}
+      shadow-camera-bottom={-6}
+      shadow-camera-near={1}
+      shadow-camera-far={40}
+      shadow-bias={-0.0004}
+      shadow-normalBias={0.02}
+    />
+  );
 }
 
 /* ── 장면 ─────────────────────────────────────────────────────────── */
 
 function Scene({
   frozen,
+  shadows,
+  mapSize,
   hovered,
   onHover,
   chips,
 }: {
   frozen: boolean;
+  shadows: boolean;
+  mapSize: number;
   hovered: number | null;
   onHover: (i: number | null) => void;
   chips: RefObject<ChipNodes>;
@@ -376,17 +390,18 @@ function Scene({
       <SimDriver frozen={frozen} />
       <color attach="background" args={[BG]} />
       <fog attach="fog" args={[BG, 20, 42]} />
-      <hemisphereLight args={["#bfe6ee", "#0b1c25", 0.5]} />
-      <Sun />
+      <hemisphereLight args={["#bfe6ee", "#0b1c25", 0.32]} />
+      <Sun shadows={shadows} mapSize={mapSize} />
       <Rig frozen={frozen}>
         <Stage />
+        <Site />
         <Blueprint />
         <Cables />
         {Array.from({ length: FLOORS }, (_, i) => (
           <Floor key={i} index={i} hovered={hovered === i} onHover={onHover} />
         ))}
-        <Facade />
-        <Fins />
+        <Mullions />
+        <Roofs />
         <Core />
         <Canopy />
         <SolarArray />
@@ -414,6 +429,9 @@ export default function HeroBuildingScene({
   const [hovered, setHovered] = useState<number | null>(null);
   // 프레임이 떨어지는 기기에서는 해상도를 1배로 낮춘다
   const [dpr, setDpr] = useState(() => Math.min(window.devicePixelRatio || 1, 1.75));
+  // 실시간 그림자도 같은 기준으로 끈다. 작은 화면은 그림자 해상도를 낮춘다
+  const [shadows, setShadows] = useState(true);
+  const [mapSize] = useState(() => (window.innerWidth < 768 ? 1024 : 2048));
   const sim = useRef<Sim>(createSim(reducedMotion));
   const chips = useRef<ChipNodes>({});
   const chip = (key: string) => (el: HTMLElement | null) => {
@@ -428,18 +446,24 @@ export default function HeroBuildingScene({
         frameloop={reducedMotion ? "demand" : active ? "always" : "never"}
         eventSource={eventSource as RefObject<HTMLElement>}
         eventPrefix="client"
+        shadows
         gl={{ antialias: true, powerPreference: "high-performance" }}
         onCreated={({ gl, scene }) => {
           // 유리 · 금속에 은은한 반사를 주는 실내 조명 환경 (네트워크 없이 생성)
           const pmrem = new THREE.PMREMGenerator(gl);
           scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
-          scene.environmentIntensity = 0.35;
+          scene.environmentIntensity = 0.28;
           pmrem.dispose();
           onReady?.();
         }}
       >
-        <PerformanceMonitor onDecline={() => setDpr(1)} />
-        <Scene frozen={reducedMotion} hovered={hovered} onHover={setHovered} chips={chips} />
+        <PerformanceMonitor
+          onDecline={() => {
+            setDpr(1);
+            setShadows(false);
+          }}
+        />
+        <Scene frozen={reducedMotion} shadows={shadows} mapSize={mapSize} hovered={hovered} onHover={setHovered} chips={chips} />
       </Canvas>
       <div ref={chip("solar")} className={chipClass}>
         <span ref={chip("clock")} className="text-white/70">
