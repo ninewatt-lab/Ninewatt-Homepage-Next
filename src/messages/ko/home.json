@@ -12,8 +12,21 @@
     "ctaProducts": "제품 보기",
     "familyLabel": "패밀리기업",
     "partnerLabel": "우수협력기업",
-    "pauseVideo": "배경 영상 일시정지",
-    "playVideo": "배경 영상 재생"
+    "pauseAnimation": "배경 애니메이션 일시정지",
+    "playAnimation": "배경 애니메이션 재생",
+    "sim": {
+      "caption": "시뮬레이션 기준",
+      "title": "화면 수치의 기준",
+      "items": {
+        "building": "모델 건물 — 지상 {floors}층 업무시설, 연면적 약 {gfa}㎡",
+        "load": "전력 부하 — 업무시설(중부) 건물에너지 원단위 중앙값 {eui} kWh/㎡·년(국토교통부 2024 건물에너지 통계)을 평일 시간대별 패턴으로 나눠 환산, 최대 약 {peak} kW. 전체 에너지를 전력으로 본 가정입니다.",
+        "solar": "태양광 — 옥상 {kwp} kWp, 국내 일평균 발전시간 {hours}시간 기준(하루 약 {daily} kWh)",
+        "ess": "ESS — {essKw} kW / {essKwh} kWh, 왕복효율 {rte}%(NREL ATB). 경부하(22~08시) 충전, 낮 최대수요를 {cut}% 낮추도록 방전(피크저감 ESS 수요요금 절감 15~30%의 하한), 최대부하(18~21시) 방전",
+        "heatPump": "히트펌프 — 공기열원 COP {cop}(KS 시험 성능 사례). 냉난방 전력은 건물 부하의 {hvac}%로 가정",
+        "ai": "AI 절감 — 나인와트 Opti 에너지 비용 절감 효과 약 {ai}%(제품 소개 수치)"
+      },
+      "note": "실측 데이터가 아닌 시뮬레이션이며, 평일 하루를 {sec}초로 압축해 보여줍니다."
+    }
   },
   "showcase": {
     "label": "Our Products",
