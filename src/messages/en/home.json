@@ -70,7 +70,8 @@
         "ai": "AI savings",
         "note": "AI analyzes each floor and trims the busiest floors first, by up to {ai}%. Grid draw drops by what solar and the ESS supply.",
         "chart": "Building load and grid draw over the day (kW)"
-      }
+      },
+      "hint": "Tap for details"
     }
   },
   "showcase": {

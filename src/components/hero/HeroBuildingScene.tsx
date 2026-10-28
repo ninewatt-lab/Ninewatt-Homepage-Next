@@ -224,7 +224,7 @@ function setChipText(node: HTMLElement | null | undefined, text: string) {
 
 const num = (v: number) => Math.abs(v).toFixed(1);
 
-function ChipProjector({ chips, hovered }: { chips: RefObject<ChipNodes>; hovered: number | null }) {
+function ChipProjector({ chips, hovered, hint }: { chips: RefObject<ChipNodes>; hovered: number | null; hint: boolean }) {
   const sim = useSim();
   const { progress } = useFocus();
   const anchor = useRef<THREE.Group>(null);
@@ -238,9 +238,9 @@ function ChipProjector({ chips, hovered }: { chips: RefObject<ChipNodes>; hovere
     if (!g) return;
     const s = sim.current;
     g.updateWorldMatrix(true, false);
-    const place = (key: string, x: number, y: number, z: number, opacity = 1) => {
+    const place = (key: string, x: number, y: number, z: number, opacity = 1, dy = 0) => {
       v.set(x, y, z).applyMatrix4(g.matrixWorld).project(camera);
-      moveChip(nodes[key], ((v.x + 1) / 2) * size.width, ((1 - v.y) / 2) * size.height, opacity, size.width);
+      moveChip(nodes[key], ((v.x + 1) / 2) * size.width, ((1 - v.y) / 2) * size.height + dy, opacity, size.width);
     };
     const on = reveal(s.intro, 0.92, 0.08) * (1 - progress.current);
     const wide = size.width / size.height >= 1.05;
@@ -250,6 +250,9 @@ function ChipProjector({ chips, hovered }: { chips: RefObject<ChipNodes>; hovere
     place("load", -2.3, BUILDING_H * 0.42, 1.3, on);
     place("hp", HP_ANCHOR[0] + 0.5, HP_ANCHOR[1], HP_ANCHOR[2] + 0.6, on);
     place("ess", ...ESS_ANCHOR, on);
+    // 처음 방문 힌트: 넓은 화면은 ESS 칩 아래, 세로 화면은 아래쪽 배지와 겹치지 않게 SOLAR 칩 아래
+    if (wide) place("hint", ...ESS_ANCHOR, hint ? on : 0, 38);
+    else place("hint", -tw / 2 - 0.5, BUILDING_H - 0.9, 0, hint ? on : 0, 38);
     place("ai", 2.2, BUILDING_H * 0.62, 1.1, s.ai * on);
     if (hovered !== null && progress.current < 0.5) place("floor", footprint(hovered)[0] / 2 + 0.35, hovered * FLOOR_H + FLOOR_H / 2, 0.5);
     else moveChip(nodes.floor, 0, 0, 0);
@@ -278,7 +281,33 @@ function ChipProjector({ chips, hovered }: { chips: RefObject<ChipNodes>; hovere
 const chipClass =
   "pointer-events-none absolute left-0 top-0 flex items-baseline gap-1.5 whitespace-nowrap rounded-lg border border-white/12 bg-[#07141b]/80 px-3 py-2 text-[13px] font-semibold leading-none tabular-nums text-white opacity-0 shadow-lg shadow-black/30 backdrop-blur-sm";
 // 수치 칩은 설비 확대 보기를 여는 버튼이기도 하다
-const chipButton = chipClass.replace("pointer-events-none", "pointer-events-auto cursor-pointer") + " transition-colors hover:border-primary/60 hover:bg-[#0b1f28]/85 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
+const chipButton = chipClass.replace("pointer-events-none", "group pointer-events-auto cursor-pointer") + " transition-colors hover:border-primary/60 hover:bg-[#0b1f28]/85 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
+// 누를 수 있다는 신호: 왼쪽 비컨 점(천천히 퍼지는 파동) · 오른쪽 화살표
+function Beacon({ delay }: { delay: number }) {
+  return (
+    <span className="relative mr-0.5 flex h-1.5 w-1.5 self-center" aria-hidden="true">
+      <span className="hero-beacon absolute inset-0 rounded-full bg-primary-light" style={{ animationDelay: `${delay}s` }} />
+      <span className="relative h-1.5 w-1.5 rounded-full bg-primary-light" />
+    </span>
+  );
+}
+
+const chevron = (
+  <svg className="ml-0.5 self-center text-white/40 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:text-white/90" width="8" height="8" viewBox="0 0 8 8" aria-hidden="true">
+    <path d="M2.5 1.5L5.5 4l-3 2.5" stroke="currentColor" strokeWidth="1.4" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+const HINT_KEY = "ninewatt.heroHintSeen";
+
+function markHintSeen() {
+  try {
+    localStorage.setItem(HINT_KEY, "1");
+  } catch {
+    // 저장소를 못 쓰는 환경이면 다음에도 한 번 더 보일 뿐이다
+  }
+}
+
 const LABEL = "text-[10px] font-semibold tracking-[0.06em] text-primary-light";
 const SUB = "text-[10px] font-medium tracking-[0.06em] text-white/45";
 const UNIT = "-ml-0.5 text-[10px] font-medium text-white/50";
@@ -395,6 +424,7 @@ function Scene({
   hovered,
   onHover,
   chips,
+  hint,
 }: {
   frozen: boolean;
   shadows: boolean;
@@ -402,6 +432,7 @@ function Scene({
   hovered: number | null;
   onHover: (i: number | null) => void;
   chips: RefObject<ChipNodes>;
+  hint: boolean;
 }) {
   return (
     <>
@@ -428,7 +459,7 @@ function Scene({
         <EssUnits />
         <EnergyFlow />
         <ScanRing />
-        <ChipProjector chips={chips} hovered={hovered} />
+        <ChipProjector chips={chips} hovered={hovered} hint={hint} />
       </Rig>
     </>
   );
@@ -456,7 +487,31 @@ export default function HeroBuildingScene({
   const [focus, setFocusState] = useState<Focus | null>(null);
   const progress = useRef(0);
   const opener = useRef<HTMLElement | null>(null);
+  const [hint, setHint] = useState(false);
+  useEffect(() => {
+    let seen = false;
+    try {
+      seen = localStorage.getItem(HINT_KEY) === "1";
+    } catch {
+      seen = false;
+    }
+    if (seen) return;
+    const show = window.setTimeout(() => setHint(true), 6500);
+    const hide = window.setTimeout(() => {
+      setHint(false);
+      markHintSeen();
+    }, 13500);
+    return () => {
+      window.clearTimeout(show);
+      window.clearTimeout(hide);
+    };
+  }, []);
+
   const setFocus = useCallback((f: Focus | null) => {
+    if (f) {
+      setHint(false);
+      markHintSeen();
+    }
     if (f && document.activeElement instanceof HTMLButtonElement) opener.current = document.activeElement;
     setFocusState(f);
     if (!f) document.body.style.cursor = "";
@@ -511,9 +566,10 @@ export default function HeroBuildingScene({
             setShadows(false);
           }}
         />
-        <Scene frozen={reducedMotion} shadows={shadows} mapSize={mapSize} hovered={hovered} onHover={setHovered} chips={chips} />
+        <Scene frozen={reducedMotion} shadows={shadows} mapSize={mapSize} hovered={hovered} onHover={setHovered} chips={chips} hint={hint} />
       </Canvas>
       <button type="button" ref={chip("solar")} data-hero-ui className={chipButton} onClick={() => setFocus("solar")} aria-label={t("open", { name: "SOLAR" })}>
+        <Beacon delay={0} />
         <span ref={chip("clock")} className="text-white/70">
           06:00
         </span>
@@ -521,8 +577,10 @@ export default function HeroBuildingScene({
         <span className={LABEL}>SOLAR</span>
         <span ref={chip("solarValue")}>0.0</span>
         <span className={UNIT}>kW</span>
+        {chevron}
       </button>
       <button type="button" ref={chip("load")} data-hero-ui className={`${chipButton} hidden sm:flex`} onClick={() => setFocus("load")} aria-label={t("open", { name: "LOAD" })}>
+        <Beacon delay={0.75} />
         <span className={LABEL}>LOAD</span>
         <span ref={chip("loadValue")}>0.0</span>
         <span className={UNIT}>kW</span>
@@ -530,16 +588,20 @@ export default function HeroBuildingScene({
         <span className={SUB}>GRID</span>
         <span ref={chip("gridValue")}>0.0</span>
         <span className={UNIT}>kW</span>
+        {chevron}
       </button>
       <button type="button" ref={chip("hp")} data-hero-ui className={`${chipButton} hidden sm:flex`} onClick={() => setFocus("hp")} aria-label={t("open", { name: "HEAT PUMP" })}>
+        <Beacon delay={1.5} />
         <span className={LABEL}>HEAT PUMP</span>
         <span ref={chip("hpValue")}>0.0</span>
         <span className={UNIT}>kW</span>
         {sep}
         <span className={SUB}>COP</span>
         <span>{HP_COP.toFixed(1)}</span>
+        {chevron}
       </button>
       <button type="button" ref={chip("ess")} data-hero-ui className={chipButton} onClick={() => setFocus("ess")} aria-label={t("open", { name: "ESS" })}>
+        <Beacon delay={2.25} />
         <span className={LABEL}>ESS</span>
         <span ref={chip("essSoc")}>0.0</span>
         <span className={UNIT}>%</span>
@@ -549,7 +611,17 @@ export default function HeroBuildingScene({
         </span>
         <span ref={chip("essValue")}>0.0</span>
         <span className={UNIT}>kW</span>
+        {chevron}
       </button>
+      <div ref={chip("hint")} aria-hidden="true" className="pointer-events-none absolute left-0 top-0 opacity-0 transition-opacity duration-500">
+        <div className="hero-hint relative flex items-center gap-1.5 whitespace-nowrap rounded-full bg-primary px-3 py-1.5 text-[11px] font-semibold text-white shadow-lg shadow-primary/30">
+          <span className="absolute -top-1 left-1/2 h-2 w-2 -translate-x-1/2 rotate-45 bg-primary" />
+          <svg width="11" height="11" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+            <path d="M4.5 6.5V2.2a.9.9 0 011.8 0v3.4l2.7.5a1 1 0 01.8 1.1l-.4 2.6a1 1 0 01-1 .9H5.7a1 1 0 01-.8-.4L3 7.8a.8.8 0 011.1-1.1l.4.4" stroke="currentColor" strokeWidth="1.1" strokeLinejoin="round" />
+          </svg>
+          {t("hint")}
+        </div>
+      </div>
       <div ref={chip("ai")} className={`${chipClass} border-primary/60`}>
         <span className={LABEL}>AI SAVING</span>
         <span>−{(AI_SAVING * 100).toFixed(1)}</span>
