@@ -11,6 +11,7 @@ import { Suspense, useMemo, useRef, type ReactNode, type RefObject } from "react
 import * as THREE from "three";
 import { EQUIPMENT, LOW_TOP, TEAL, WARM, WHITE } from "./BuildingModel";
 import { FLOORS, HVAC_SHARE, PEAK_KW, footprint, reveal, useSim } from "./heroSim";
+import { useFocusTarget } from "./focus";
 import { scaled, useModelGeometry, useModelMaterial } from "./models";
 import { coilTexture, fenceTexture, grilleTexture, louverTexture } from "./textures";
 
@@ -50,11 +51,14 @@ const HP_X = (() => {
 })();
 const HP_UNITS = [-0.095, 0.095].flatMap((dx) => [-0.55, -0.33, -0.11, 0.11].map((z) => mat4(HP_X + dx, 0, z)));
 export const HP_ANCHOR: [number, number, number] = [HP_X + 0.75, LOW_TOP + 0.75, -0.3];
+/** 확대 보기 카메라가 바라보는 히트펌프 무리의 가운데 */
+export const HP_CENTER = new THREE.Vector3(HP_X, LOW_TOP + 0.15, -0.22);
 
 export function HeatPumps() {
   const sim = useSim();
   const group = useRef<THREE.Group>(null);
   const angle = useRef(0);
+  const target = useFocusTarget("hp");
 
   useFrame((_, delta) => {
     const g = group.current;
@@ -68,7 +72,7 @@ export function HeatPumps() {
   });
 
   return (
-    <group ref={group} position={[0, LOW_TOP + 0.07, 0]}>
+    <group ref={group} position={[0, LOW_TOP + 0.07, 0]} {...target}>
       {/* 설비 기초 */}
       <mesh position={[HP_X, 0.006, -0.22]} receiveShadow>
         <boxGeometry args={[0.42, 0.012, 0.98]} />
@@ -209,6 +213,8 @@ const CABINETS = [-0.2, 0.2].map((dx) => new THREE.Vector3(ESS_CENTER.x + dx, 0.
 const PAD: [number, number] = [1.0, 0.62];
 const LED_COUNT = 10;
 export const ESS_ANCHOR: [number, number, number] = [ESS_CENTER.x, 0.62, ESS_CENTER.z];
+/** 확대 보기 카메라가 바라보는 ESS 캐비닛 가운데 */
+export const ESS_CENTER_VIEW = new THREE.Vector3(ESS_CENTER.x, 0.17, ESS_CENTER.z - 0.05);
 export const ESS_PORT = new THREE.Vector3(ESS_CENTER.x + 0.42, 0.06, ESS_CENTER.z - 0.1);
 export const ESS_ENTRY = new THREE.Vector3(-1.0, 0.06, 1.3);
 
@@ -219,6 +225,7 @@ export function EssUnits() {
   const sim = useSim();
   const group = useRef<THREE.Group>(null);
   const leds = useRef<THREE.InstancedMesh>(null);
+  const target = useFocusTarget("ess");
   const tex = useMemo(() => ({ louver: louverTexture("#d9dedd", "#8c9799"), fenceLong: fenceTexture(30), fenceShort: fenceTexture(18) }), []);
   const tmp = useMemo(() => ({ c: new THREE.Color(), off: new THREE.Color("#2a3a40") }), []);
 
@@ -275,7 +282,7 @@ export function EssUnits() {
   const fenceH = 0.17;
 
   return (
-    <group ref={group}>
+    <group ref={group} {...target}>
       {/* 콘크리트 패드 */}
       <mesh position={[ESS_CENTER.x, 0.0125, ESS_CENTER.z]} receiveShadow castShadow>
         <boxGeometry args={[pw, 0.025, pd]} />

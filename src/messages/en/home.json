@@ -26,6 +26,51 @@
         "ai": "AI savings — about {ai}% energy cost reduction stated for Ninewatt Opti"
       },
       "note": "This is a simulation, not measured data. One weekday is compressed into {sec} seconds."
+    },
+    "detail": {
+      "open": "Show {name} details",
+      "close": "Close",
+      "now": "Now",
+      "hourUnit": "h",
+      "footnote": "Simulated values. See 'Simulation basis' at the top right for sources.",
+      "ess": {
+        "kicker": "ESS · Peak shaving",
+        "title": "Energy storage",
+        "soc": "State of charge",
+        "capacity": "Capacity",
+        "charge": "Charging",
+        "discharge": "Discharging",
+        "idle": "Idle",
+        "peakNote": "Charges during off-peak night hours and discharges at the daytime peak. Daily peak demand is {before} kW without the ESS and {after} kW with it (−{cut}%).",
+        "socChart": "State of charge over the day (%)",
+        "powerChart": "Charge and discharge over the day (kW)"
+      },
+      "hp": {
+        "kicker": "Heat pump · 8 air-source units",
+        "title": "HVAC heat pumps",
+        "power": "Power use",
+        "heat": "Heat output",
+        "note": "Each 1 kW of electricity makes {cop} kW of heat (COP {cop}). Fan speed follows the HVAC load.",
+        "chart": "Power use and heat output over the day (kW)"
+      },
+      "solar": {
+        "kicker": "Solar · Roof and terrace",
+        "title": "Solar generation",
+        "power": "Output",
+        "today": "Today so far",
+        "capacity": "Capacity",
+        "note": "Solar is covering {share}% of the building load right now.",
+        "chart": "Solar output over the day (kW)"
+      },
+      "load": {
+        "kicker": "Whole building",
+        "title": "Building power",
+        "load": "Building load",
+        "grid": "Grid",
+        "ai": "AI savings",
+        "note": "AI analyzes each floor and trims the busiest floors first, by up to {ai}%. Grid draw drops by what solar and the ESS supply.",
+        "chart": "Building load and grid draw over the day (kW)"
+      }
     }
   },
   "showcase": {

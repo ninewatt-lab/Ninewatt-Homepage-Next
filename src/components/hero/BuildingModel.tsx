@@ -10,6 +10,7 @@ import { useFrame, type ThreeEvent } from "@react-three/fiber";
 import { Suspense, useMemo, useRef } from "react";
 import * as THREE from "three";
 import { BUILDING_H, ESS_KW, FLOOR_H, FLOORS, PEAK_KW, PV_PEAK_KW, SETBACK_FLOOR, footprint, reveal, seeded, useSim } from "./heroSim";
+import { fromUi, useFocusTarget } from "./focus";
 import { useModelGeometry, useModelMaterial } from "./models";
 import { louverTexture, pavingTexture, pvTexture } from "./textures";
 
@@ -278,6 +279,7 @@ export function Floor({ index, hovered, onHover }: { index: number; hovered: boo
   const lobby = index === 0;
   const color = useMemo(() => new THREE.Color(), []);
   const planGeometry = useMemo(() => floorPlan(index), [index]);
+  const target = useFocusTarget("load");
   const windowUniforms = useMemo(
     () => ({
       uColor: { value: OFFICE_LIGHT.clone() },
@@ -327,11 +329,16 @@ export function Floor({ index, hovered, onHover }: { index: number; hovered: boo
       <mesh
         ref={energy}
         position={[0, DECK + glassH / 2, 0]}
+        onClick={target.onClick}
         onPointerOver={(e: ThreeEvent<PointerEvent>) => {
-          e.stopPropagation();
+          if (fromUi(e)) return;
+          target.onPointerOver(e);
           onHover(index);
         }}
-        onPointerOut={() => onHover(null)}
+        onPointerOut={() => {
+          target.onPointerOut();
+          onHover(null);
+        }}
       >
         <boxGeometry args={[w - 0.14, glassH - 0.04, d - 0.14]} />
         <meshBasicMaterial transparent depthWrite={false} blending={THREE.AdditiveBlending} />
@@ -603,6 +610,7 @@ export function SolarArray() {
   const ref = useRef<THREE.InstancedMesh>(null);
   const placed = useRef(-1);
   const texture = useMemo(() => pvTexture(), []);
+  const target = useFocusTarget("solar");
   // 남쪽(+z, 카메라 쪽)을 향해 기운다 — 패널 면이 보이게
   const tmp = useMemo(() => ({ m: new THREE.Matrix4(), p: new THREE.Vector3(), q: new THREE.Quaternion().setFromEuler(new THREE.Euler(0.42, 0, 0)), s: new THREE.Vector3() }), []);
 
@@ -626,7 +634,7 @@ export function SolarArray() {
   });
 
   return (
-    <instancedMesh ref={ref} args={[undefined, undefined, PANELS.length]} frustumCulled={false} castShadow receiveShadow>
+    <instancedMesh ref={ref} args={[undefined, undefined, PANELS.length]} frustumCulled={false} castShadow receiveShadow {...target}>
       <boxGeometry args={[0.34, 0.02, 0.24]} />
       <meshStandardMaterial map={texture} emissive={TEAL} emissiveMap={texture} metalness={0.45} roughness={0.3} />
     </instancedMesh>

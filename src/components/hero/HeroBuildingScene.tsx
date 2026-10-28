@@ -5,13 +5,16 @@
  * HeroSection 이 동적으로 불러온다(초기 번들에 넣지 않음). 수치 · 근거는 heroSim.ts.
  */
 
-import { Canvas, useFrame } from "@react-three/fiber";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { PerformanceMonitor } from "@react-three/drei";
-import { useEffect, useMemo, useRef, useState, type RefObject } from "react";
+import { useTranslations } from "next-intl";
+import { useCallback, useEffect, useMemo, useRef, useState, type RefObject } from "react";
 import * as THREE from "three";
 import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
 import { Blueprint, Canopy, Core, FLOW_NORM, Floor, Mullions, RISER_Z, Roofs, Site, SolarArray, TEAL } from "./BuildingModel";
-import { ESS_ANCHOR, ESS_ENTRY, ESS_PORT, EssUnits, HP_ANCHOR, HeatPumps } from "./Equipment";
+import DetailPanel, { type Focus } from "./DetailPanel";
+import { ESS_ANCHOR, ESS_CENTER_VIEW, ESS_ENTRY, ESS_PORT, EssUnits, HP_ANCHOR, HP_CENTER, HeatPumps } from "./Equipment";
+import { FocusContext, fromUi, useFocus } from "./focus";
 import { Lighting, Sky, StreetLights } from "./Atmosphere";
 import {
   AI_SAVING,
@@ -223,6 +226,7 @@ const num = (v: number) => Math.abs(v).toFixed(1);
 
 function ChipProjector({ chips, hovered }: { chips: RefObject<ChipNodes>; hovered: number | null }) {
   const sim = useSim();
+  const { progress } = useFocus();
   const anchor = useRef<THREE.Group>(null);
   const v = useMemo(() => new THREE.Vector3(), []);
   const last = useRef(-1);
@@ -238,7 +242,7 @@ function ChipProjector({ chips, hovered }: { chips: RefObject<ChipNodes>; hovere
       v.set(x, y, z).applyMatrix4(g.matrixWorld).project(camera);
       moveChip(nodes[key], ((v.x + 1) / 2) * size.width, ((1 - v.y) / 2) * size.height, opacity, size.width);
     };
-    const on = reveal(s.intro, 0.92, 0.08);
+    const on = reveal(s.intro, 0.92, 0.08) * (1 - progress.current);
     const wide = size.width / size.height >= 1.05;
     // 세로 화면은 오른쪽 위에 일시정지 버튼이 있어 왼쪽에 둔다
     if (wide) place("solar", tw / 2 + 0.4, BUILDING_H + 0.75, 0, on);
@@ -247,7 +251,7 @@ function ChipProjector({ chips, hovered }: { chips: RefObject<ChipNodes>; hovere
     place("hp", HP_ANCHOR[0] + 0.5, HP_ANCHOR[1], HP_ANCHOR[2] + 0.6, on);
     place("ess", ...ESS_ANCHOR, on);
     place("ai", 2.2, BUILDING_H * 0.62, 1.1, s.ai * on);
-    if (hovered !== null) place("floor", footprint(hovered)[0] / 2 + 0.35, hovered * FLOOR_H + FLOOR_H / 2, 0.5);
+    if (hovered !== null && progress.current < 0.5) place("floor", footprint(hovered)[0] / 2 + 0.35, hovered * FLOOR_H + FLOOR_H / 2, 0.5);
     else moveChip(nodes.floor, 0, 0, 0);
 
     // 계측기처럼 0.5초마다 갱신
@@ -273,6 +277,8 @@ function ChipProjector({ chips, hovered }: { chips: RefObject<ChipNodes>; hovere
 // 사이트 기본 글꼴 + 폭이 같은 숫자(값이 바뀌어도 칩이 흔들리지 않게), 단위는 작고 흐리게
 const chipClass =
   "pointer-events-none absolute left-0 top-0 flex items-baseline gap-1.5 whitespace-nowrap rounded-lg border border-white/12 bg-[#07141b]/80 px-3 py-2 text-[13px] font-semibold leading-none tabular-nums text-white opacity-0 shadow-lg shadow-black/30 backdrop-blur-sm";
+// 수치 칩은 설비 확대 보기를 여는 버튼이기도 하다
+const chipButton = chipClass.replace("pointer-events-none", "pointer-events-auto cursor-pointer") + " transition-colors hover:border-primary/60 hover:bg-[#0b1f28]/85 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
 const LABEL = "text-[10px] font-semibold tracking-[0.06em] text-primary-light";
 const SUB = "text-[10px] font-medium tracking-[0.06em] text-white/45";
 const UNIT = "-ml-0.5 text-[10px] font-medium text-white/50";
@@ -283,17 +289,45 @@ const sep = <span className="mx-1 h-3 w-px self-center bg-white/15" />;
 // 옥상 태양광이 보이도록 약 21° 위에서 내려다본다
 const CAMERA_DIR = new THREE.Vector3(0.66, 0.36, 0.72).normalize();
 
+// 확대 보기: 건물 좌표의 바라볼 점 · 카메라 방향 · 거리 (세로 화면은 화면이 좁아 더 멀리서)
+const POSES: Record<Focus, { target: THREE.Vector3; dir: THREE.Vector3; dist: number }> = {
+  ess: { target: ESS_CENTER_VIEW, dir: new THREE.Vector3(0.45, 0.55, 1).normalize(), dist: 3.8 },
+  hp: { target: HP_CENTER, dir: new THREE.Vector3(1, 0.85, 0.75).normalize(), dist: 2.5 },
+  solar: { target: new THREE.Vector3(0, BUILDING_H + 0.1, 0), dir: new THREE.Vector3(0.6, 1.3, 0.9).normalize(), dist: 5.6 },
+  load: { target: new THREE.Vector3(0, BUILDING_H * 0.45, 0), dir: CAMERA_DIR, dist: 12.5 },
+};
+
+const ease = (t: number) => t * t * (3 - 2 * t);
+
+/** 확대 정도를 한 걸음 진행 (움직임 줄이기에서는 바로) */
+function stepProgress(progress: RefObject<number>, want: number, delta: number, instant: boolean) {
+  const k = 1 - Math.exp(-Math.min(delta, 0.1) * 3);
+  progress.current = instant || Math.abs(want - progress.current) < 0.002 ? want : progress.current + (want - progress.current) * k;
+  return progress.current;
+}
+
 function Rig({ frozen, children }: { frozen: boolean; children: React.ReactNode }) {
   const sim = useSim();
+  const { focus, progress } = useFocus();
+  const invalidate = useThree((s) => s.invalidate);
   const group = useRef<THREE.Group>(null);
   const pointer = useRef({ x: 0, y: 0, sx: 0, sy: 0 });
-  const lastSize = useRef("");
   const dist = useRef(19.5);
+  const lastFocus = useRef<Focus | null>(null);
+  const lastOffset = useRef("");
+  const tmp = useMemo(() => ({ pos: new THREE.Vector3(), look: new THREE.Vector3(), target: new THREE.Vector3(), camF: new THREE.Vector3() }), []);
+
+  // 움직임 줄이기(그때만 그리는 모드)에서도 확대 전환이 바로 그려지게
+  useEffect(() => {
+    invalidate();
+  }, [focus, invalidate]);
 
   // 마우스 위치는 창 전체에서 받는다 (텍스트 위에서도 건물이 따라 돈다)
   useEffect(() => {
     if (frozen) return;
     const onMove = (e: PointerEvent) => {
+      // 칩 · 패널 위에서는 건물이 따라 돌지 않는다 (누르려는 칩이 움직이지 않게)
+      if ((e.target as Element | null)?.closest?.("[data-hero-ui]")) return;
       pointer.current.x = (e.clientX / window.innerWidth) * 2 - 1;
       pointer.current.y = (e.clientY / window.innerHeight) * 2 - 1;
     };
@@ -303,32 +337,50 @@ function Rig({ frozen, children }: { frozen: boolean; children: React.ReactNode 
 
   useFrame(({ camera, size }, delta) => {
     const cam = camera as THREE.PerspectiveCamera;
-    // 가로 화면: 건물을 오른쪽으로 (왼쪽은 텍스트) · 세로 화면: 위쪽으로 (아래는 텍스트)
-    const key = `${size.width}x${size.height}`;
-    if (key !== lastSize.current) {
-      lastSize.current = key;
-      const aspect = size.width / size.height;
-      const wide = aspect >= 1.05;
-      dist.current = wide ? 19.5 : 19.5 * Math.min(1.62, 0.98 / Math.max(aspect, 0.4));
-      if (wide) cam.setViewOffset(size.width, size.height, -size.width * 0.21, -size.height * 0.03, size.width, size.height);
-      else cam.setViewOffset(size.width, size.height, 0, size.height * 0.2, size.width, size.height);
-      cam.updateProjectionMatrix();
-    }
-    // 지어지는 동안 천천히 다가간다
-    const intro = sim.current.intro;
-    const push = 1 + (1 - reveal(intro, 0, 1)) * 0.14;
-    cam.position.copy(CAMERA_DIR).multiplyScalar(dist.current * push);
-    cam.lookAt(0, BUILDING_H * 0.5 - (1 - intro) * 0.6, 0);
-
     const g = group.current;
     if (!g) return;
+    const aspect = size.width / size.height;
+    const wide = aspect >= 1.05;
+    dist.current = wide ? 19.5 : 19.5 * Math.min(1.62, 0.98 / Math.max(aspect, 0.4));
+
+    if (focus) lastFocus.current = focus;
+    const f = ease(stepProgress(progress, focus ? 1 : 0, delta, frozen));
+
+    // 건물 회전: 평소엔 천천히 돌고 마우스를 따르지만, 확대 중에는 고정 각도로
     const p = pointer.current;
-    const k = 1 - Math.exp(-Math.min(delta, 0.1) * 2.5);
-    p.sx += (p.x - p.sx) * k;
-    p.sy += (p.y - p.sy) * k;
+    const kp = 1 - Math.exp(-Math.min(delta, 0.1) * 2.5);
+    p.sx += (p.x - p.sx) * kp;
+    p.sy += (p.y - p.sy) * kp;
+    const intro = sim.current.intro;
     const t = frozen ? 0 : performance.now() / 1000;
-    g.rotation.y = 0.08 + Math.sin(t * 0.11) * 0.22 + p.sx * 0.28 - (1 - intro) * 0.5;
-    g.rotation.x = p.sy * 0.04;
+    const yaw = 0.08 + Math.sin(t * 0.11) * 0.22 + p.sx * 0.28 - (1 - intro) * 0.5;
+    g.rotation.y = yaw * (1 - f) + 0.08 * f;
+    g.rotation.x = p.sy * 0.04 * (1 - f);
+    g.updateWorldMatrix(true, false);
+
+    // 개요 시점 (지어지는 동안 천천히 다가간다)
+    const push = 1 + (1 - reveal(intro, 0, 1)) * 0.14;
+    tmp.pos.copy(CAMERA_DIR).multiplyScalar(dist.current * push);
+    tmp.look.set(0, BUILDING_H * 0.5 - (1 - intro) * 0.6, 0);
+    if (lastFocus.current && f > 0) {
+      const pose = POSES[lastFocus.current];
+      tmp.target.copy(pose.target).applyMatrix4(g.matrixWorld);
+      tmp.camF.copy(pose.dir).multiplyScalar(pose.dist * (wide ? 1 : 1.7)).add(tmp.target);
+      tmp.pos.lerp(tmp.camF, f);
+      tmp.look.lerp(tmp.target, f);
+    }
+    cam.position.copy(tmp.pos);
+    cam.lookAt(tmp.look);
+
+    // 화면 배치: 넓은 화면은 왼쪽 텍스트 · 오른쪽 패널 사이로, 세로 화면은 아래 패널 위로
+    const ox = (wide ? -0.21 + 0.14 * f : 0) * size.width;
+    const oy = (wide ? -0.03 + 0.03 * f : 0.2 + 0.08 * f) * size.height;
+    const key = `${size.width}x${size.height}:${ox.toFixed(1)}:${oy.toFixed(1)}`;
+    if (key !== lastOffset.current) {
+      lastOffset.current = key;
+      cam.setViewOffset(size.width, size.height, ox, oy, size.width, size.height);
+      cam.updateProjectionMatrix();
+    }
   });
 
   return <group ref={group}>{children}</group>;
@@ -400,6 +452,31 @@ export default function HeroBuildingScene({
   const [shadows, setShadows] = useState(true);
   const [mapSize] = useState(() => (window.innerWidth < 768 ? 1024 : 2048));
   const sim = useRef<Sim>(createSim(reducedMotion));
+  const t = useTranslations("home.hero.detail");
+  const [focus, setFocusState] = useState<Focus | null>(null);
+  const progress = useRef(0);
+  const opener = useRef<HTMLElement | null>(null);
+  const setFocus = useCallback((f: Focus | null) => {
+    if (f && document.activeElement instanceof HTMLButtonElement) opener.current = document.activeElement;
+    setFocusState(f);
+    if (!f) document.body.style.cursor = "";
+  }, []);
+  const close = useCallback(() => {
+    setFocus(null);
+    opener.current?.focus();
+    opener.current = null;
+  }, [setFocus]);
+  const focusValue = useMemo(() => ({ focus, setFocus, progress }), [focus, setFocus]);
+
+  useEffect(() => {
+    if (!focus) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") close();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [focus, close]);
+
   const chips = useRef<ChipNodes>({});
   const chip = (key: string) => (el: HTMLElement | null) => {
     chips.current[key] = el;
@@ -407,10 +484,14 @@ export default function HeroBuildingScene({
 
   return (
     <SimContext.Provider value={sim}>
+      <FocusContext.Provider value={focusValue}>
       <Canvas
         dpr={dpr}
         camera={{ fov: 30, near: 0.1, far: 100 }}
-        frameloop={reducedMotion ? "demand" : active ? "always" : "never"}
+        frameloop={reducedMotion ? "demand" : active || focus ? "always" : "never"}
+        onPointerMissed={(e) => {
+          if (focus && !fromUi(e)) close();
+        }}
         eventSource={eventSource as RefObject<HTMLElement>}
         eventPrefix="client"
         shadows
@@ -432,7 +513,7 @@ export default function HeroBuildingScene({
         />
         <Scene frozen={reducedMotion} shadows={shadows} mapSize={mapSize} hovered={hovered} onHover={setHovered} chips={chips} />
       </Canvas>
-      <div ref={chip("solar")} className={chipClass}>
+      <button type="button" ref={chip("solar")} data-hero-ui className={chipButton} onClick={() => setFocus("solar")} aria-label={t("open", { name: "SOLAR" })}>
         <span ref={chip("clock")} className="text-white/70">
           06:00
         </span>
@@ -440,8 +521,8 @@ export default function HeroBuildingScene({
         <span className={LABEL}>SOLAR</span>
         <span ref={chip("solarValue")}>0.0</span>
         <span className={UNIT}>kW</span>
-      </div>
-      <div ref={chip("load")} className={`${chipClass} hidden sm:flex`}>
+      </button>
+      <button type="button" ref={chip("load")} data-hero-ui className={`${chipButton} hidden sm:flex`} onClick={() => setFocus("load")} aria-label={t("open", { name: "LOAD" })}>
         <span className={LABEL}>LOAD</span>
         <span ref={chip("loadValue")}>0.0</span>
         <span className={UNIT}>kW</span>
@@ -449,16 +530,16 @@ export default function HeroBuildingScene({
         <span className={SUB}>GRID</span>
         <span ref={chip("gridValue")}>0.0</span>
         <span className={UNIT}>kW</span>
-      </div>
-      <div ref={chip("hp")} className={`${chipClass} hidden sm:flex`}>
+      </button>
+      <button type="button" ref={chip("hp")} data-hero-ui className={`${chipButton} hidden sm:flex`} onClick={() => setFocus("hp")} aria-label={t("open", { name: "HEAT PUMP" })}>
         <span className={LABEL}>HEAT PUMP</span>
         <span ref={chip("hpValue")}>0.0</span>
         <span className={UNIT}>kW</span>
         {sep}
         <span className={SUB}>COP</span>
         <span>{HP_COP.toFixed(1)}</span>
-      </div>
-      <div ref={chip("ess")} className={chipClass}>
+      </button>
+      <button type="button" ref={chip("ess")} data-hero-ui className={chipButton} onClick={() => setFocus("ess")} aria-label={t("open", { name: "ESS" })}>
         <span className={LABEL}>ESS</span>
         <span ref={chip("essSoc")}>0.0</span>
         <span className={UNIT}>%</span>
@@ -468,7 +549,7 @@ export default function HeroBuildingScene({
         </span>
         <span ref={chip("essValue")}>0.0</span>
         <span className={UNIT}>kW</span>
-      </div>
+      </button>
       <div ref={chip("ai")} className={`${chipClass} border-primary/60`}>
         <span className={LABEL}>AI SAVING</span>
         <span>−{(AI_SAVING * 100).toFixed(1)}</span>
@@ -482,6 +563,8 @@ export default function HeroBuildingScene({
         <span ref={chip("floorValue")}>0.0</span>
         <span className={UNIT}>kW</span>
       </div>
+      {focus && <DetailPanel focus={focus} sim={sim} onClose={close} />}
+      </FocusContext.Provider>
     </SimContext.Provider>
   );
 }

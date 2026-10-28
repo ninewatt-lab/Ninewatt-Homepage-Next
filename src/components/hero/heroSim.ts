@@ -212,6 +212,51 @@ export function stepSim(sim: Sim, delta: number, frozen: boolean) {
   sim.gridKw = sim.loadKw - sim.solarKw - ess;
 }
 
+/* ── 하루 곡선 (상세 패널 그래프용) ──────────────────────────────── */
+
+export type DayPoint = {
+  hour: number;
+  loadKw: number;
+  solarKw: number;
+  gridKw: number;
+  /** ESS 없이 전력망에서 받았을 전력 */
+  gridNoEssKw: number;
+  essKw: number;
+  essSoc: number;
+  hpKw: number;
+  heatKw: number;
+};
+
+/** 평일 하루를 15분 간격으로. 흔들림 · AI 연출 없이 기준값만 쓰고, 이틀을 돌려 ESS 잔량이 안정된 둘째 날을 쓴다 */
+export function simulateDay(stepHours = 0.25): DayPoint[] {
+  const points: DayPoint[] = [];
+  let soc = 0.6;
+  const eff = Math.sqrt(ESS_RTE);
+  const target = PEAK_KW * (1 - PEAK_CUT);
+  for (let day = 0; day < 2; day++) {
+    for (let h = 0; h < 24 - 1e-9; h += stepHours) {
+      const load = PEAK_KW * loadAt(h);
+      const solar = PV_PEAK_KW * daylight(h);
+      let ess = 0;
+      if (h >= 22 || h < 8) {
+        if (soc < 0.95) ess = -ESS_CHARGE_KW;
+      } else {
+        const excess = load - solar - target;
+        if (excess > 0) ess = Math.min(ESS_KW, excess);
+        else if (h >= 18 && h < 21 && soc > 0.25) ess = ESS_EVENING_KW;
+        if (soc <= 0.1) ess = 0;
+      }
+      soc += ess < 0 ? (-ess * stepHours * eff) / ESS_KWH : (-ess * stepHours) / eff / ESS_KWH;
+      soc = Math.min(0.95, Math.max(0.1, soc));
+      if (day === 1) {
+        const hp = load * HVAC_SHARE;
+        points.push({ hour: h, loadKw: load, solarKw: solar, gridKw: load - solar - ess, gridNoEssKw: load - solar, essKw: ess, essSoc: soc, hpKw: hp, heatKw: hp * HP_COP });
+      }
+    }
+  }
+  return points;
+}
+
 /* ── React ────────────────────────────────────────────────────────── */
 
 export const SimContext = createContext<RefObject<Sim> | null>(null);
