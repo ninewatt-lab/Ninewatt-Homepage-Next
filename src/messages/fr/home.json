@@ -70,7 +70,8 @@
         "ai": "Économies IA",
         "note": "L'IA analyse chaque étage et réduit d'abord les plus chargés, jusqu'à {ai} %. Le soutirage réseau baisse d'autant que le solaire et l'ESS fournissent.",
         "chart": "Charge du bâtiment et soutirage réseau sur la journée (kW)"
-      }
+      },
+      "hint": "Touchez pour le détail"
     }
   },
   "showcase": {
