@@ -1,6 +1,8 @@
 @import "tailwindcss";
 
 @custom-variant dark (&:is(.dark *));
+/* 가로로 넓은 화면 — 홈 히어로 3D 가 텍스트(왼쪽) · 건물(오른쪽)로 나뉘는 기준. HeroBuildingScene 의 aspect 1.05 와 맞춘다 */
+@custom-variant wide (@media (min-aspect-ratio: 21/20));
 
 :root {
   --background: #ffffff;
@@ -138,6 +140,12 @@ body.subnav-visible header {
   background-clip: text;
   -webkit-text-fill-color: transparent;
   animation: gradient-flow 6s ease infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-shine {
+    animation: none;
+  }
 }
 
 @keyframes gradient-flow {

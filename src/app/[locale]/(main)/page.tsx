@@ -31,7 +31,7 @@ import {
   ThurrockCouncil,
   BluepointPartners,
 } from "@/components/logos/partners";
-import VideoHero from "@/components/VideoHero";
+import HeroSection from "@/components/hero/HeroSection";
 import ScrollReveal from "@/components/ScrollReveal";
 import ProductShowcase from "@/components/ProductShowcase";
 import CountUp from "@/components/CountUp";
@@ -73,7 +73,7 @@ export default async function Home({
   return (
     <>
       {/* Hero — Full-screen video background */}
-      <VideoHero />
+      <HeroSection />
 
       {/* Products — Sticky text + scrolling media */}
       <ProductShowcase />

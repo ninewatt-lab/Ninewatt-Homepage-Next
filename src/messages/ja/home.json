@@ -12,8 +12,21 @@
     "ctaProducts": "製品を見る",
     "familyLabel": "ファミリー企業",
     "partnerLabel": "優秀協力企業",
-    "pauseVideo": "背景動画を一時停止",
-    "playVideo": "背景動画を再生"
+    "pauseAnimation": "背景アニメーションを一時停止",
+    "playAnimation": "背景アニメーションを再生",
+    "sim": {
+      "caption": "シミュレーション条件",
+      "title": "画面の数値の根拠",
+      "items": {
+        "building": "モデル建物 — 地上{floors}階のオフィス、延床面積 約{gfa}㎡",
+        "load": "電力負荷 — 業務施設(韓国中部)のエネルギー原単位の中央値 {eui} kWh/㎡·年(国土交通部 2024 建物エネルギー統計)を平日の時間帯別パターンで換算、最大 約{peak} kW。全エネルギーを電力とみなした仮定です。",
+        "solar": "太陽光 — 屋上 {kwp} kWp、韓国の平均日発電時間 {hours}時間(1日 約{daily} kWh)",
+        "ess": "ESS — {essKw} kW / {essKwh} kWh、往復効率 {rte}%(NREL ATB)。軽負荷時間(22~08時)に充電し、日中の最大需要を{cut}%下げるよう放電(ピーク削減ESSの需要料金削減15~30%の下限)、最大負荷時間(18~21時)にも放電",
+        "heatPump": "ヒートポンプ — 空気熱源 COP {cop}(KS試験の事例)。空調電力は建物負荷の{hvac}%と仮定",
+        "ai": "AI削減 — ナインワット Opti のエネルギーコスト削減効果 約{ai}%(製品紹介の数値)"
+      },
+      "note": "実測データではなくシミュレーションです。平日1日を{sec}秒に圧縮して表示しています。"
+    }
   },
   "showcase": {
     "label": "Our Products",

@@ -12,8 +12,21 @@
     "ctaProducts": "Voir les produits",
     "familyLabel": "Entreprise affiliée",
     "partnerLabel": "Partenaire clé",
-    "pauseVideo": "Mettre en pause la vidéo d'arrière-plan",
-    "playVideo": "Lire la vidéo d'arrière-plan"
+    "pauseAnimation": "Mettre en pause l'animation d'arrière-plan",
+    "playAnimation": "Lire l'animation d'arrière-plan",
+    "sim": {
+      "caption": "Base de simulation",
+      "title": "D'où viennent les chiffres",
+      "items": {
+        "building": "Bâtiment modèle — bureaux de {floors} étages, environ {gfa} m² de surface de plancher",
+        "load": "Charge électrique — intensité énergétique médiane des bureaux de la région centrale de Corée, {eui} kWh/m²·an (statistiques énergétiques des bâtiments 2024, MOLIT), répartie selon un profil horaire de semaine ; pointe d'environ {peak} kW. Toute l'énergie est supposée électrique.",
+        "solar": "Solaire — {kwp} kWc en toiture, sur la moyenne coréenne de {hours} heures de production par jour (environ {daily} kWh/jour)",
+        "ess": "ESS — {essKw} kW / {essKwh} kWh, rendement aller-retour de {rte} % (NREL ATB). Charge en heures creuses (22 h–8 h), décharge pour réduire la pointe de jour de {cut} % (bas de la fourchette de 15–30 % d'économies de Peak ESS) et pendant la tarification de pointe 18 h–21 h",
+        "heatPump": "Pompe à chaleur — air, COP {cop} (cas d'essai KS). CVC supposé à {hvac} % de la charge du bâtiment",
+        "ai": "Économies IA — environ {ai} % de réduction des coûts énergétiques annoncée pour Ninewatt Opti"
+      },
+      "note": "Il s'agit d'une simulation, pas de données mesurées. Une journée de semaine est condensée en {sec} secondes."
+    }
   },
   "showcase": {
     "label": "Our Products",

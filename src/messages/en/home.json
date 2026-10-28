@@ -12,8 +12,21 @@
     "ctaProducts": "View Products",
     "familyLabel": "Family Corp.",
     "partnerLabel": "Key Partner",
-    "pauseVideo": "Pause background video",
-    "playVideo": "Play background video"
+    "pauseAnimation": "Pause background animation",
+    "playAnimation": "Play background animation",
+    "sim": {
+      "caption": "Simulation basis",
+      "title": "Where the numbers come from",
+      "items": {
+        "building": "Model building — {floors}-story office, about {gfa} m² gross floor area",
+        "load": "Electric load — median energy use intensity for offices in Korea's central region, {eui} kWh/m²·yr (MOLIT 2024 building energy statistics), spread over a weekday hourly profile; peak about {peak} kW. Assumes all energy is electric.",
+        "solar": "Solar — {kwp} kWp on the roof, at Korea's average {hours} generation hours a day (about {daily} kWh/day)",
+        "ess": "ESS — {essKw} kW / {essKwh} kWh, {rte}% round-trip efficiency (NREL ATB). Charges off-peak (22:00–08:00), discharges to cut the daytime peak by {cut}% (the low end of Peak ESS's 15–30% demand-charge savings) and during the 18:00–21:00 peak tariff",
+        "heatPump": "Heat pump — air-source, COP {cop} (KS test case). HVAC assumed at {hvac}% of building load",
+        "ai": "AI savings — about {ai}% energy cost reduction stated for Ninewatt Opti"
+      },
+      "note": "This is a simulation, not measured data. One weekday is compressed into {sec} seconds."
+    }
   },
   "showcase": {
     "label": "Our Products",
