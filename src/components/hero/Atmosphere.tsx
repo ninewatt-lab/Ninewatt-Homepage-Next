@@ -53,7 +53,8 @@ const skyFragment = /* glsl */ `
   }
 `;
 
-export function Sky() {
+/** radius: 카메라가 멀리 있는 장면(Product 지역)은 하늘 구를 더 크게 */
+export function Sky({ radius = 70 }: { radius?: number }) {
   const sim = useSim();
   const mesh = useRef<THREE.Mesh>(null);
   const uniforms = useMemo(
@@ -83,7 +84,7 @@ export function Sky() {
   });
 
   return (
-    <mesh ref={mesh} scale={70} renderOrder={-1}>
+    <mesh ref={mesh} scale={radius} renderOrder={-1}>
       <sphereGeometry args={[1, 32, 16]} />
       <shaderMaterial vertexShader={skyVertex} fragmentShader={skyFragment} uniforms={uniforms} side={THREE.BackSide} depthWrite={false} fog={false} />
     </mesh>
@@ -100,7 +101,8 @@ const HEMI_DUSK = new THREE.Color("#d9b48f");
 const HEMI_NIGHT = new THREE.Color("#6f8aa0");
 
 // 해는 동(+x)에서 서(-x)로 낮게 지나가 아침 · 오후 그림자가 건물 좌우로 길게 드리운다
-export function Lighting({ shadows, mapSize }: { shadows: boolean; mapSize: number }) {
+/** bounds: 그림자를 받는 범위(반지름), reach: 해까지의 거리 — 넓은 장면(Product 지역)은 크게 */
+export function Lighting({ shadows, mapSize, bounds = 6, reach = 12 }: { shadows: boolean; mapSize: number; bounds?: number; reach?: number }) {
   const sim = useSim();
   const sun = useRef<THREE.DirectionalLight>(null);
   const hemi = useRef<THREE.HemisphereLight>(null);
@@ -115,7 +117,7 @@ export function Lighting({ shadows, mapSize }: { shadows: boolean; mapSize: numb
     const low = 1 - smooth(0.15, 0.6, sunAlt); // 해가 낮을수록 따뜻한 빛
 
     const a = sunAlt > -0.05 ? ((hour - 6) / 12) * Math.PI : ((((hour - 18) % 24) + 24) % 24 / 12) * Math.PI;
-    light.position.set(Math.cos(a) * 12, 1.5 + Math.abs(Math.sin(a)) * 8, 3);
+    light.position.set(Math.cos(a) * reach, (1.5 + Math.abs(Math.sin(a)) * 8) * (reach / 12), 3 * (reach / 12));
     light.intensity = 0.2 + (0.5 + (solarKw / PV_PEAK_KW) * 1.3) * day;
     light.color.copy(MOON).lerp(tmp.copy(SUN_NOON).lerp(SUN_LOW, low), day);
 
@@ -131,12 +133,12 @@ export function Lighting({ shadows, mapSize }: { shadows: boolean; mapSize: numb
         ref={sun}
         castShadow={shadows}
         shadow-mapSize={[mapSize, mapSize]}
-        shadow-camera-left={-6}
-        shadow-camera-right={6}
-        shadow-camera-top={6}
-        shadow-camera-bottom={-6}
+        shadow-camera-left={-bounds}
+        shadow-camera-right={bounds}
+        shadow-camera-top={bounds}
+        shadow-camera-bottom={-bounds}
         shadow-camera-near={1}
-        shadow-camera-far={40}
+        shadow-camera-far={reach * 3.4}
         shadow-bias={-0.0004}
         shadow-normalBias={0.02}
       />

@@ -491,8 +491,9 @@ export default function Header() {
     setLangOpen(false);
   }, [router, pathname]);
 
-  const isHome = pathname === "/";
-  const isTransparent = isHome && !scrolled && !mobileOpen && !activeMenu;
+  // 첫 화면이 어두운 3D 캔버스인 페이지: 맨 위에서는 헤더가 캔버스 위에 투명하게 겹친다
+  const overDarkHero = pathname === "/" || pathname === "/product";
+  const isTransparent = overDarkHero && !scrolled && !mobileOpen && !activeMenu;
 
   // Helper to resolve label — product names are literal, others are translation keys
   const resolveLabel = (key: string) => {

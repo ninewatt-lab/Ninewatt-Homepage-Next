@@ -991,5 +991,18 @@
     "ctaTitle": "Gérez l'énergie de votre bâtiment avec les données",
     "ctaDesc": "Réduisez les coûts énergétiques et progressez vers la neutralité carbone avec le BEMS.",
     "ctaContact": "Nous contacter"
+  },
+  "district": {
+    "hint": "Sélectionnez une installation pour découvrir son produit",
+    "more": "En savoir plus",
+    "place": {
+      "bems": "Immeuble de bureaux",
+      "peakEss": "ESS du bâtiment",
+      "sharedEss": "Site d'ESS partagé",
+      "pvRems": "Centrale solaire · ombrières · toiture",
+      "solarScope": "Site solaire candidat",
+      "greenplanner": "Bâtiment en rénovation",
+      "repark": "Équipements du parc"
+    }
   }
 }
