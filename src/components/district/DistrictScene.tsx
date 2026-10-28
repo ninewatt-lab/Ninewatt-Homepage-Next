@@ -17,8 +17,9 @@ import { Lighting, Sky } from "@/components/hero/Atmosphere";
 import { SimContext, createSim, reveal, stepSim, useSim } from "@/components/hero/heroSim";
 import { Appear, DistrictContext } from "./common";
 import Effects from "./Effects";
+import { CloudShadows, Pedestrians } from "./Life";
 import { ContactShadows, Roads, StreetTrees } from "./Streetscape";
-import { FACILITY, PRODUCT_HREF, PRODUCT_ORDER, type ProductKey } from "./districtLayout";
+import { FACILITY, PLATE, PRODUCT_HREF, PRODUCT_ORDER, type ProductKey } from "./districtLayout";
 import {
   EnergyFlow,
   Fillers,
@@ -224,8 +225,10 @@ function Scene({ shadows, chips, frozen, dive, onArrive }: { shadows: boolean; c
         </Appear>
         <Appear at={0.74}>
           <Traffic />
+          <Pedestrians />
         </Appear>
         <EnergyFlow />
+        <CloudShadows w={PLATE.w} d={PLATE.d} />
         <Highlight />
       </Rig>
     </>

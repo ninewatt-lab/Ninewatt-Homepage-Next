@@ -1,7 +1,7 @@
 """
 Product 페이지 3D 테마 지역 소품 모델 생성 (Blender 5.x, 배경 실행).
 
-    /Applications/Blender.app/Contents/MacOS/blender -b --python scripts/district-models/build_district_models.py -- public/models/district-props-v1.glb
+    /Applications/Blender.app/Contents/MacOS/blender -b --python scripts/district-models/build_district_models.py -- public/models/district-props-v3.glb
 
 만드는 것 (노드 이름 = 코드에서 찾는 이름)
 - Car            승용차 (차체 · 유리 캐빈 · 바퀴 · 전조등 · 후미등). 차체는 밝은 회색이라 three.js 인스턴스 색으로 칠한다
@@ -12,6 +12,10 @@ Product 페이지 3D 테마 지역 소품 모델 생성 (Blender 5.x, 배경 실
 - Bench          공원 벤치 (주철 다리 · 나무 살)
 - Playground     놀이터 (탑 · 지붕 · 미끄럼틀 · 사다리 · 그네 · 고무 바닥)
 - Restroom       공원 화장실 (벽 · 처마 지붕 · 문 · 환기창)
+- PersonA/B/C    걷는 사람 (옷 색만 다름)
+- Drone          측량 드론 (SolarScope)
+- EssContainer   컨테이너형 ESS (골판 · 출입문 · 벽걸이 냉방기 · 환기구)
+- Inverter       태양광 인버터 스키드 (인버터 함 · 승압 변압기)
 - Tower · OldBuilding · MidOffice · ShopHouse · SmallBlock  건물 5동. 각각 몸체 / Glass(유리) / Lit(밤에 켜지는 창) 세 노드
 
 색 · 좌표 규칙은 ../hero-models/blender_common.py 와 같다 (부품 색 × AO 를 꼭짓점 색으로, 단위 m, 정면 -Y → glTF +Z).
@@ -583,6 +587,146 @@ def build_shop_house(name, W, D, FLOORS, FH, seed):
     return finish_building(parts, name, 40)
 
 
+
+# ── 사람 (키 1.75 m, 정면 -Y) — 옷 색만 다른 3명 ───────────────────────
+
+def build_person(name, top_hex, bottom_hex, hair_hex):
+    top = material(name + "_top", top_hex)
+    bottom = material(name + "_bottom", bottom_hex)
+    skin = material(name + "_skin", "#d6b294")
+    hair = material(name + "_hair", hair_hex)
+    shoe = material(name + "_shoe", "#2a2c2e")
+    parts = []
+    for sx in (-1, 1):
+        box(parts, bottom, (0.15, 0.17, 0.84), (sx * 0.1, 0, 0.5), bevel=0.03)
+        box(parts, shoe, (0.15, 0.26, 0.09), (sx * 0.1, -0.04, 0.045), bevel=0.02)
+        box(parts, top, (0.11, 0.12, 0.6), (sx * 0.29, 0, 1.17), bevel=0.03)
+        box(parts, skin, (0.09, 0.1, 0.12), (sx * 0.29, 0, 0.83), bevel=0.02)
+    box(parts, top, (0.46, 0.26, 0.62), (0, 0, 1.19), bevel=0.06, cuts=1)
+    cyl(parts, skin, 0.06, 0.1, (0, 0, 1.54), verts=8)
+    bpy.ops.mesh.primitive_uv_sphere_add(segments=12, ring_count=8, radius=0.12, location=(0, 0, 1.66))
+    add(bpy.context.active_object, skin, parts)
+    bpy.ops.mesh.primitive_uv_sphere_add(segments=12, ring_count=6, radius=0.125, location=(0, 0.015, 1.69))
+    cap = bpy.context.active_object
+    cap.scale.z = 0.75
+    bpy.ops.object.transform_apply(scale=True)
+    add(cap, hair, parts)
+    person = join(parts, name)
+    bake_vertex_colors(person, ao_floor=0.55, samples=16)
+    return person
+
+
+# ── 측량 드론 (폭 약 1.1 m) — SolarScope ───────────────────────────────
+
+def build_drone():
+    body = material("dr_body", "#e9edee")
+    dark = material("dr_dark", "#2b3236")
+    rotor = material("dr_rotor", "#9aa6aa")
+    accent = material("dr_accent", "#f5a54a")
+    lens = material("dr_lens", "#1b4f5c")
+    parts = []
+    box(parts, body, (0.42, 0.3, 0.12), (0, 0, 0.32), bevel=0.04)
+    box(parts, dark, (0.3, 0.2, 0.06), (0, 0, 0.42), bevel=0.02)
+    box(parts, accent, (0.06, 0.31, 0.02), (0.15, 0, 0.385))
+    for k in range(4):
+        a = math.pi / 4 + k * math.pi / 2
+        x, y = math.cos(a) * 0.42, math.sin(a) * 0.42
+        beam(parts, dark, (math.cos(a) * 0.12, math.sin(a) * 0.12, 0.33), (x, y, 0.36), 0.035)
+        cyl(parts, dark, 0.035, 0.07, (x, y, 0.38), verts=10)
+        cyl(parts, rotor, 0.19, 0.008, (x, y, 0.425), verts=24)
+    # 착륙 다리 · 짐벌 카메라
+    for s in (-1, 1):
+        beam(parts, dark, (0.06, s * 0.1, 0.27), (0.08, s * 0.18, 0.02), 0.02)
+        beam(parts, dark, (-0.06, s * 0.1, 0.27), (-0.08, s * 0.18, 0.02), 0.02)
+        box(parts, dark, (0.32, 0.02, 0.02), (0, s * 0.18, 0.02))
+    box(parts, dark, (0.1, 0.1, 0.08), (0, -0.05, 0.22), bevel=0.02)
+    cyl(parts, lens, 0.03, 0.03, (0, -0.105, 0.22), verts=12, rot=(math.pi / 2, 0, 0))
+    drone = join(parts, "Drone")
+    bake_vertex_colors(drone, ao_floor=0.5, samples=16)
+    return drone
+
+
+# ── 컨테이너형 ESS (40ft: 12.2 × 2.44 × 2.9 m) — 공유형 ESS ──────────
+
+def build_ess_container():
+    L, Wd, H, BASE = 12.2, 2.44, 2.6, 0.3
+    shell = material("ct_shell", "#e6e9e7")
+    rib = material("ct_rib", "#d3d8d6")
+    frame = material("ct_frame", "#9da6a8")
+    skid = material("ct_skid", "#4e585c")
+    hvac = material("ct_hvac", "#b7bfc1")
+    grille = material("ct_grille", "#5d686c")
+    label = material("ct_label", "#f0c22e")
+    orange = material("ct_orange", "#e5762c")
+    parts = []
+    # 받침 스키드 · 본체 · 모서리 기둥 · 위아래 테두리
+    for y in (-0.9, 0.9):
+        box(parts, skid, (L, 0.2, BASE), (0, y, BASE / 2))
+    box(parts, shell, (L, Wd, H), (0, 0, BASE + H / 2), cuts=4)
+    for sx in (-1, 1):
+        for sy in (-1, 1):
+            box(parts, frame, (0.18, 0.18, H + 0.05), (sx * (L / 2 - 0.06), sy * (Wd / 2 - 0.06), BASE + H / 2))
+    for z in (BASE + 0.05, BASE + H - 0.05):
+        for sy in (-1, 1):
+            box(parts, frame, (L, 0.12, 0.12), (0, sy * (Wd / 2 - 0.02), z))
+    # 긴 면 골판: 세로 골
+    n = 34
+    for k in range(n):
+        x = -L / 2 + 0.35 + k * (L - 0.7) / (n - 1)
+        for sy in (-1, 1):
+            box(parts, rib, (0.12, 0.05, H - 0.3), (x, sy * (Wd / 2 + 0.02), BASE + H / 2))
+    # 정면(-Y): 출입문 2 · 벽걸이 냉방기 2 · 경고 표지
+    for x in (-4.2, 4.2):
+        box(parts, shell, (1.0, 0.06, 2.1), (x, -Wd / 2 - 0.05, BASE + 1.1), bevel=0.01)
+        box(parts, frame, (0.05, 0.08, 0.2), (x + 0.35, -Wd / 2 - 0.1, BASE + 1.1))
+        box(parts, label, (0.3, 0.02, 0.3), (x, -Wd / 2 - 0.09, BASE + 1.9))
+    for x in (-1.6, 1.6):
+        box(parts, hvac, (1.3, 0.55, 1.6), (x, -Wd / 2 - 0.3, BASE + 1.2), bevel=0.04, cuts=1)
+        for k in range(8):
+            box(parts, grille, (1.05, 0.03, 0.04), (x, -Wd / 2 - 0.59, BASE + 0.7 + k * 0.13))
+    # 끝면(-X): 양문 · 잠금 막대 · 주황 비상 표시
+    for sy in (-1, 1):
+        box(parts, shell, (0.06, 1.1, H - 0.2), (-L / 2 - 0.04, sy * 0.58, BASE + H / 2), bevel=0.01)
+        for dy in (-0.3, 0.3):
+            cyl(parts, frame, 0.025, H - 0.3, (-L / 2 - 0.1, sy * 0.58 + dy, BASE + H / 2), verts=8)
+    box(parts, orange, (0.03, 0.6, 0.15), (-L / 2 - 0.08, 0, BASE + H - 0.3))
+    # 지붕 환기구
+    for x in (-3, 0, 3):
+        box(parts, hvac, (0.8, 0.8, 0.25), (x, 0, BASE + H + 0.12), bevel=0.03)
+    ct = join(parts, "EssContainer")
+    bake_vertex_colors(ct, ao_floor=0.4, samples=32)
+    return ct
+
+
+# ── 인버터 스키드 (6 × 2.4 × 2.6 m) — 태양광 발전소 ─────────────────────
+
+def build_inverter():
+    skid = material("iv_skid", "#4b555a")
+    cab = material("iv_cab", "#dfe3e2")
+    door = material("iv_door", "#d4d9d8")
+    vent = material("iv_vent", "#6a7579")
+    tr = material("iv_tr", "#8b989b")
+    label = material("iv_label", "#49b6ca")
+    parts = []
+    box(parts, skid, (6.0, 2.4, 0.25), (0, 0, 0.125), bevel=0.02)
+    # 인버터 함 (왼쪽) — 문 4짝 · 위 환기 루버
+    box(parts, cab, (3.4, 1.6, 2.2), (-1.2, 0, 0.25 + 1.1), bevel=0.03, cuts=2)
+    for k in range(4):
+        x = -2.6 + k * 0.85 + 0.42
+        box(parts, door, (0.78, 0.04, 1.8), (x, -0.82, 1.2), bevel=0.01)
+        box(parts, vent, (0.6, 0.03, 0.25), (x, -0.85, 2.15))
+    box(parts, label, (0.6, 0.02, 0.2), (-1.2, -0.86, 1.75))
+    # 승압 변압기 (오른쪽) — 방열판
+    box(parts, tr, (1.6, 1.4, 1.7), (1.9, 0, 0.25 + 0.85), bevel=0.03, cuts=2)
+    for k in range(6):
+        box(parts, vent, (0.04, 0.35, 1.3), (1.25 + k * 0.26, -0.88, 1.05))
+    for k in range(3):
+        cyl(parts, vent, 0.06, 0.35, (1.5 + k * 0.4, 0.3, 2.15), verts=10)
+    iv = join(parts, "Inverter")
+    bake_vertex_colors(iv, ao_floor=0.42, samples=24)
+    return iv
+
+
 # ── 실행 ─────────────────────────────────────────────────────────────
 
 bpy.ops.wm.read_factory_settings(use_empty=True)
@@ -596,6 +740,14 @@ objects = [
     build_playground(),
     build_restroom(),
 ]
+objects += [
+    build_person("PersonA", "#2f5f7a", "#3a3f44", "#2a2522"),
+    build_person("PersonB", "#e8e4dc", "#28323a", "#4a3828"),
+    build_person("PersonC", "#c96b4b", "#59606a", "#1f1d1c"),
+    build_drone(),
+    build_ess_container(),
+    build_inverter(),
+]
 objects += build_tower()
 objects += build_old_building()
 objects += build_mid_office()
@@ -608,4 +760,4 @@ for o in objects:
     o.select_set(True)
     bpy.context.view_layer.objects.active = o
     bpy.ops.object.transform_apply(location=True, rotation=False, scale=False)
-export_glb(objects, OUT)
+export_glb(objects, OUT, meshopt=True)

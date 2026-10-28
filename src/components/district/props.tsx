@@ -14,11 +14,11 @@ import * as THREE from "three";
 import { useModelMaterial } from "@/components/hero/models";
 import { useSim } from "@/components/hero/heroSim";
 
-export const PROPS_URL = "/models/district-props-v2.glb";
+export const PROPS_URL = "/models/district-props-v3.glb";
 
 useGLTF.preload(PROPS_URL);
 
-export type PropNode = "Car" | "LampPost" | "PowerPole" | "PowerPoleTx" | "Transformer" | "Bench" | "Playground" | "Restroom";
+export type PropNode = "Car" | "LampPost" | "PowerPole" | "PowerPoleTx" | "Transformer" | "Bench" | "Playground" | "Restroom" | "EssContainer" | "Inverter";
 
 function PropMesh({
   node,

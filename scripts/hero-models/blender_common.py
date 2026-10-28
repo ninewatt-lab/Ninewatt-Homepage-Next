@@ -126,7 +126,7 @@ def bake_vertex_colors(obj, ao_floor=0.35, samples=48, ground=True, smooth=False
         o.hide_render = False
 
 
-def export_glb(objects, out):
+def export_glb(objects, out, meshopt=False):
     bpy.ops.object.select_all(action="DESELECT")
     for o in objects:
         o.select_set(True)
@@ -143,5 +143,7 @@ def export_glb(objects, out):
         export_texcoords=False,
         export_normals=True,
         export_yup=True,
+        # meshopt: 꼭짓점을 양자화 · 압축 (three.js GLTFLoader 가 MeshoptDecoder 로 푼다)
+        export_meshopt_compression_enable=meshopt,
     )
     print("exported", out)

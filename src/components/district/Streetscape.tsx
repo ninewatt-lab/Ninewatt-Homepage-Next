@@ -8,7 +8,9 @@
 
 import { Suspense, useMemo } from "react";
 import * as THREE from "three";
-import { useModelGeometry, useModelMaterial } from "@/components/hero/models";
+import { useFrame } from "@react-three/fiber";
+import { useModelGeometry } from "@/components/hero/models";
+import { createSwayMaterial, tickSway } from "./Life";
 import { Instances, m4 } from "./common";
 import { PLATE, ROAD } from "./districtLayout";
 
@@ -199,7 +201,8 @@ const STREET_TREES: [number, number, number][] = [
 function StreetTreeModels() {
   const a = useModelGeometry("TreeA");
   const b = useModelGeometry("TreeB");
-  const material = useModelMaterial(0.85, 0);
+  const material = useMemo(() => createSwayMaterial(), []);
+  useFrame(({ clock }) => tickSway(material, clock.elapsedTime));
   const pick = (i: number) => i % 3 !== 1;
   const make = (want: boolean) =>
     STREET_TREES.filter((_, i) => pick(i) === want).map(([x, z, k], i) => m4(x, 0.01, z, i * 1.3, 0.13 * k, 0.13 * k, 0.13 * k));
