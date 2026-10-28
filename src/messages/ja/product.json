@@ -991,5 +991,18 @@
     "ctaTitle": "建物エネルギーをデータで管理しましょう",
     "ctaDesc": "BEMS導入でエネルギーコストを削減し、カーボンニュートラル目標に一歩近づきましょう。",
     "ctaContact": "導入のお問い合わせ"
+  },
+  "district": {
+    "hint": "施設を選んで製品を見てみましょう",
+    "more": "詳しく見る",
+    "place": {
+      "bems": "オフィスビル",
+      "peakEss": "ビルのESS",
+      "sharedEss": "共有型ESS団地",
+      "pvRems": "太陽光発電所 · 駐車場 · 屋上",
+      "solarScope": "太陽光候補地",
+      "greenplanner": "リモデリング中の建物",
+      "repark": "公園の施設"
+    }
   }
 }

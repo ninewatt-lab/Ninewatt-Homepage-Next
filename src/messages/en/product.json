@@ -861,5 +861,18 @@
     "ctaTitle": "Manage your building energy with data",
     "ctaDesc": "Reduce energy costs and move closer to carbon neutrality with BEMS.",
     "ctaContact": "Contact Us"
+  },
+  "district": {
+    "hint": "Select a facility to explore its product",
+    "more": "Learn more",
+    "place": {
+      "bems": "Office building",
+      "peakEss": "Building ESS",
+      "sharedEss": "Shared ESS site",
+      "pvRems": "Solar plant · carport · rooftop",
+      "solarScope": "Solar candidate site",
+      "greenplanner": "Building under remodeling",
+      "repark": "Park facilities"
+    }
   }
 }

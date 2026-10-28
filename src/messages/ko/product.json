@@ -863,5 +863,18 @@
     "ctaTitle": "건물 에너지, 데이터로 관리하세요",
     "ctaDesc": "BEMS 도입으로 에너지 비용을 절감하고, 탄소중립 목표에 한 걸음 더 다가가세요.",
     "ctaContact": "도입 문의"
+  },
+  "district": {
+    "hint": "시설을 눌러 제품을 살펴보세요",
+    "more": "자세히 보기",
+    "place": {
+      "bems": "업무 빌딩",
+      "peakEss": "빌딩 ESS",
+      "sharedEss": "공유형 ESS 단지",
+      "pvRems": "태양광 발전소 · 주차장 · 옥상",
+      "solarScope": "태양광 후보지",
+      "greenplanner": "리모델링 건물",
+      "repark": "공원 시설물"
+    }
   }
 }

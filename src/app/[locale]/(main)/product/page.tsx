@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { buildMetadata } from "@/lib/seo";
 import { Link } from "@/i18n/navigation";
 import { getTranslations } from "next-intl/server";
+import DistrictSection, { type DistrictProductInfo } from "@/components/district/DistrictSection";
+import { PRODUCT_HREF, PRODUCT_ORDER, type ProductKey } from "@/components/district/districtLayout";
 
 export async function generateMetadata({
   params,
@@ -91,17 +93,24 @@ export default async function ProductPage() {
     getTranslations("common"),
   ]);
 
+  // 3D 테마 지역의 시설마다 제품 이름 · 소개 (아래 목록과 같은 데이터)
+  type Entry = { href: string; name?: string; nameKey?: string; tagline: string; descKey: string };
+  const all: Entry[] = categories.flatMap((c) => [...c.products] as Entry[]);
+  const districtProducts = Object.fromEntries(
+    PRODUCT_ORDER.map((key: ProductKey) => {
+      const product = all.find((p) => p.href === PRODUCT_HREF[key])!;
+      const name = product.nameKey ? tc(product.nameKey) : product.name!;
+      return [key, { name, place: t(`district.place.${key}`), tagline: product.tagline, desc: t(product.descKey) }];
+    }),
+  ) as Record<ProductKey, DistrictProductInfo>;
+
   return (
     <>
-      {/* Hero */}
-      <section className="border-b border-border px-6 pb-16 pt-16">
-        <div className="mx-auto max-w-5xl">
-          <h1 className="text-4xl font-bold tracking-tight md:text-5xl">{t("list.title")}</h1>
-          <p className="mt-4 max-w-lg text-lg text-muted">
-            {t("list.subtitle")}
-          </p>
-        </div>
-      </section>
+      {/* 제품이 모두 들어간 하나의 테마 지역 — 시설을 누르면 제품 상세 페이지로 */}
+      <DistrictSection
+        products={districtProducts}
+        texts={{ title: t("list.title"), subtitle: t("list.subtitle"), hint: t("district.hint"), more: t("district.more") }}
+      />
 
       {/* Product list by category */}
       <section className="px-6 py-20">
