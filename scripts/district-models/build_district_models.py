@@ -12,6 +12,7 @@ Product 페이지 3D 테마 지역 소품 모델 생성 (Blender 5.x, 배경 실
 - Bench          공원 벤치 (주철 다리 · 나무 살)
 - Playground     놀이터 (탑 · 지붕 · 미끄럼틀 · 사다리 · 그네 · 고무 바닥)
 - Restroom       공원 화장실 (벽 · 처마 지붕 · 문 · 환기창)
+- Tower · OldBuilding · MidOffice · ShopHouse · SmallBlock  건물 5동. 각각 몸체 / Glass(유리) / Lit(밤에 켜지는 창) 세 노드
 
 색 · 좌표 규칙은 ../hero-models/blender_common.py 와 같다 (부품 색 × AO 를 꼭짓점 색으로, 단위 m, 정면 -Y → glTF +Z).
 차는 +X 가 앞.
@@ -321,6 +322,267 @@ def build_restroom():
     return rr
 
 
+
+# ── 건물 공용: 유리 · 켜진 창을 따로 나눠 내보낸다 ──────────────────────
+#  노드 <이름>      몸체 (부품 색 × AO)
+#       <이름>Glass 유리 (three.js 에서 반사 재질)
+#       <이름>Lit   밤에 켜지는 창 (three.js 에서 해가 지면 빛난다)
+
+
+def group_material(name, hex_color, group):
+    m = material(name, hex_color)
+    m["group"] = group
+    return m
+
+
+class Facade:
+    """창 재질 묶음 + 켜진 창 고르기 (같은 씨앗이면 항상 같은 창이 켜진다)"""
+
+    def __init__(self, prefix, glass_hex, lit_hex, lit_ratio, seed):
+        import random
+
+        self.glass = group_material(prefix + "_glass", glass_hex, "glass")
+        self.lit = group_material(prefix + "_lit", lit_hex, "lit")
+        self.ratio = lit_ratio
+        self.rnd = random.Random(seed)
+
+    def pick(self, always=False):
+        return self.lit if always or self.rnd.random() < self.ratio else self.glass
+
+
+def face_frame(face, W, D):
+    """면의 바깥 방향 · 가로축: front(-Y) back(+Y) left(-X) right(+X)"""
+    if face == "front":
+        return (0, -D / 2), (1, 0), (0, -1), W
+    if face == "back":
+        return (0, D / 2), (-1, 0), (0, 1), W
+    if face == "left":
+        return (-W / 2, 0), (0, 1), (-1, 0), D
+    return (W / 2, 0), (0, -1), (1, 0), D
+
+
+def on_face(face, W, D, u, out, z):
+    (cx, cy), (ax, ay), (nx, ny), _ = face_frame(face, W, D)
+    return (cx + ax * u + nx * out, cy + ay * u + ny * out, z)
+
+
+def face_box(parts, mat, face, W, D, u, out, z, width, depth, height):
+    x, y, zz = on_face(face, W, D, u, out, z)
+    size = (width, depth, height) if face in ("front", "back") else (depth, width, height)
+    return box(parts, mat, size, (x, y, zz))
+
+
+def finish_building(parts, name, ground_size):
+    obj = join(parts, name)
+    bake_vertex_colors(obj, ao_floor=0.4, samples=32, keep_materials=True, ground_size=ground_size)
+    # 재질별로 나눈 뒤 몸체 · 유리 · 켜진 창 세 덩어리로 다시 합친다
+    bpy.ops.object.select_all(action="DESELECT")
+    obj.select_set(True)
+    bpy.context.view_layer.objects.active = obj
+    bpy.ops.object.mode_set(mode="EDIT")
+    bpy.ops.mesh.select_all(action="SELECT")
+    bpy.ops.mesh.separate(type="MATERIAL")
+    bpy.ops.object.mode_set(mode="OBJECT")
+    pieces = [o for o in bpy.context.scene.objects if o.name == name or o.name.startswith(name + ".")]
+    groups = {"body": [], "glass": [], "lit": []}
+    # 나눈 조각 이름을 먼저 비켜 둔다 (최종 이름과 겹치면 .001 이 붙는다)
+    for i, o in enumerate(pieces):
+        o.name = f"_{name}_piece{i}"
+        o.data.name = o.name
+    for o in pieces:
+        used = {p.material_index for p in o.data.polygons}
+        m = o.data.materials[next(iter(used))]
+        groups[m.get("group", "body")].append(o)
+    out = []
+    for g, suffix in (("body", ""), ("glass", "Glass"), ("lit", "Lit")):
+        objs = groups[g]
+        if not objs:
+            continue
+        bpy.ops.object.select_all(action="DESELECT")
+        for o in objs:
+            o.select_set(True)
+        bpy.context.view_layer.objects.active = objs[0]
+        if len(objs) > 1:
+            bpy.ops.object.join()
+        o = bpy.context.active_object
+        o.name = name + suffix
+        o.data.name = name + suffix
+        o.data.materials.clear()
+        out.append(o)
+    return out
+
+
+# ── 업무 빌딩 (32 × 24 × 56 m, 12층) — BEMS ────────────────────────────
+
+def build_tower():
+    W, D, FLOORS, FH = 32.0, 24.0, 12, 56.0 / 12
+    H = FLOORS * FH
+    slab = group_material("tw_slab", "#2b3c43", "body")
+    core = group_material("tw_core", "#1c2a30", "body")
+    fin = group_material("tw_fin", "#41575f", "body")
+    column = group_material("tw_column", "#24343a", "body")
+    roof = group_material("tw_roof", "#36464c", "body")
+    canopy = group_material("tw_canopy", "#a9bcc2", "body")
+    mech = group_material("tw_mech", "#3c4f56", "body")
+    fac = Facade("tw", "#4f7f8c", "#d9d3bf", 0.32, 7)
+    parts = []
+
+    # 속 (유리 뒤 어두운 실내) · 층 슬래브 띠 · 지붕
+    box(parts, core, (W - 1.2, D - 1.2, H), (0, 0, H / 2), cuts=2)
+    for f in range(1, FLOORS + 1):
+        box(parts, slab, (W + 0.1, D + 0.1, 0.9), (0, 0, f * FH - 0.45 + (0.45 if f == FLOORS else 0)))
+    box(parts, roof, (W + 0.1, D + 0.1, 0.8), (0, 0, H + 0.4), cuts=3)
+    # 난간 · 모서리 기둥
+    for face in ("front", "back", "left", "right"):
+        _, _, _, span = face_frame(face, W, D)
+        face_box(parts, slab, face, W, D, 0, 0.15, H + 1.4, span + 0.4, 0.3, 1.2)
+    for sx in (-1, 1):
+        for sy in (-1, 1):
+            box(parts, column, (1.1, 1.1, H + 2.0), (sx * (W / 2 - 0.3), sy * (D / 2 - 0.3), (H + 2.0) / 2), bevel=0.05)
+
+    # 커튼월: 칸마다 유리(켜짐 무작위) + 세로 핀
+    for face in ("front", "back", "left", "right"):
+        _, _, _, span = face_frame(face, W, D)
+        bays = 10 if face in ("front", "back") else 8
+        bw = span / bays
+        for k in range(1, bays):
+            face_box(parts, fin, face, W, D, -span / 2 + k * bw, 0.35, (FH + H) / 2, 0.22, 0.7, H - FH)
+        for f in range(1, FLOORS):
+            z0 = f * FH
+            for k in range(bays):
+                u = -span / 2 + (k + 0.5) * bw
+                face_box(parts, fac.pick(), face, W, D, u, -0.25, z0 + (FH + 0.9) / 2 - 0.45 + 0.45, bw - 0.3, 0.12, FH - 1.0)
+        # 1층 로비: 안으로 들어간 통유리 (밤에 늘 켜짐) + 기둥
+        for k in range(bays):
+            u = -span / 2 + (k + 0.5) * bw
+            face_box(parts, fac.pick(always=True), face, W, D, u, -1.2, FH / 2, bw - 0.2, 0.12, FH - 0.9)
+        for k in range(1, bays):
+            face_box(parts, column, face, W, D, -span / 2 + k * bw, -0.2, FH / 2, 0.6, 0.6, FH)
+
+    # 정문 캐노피 (정면 가운데)
+    box(parts, canopy, (16, 5, 0.45), (0, -D / 2 - 2.5, 3.6), bevel=0.05)
+    for sx in (-1, 1):
+        box(parts, column, (0.3, 0.3, 3.4), (sx * 7.2, -D / 2 - 4.6, 1.7))
+    # 옥상 기계실 (코드의 안테나 · 실외기 자리와 맞춤: 동쪽 x+9.5, 북쪽)
+    px, py, ph = 9.5, 4.0, 4.2
+    box(parts, mech, (10, 9, ph), (px, py, H + 0.8 + ph / 2), bevel=0.05, cuts=2)
+    box(parts, roof, (10.6, 9.6, 0.4), (px, py, H + 0.8 + ph + 0.2))
+    for k in range(4):
+        box(parts, fin, (1.6, 0.1, 1.2), (px - 3 + k * 2, py - 4.55, H + 0.8 + 2.4))
+    return finish_building(parts, "Tower", 60)
+
+
+# ── 리모델링 대상 노후 건물 (30 × 22 × 24 m, 5층) — GreenPlanner ────────
+
+def build_old_building():
+    W, D, FLOORS, FH = 30.0, 22.0, 5, 4.8
+    H = FLOORS * FH
+    wall = group_material("ob_wall", "#c3b8a2", "body")
+    band = group_material("ob_band", "#a99d87", "body")
+    frame = group_material("ob_frame", "#5d5248", "body")
+    sill = group_material("ob_sill", "#d9d1c0", "body")
+    roof = group_material("ob_roof", "#6c6256", "body")
+    tank = group_material("ob_tank", "#8e9497", "body")
+    shop = group_material("ob_shop", "#3e4a4f", "body")
+    fac = Facade("ob", "#47565b", "#dccfae", 0.38, 21)
+    parts = []
+    box(parts, wall, (W, D, H), (0, 0, H / 2), cuts=4)
+    box(parts, roof, (W + 0.2, D + 0.2, 0.8), (0, 0, H + 0.4), cuts=3)
+    for face in ("front", "back", "left", "right"):
+        _, _, _, span = face_frame(face, W, D)
+        face_box(parts, band, face, W, D, 0, 0.12, H + 1.3, span + 0.5, 0.25, 1.0)
+        for f in range(1, FLOORS):
+            face_box(parts, band, face, W, D, 0, 0.06, f * FH, span, 0.12, 0.35)
+        n = 6 if face in ("front", "back") else 4
+        step = span / n
+        for f in range(FLOORS):
+            z0 = f * FH
+            for k in range(n):
+                u = -span / 2 + (k + 0.5) * step
+                if f == 0 and face == "front":
+                    # 1층 가게: 넓은 유리 + 어두운 틀
+                    face_box(parts, shop, face, W, D, u, 0.02, z0 + 2.0, step - 0.4, 0.1, 3.4)
+                    face_box(parts, fac.pick(always=k % 2 == 0), face, W, D, u, 0.06, z0 + 2.0, step - 1.0, 0.1, 2.8)
+                    continue
+                ww, wh = 2.4, 2.0
+                zc = z0 + 2.5
+                # 움푹한 창: 틀(밖) → 유리(안) · 창턱
+                face_box(parts, frame, face, W, D, u, 0.02, zc, ww + 0.3, 0.1, wh + 0.3)
+                face_box(parts, fac.pick(), face, W, D, u, 0.06, zc, ww, 0.1, wh)
+                face_box(parts, sill, face, W, D, u, 0.15, zc - wh / 2 - 0.18, ww + 0.6, 0.3, 0.15)
+    # 옥상: 물탱크 · 계단실 · 낡은 실외기
+    cyl(parts, tank, 1.6, 2.6, (-9, 5, H + 0.8 + 1.8), verts=20)
+    box(parts, band, (1.8, 1.8, 0.6), (-9, 5, H + 0.8 + 0.3))
+    box(parts, wall, (6, 5, 3.2), (6, 4, H + 0.8 + 1.6), bevel=0.05)
+    for k in range(3):
+        box(parts, tank, (1.4, 0.9, 1.0), (-2 + k * 2.2, -5, H + 0.8 + 0.5), bevel=0.05)
+    return finish_building(parts, "OldBuilding", 50)
+
+
+# ── 주변 건물 3동 ──────────────────────────────────────────────────────
+
+def build_mid_office():
+    """24 × 20 × 18 m, 4층 — 가로로 긴 띠창 사무동"""
+    W, D, FLOORS, FH = 24.0, 20.0, 4, 4.5
+    H = FLOORS * FH
+    slab = group_material("mo_slab", "#3a4b52", "body")
+    core = group_material("mo_core", "#1d2a30", "body")
+    roof = group_material("mo_roof", "#2f3d43", "body")
+    mull = group_material("mo_mull", "#55686f", "body")
+    fac = Facade("mo", "#5c8a96", "#dcd5bf", 0.36, 3)
+    parts = []
+    box(parts, core, (W - 0.8, D - 0.8, H), (0, 0, H / 2), cuts=2)
+    for f in range(FLOORS + 1):
+        box(parts, slab, (W + 0.1, D + 0.1, 1.3), (0, 0, f * FH + 0.65 - (0.65 if f == 0 else 0)))
+    box(parts, roof, (W + 0.1, D + 0.1, 0.8), (0, 0, H + 0.4), cuts=3)
+    for face in ("front", "back", "left", "right"):
+        _, _, _, span = face_frame(face, W, D)
+        face_box(parts, slab, face, W, D, 0, 0.1, H + 1.2, span + 0.3, 0.2, 0.9)
+        bays = 8 if face in ("front", "back") else 6
+        bw = span / bays
+        for f in range(FLOORS):
+            for k in range(bays):
+                u = -span / 2 + (k + 0.5) * bw
+                face_box(parts, fac.pick(always=f == 0 and face == "front"), face, W, D, u, -0.15, f * FH + 1.3 + (FH - 1.3) / 2, bw - 0.18, 0.1, FH - 1.4)
+            for k in range(1, bays):
+                face_box(parts, mull, face, W, D, -span / 2 + k * bw, 0.05, f * FH + 1.3 + (FH - 1.3) / 2, 0.18, 0.25, FH - 1.3)
+    return finish_building(parts, "MidOffice", 40)
+
+
+def build_shop_house(name, W, D, FLOORS, FH, seed):
+    """근린생활시설: 1층 가게 통유리 + 차양, 위층은 창"""
+    H = FLOORS * FH
+    wall = group_material(name + "_wall", "#cdbfa8", "body")
+    trim = group_material(name + "_trim", "#9c8f7a", "body")
+    roof = group_material(name + "_roof", "#6e6658", "body")
+    frame = group_material(name + "_frame", "#4b4640", "body")
+    awning = group_material(name + "_awning", "#2f6f7d", "body")
+    fac = Facade(name, "#4f5f64", "#e2d4b1", 0.4, seed)
+    parts = []
+    box(parts, wall, (W, D, H), (0, 0, H / 2), cuts=3)
+    box(parts, roof, (W + 0.2, D + 0.2, 0.8), (0, 0, H + 0.4), cuts=2)
+    for face in ("front", "back", "left", "right"):
+        _, _, _, span = face_frame(face, W, D)
+        face_box(parts, trim, face, W, D, 0, 0.1, H + 1.2, span + 0.4, 0.2, 0.8)
+        face_box(parts, trim, face, W, D, 0, 0.06, FH, span, 0.12, 0.4)
+        n = max(2, round(span / 4.2))
+        step = span / n
+        for f in range(FLOORS):
+            for k in range(n):
+                u = -span / 2 + (k + 0.5) * step
+                if f == 0 and face == "front":
+                    face_box(parts, frame, face, W, D, u, 0.02, 1.9, step - 0.3, 0.1, 3.2)
+                    face_box(parts, fac.pick(always=True), face, W, D, u, 0.06, 1.8, step - 0.8, 0.1, 2.7)
+                    continue
+                zc = f * FH + FH * 0.55
+                face_box(parts, frame, face, W, D, u, 0.02, zc, 2.3, 0.1, 1.9)
+                face_box(parts, fac.pick(), face, W, D, u, 0.06, zc, 2.0, 0.1, 1.6)
+    # 정면 1층 차양
+    x, y, z = on_face("front", W, D, 0, 0.8, 3.7)
+    box(parts, awning, (W - 1.0, 1.6, 0.25), (x, y, z), rot=(math.radians(-12), 0, 0))
+    return finish_building(parts, name, 40)
+
+
 # ── 실행 ─────────────────────────────────────────────────────────────
 
 bpy.ops.wm.read_factory_settings(use_empty=True)
@@ -334,4 +596,16 @@ objects = [
     build_playground(),
     build_restroom(),
 ]
+objects += build_tower()
+objects += build_old_building()
+objects += build_mid_office()
+objects += build_shop_house("ShopHouse", 20.0, 12.0, 3, 4.0, 11)
+objects += build_shop_house("SmallBlock", 16.0, 10.0, 2, 4.5, 17)
+
+# 합친 모델의 원점은 첫 부품 위치에 남아 있다 → 위치를 꼭짓점에 굽고 원점을 바닥 가운데(0, 0, 0)로
+for o in objects:
+    bpy.ops.object.select_all(action="DESELECT")
+    o.select_set(True)
+    bpy.context.view_layer.objects.active = o
+    bpy.ops.object.transform_apply(location=True, rotation=False, scale=False)
 export_glb(objects, OUT)

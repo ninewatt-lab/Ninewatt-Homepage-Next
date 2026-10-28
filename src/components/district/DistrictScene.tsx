@@ -16,6 +16,8 @@ import { Link } from "@/i18n/navigation";
 import { Lighting, Sky } from "@/components/hero/Atmosphere";
 import { SimContext, createSim, reveal, stepSim, useSim } from "@/components/hero/heroSim";
 import { Appear, DistrictContext } from "./common";
+import Effects from "./Effects";
+import { ContactShadows, Roads, StreetTrees } from "./Streetscape";
 import { FACILITY, PRODUCT_HREF, PRODUCT_ORDER, type ProductKey } from "./districtLayout";
 import {
   EnergyFlow,
@@ -30,13 +32,22 @@ import {
   PvFarm,
   Remodeling,
   RoadLamps,
-  Roads,
   SharedEss,
   SolarScopeLot,
   Traffic,
 } from "./Facilities";
 
 const BG = "#050d13";
+
+// 건물 밑 접지 그늘 [x, z, 너비, 깊이, 높이] — 발치가 바닥에 붙어 보이게
+const GROUND_SHADOWS: [number, number, number, number, number][] = [
+  [-6.5, -4.6, 3.9, 3.1, 0.004],
+  [-11, -5.5, 3.0, 2.6, 0.004],
+  [-10.8, -1.9, 2.6, 1.8, 0.004],
+  [6.4, -1.9, 2.2, 1.6, 0.004],
+  [7.6, 3.2, 3.7, 2.9, 0.004],
+  [-11, 7.6, 1.2, 0.85, 0.045],
+];
 
 function SimDriver({ frozen }: { frozen: boolean }) {
   const sim = useSim();
@@ -175,6 +186,7 @@ function Scene({ shadows, chips, frozen, dive, onArrive }: { shadows: boolean; c
         <Ground />
         <Appear at={0} dur={0.12}>
           <Roads />
+          <ContactShadows spots={GROUND_SHADOWS} />
         </Appear>
         <Appear at={0.08} dur={0.22}>
           <OfficeTower />
@@ -206,6 +218,9 @@ function Scene({ shadows, chips, frozen, dive, onArrive }: { shadows: boolean; c
         <Appear at={0.66}>
           <PowerLines />
           <RoadLamps />
+        </Appear>
+        <Appear at={0.7}>
+          <StreetTrees />
         </Appear>
         <Appear at={0.74}>
           <Traffic />
@@ -240,6 +255,8 @@ export default function DistrictScene({
   const [frozen] = useState(() => window.matchMedia("(prefers-reduced-motion: reduce)").matches);
   const [dpr, setDpr] = useState(() => Math.min(window.devicePixelRatio || 1, 1.75));
   const [shadows, setShadows] = useState(true);
+  const [fx, setFx] = useState(true);
+  const declines = useRef(0);
   const [dive, setDive] = useState<Dive | null>(null);
   const sim = useRef(createSim(frozen));
   const chips = useRef<ChipNodes>({});
@@ -277,11 +294,17 @@ export default function DistrictScene({
         >
           <PerformanceMonitor
             onDecline={() => {
-              setDpr(1);
-              setShadows(false);
+              // 느려지면 후처리부터 끄고, 그래도 느리면 해상도 · 그림자를 낮춘다
+              declines.current += 1;
+              if (declines.current === 1) setFx(false);
+              else {
+                setDpr(1);
+                setShadows(false);
+              }
             }}
           />
           <Scene shadows={shadows} chips={chips} frozen={frozen} dive={dive} onArrive={onGo} />
+          {fx && <Effects />}
         </Canvas>
       </SimContext.Provider>
       {overlay}
