@@ -12,12 +12,13 @@ import { useCallback, useEffect, useMemo, useRef, useState, type RefObject } fro
 import * as THREE from "three";
 import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
 import { Blueprint, Canopy, Core, FLOW_NORM, Floor, Mullions, RISER_Z, Roofs, Site, SolarArray, TEAL } from "./BuildingModel";
-import DetailPanel, { type Focus } from "./DetailPanel";
+import DetailPanel, { BEMS_TONE_COLOR, bemsMessage, type Focus } from "./DetailPanel";
 import { ESS_ANCHOR, ESS_CENTER_VIEW, ESS_ENTRY, ESS_PORT, EssUnits, HP_ANCHOR, HP_CENTER, HeatPumps } from "./Equipment";
 import { FocusContext, fromUi, useFocus } from "./focus";
 import { Lighting, Sky, StreetLights } from "./Atmosphere";
 import {
   AI_SAVING,
+  BEMS_FLOOR,
   BUILDING_H,
   FLOOR_H,
   FLOORS,
@@ -25,6 +26,7 @@ import {
   PEAK_KW,
   SimContext,
   createSim,
+  floorKw,
   footprint,
   reveal,
   seeded,
@@ -216,15 +218,34 @@ function moveChip(node: HTMLElement | null | undefined, x: number, y: number, op
   const cx = Math.min(Math.max(x, half), maxX - half);
   if (opacity > 0) node.style.transform = `translate3d(${cx}px, ${y}px, 0) translate(-50%, -50%)`;
   node.style.opacity = opacity.toFixed(2);
+  node.style.visibility = opacity > 0.02 ? "visible" : "hidden";
 }
 
 function setChipText(node: HTMLElement | null | undefined, text: string) {
   if (node && node.textContent !== text) node.textContent = text;
 }
 
+function setChipColor(node: HTMLElement | null | undefined, prop: "color" | "borderColor" | "backgroundColor", value: string) {
+  if (node && node.style[prop] !== value) node.style[prop] = value;
+}
+
+type BemsText = (s: Sim) => { tone: keyof typeof BEMS_TONE_COLOR; label: string; text: string } | null;
+
 const num = (v: number) => Math.abs(v).toFixed(1);
 
-function ChipProjector({ chips, hovered, hint }: { chips: RefObject<ChipNodes>; hovered: number | null; hint: boolean }) {
+function ChipProjector({
+  chips,
+  hovered,
+  hint,
+  bemsText,
+  bemsStatus,
+}: {
+  chips: RefObject<ChipNodes>;
+  hovered: number | null;
+  hint: boolean;
+  bemsText: BemsText;
+  bemsStatus: { ok: string; alert: string };
+}) {
   const sim = useSim();
   const { progress } = useFocus();
   const anchor = useRef<THREE.Group>(null);
@@ -254,6 +275,14 @@ function ChipProjector({ chips, hovered, hint }: { chips: RefObject<ChipNodes>; 
     if (wide) place("hint", ...ESS_ANCHOR, hint ? on : 0, 38);
     else place("hint", -tw / 2 - 0.5, BUILDING_H - 0.9, 0, hint ? on : 0, 38);
     place("ai", 2.2, BUILDING_H * 0.62, 1.1, s.ai * on);
+    // BEMS: 상태 칩은 늘 보이고, 경보 칩은 장면이 진행되는 동안 문제 위치 옆에 뜬다
+    const ev = s.bems;
+    const evOn = ev ? Math.min(1, ev.stage === "resolved" ? (1 - ev.p) * 3 : ev.stage === "alert" ? ev.p * 6 : 1) : 0;
+    if (wide) place("bemsStatus", -tw / 2 - 1.15, BUILDING_H * 0.92, 0, on);
+    // 세로 화면: SOLAR(위) · ESS(아래) 칩 사이 왼쪽. 자리가 좁아 경보 칩이 떠 있는 동안은 경보 칩이 입구 역할을 한다
+    else place("bemsStatus", -footprint(0)[0] / 2 - 0.2, BUILDING_H * 0.42, 1.0, on * (1 - evOn));
+    if (ev?.kind === "night") place("bemsAlert", footprint(BEMS_FLOOR)[0] / 2 + 0.55, BEMS_FLOOR * FLOOR_H + FLOOR_H / 2, 0.6, evOn * on);
+    else place("bemsAlert", wide ? 2.3 : 1.6, BUILDING_H * 0.66, 1.1, evOn * on);
     if (hovered !== null && progress.current < 0.5) place("floor", footprint(hovered)[0] / 2 + 0.35, hovered * FLOOR_H + FLOOR_H / 2, 0.5);
     else moveChip(nodes.floor, 0, 0, 0);
 
@@ -271,6 +300,19 @@ function ChipProjector({ chips, hovered, hint }: { chips: RefObject<ChipNodes>; 
     setChipText(nodes.essMode, s.essKw > 1 ? "DISCHARGE" : s.essKw < -1 ? "CHARGE" : "IDLE");
     setChipText(nodes.essValue, num(Math.abs(s.essKw) > 1 ? s.essKw : 0));
     setChipText(nodes.aiValue, `−${num(s.aiKw)}`);
+    const msg = bemsText(s);
+    if (msg) {
+      const c = BEMS_TONE_COLOR[msg.tone];
+      setChipText(nodes.bemsAlertLabel, msg.label);
+      setChipText(nodes.bemsAlertText, msg.text);
+      setChipColor(nodes.bemsAlertLabel, "color", c);
+      setChipColor(nodes.bemsAlert, "borderColor", `${c}99`);
+    }
+    const alarming = !!s.bems && s.bems.stage !== "resolved";
+    setChipText(nodes.bemsState, alarming ? bemsStatus.alert : bemsStatus.ok);
+    setChipColor(nodes.bemsState, "color", alarming ? BEMS_TONE_COLOR.alert : "rgba(255,255,255,0.7)");
+    setChipColor(nodes.bemsDot, "backgroundColor", alarming ? BEMS_TONE_COLOR.alert : "#85D2E0");
+    setChipColor(nodes.bemsDotCore, "backgroundColor", alarming ? BEMS_TONE_COLOR.alert : "#85D2E0");
     if (hovered !== null) setChipText(nodes.floorValue, num(s.floorLoads[hovered] * (PEAK_KW / FLOORS) * 1.3));
   });
 
@@ -308,6 +350,9 @@ function markHintSeen() {
   }
 }
 
+// 경보 칩: 문장이 길어 고정 폭에서 줄바꿈한다
+const alertChip = chipButton.replace("whitespace-nowrap", "whitespace-normal").replace("items-baseline", "items-start") + " w-[15.5rem] flex-col gap-1 py-2.5 text-left";
+
 const LABEL = "text-[10px] font-semibold tracking-[0.06em] text-primary-light";
 const SUB = "text-[10px] font-medium tracking-[0.06em] text-white/45";
 const UNIT = "-ml-0.5 text-[10px] font-medium text-white/50";
@@ -324,6 +369,7 @@ const POSES: Record<Focus, { target: THREE.Vector3; dir: THREE.Vector3; dist: nu
   hp: { target: HP_CENTER, dir: new THREE.Vector3(1, 0.85, 0.75).normalize(), dist: 2.5 },
   solar: { target: new THREE.Vector3(0, BUILDING_H + 0.1, 0), dir: new THREE.Vector3(0.6, 1.3, 0.9).normalize(), dist: 5.6 },
   load: { target: new THREE.Vector3(0, BUILDING_H * 0.45, 0), dir: CAMERA_DIR, dist: 12.5 },
+  bems: { target: new THREE.Vector3(0, BUILDING_H * 0.5, 0), dir: CAMERA_DIR, dist: 14 },
 };
 
 const ease = (t: number) => t * t * (3 - 2 * t);
@@ -425,6 +471,8 @@ function Scene({
   onHover,
   chips,
   hint,
+  bemsText,
+  bemsStatus,
 }: {
   frozen: boolean;
   shadows: boolean;
@@ -433,6 +481,8 @@ function Scene({
   onHover: (i: number | null) => void;
   chips: RefObject<ChipNodes>;
   hint: boolean;
+  bemsText: BemsText;
+  bemsStatus: { ok: string; alert: string };
 }) {
   return (
     <>
@@ -459,7 +509,7 @@ function Scene({
         <EssUnits />
         <EnergyFlow />
         <ScanRing />
-        <ChipProjector chips={chips} hovered={hovered} hint={hint} />
+        <ChipProjector chips={chips} hovered={hovered} hint={hint} bemsText={bemsText} bemsStatus={bemsStatus} />
       </Rig>
     </>
   );
@@ -522,6 +572,11 @@ export default function HeroBuildingScene({
     opener.current = null;
   }, [setFocus]);
   const focusValue = useMemo(() => ({ focus, setFocus, progress }), [focus, setFocus]);
+  const bemsText = useCallback<BemsText>(
+    (s) => bemsMessage(t as unknown as Parameters<typeof bemsMessage>[0], { bems: s.bems, loadKw: s.loadKw, gridKw: s.gridKw, bemsFloorKw: floorKw(s.floorLoads[BEMS_FLOOR] ?? 0) }),
+    [t],
+  );
+  const bemsStatus = useMemo(() => ({ ok: t("bems.statusOk"), alert: t("bems.statusAlert") }), [t]);
 
   useEffect(() => {
     if (!focus) return;
@@ -566,7 +621,7 @@ export default function HeroBuildingScene({
             setShadows(false);
           }}
         />
-        <Scene frozen={reducedMotion} shadows={shadows} mapSize={mapSize} hovered={hovered} onHover={setHovered} chips={chips} hint={hint} />
+        <Scene frozen={reducedMotion} shadows={shadows} mapSize={mapSize} hovered={hovered} onHover={setHovered} chips={chips} hint={hint} bemsText={bemsText} bemsStatus={bemsStatus} />
       </Canvas>
       <button type="button" ref={chip("solar")} data-hero-ui className={chipButton} onClick={() => setFocus("solar")} aria-label={t("open", { name: "SOLAR" })}>
         <Beacon delay={0} />
@@ -612,6 +667,28 @@ export default function HeroBuildingScene({
         <span ref={chip("essValue")}>0.0</span>
         <span className={UNIT}>kW</span>
         {chevron}
+      </button>
+      <button type="button" ref={chip("bemsStatus")} data-hero-ui className={chipButton} onClick={() => setFocus("bems")} aria-label={t("open", { name: "BEMS" })}>
+        <span className="relative mr-0.5 flex h-1.5 w-1.5 self-center" aria-hidden="true">
+          <span ref={chip("bemsDot")} className="hero-beacon absolute inset-0 rounded-full bg-primary-light" style={{ animationDelay: "3s" }} />
+          <span ref={chip("bemsDotCore")} className="relative h-1.5 w-1.5 rounded-full bg-primary-light" />
+        </span>
+        <span className={LABEL}>BEMS</span>
+        <span ref={chip("bemsState")} className="text-[11px] font-medium text-white/70">
+          {bemsStatus.ok}
+        </span>
+        {chevron}
+      </button>
+      <button
+        type="button"
+        ref={chip("bemsAlert")}
+        data-hero-ui
+        className={alertChip}
+        onClick={() => setFocus("bems")}
+        aria-label={t("open", { name: "BEMS" })}
+      >
+        <span ref={chip("bemsAlertLabel")} className="text-[10px] font-semibold tracking-[0.06em]" />
+        <span ref={chip("bemsAlertText")} className="text-[12px] font-medium leading-snug text-white/90" />
       </button>
       <div ref={chip("hint")} aria-hidden="true" className="pointer-events-none absolute left-0 top-0 opacity-0 transition-opacity duration-500">
         <div className="hero-hint relative flex items-center gap-1.5 whitespace-nowrap rounded-full bg-primary px-3 py-1.5 text-[11px] font-semibold text-white shadow-lg shadow-primary/30">
