@@ -26,6 +26,51 @@
         "ai": "Économies IA — environ {ai} % de réduction des coûts énergétiques annoncée pour Ninewatt Opti"
       },
       "note": "Il s'agit d'une simulation, pas de données mesurées. Une journée de semaine est condensée en {sec} secondes."
+    },
+    "detail": {
+      "open": "Voir le détail : {name}",
+      "close": "Fermer",
+      "now": "Maintenant",
+      "hourUnit": "h",
+      "footnote": "Valeurs simulées. Les sources sont dans « Base de simulation », en haut à droite.",
+      "ess": {
+        "kicker": "ESS · Écrêtement de pointe",
+        "title": "Stockage d'énergie",
+        "soc": "État de charge",
+        "capacity": "Capacité",
+        "charge": "Charge",
+        "discharge": "Décharge",
+        "idle": "En attente",
+        "peakNote": "Se charge la nuit en heures creuses et se décharge à la pointe de jour. La pointe quotidienne est de {before} kW sans l'ESS et de {after} kW avec (−{cut} %).",
+        "socChart": "État de charge sur la journée (%)",
+        "powerChart": "Charge et décharge sur la journée (kW)"
+      },
+      "hp": {
+        "kicker": "Pompes à chaleur · 8 unités air",
+        "title": "Pompes à chaleur CVC",
+        "power": "Consommation",
+        "heat": "Chaleur produite",
+        "note": "1 kW d'électricité produit {cop} kW de chaleur (COP {cop}). La vitesse des ventilateurs suit la charge CVC.",
+        "chart": "Consommation et chaleur produite sur la journée (kW)"
+      },
+      "solar": {
+        "kicker": "Solaire · Toit et terrasse",
+        "title": "Production solaire",
+        "power": "Production",
+        "today": "Cumul du jour",
+        "capacity": "Puissance installée",
+        "note": "Le solaire couvre en ce moment {share} % de la charge du bâtiment.",
+        "chart": "Production solaire sur la journée (kW)"
+      },
+      "load": {
+        "kicker": "Bâtiment entier",
+        "title": "Électricité du bâtiment",
+        "load": "Charge du bâtiment",
+        "grid": "Réseau",
+        "ai": "Économies IA",
+        "note": "L'IA analyse chaque étage et réduit d'abord les plus chargés, jusqu'à {ai} %. Le soutirage réseau baisse d'autant que le solaire et l'ESS fournissent.",
+        "chart": "Charge du bâtiment et soutirage réseau sur la journée (kW)"
+      }
     }
   },
   "showcase": {

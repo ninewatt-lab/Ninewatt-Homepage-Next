@@ -1,6 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import Email from "@/components/Email";
 import { Link } from "@/i18n/navigation";
 import NinewattLogo from "@/components/icons/NinewattLogo";
 
@@ -25,7 +26,7 @@ export default function EnergyFooter() {
             </p>
             <div className="mt-6 space-y-1.5 text-sm">
               <p>Tel. <a href="tel:070-8866-7226" className="hover:text-white transition-colors">070-8866-7226</a></p>
-              <p>Email. <a href="mailto:ninewatt@ninewatt.com" className="hover:text-white transition-colors">ninewatt@ninewatt.com</a></p>
+              <p>Email. <Email address="ninewatt@ninewatt.com" link className="hover:text-white transition-colors" /></p>
             </div>
           </div>
 
