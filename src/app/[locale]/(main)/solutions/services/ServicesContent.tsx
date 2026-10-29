@@ -40,43 +40,41 @@ function ServiceRow({ project, index }: { project: ServiceProject; index: number
   const hasDetail = !!project.detail;
 
   const open = accordion ? accordion.openKey === key : false;
-  const toggle = () => {
-    if (!hasDetail) return;
-    if (accordion) {
-      accordion.setOpenKey(open ? null : key);
-    }
-  };
 
   const [mounted, setMounted] = useState(false);
   const [animateOpen, setAnimateOpen] = useState(false);
   const [activeImage, setActiveImage] = useState(0);
 
-  useEffect(() => {
-    if (open) {
-      if (!mounted) {
+  const toggle = () => {
+    if (!hasDetail) return;
+    if (accordion) {
+      if (!open) {
         setMounted(true);
-        requestAnimationFrame(() => {
-          requestAnimationFrame(() => {
-            setAnimateOpen(true);
-          });
-        });
-      } else {
-        setAnimateOpen(true);
+        setActiveImage(0);
       }
-    } else {
-      setAnimateOpen(false);
+      accordion.setOpenKey(open ? null : key);
     }
-  }, [open, mounted]);
+  };
 
-  // Reset active image when closing
+  // 처음 열 때는 상세 영역이 0fr 로 한 번 그려진 뒤 1fr 로 바뀌어야 펼침 전환이 보인다
   useEffect(() => {
-    if (!open) setActiveImage(0);
+    if (!open) return;
+    let inner = 0;
+    const outer = requestAnimationFrame(() => {
+      inner = requestAnimationFrame(() => setAnimateOpen(true));
+    });
+    return () => {
+      cancelAnimationFrame(outer);
+      cancelAnimationFrame(inner);
+    };
   }, [open]);
+
+  const expanded = open && animateOpen;
 
   return (
     <>
       <tr
-        className={`border-b border-border ${hasDetail ? "cursor-pointer hover:bg-secondary/30 transition-colors" : ""} ${animateOpen ? "border-b-0!" : ""}`}
+        className={`border-b border-border ${hasDetail ? "cursor-pointer hover:bg-secondary/30 transition-colors" : ""} ${expanded ? "border-b-0!" : ""}`}
         onClick={toggle}
       >
         <td className="py-3 pr-4 whitespace-nowrap text-muted">{project.client}</td>
@@ -99,11 +97,11 @@ function ServiceRow({ project, index }: { project: ServiceProject; index: number
         </td>
       </tr>
       {hasDetail && mounted && (
-        <tr className={animateOpen ? "border-b border-border" : ""}>
+        <tr className={expanded ? "border-b border-border" : ""}>
           <td colSpan={3} className="p-0!">
             <div
               className={`grid transition-[grid-template-rows] duration-300 ease-out ${
-                animateOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+                expanded ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
               }`}
             >
               <div className="overflow-hidden">
