@@ -19,6 +19,7 @@ import Effects from "@/components/district/Effects";
 import { Lighting, Sky, StreetLights } from "./Atmosphere";
 import HeroCity from "./HeroCity";
 import { HeroPeople } from "./HeroLife";
+import { REMODEL_ANCHOR, REMODEL_TARGET, RemodelFacade, stepRemodel } from "./Remodel";
 import {
   AI_SAVING,
   BEMS_FLOOR,
@@ -51,7 +52,12 @@ function driveSim(sim: Sim, delta: number, frozen: boolean) {
 
 function SimDriver({ frozen }: { frozen: boolean }) {
   const sim = useSim();
-  useFrame((_, delta) => driveSim(sim.current, delta, frozen));
+  const { focus, progress } = useFocus();
+  useFrame((_, delta) => {
+    driveSim(sim.current, delta, frozen);
+    // 그린리모델링: 확대 보기 카메라가 거의 다가갔을 때 시공을 시작한다 (시공 속도는 하루 시간과 무관)
+    stepRemodel(sim.current, focus === "gr" && progress.current > 0.8, delta, frozen);
+  });
   return null;
 }
 
@@ -240,6 +246,7 @@ function setChipColor(node: HTMLElement | null | undefined, prop: "color" | "bor
 }
 
 type BemsText = (s: Sim) => { tone: keyof typeof BEMS_TONE_COLOR; label: string; text: string } | null;
+type GrText = (s: Sim) => string;
 
 const num = (v: number) => Math.abs(v).toFixed(1);
 
@@ -249,12 +256,14 @@ function ChipProjector({
   hint,
   bemsText,
   bemsStatus,
+  grText,
 }: {
   chips: RefObject<ChipNodes>;
   hovered: number | null;
   hint: boolean;
   bemsText: BemsText;
   bemsStatus: { ok: string; alert: string };
+  grText: GrText;
 }) {
   const sim = useSim();
   const { progress } = useFocus();
@@ -281,6 +290,9 @@ function ChipProjector({
     place("load", -2.3, BUILDING_H * 0.42, 1.3, on);
     place("hp", HP_ANCHOR[0] + 0.5, HP_ANCHOR[1], HP_ANCHOR[2] + 0.6, on);
     place("ess", ...ESS_ANCHOR, on);
+    // 그린리모델링: 넓은 화면은 고친 외벽 옆 아래, 세로 화면은 칩이 몰려 있어 ESS 칩 바로 위에 쌓는다
+    if (wide) place("gr", ...REMODEL_ANCHOR, on);
+    else place("gr", ...ESS_ANCHOR, on, -42);
     // 처음 방문 힌트: 넓은 화면은 ESS 칩 아래, 세로 화면은 아래쪽 배지와 겹치지 않게 SOLAR 칩 아래
     if (wide) place("hint", ...ESS_ANCHOR, hint ? on : 0, 38);
     else place("hint", -tw / 2 - 0.5, BUILDING_H - 0.9, 0, hint ? on : 0, 38);
@@ -323,6 +335,7 @@ function ChipProjector({
     setChipColor(nodes.bemsState, "color", alarming ? BEMS_TONE_COLOR.alert : "rgba(255,255,255,0.7)");
     setChipColor(nodes.bemsDot, "backgroundColor", alarming ? BEMS_TONE_COLOR.alert : "#85D2E0");
     setChipColor(nodes.bemsDotCore, "backgroundColor", alarming ? BEMS_TONE_COLOR.alert : "#85D2E0");
+    setChipText(nodes.grState, grText(s));
     if (hovered !== null) setChipText(nodes.floorValue, num(s.floorLoads[hovered] * (PEAK_KW / FLOORS) * 1.3));
   });
 
@@ -380,6 +393,8 @@ const POSES: Record<Focus, { target: THREE.Vector3; dir: THREE.Vector3; dist: nu
   solar: { target: new THREE.Vector3(0, BUILDING_H + 0.1, 0), dir: new THREE.Vector3(0.6, 1.3, 0.9).normalize(), dist: 5.6 },
   load: { target: new THREE.Vector3(0, BUILDING_H * 0.45, 0), dir: CAMERA_DIR, dist: 12.5 },
   bems: { target: new THREE.Vector3(0, BUILDING_H * 0.5, 0), dir: CAMERA_DIR, dist: 14 },
+  // 외벽이 왼쪽 제목과 덜 겹치게 바라볼 점을 화면 왼쪽으로 옮긴다
+  gr: { target: REMODEL_TARGET.clone().add(new THREE.Vector3(-0.47, 0, 0.6)), dir: new THREE.Vector3(1, 0.3, 0.78).normalize(), dist: 11.5 },
 };
 
 const ease = (t: number) => t * t * (3 - 2 * t);
@@ -483,6 +498,7 @@ function Scene({
   hint,
   bemsText,
   bemsStatus,
+  grText,
 }: {
   frozen: boolean;
   shadows: boolean;
@@ -493,6 +509,7 @@ function Scene({
   hint: boolean;
   bemsText: BemsText;
   bemsStatus: { ok: string; alert: string };
+  grText: GrText;
 }) {
   return (
     <>
@@ -519,9 +536,10 @@ function Scene({
         <SolarArray />
         <HeatPumps />
         <EssUnits />
+        <RemodelFacade />
         <EnergyFlow />
         <ScanRing />
-        <ChipProjector chips={chips} hovered={hovered} hint={hint} bemsText={bemsText} bemsStatus={bemsStatus} />
+        <ChipProjector chips={chips} hovered={hovered} hint={hint} bemsText={bemsText} bemsStatus={bemsStatus} grText={grText} />
       </Rig>
     </>
   );
@@ -592,6 +610,15 @@ export default function HeroBuildingScene({
     [t],
   );
   const bemsStatus = useMemo(() => ({ ok: t("bems.statusOk"), alert: t("bems.statusAlert") }), [t]);
+  const grText = useCallback<GrText>(
+    (s) => (s.remodel >= 1 ? t("gr.status.complete") : s.remodel > 0 ? t("gr.status.running", { pct: Math.round(s.remodel * 100) }) : t("gr.status.before")),
+    [t],
+  );
+  // 다시 보기: 시공 전으로 되돌리면 (확대 보기가 열려 있으니) 바로 다시 시작한다
+  const replayRemodel = useCallback(() => {
+    sim.current.remodel = 0;
+    sim.current.remodelRun = false;
+  }, []);
 
   useEffect(() => {
     if (!focus) return;
@@ -641,7 +668,7 @@ export default function HeroBuildingScene({
             }
           }}
         />
-        <Scene frozen={reducedMotion} shadows={shadows} mapSize={mapSize} hovered={hovered} onHover={setHovered} chips={chips} hint={hint} bemsText={bemsText} bemsStatus={bemsStatus} />
+        <Scene frozen={reducedMotion} shadows={shadows} mapSize={mapSize} hovered={hovered} onHover={setHovered} chips={chips} hint={hint} bemsText={bemsText} bemsStatus={bemsStatus} grText={grText} />
         {fx && <Effects glow={0.5} />}
       </Canvas>
       <button type="button" ref={chip("solar")} data-hero-ui className={chipButton} onClick={() => setFocus("solar")} aria-label={t("open", { name: "SOLAR" })}>
@@ -689,6 +716,14 @@ export default function HeroBuildingScene({
         <span className={UNIT}>kW</span>
         {chevron}
       </button>
+      <button type="button" ref={chip("gr")} data-hero-ui className={chipButton} onClick={() => setFocus("gr")} aria-label={t("open", { name: "GREEN REMODELING" })}>
+        <Beacon delay={3.75} />
+        <span className={LABEL}>GREEN REMODELING</span>
+        <span ref={chip("grState")} className="text-[11px] font-medium text-white/70">
+          {t("gr.status.before")}
+        </span>
+        {chevron}
+      </button>
       <button type="button" ref={chip("bemsStatus")} data-hero-ui className={chipButton} onClick={() => setFocus("bems")} aria-label={t("open", { name: "BEMS" })}>
         <span className="relative mr-0.5 flex h-1.5 w-1.5 self-center" aria-hidden="true">
           <span ref={chip("bemsDot")} className="hero-beacon absolute inset-0 rounded-full bg-primary-light" style={{ animationDelay: "3s" }} />
@@ -733,7 +768,7 @@ export default function HeroBuildingScene({
         <span ref={chip("floorValue")}>0.0</span>
         <span className={UNIT}>kW</span>
       </div>
-      {focus && <DetailPanel focus={focus} sim={sim} onClose={close} />}
+      {focus && <DetailPanel focus={focus} sim={sim} onClose={close} onReplay={reducedMotion ? undefined : replayRemodel} />}
       </FocusContext.Provider>
     </SimContext.Provider>
   );

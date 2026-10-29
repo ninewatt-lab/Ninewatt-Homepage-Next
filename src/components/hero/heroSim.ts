@@ -184,6 +184,9 @@ export type Sim = {
   /** 야간 대기전력 증가 중인지 · 그 층의 평소 사용량(0~1) */
   nightAnomaly: boolean;
   nightBaseLoad: number;
+  /** 그린리모델링 시공 진행 0(시공 전) → 1(완료) · 진행 중인지 (Remodel.tsx) */
+  remodel: number;
+  remodelRun: boolean;
 };
 
 export function createSim(frozen: boolean): Sim {
@@ -206,6 +209,8 @@ export function createSim(frozen: boolean): Sim {
     bems: null,
     nightAnomaly: false,
     nightBaseLoad: 0,
+    remodel: 0,
+    remodelRun: false,
   };
   stepSim(sim, 0, frozen);
   return sim;

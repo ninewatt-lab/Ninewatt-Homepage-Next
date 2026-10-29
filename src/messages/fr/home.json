@@ -105,6 +105,45 @@
         "cta": "En savoir plus sur le BEMS",
         "viewIn": "Voir cet équipement dans le BEMS"
       },
+      "gr": {
+        "kicker": "Rénovation énergétique · Façade est, étages 2 à 8",
+        "title": "Isolation · Fenêtres · Protections solaires",
+        "panels": "Panneaux isolants",
+        "windows": "Fenêtres",
+        "blades": "Lames de brise-soleil",
+        "steps": {
+          "scan": {
+            "title": "Thermographie",
+            "desc": "On repère d'abord les fuites de chaleur. Les nez de dalle (ponts thermiques) et les cadres de fenêtre apparaissent les plus chauds."
+          },
+          "insulation": {
+            "title": "Isolation par l'extérieur",
+            "desc": "Les bandeaux entre étages et les allèges sont recouverts de panneaux isolants pour fermer les fuites de chaleur."
+          },
+          "windows": {
+            "title": "Fenêtres performantes",
+            "desc": "Double vitrage à faible émissivité et cadres isolés pour réduire la chaleur qui traverse les vitres."
+          },
+          "shading": {
+            "title": "Brise-soleil extérieurs",
+            "desc": "Les lames au-dessus des fenêtres s'inclinent selon la hauteur du soleil pour doser l'ensoleillement."
+          }
+        },
+        "status": {
+          "waiting": "En attente",
+          "done": "Terminé",
+          "before": "Voir",
+          "running": "Pose {pct} %",
+          "complete": "Terminé"
+        },
+        "legend": {
+          "low": "Faibles pertes",
+          "high": "Fortes"
+        },
+        "note": "Les zones terminées refroidissent sur la thermographie. Simulez les économies d'un bâtiment réel avec ses données dans GreenPlanner.",
+        "replay": "Revoir la pose",
+        "footnote": "Scène d'illustration montrant l'ordre des travaux. Les couleurs thermiques sont explicatives, pas mesurées."
+      },
       "productLink": "En savoir plus : {name}"
     }
   },

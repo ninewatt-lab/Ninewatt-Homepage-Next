@@ -105,6 +105,45 @@
         "cta": "Learn more about BEMS",
         "viewIn": "View this equipment in BEMS"
       },
+      "gr": {
+        "kicker": "Green remodeling · East façade, floors 2–8",
+        "title": "Insulation · Windows · Shading",
+        "panels": "Insulation panels",
+        "windows": "Windows",
+        "blades": "Louver blades",
+        "steps": {
+          "scan": {
+            "title": "Thermal scan",
+            "desc": "First, find where heat escapes. Slab edges (thermal bridges) and window frames show up hottest."
+          },
+          "insulation": {
+            "title": "External insulation",
+            "desc": "Wrap the floor bands and the wall below each window in insulation panels from outside to close the heat leaks."
+          },
+          "windows": {
+            "title": "High-performance windows",
+            "desc": "Switch to Low-E double glazing with insulated frames to cut heat flowing through the glass."
+          },
+          "shading": {
+            "title": "External shading",
+            "desc": "Louvers above the windows tilt with the sun's height to control incoming sunlight."
+          }
+        },
+        "status": {
+          "waiting": "Waiting",
+          "done": "Done",
+          "before": "Watch",
+          "running": "Installing {pct}%",
+          "complete": "Completed"
+        },
+        "legend": {
+          "low": "Low heat loss",
+          "high": "High"
+        },
+        "note": "Finished sections cool down in the thermal view. Simulate the savings for a real building with its own data in GreenPlanner.",
+        "replay": "Replay the installation",
+        "footnote": "An illustrative scene showing the installation order. Thermal colors are for explanation, not measurements."
+      },
       "productLink": "Learn more about {name}"
     }
   },
