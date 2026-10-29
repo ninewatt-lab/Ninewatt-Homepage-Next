@@ -180,7 +180,7 @@ export default function HeroSection() {
               {t("hero.familyLabel")}
             </span>
             <span className="text-center text-[12px] leading-relaxed text-white/60 sm:text-[13px]">
-              한국건설기술연구원 · 한국에너지기술연구원 · 한국전기연구원
+              {t("hero.familyNames")}
             </span>
           </div>
           <div className="hidden h-3 w-px bg-white/20 sm:block" />
@@ -189,7 +189,7 @@ export default function HeroSection() {
               {t("hero.partnerLabel")}
             </span>
             <span className="text-[12px] text-white/60 sm:text-[13px]">
-              한국전력공사
+              {t("hero.partnerName")}
             </span>
           </div>
         </div>

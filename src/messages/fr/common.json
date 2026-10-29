@@ -104,6 +104,7 @@
     "subtitle": "R&D gouvernemental, commercialisation et projets de démonstration ({count} projets)",
     "period": "Période",
     "department": "Ministère responsable",
-    "org": "Organisme gestionnaire"
+    "org": "Organisme gestionnaire",
+    "types": { "rnd": "R&D", "commercialization": "Commercialisation", "service": "Prestation", "poc": "PoC", "support": "Programme d'appui" }
   }
 }

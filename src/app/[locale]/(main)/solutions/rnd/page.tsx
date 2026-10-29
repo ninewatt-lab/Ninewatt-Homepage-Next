@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { buildMetadata } from "@/lib/seo";
 import { getTranslations } from "next-intl/server";
 import { getRndProjects } from "@/lib/cms";
+import { localizeOrg } from "@/lib/orgNames";
 import { RndContent } from "./RndContent";
 
 export async function generateMetadata({
@@ -28,9 +29,9 @@ export default async function RndPage({
   const { docs: projects } = await getRndProjects(locale);
 
   const rndProjects = projects.map((p) => ({
-    agency: p.agency,
+    agency: localizeOrg(p.agency, locale),
     research: p.research,
-    lead: p.lead,
+    lead: localizeOrg(p.lead, locale),
     period: p.period,
     status: p.status as "수행중" | "완료",
     // goal이 아니라 detail 존재로 판단한다. 출처(연구과제 xlsx)에 사업비·소관부처·
@@ -43,7 +44,7 @@ export default async function RndPage({
             typeof c === "string" ? c : (c as { item?: string | null }).item ?? ""
           ),
           budget: p.detail.budget ?? "",
-          department: p.detail.department ?? "",
+          department: localizeOrg(p.detail.department ?? "", locale),
           category: p.detail.category ?? "",
           images: (p.detail as Record<string, unknown>).images as string[] | undefined,
           link: (p.detail as Record<string, unknown>).link as string | undefined,

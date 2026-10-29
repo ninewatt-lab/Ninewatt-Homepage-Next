@@ -104,6 +104,7 @@
     "subtitle": "政府R&D・事業化・実証課題遂行履歴（{count}件）",
     "period": "事業期間",
     "department": "主管省庁",
-    "org": "運営機関"
+    "org": "運営機関",
+    "types": { "rnd": "R&D", "commercialization": "事業化", "service": "受託", "poc": "PoC", "support": "支援事業" }
   }
 }

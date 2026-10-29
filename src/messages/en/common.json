@@ -104,6 +104,7 @@
     "subtitle": "Government R&D, commercialization, and demonstration project history ({count} projects)",
     "period": "Period",
     "department": "Lead Ministry",
-    "org": "Operating Agency"
+    "org": "Operating Agency",
+    "types": { "rnd": "R&D", "commercialization": "Commercialization", "service": "Contract", "poc": "PoC", "support": "Support Program" }
   }
 }

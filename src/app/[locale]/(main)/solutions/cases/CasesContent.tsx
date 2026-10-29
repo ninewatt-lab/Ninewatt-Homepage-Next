@@ -23,42 +23,41 @@ interface StatItem {
 }
 
 function CaseRow({ item, index, openKey, setOpenKey }: { item: CaseItem; index: number; openKey: string | null; setOpenKey: (key: string | null) => void }) {
+  const t = useTranslations("solutions");
   const hasDetail = !!item.detail;
   const key = `case-${index}`;
   const open = openKey === key;
-
-  const toggle = () => {
-    if (!hasDetail) return;
-    setOpenKey(open ? null : key);
-  };
 
   const [mounted, setMounted] = useState(false);
   const [animateOpen, setAnimateOpen] = useState(false);
   const [activeImage, setActiveImage] = useState(0);
 
-  useEffect(() => {
-    if (open) {
-      if (!mounted) {
-        setMounted(true);
-        requestAnimationFrame(() => {
-          requestAnimationFrame(() => {
-            setAnimateOpen(true);
-          });
-        });
-      } else {
-        setAnimateOpen(true);
-      }
-    } else {
-      setAnimateOpen(false);
+  const toggle = () => {
+    if (!hasDetail) return;
+    if (!open) {
+      setMounted(true);
+      setActiveImage(0);
     }
-  }, [open, mounted]);
+    setOpenKey(open ? null : key);
+  };
 
+  // 처음 열 때는 상세 영역이 0fr 로 한 번 그려진 뒤 1fr 로 바뀌어야 펼침 전환이 보인다
   useEffect(() => {
-    if (!open) setActiveImage(0);
+    if (!open) return;
+    let inner = 0;
+    const outer = requestAnimationFrame(() => {
+      inner = requestAnimationFrame(() => setAnimateOpen(true));
+    });
+    return () => {
+      cancelAnimationFrame(outer);
+      cancelAnimationFrame(inner);
+    };
   }, [open]);
 
+  const expanded = open && animateOpen;
+
   return (
-    <div className={`${animateOpen ? "" : "border-b border-border"}`}>
+    <div className={`${expanded ? "" : "border-b border-border"}`}>
       <div
         className={`py-4 ${hasDetail ? "cursor-pointer hover:bg-secondary/30 transition-colors rounded-md px-2 -mx-2" : ""}`}
         onClick={toggle}
@@ -83,11 +82,11 @@ function CaseRow({ item, index, openKey, setOpenKey }: { item: CaseItem; index: 
       {hasDetail && mounted && (
         <div
           className={`grid transition-[grid-template-rows] duration-300 ease-out ${
-            animateOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+            expanded ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
           }`}
         >
           <div className="overflow-hidden">
-            <div className={`px-2 -mx-2 pb-5 pt-1 ${animateOpen ? "border-b border-border" : ""}`}>
+            <div className={`px-2 -mx-2 pb-5 pt-1 ${expanded ? "border-b border-border" : ""}`}>
               <div className="rounded-lg bg-secondary/20 p-4">
                 {/* Image gallery — 스크린샷이 있는 사례만 */}
                 {(item.detail!.images?.length ?? 0) > 0 && (
@@ -142,7 +141,7 @@ function CaseRow({ item, index, openKey, setOpenKey }: { item: CaseItem; index: 
                       <path strokeLinecap="round" strokeLinejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101" />
                       <path strokeLinecap="round" strokeLinejoin="round" d="M10.172 13.828a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.102 1.101" />
                     </svg>
-                    서비스 바로가기
+                    {t("cases.goToService")}
                     <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                     </svg>

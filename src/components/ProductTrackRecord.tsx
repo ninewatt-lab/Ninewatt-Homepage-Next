@@ -1,6 +1,7 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
+import { localizeOrg } from "@/lib/orgNames";
 
 export interface TrackRecordItem {
   year: number;
@@ -11,12 +12,22 @@ export interface TrackRecordItem {
   org?: string;
 }
 
+// 데이터의 한국어 구분값 → common.trackRecord.types 메시지 키
+const TYPE_KEYS: Record<TrackRecordItem["type"], string> = {
+  "R&D": "rnd",
+  사업화: "commercialization",
+  용역: "service",
+  PoC: "poc",
+  지원사업: "support",
+};
+
 export function ProductTrackRecord({
   items,
 }: {
   items: TrackRecordItem[];
 }) {
   const t = useTranslations("common");
+  const locale = useLocale();
   const sorted = [...items].sort((a, b) => b.year - a.year);
   const grouped = sorted.reduce<Record<number, TrackRecordItem[]>>(
     (acc, item) => {
@@ -47,7 +58,7 @@ export function ProductTrackRecord({
                   <li key={i} className="text-base">
                     <div className="flex flex-wrap items-start gap-2">
                       <span className="inline-block shrink-0 min-w-16 rounded border border-border px-2 py-0.5 text-center text-sm text-muted">
-                        {item.type}
+                        {t(`trackRecord.types.${TYPE_KEYS[item.type]}`)}
                       </span>
                       <span className="leading-relaxed">{item.name}</span>
                     </div>
@@ -57,10 +68,10 @@ export function ProductTrackRecord({
                           <span>{t("trackRecord.period")}: {item.period}</span>
                         )}
                         {item.department && (
-                          <span>{t("trackRecord.department")}: {item.department}</span>
+                          <span>{t("trackRecord.department")}: {localizeOrg(item.department, locale)}</span>
                         )}
                         {item.org && (
-                          <span>{t("trackRecord.org")}: {item.org}</span>
+                          <span>{t("trackRecord.org")}: {localizeOrg(item.org, locale)}</span>
                         )}
                       </div>
                     )}
