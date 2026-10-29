@@ -12,9 +12,10 @@ import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 import { useEffect, useMemo, useRef, useState, type RefObject } from "react";
+import { REMODEL_COUNTS, REMODEL_STEP_KEYS, THERMAL_STOPS, installedPieces, stepAmount } from "./Remodel";
 import { AI_SAVING, BEMS_FLOOR, ESS_KWH, HP_COP, NIGHT_EXTRA, PEAK_CUT, PEAK_KW, PV_KWP, floorKw, simulateDay, type BemsEvent, type Sim } from "./heroSim";
 
-export type Focus = "ess" | "hp" | "solar" | "load" | "bems";
+export type Focus = "ess" | "hp" | "solar" | "load" | "bems" | "gr";
 
 /* ── BEMS 경보 문구 (칩 · 패널 공용) ──────────────────────────────── */
 
@@ -48,9 +49,9 @@ const STEP = DAY[1].hour - DAY[0].hour;
 
 /* ── 실시간 값 ────────────────────────────────────────────────────── */
 
-type Snapshot = Pick<Sim, "hour" | "loadKw" | "solarKw" | "gridKw" | "essKw" | "essSoc" | "hpKw" | "aiKw" | "bems"> & { bemsFloorKw: number };
+type Snapshot = Pick<Sim, "hour" | "loadKw" | "solarKw" | "gridKw" | "essKw" | "essSoc" | "hpKw" | "aiKw" | "bems" | "remodel"> & { bemsFloorKw: number };
 
-const EMPTY: Snapshot = { hour: 0, loadKw: 0, solarKw: 0, gridKw: 0, essKw: 0, essSoc: 0, hpKw: 0, aiKw: 0, bems: null, bemsFloorKw: 0 };
+const EMPTY: Snapshot = { hour: 0, loadKw: 0, solarKw: 0, gridKw: 0, essKw: 0, essSoc: 0, hpKw: 0, aiKw: 0, bems: null, remodel: 0, bemsFloorKw: 0 };
 
 function readSim(s: Sim): Snapshot {
   return {
@@ -63,6 +64,7 @@ function readSim(s: Sim): Snapshot {
     hpKw: s.hpKw,
     aiKw: s.aiKw,
     bems: s.bems ? { ...s.bems } : null,
+    remodel: s.remodel,
     bemsFloorKw: floorKw(s.floorLoads[BEMS_FLOOR] ?? 0),
   };
 }
@@ -232,7 +234,7 @@ function Stat({ label, value, unit }: { label: string; value: string; unit?: str
   );
 }
 
-export default function DetailPanel({ focus, sim, onClose }: { focus: Focus; sim: RefObject<Sim>; onClose: () => void }) {
+export default function DetailPanel({ focus, sim, onClose, onReplay }: { focus: Focus; sim: RefObject<Sim>; onClose: () => void; onReplay?: () => void }) {
   const t = useTranslations("home.hero.detail");
   const snap = useSnapshot(sim);
   const heading = useRef<HTMLHeadingElement>(null);
@@ -378,9 +380,11 @@ export default function DetailPanel({ focus, sim, onClose }: { focus: Focus; sim
 
       {focus === "bems" && <BemsSection snap={snap} />}
 
+      {focus === "gr" && <GrSection t={snap.remodel} onReplay={onReplay} />}
+
       {focus !== "bems" && <ProductLinks focus={focus} />}
 
-      <p className="mt-4 border-t border-white/10 pt-3 text-[11px] leading-relaxed text-white/40">{t("footnote")}</p>
+      <p className="mt-4 border-t border-white/10 pt-3 text-[11px] leading-relaxed text-white/40">{t(focus === "gr" ? "gr.footnote" : "footnote")}</p>
     </div>
   );
 }
@@ -434,6 +438,80 @@ function BemsSection({ snap }: { snap: Snapshot }) {
   );
 }
 
+/* ── 그린리모델링 패널 ────────────────────────────────────────────── */
+
+function GrSection({ t: progress, onReplay }: { t: number; onReplay?: () => void }) {
+  const t = useTranslations("home.hero.detail");
+  const done = progress >= 1;
+  const count = (step: "insulation" | "windows" | "shading") => {
+    const a = stepAmount(progress, step);
+    // 차양은 칸마다 날개 3개
+    return installedPieces(a) * (REMODEL_COUNTS[step] / REMODEL_COUNTS.insulation);
+  };
+  return (
+    <>
+      <div className="mt-4 grid grid-cols-3 gap-3">
+        <Stat label={t("gr.panels")} value={`${count("insulation")}`} unit={`/ ${REMODEL_COUNTS.insulation}`} />
+        <Stat label={t("gr.windows")} value={`${count("windows")}`} unit={`/ ${REMODEL_COUNTS.windows}`} />
+        <Stat label={t("gr.blades")} value={`${count("shading")}`} unit={`/ ${REMODEL_COUNTS.shading}`} />
+      </div>
+
+      {/* 시공 단계: 순서 · 설명 · 진행 */}
+      <ol className="mt-4 space-y-3" aria-live="polite">
+        {REMODEL_STEP_KEYS.map((step, i) => {
+          const a = stepAmount(progress, step);
+          const state = a >= 1 ? t("gr.status.done") : a > 0 ? `${Math.round(a * 100)}%` : t("gr.status.waiting");
+          return (
+            <li key={step} className="flex gap-3">
+              <span
+                className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-[10px] font-semibold tabular-nums ${a >= 1 ? "border-primary bg-primary text-white" : a > 0 ? "border-primary-light text-primary-light" : "border-white/20 text-white/40"}`}
+                aria-hidden="true"
+              >
+                {a >= 1 ? (
+                  <svg width="9" height="9" viewBox="0 0 10 10">
+                    <path d="M2 5.2l2 2L8 3" stroke="currentColor" strokeWidth="1.6" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                ) : (
+                  i + 1
+                )}
+              </span>
+              <div className="min-w-0 flex-1">
+                <div className="flex items-baseline justify-between gap-2">
+                  <span className={`text-[13px] font-semibold ${a > 0 ? "text-white" : "text-white/55"}`}>{t(`gr.steps.${step}.title`)}</span>
+                  <span className="text-[11px] tabular-nums text-white/50">{state}</span>
+                </div>
+                <div className="mt-1.5 h-0.5 overflow-hidden rounded-full bg-white/10">
+                  <div className="h-full rounded-full bg-primary-light" style={{ width: `${a * 100}%` }} />
+                </div>
+                <p className="mt-1.5 text-[12px] leading-relaxed text-white/60">{t(`gr.steps.${step}.desc`)}</p>
+                {step === "scan" && (
+                  // 열화상 색 범례 (글자는 글자 색, 색은 막대가 맡는다)
+                  <div className="mt-2 flex items-center gap-2 text-[10px] text-white/45">
+                    <span>{t("gr.legend.low")}</span>
+                    <span className="h-1.5 flex-1 rounded-full" style={{ background: `linear-gradient(90deg, ${THERMAL_STOPS.join(", ")})` }} aria-hidden="true" />
+                    <span>{t("gr.legend.high")}</span>
+                  </div>
+                )}
+              </div>
+            </li>
+          );
+        })}
+      </ol>
+
+      <p className="mt-4 text-[12px] leading-relaxed text-white/65">{t("gr.note")}</p>
+
+      {done && onReplay && (
+        <button type="button" onClick={onReplay} className={`${secondaryLink} mt-3`}>
+          <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">
+            <path d="M2.5 6a3.5 3.5 0 1 0 1-2.5M2.5 1.8v1.9h1.9" stroke="currentColor" strokeWidth="1.3" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+          {t("gr.replay")}
+        </button>
+      )}
+    </>
+  );
+}
+
 /* ── 관련 제품 링크 ───────────────────────────────────────────────── */
 
 // 패널마다 그 설비를 다루는 제품 페이지로. 이름은 헤더 메뉴(common.productMenu)와 같게
@@ -441,6 +519,7 @@ const PRODUCTS: Partial<Record<Focus, { href: string; nameKey?: string; name?: s
   ess: { href: "/product/peak-ess", nameKey: "peakEssLabel" },
   solar: { href: "/product/pv-intelligence", nameKey: "pvRemsLabel" },
   load: { href: "/solutions/opti", name: "Opti" },
+  gr: { href: "/product/greenplanner", name: "GreenPlanner" },
 };
 // BEMS 에서도 보는 설비 (히트펌프는 BEMS 의 설비 효율 · COP 분석이 주 링크)
 const ALSO_IN_BEMS: Focus[] = ["ess", "load"];

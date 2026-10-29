@@ -29,7 +29,7 @@ const FACADE = [0.7, 0.15] as const;
 export const EQUIPMENT = [0.8, 0.18] as const;
 
 export const LOW_TOP = SETBACK_FLOOR * FLOOR_H; // 저층부 지붕(테라스) 높이
-const DECK = 0.07; // 슬래브 · 스팬드럴 두께
+export const DECK = 0.07; // 슬래브 · 스팬드럴 두께
 const CORE: [number, number] = [0.8, 0.6]; // 엘리베이터 · 계단 코어 8 × 6 m
 export const RISER_Z = CORE[1] / 2 + 0.05; // 전력 간선이 지나는 코어 앞면
 
