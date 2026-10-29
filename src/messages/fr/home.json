@@ -37,8 +37,8 @@
       "hourUnit": "h",
       "footnote": "Valeurs simulées. Les sources sont dans « Base de simulation », en haut à droite.",
       "ess": {
-        "kicker": "ESS · Écrêtement de pointe",
-        "title": "Stockage d'énergie",
+        "kicker": "Écrêtement de pointe",
+        "title": "ESS",
         "soc": "État de charge",
         "capacity": "Capacité",
         "charge": "Charge",

@@ -37,8 +37,8 @@
       "hourUnit": "시",
       "footnote": "시뮬레이션 값입니다. 근거는 화면 오른쪽 위 '시뮬레이션 기준'에서 볼 수 있어요.",
       "ess": {
-        "kicker": "ESS · 피크 저감",
-        "title": "에너지저장장치",
+        "kicker": "피크 저감",
+        "title": "ESS",
         "soc": "충전 잔량",
         "capacity": "용량",
         "charge": "충전",

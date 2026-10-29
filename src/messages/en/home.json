@@ -37,8 +37,8 @@
       "hourUnit": "h",
       "footnote": "Simulated values. See 'Simulation basis' at the top right for sources.",
       "ess": {
-        "kicker": "ESS · Peak shaving",
-        "title": "Energy storage",
+        "kicker": "Peak shaving",
+        "title": "ESS",
         "soc": "State of charge",
         "capacity": "Capacity",
         "charge": "Charging",
