@@ -104,6 +104,7 @@
     "subtitle": "정부 R&D·사업화·실증 과제 수행 이력 ({count}건)",
     "period": "사업기간",
     "department": "주관부처",
-    "org": "운영기관"
+    "org": "운영기관",
+    "types": { "rnd": "R&D", "commercialization": "사업화", "service": "용역", "poc": "PoC", "support": "지원사업" }
   }
 }

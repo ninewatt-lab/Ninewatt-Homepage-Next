@@ -118,7 +118,7 @@ export default async function WattiPage() {
       {/* Big data stat */}
       <section className="border-b border-border px-6 py-12">
         <div className="mx-auto flex max-w-5xl items-baseline gap-3">
-          <span className="text-4xl font-bold text-primary">134,000건+</span>
+          <span className="text-4xl font-bold text-primary">{t("watti.bigDataValue")}</span>
           <span className="text-muted">{t("watti.bigDataStat")}</span>
         </div>
       </section>
