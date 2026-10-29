@@ -37,8 +37,8 @@
       "hourUnit": "時",
       "footnote": "シミュレーション値です。根拠は右上の「シミュレーション条件」で確認できます。",
       "ess": {
-        "kicker": "ESS · ピークカット",
-        "title": "蓄電システム",
+        "kicker": "ピークカット",
+        "title": "ESS",
         "soc": "充電残量",
         "capacity": "容量",
         "charge": "充電",
