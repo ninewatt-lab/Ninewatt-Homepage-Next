@@ -181,8 +181,8 @@ function groundTexture(roads: Road[], parks: Park[]) {
 
 /* ── 필지: 건물 · 옥상 설비 · 공원 · 나무 ───────────────────────────── */
 
-type Box = { x: number; z: number; w: number; d: number; h: number; color: THREE.Color };
-type Tree = { x: number; z: number; r: number; shade: number; pine: boolean };
+export type Box = { x: number; z: number; w: number; d: number; h: number; color: THREE.Color };
+export type Tree = { x: number; z: number; r: number; shade: number; pine: boolean };
 type City = { boxes: Box[]; roofs: Box[]; parks: Park[]; trees: Tree[]; benches: THREE.Matrix4[]; parkLamps: V2[] };
 /** 건물 · 공원 나무를 비켜 놓을 것: 대각선 대로 · 고가 발자국 */
 type Avoid = { diag: Road[]; hw: { x: number; z: number; r: number }[] };
@@ -195,7 +195,7 @@ const PALETTE = [
   { p: 0.1, rgb: [0.6, 0.7, 0.84] },
 ];
 
-function tint(rand: () => number, tall: boolean) {
+export function tint(rand: () => number, tall: boolean) {
   let u = rand() * (tall ? 0.75 : 1);
   if (tall && rand() < 0.35) u = 0.95; // 고층은 유리가 더 많다
   const k = 0.82 + rand() * 0.28;
@@ -447,8 +447,8 @@ function createCityMaterial() {
 }
 
 // 창은 해가 진 뒤에 켜진다 (빛 번짐이 있어 세게 하지 않는다)
-function tickWindows(uniforms: { uNight: { value: number } }, dark: number) {
-  uniforms.uNight.value = THREE.MathUtils.smoothstep(dark, 0.25, 0.7) * 0.75;
+function tickWindows(uniforms: { uNight: { value: number } }, dark: number, glow: number) {
+  uniforms.uNight.value = THREE.MathUtils.smoothstep(dark, 0.25, 0.7) * 0.75 * glow;
 }
 
 function initBoxes(mesh: THREE.InstancedMesh | null, boxes: Box[]) {
@@ -463,12 +463,13 @@ function initBoxes(mesh: THREE.InstancedMesh | null, boxes: Box[]) {
   mesh.computeBoundingSphere();
 }
 
-function Buildings({ boxes, roofs }: { boxes: Box[]; roofs: Box[] }) {
+/** glow: 밤 창 밝기 (카메라가 가까운 홈 히어로는 약하게) */
+export function Buildings({ boxes, roofs, glow = 1 }: { boxes: Box[]; roofs: Box[]; glow?: number }) {
   const sim = useSim();
   const { material, uniforms } = useMemo(() => createCityMaterial(), []);
   const geometry = useMemo(() => new THREE.BoxGeometry(1, 1, 1).translate(0, 0.5, 0), []);
   const roofMat = useMemo(() => new THREE.MeshStandardMaterial({ color: "#4a5760", roughness: 0.8 }), []);
-  useFrame(() => tickWindows(uniforms, sim.current.dark));
+  useFrame(() => tickWindows(uniforms, sim.current.dark, glow));
   return (
     <>
       <instancedMesh ref={(m) => initBoxes(m, boxes)} args={[geometry, material, boxes.length]} receiveShadow />
@@ -482,7 +483,7 @@ function Buildings({ boxes, roofs }: { boxes: Box[]; roofs: Box[] }) {
 const TREE_DARK = new THREE.Color("#22362c");
 const TREE_LIGHT = new THREE.Color("#3a5446");
 
-function Trees({ trees }: { trees: Tree[] }) {
+export function Trees({ trees }: { trees: Tree[] }) {
   const round = useMemo(() => trees.filter((t) => !t.pine), [trees]);
   const pines = useMemo(() => trees.filter((t) => t.pine), [trees]);
   const ico = useMemo(() => new THREE.IcosahedronGeometry(1, 0).translate(0, 1.2, 0), []);

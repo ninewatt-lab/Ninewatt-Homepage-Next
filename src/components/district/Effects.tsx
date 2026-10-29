@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * Product 지역 후처리 — 빛 번짐(밤의 창 · 가로등 · 전조등) + 색 보정(가장자리 비네트, 낮은 차갑게 · 해 질 녘은 따뜻하게).
+ * Product 지역 · 홈 히어로 후처리 — 빛 번짐(밤의 창 · 가로등 · 전조등) + 색 보정(가장자리 비네트, 낮은 차갑게 · 해 질 녘은 따뜻하게).
  * three.js 기본 패스만 쓴다(추가 라이브러리 없음). 성능이 떨어지면 DistrictScene 이 이 컴포넌트를 빼서 일반 렌더로 돌아간다.
  */
 
@@ -58,10 +58,10 @@ const FinalShader = {
 
 type Fx = { composer: EffectComposer; bloom: UnrealBloomPass; grade: ShaderPass };
 
-function stepFx(fx: Fx, dark: number, sunAlt: number, delta: number) {
-  // 낮에는 아주 약하게, 밤에는 빛이 번진다
-  fx.bloom.strength = 0.08 + dark * 0.42;
-  fx.bloom.threshold = 0.9 - dark * 0.12;
+function stepFx(fx: Fx, dark: number, sunAlt: number, delta: number, glow: number) {
+  // 낮에는 아주 약하게, 밤에는 빛이 번진다 (glow: 장면마다 세기 조절 — 밝은 창이 많은 홈 히어로는 약하게)
+  fx.bloom.strength = (0.08 + dark * 0.42) * glow;
+  fx.bloom.threshold = 0.9 - dark * 0.12 * glow;
   const u = fx.grade.uniforms;
   u.uDark.value = dark;
   u.uWarm.value = Math.exp(-Math.pow((sunAlt - 0.1) / 0.22, 2)) * 0.8;
@@ -76,7 +76,7 @@ function resizeFx(fx: Fx, w: number, h: number, dpr: number) {
   fx.bloom.setSize(w, h);
 }
 
-export default function Effects() {
+export default function Effects({ glow = 1 }: { glow?: number }) {
   const sim = useSim();
   const { gl, scene, camera, size, viewport } = useThree();
   const fx = useMemo<Fx>(() => {
@@ -97,6 +97,6 @@ export default function Effects() {
   useEffect(() => () => fx.composer.dispose(), [fx]);
 
   // 우선순위 1: R3F 의 기본 렌더 대신 이 합성기가 그린다
-  useFrame((_, delta) => stepFx(fx, sim.current.dark, sim.current.sunAlt, delta), 1);
+  useFrame((_, delta) => stepFx(fx, sim.current.dark, sim.current.sunAlt, delta, glow), 1);
   return null;
 }

@@ -11,7 +11,8 @@ import { Suspense, useMemo, useRef } from "react";
 import * as THREE from "three";
 import { BEMS_FLOOR, BUILDING_H, ESS_KW, FLOOR_H, FLOORS, PEAK_KW, PV_PEAK_KW, SETBACK_FLOOR, footprint, reveal, seeded, useSim } from "./heroSim";
 import { fromUi, useFocusTarget } from "./focus";
-import { useModelGeometry, useModelMaterial } from "./models";
+import { createSwayMaterial, tickSway } from "@/components/district/Life";
+import { useModelGeometry } from "./models";
 import { louverTexture, pavingTexture, pvTexture } from "./textures";
 
 export const TEAL = new THREE.Color("#49B6CA");
@@ -98,7 +99,9 @@ export function Site() {
 function TreesModel() {
   const a = useModelGeometry("TreeA");
   const b = useModelGeometry("TreeB");
-  const material = useModelMaterial(0.85, 0);
+  // 바람에 위쪽만 살짝 흔들린다 (Product 지역과 같은 재질)
+  const material = useMemo(() => createSwayMaterial(), []);
+  useFrame(({ clock }) => tickSway(material, clock.elapsedTime));
   return (
     <>
       {TREES.map(([x, z, k], i) => (
