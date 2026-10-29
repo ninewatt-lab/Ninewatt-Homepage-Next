@@ -15,7 +15,10 @@ import { Blueprint, Canopy, Core, FLOW_NORM, Floor, Mullions, RISER_Z, Roofs, Si
 import DetailPanel, { BEMS_TONE_COLOR, bemsMessage, type Focus } from "./DetailPanel";
 import { ESS_ANCHOR, ESS_CENTER_VIEW, ESS_ENTRY, ESS_PORT, EssUnits, HP_ANCHOR, HP_CENTER, HeatPumps } from "./Equipment";
 import { FocusContext, fromUi, useFocus } from "./focus";
+import Effects from "@/components/district/Effects";
 import { Lighting, Sky, StreetLights } from "./Atmosphere";
+import HeroCity from "./HeroCity";
+import { HeroPeople } from "./HeroLife";
 import {
   AI_SAVING,
   BEMS_FLOOR,
@@ -37,11 +40,18 @@ import {
 
 const BG = "#050d13";
 
+/** 낮은 빠르게 · 밤은 느리게 — 야경이 오래 머문다 (Product 지역과 같은 속도, 시뮬레이션 수치는 그대로) */
+const DAY_PACE = 1.35;
+const NIGHT_PACE = 0.7;
+
+function driveSim(sim: Sim, delta: number, frozen: boolean) {
+  const pace = THREE.MathUtils.lerp(DAY_PACE, NIGHT_PACE, sim.dark);
+  stepSim(sim, frozen ? 0 : Math.min(delta, 0.1) * pace, frozen);
+}
+
 function SimDriver({ frozen }: { frozen: boolean }) {
   const sim = useSim();
-  useFrame((_, delta) => {
-    stepSim(sim.current, frozen ? 0 : Math.min(delta, 0.1), frozen);
-  });
+  useFrame((_, delta) => driveSim(sim.current, delta, frozen));
   return null;
 }
 
@@ -493,8 +503,10 @@ function Scene({
       <Lighting shadows={shadows} mapSize={mapSize} />
       <Rig frozen={frozen}>
         <Stage />
+        <HeroCity />
         <Site />
         <StreetLights />
+        <HeroPeople />
         <Blueprint />
         <Cables />
         {Array.from({ length: FLOORS }, (_, i) => (
@@ -531,6 +543,9 @@ export default function HeroBuildingScene({
   const [dpr, setDpr] = useState(() => Math.min(window.devicePixelRatio || 1, 1.75));
   // 실시간 그림자도 같은 기준으로 끈다. 작은 화면은 그림자 해상도를 낮춘다
   const [shadows, setShadows] = useState(true);
+  // 빛 번짐 · 색 보정: 느려지면 이것부터 끈다
+  const [fx, setFx] = useState(true);
+  const declines = useRef(0);
   const [mapSize] = useState(() => (window.innerWidth < 768 ? 1024 : 2048));
   const sim = useRef<Sim>(createSim(reducedMotion));
   const t = useTranslations("home.hero.detail");
@@ -617,11 +632,17 @@ export default function HeroBuildingScene({
       >
         <PerformanceMonitor
           onDecline={() => {
-            setDpr(1);
-            setShadows(false);
+            // 느려지면 후처리부터 끄고, 그래도 느리면 해상도 · 그림자를 낮춘다
+            declines.current += 1;
+            if (declines.current === 1) setFx(false);
+            else {
+              setDpr(1);
+              setShadows(false);
+            }
           }}
         />
         <Scene frozen={reducedMotion} shadows={shadows} mapSize={mapSize} hovered={hovered} onHover={setHovered} chips={chips} hint={hint} bemsText={bemsText} bemsStatus={bemsStatus} />
+        {fx && <Effects glow={0.5} />}
       </Canvas>
       <button type="button" ref={chip("solar")} data-hero-ui className={chipButton} onClick={() => setFocus("solar")} aria-label={t("open", { name: "SOLAR" })}>
         <Beacon delay={0} />

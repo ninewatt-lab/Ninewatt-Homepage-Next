@@ -1,7 +1,7 @@
 """
 홈 히어로 3D 설비 모델 생성 (Blender 5.x, 배경 실행).
 
-    /Applications/Blender.app/Contents/MacOS/blender -b --python scripts/hero-models/build_hero_models.py -- public/models/hero-equipment-v1.glb
+    /Applications/Blender.app/Contents/MacOS/blender -b --python scripts/hero-models/build_hero_models.py -- public/models/hero-equipment-v2.glb
 
 만드는 것 (노드 이름 = 코드에서 찾는 이름)
 - HeatPump      공기열원 히트펌프 실외기 본체 (상부 1팬, 코일 측면, 점검 패널, 보호망)
@@ -240,4 +240,4 @@ objects.append(build_ess())
 objects.append(build_tree("TreeA", 7, columnar=False))
 objects.append(build_tree("TreeB", 11, columnar=True))
 
-export_glb(objects, OUT)
+export_glb(objects, OUT, meshopt=True)

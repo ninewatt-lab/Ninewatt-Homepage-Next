@@ -11,7 +11,7 @@ import { useGLTF } from "@react-three/drei";
 import { useMemo } from "react";
 import * as THREE from "three";
 
-export const MODEL_URL = "/models/hero-equipment-v1.glb";
+export const MODEL_URL = "/models/hero-equipment-v2.glb";
 export const MODEL_SCALE = 0.1;
 
 // 장면 코드가 불러와지는 즉시 받기 시작한다 (그동안은 코드 모델이 대신 보인다)
