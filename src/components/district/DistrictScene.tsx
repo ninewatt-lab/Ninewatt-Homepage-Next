@@ -16,6 +16,7 @@ import { Link } from "@/i18n/navigation";
 import { Lighting, Sky } from "@/components/hero/Atmosphere";
 import { SimContext, createSim, reveal, stepSim, useSim } from "@/components/hero/heroSim";
 import { Appear, DistrictContext } from "./common";
+import CityContext from "./CityContext";
 import Effects from "./Effects";
 import { CloudShadows, Pedestrians } from "./Life";
 import { ContactShadows, Roads, StreetTrees } from "./Streetscape";
@@ -50,10 +51,15 @@ const GROUND_SHADOWS: [number, number, number, number, number][] = [
   [-11, 7.6, 1.2, 0.85, 0.045],
 ];
 
+/** 낮은 빠르게 · 밤은 느리게 — 도시 야경이 하루의 절반 넘게 머문다 (시뮬레이션 수치는 그대로) */
+const DAY_PACE = 1.35;
+const NIGHT_PACE = 0.7;
+
 function SimDriver({ frozen }: { frozen: boolean }) {
   const sim = useSim();
   useFrame((_, delta) => {
-    stepSim(sim.current, frozen ? 0 : Math.min(delta, 0.1), frozen);
+    const pace = THREE.MathUtils.lerp(DAY_PACE, NIGHT_PACE, sim.current.dark);
+    stepSim(sim.current, frozen ? 0 : Math.min(delta, 0.1) * pace, frozen);
   });
   return null;
 }
@@ -146,10 +152,10 @@ function Rig({ chips, dive, onArrive, children }: { chips: RefObject<ChipNodes>;
       const dist = wide ? 42 * Math.min(1.25, (0.92 * size.height) / Math.max(size.height - TOP_INSET, 1)) : 42 * Math.min(2.0, 1.1 / Math.max(aspect, 0.4));
       cam.position.copy(CAMERA_DIR).multiplyScalar(dist).add(LOOK);
       cam.lookAt(LOOK);
-      // 안개는 카메라 거리에 맞춘다 (세로 화면은 멀리서 보므로)
+      // 안개는 카메라 거리에 맞춘다 (세로 화면은 멀리서 보므로) — 지역 너머 도시는 어둠에 묻힌다
       if (scene.fog instanceof THREE.Fog) {
-        scene.fog.near = dist + 10;
-        scene.fog.far = dist + 60;
+        scene.fog.near = dist + 12;
+        scene.fog.far = dist + 42;
       }
       setOffset(cam, size.width, size.height, wide, 1);
     }
@@ -184,6 +190,9 @@ function Scene({ shadows, chips, frozen, dive, onArrive }: { shadows: boolean; c
       <Sky radius={220} />
       <Lighting shadows={shadows} mapSize={2048} bounds={16} reach={30} />
       <Rig chips={chips} dive={dive} onArrive={onArrive}>
+        <Appear at={0} dur={0.2}>
+          <CityContext />
+        </Appear>
         <Ground />
         <Appear at={0} dur={0.12}>
           <Roads />
