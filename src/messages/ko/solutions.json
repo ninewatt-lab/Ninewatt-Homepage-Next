@@ -114,6 +114,7 @@
     "title": "R&D 수행 이력",
     "subtitle": "정부 R&D 과제 수행을 통한 기술력 확보",
     "clickHint": "과제명을 클릭하면 상세 내용을 확인할 수 있습니다.",
+    "goToSystem": "시스템 바로가기",
     "inProgress": "수행중",
     "completed": "완료",
     "count": "건",
@@ -127,6 +128,7 @@
     "title": "시스템개발 수행 이력",
     "subtitleTemplate": "{count}건의 시스템개발, {partners}개 파트너 기관과 협업",
     "clickHint": "▸ 표시가 있는 항목을 클릭하면 상세 내용을 확인할 수 있습니다",
+    "goToSystem": "시스템 바로가기",
     "tableHeaders": { "client": "기업(기관명)", "period": "기간", "content": "수행내용" },
     "projects": [
       { "client": "-", "period": "2026.09~2026.11", "title": "SLM 헐케어(선박 관리) 플랫폼 구축", "detail": { "description": "선박 선체(헐) 청소 작업을 관리하는 플랫폼으로, 전체 운영 현황 대시보드, 선체 구역별 청소 진행률 시각화, 청소 로봇 실시간 관제, 청소 결과·증빙 자료 관리 및 보고서 작성 기능을 제공합니다.", "images": ["https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/projects/SLM_1.png", "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/projects/SLM_2.png"] }},

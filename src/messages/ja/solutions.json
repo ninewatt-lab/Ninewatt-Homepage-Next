@@ -114,6 +114,7 @@
     "title": "R&D実績",
     "subtitle": "政府R&D課題の遂行による技術力の確保",
     "clickHint": "課題名をクリックすると詳細内容をご確認いただけます。",
+    "goToSystem": "システムへ移動",
     "inProgress": "進行中",
     "completed": "完了",
     "count": "件",
@@ -127,6 +128,7 @@
     "title": "システム開発実績",
     "subtitleTemplate": "{count}件のシステム開発、{partners}のパートナー機関と協業",
     "clickHint": "▸マーク付きの項目をクリックすると詳細を確認できます",
+    "goToSystem": "システムへ移動",
     "tableHeaders": { "client": "企業（機関名）", "period": "期間", "content": "遂行内容" },
     "projects": [
       { "client": "-", "period": "2026.09~2026.11", "title": "SLMハルケア（船舶管理）プラットフォーム構築", "detail": { "description": "船舶の船体（ハル）清掃作業を管理するプラットフォームで、全体運用状況ダッシュボード、船体区域別の清掃進捗の可視化、清掃ロボットのリアルタイム監視、清掃結果・証憑資料の管理及び報告書作成機能を提供します。", "images": ["https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/projects/SLM_1.png", "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/projects/SLM_2.png"] }},

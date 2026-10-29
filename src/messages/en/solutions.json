@@ -114,6 +114,7 @@
     "title": "R&D Track Record",
     "subtitle": "Building technical expertise through government-funded R&D projects",
     "clickHint": "Click on a project name to view details.",
+    "goToSystem": "Go to System",
     "inProgress": "In Progress",
     "completed": "Completed",
     "count": "projects",
@@ -127,6 +128,7 @@
     "title": "System Development Track Record",
     "subtitleTemplate": "{count} system development projects in collaboration with {partners} partner organizations",
     "clickHint": "Click items with ▸ to view details",
+    "goToSystem": "Go to System",
     "tableHeaders": { "client": "Client (Organization)", "period": "Period", "content": "Scope of Work" },
     "projects": [
       { "client": "-", "period": "2026.09~2026.11", "title": "SLM Hull Care (Ship Management) Platform Development", "detail": { "description": "A platform for managing ship hull cleaning operations, providing an operations dashboard, zone-by-zone hull cleaning progress visualization, real-time monitoring of cleaning robots, cleaning result and evidence management, and report generation.", "images": ["https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/projects/SLM_1.png", "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/projects/SLM_2.png"] }},
