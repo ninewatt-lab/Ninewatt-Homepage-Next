@@ -867,6 +867,23 @@
   "district": {
     "hint": "시설을 눌러 제품을 살펴보세요",
     "more": "자세히 보기",
+    "view": {
+      "label": "보기 범위",
+      "city": "도시",
+      "district": "지역"
+    },
+    "alert": {
+      "peak": {
+        "alert": "피크 전력 임박",
+        "ai": "ESS 방전으로 대응",
+        "resolved": "피크 저감 완료"
+      },
+      "night": {
+        "alert": "야간 대기전력 증가",
+        "ai": "AI 원인 분석",
+        "resolved": "대기전력 조치 완료"
+      }
+    },
     "place": {
       "bems": "업무 빌딩",
       "peakEss": "빌딩 ESS",

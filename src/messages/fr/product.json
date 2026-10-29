@@ -995,6 +995,23 @@
   "district": {
     "hint": "Sélectionnez une installation pour découvrir son produit",
     "more": "En savoir plus",
+    "view": {
+      "label": "Vue",
+      "city": "Ville",
+      "district": "Quartier"
+    },
+    "alert": {
+      "peak": {
+        "alert": "Pointe de consommation imminente",
+        "ai": "Décharge de l'ESS",
+        "resolved": "Pointe écrêtée"
+      },
+      "night": {
+        "alert": "Hausse de la veille nocturne",
+        "ai": "Analyse IA de la cause",
+        "resolved": "Veille corrigée"
+      }
+    },
     "place": {
       "bems": "Immeuble de bureaux",
       "peakEss": "ESS du bâtiment",

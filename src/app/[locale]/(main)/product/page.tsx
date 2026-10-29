@@ -3,6 +3,7 @@ import { buildMetadata } from "@/lib/seo";
 import { Link } from "@/i18n/navigation";
 import { getTranslations } from "next-intl/server";
 import DistrictSection, { type DistrictProductInfo } from "@/components/district/DistrictSection";
+import type { AlertTexts } from "@/components/district/DistrictScene";
 import { PRODUCT_HREF, PRODUCT_ORDER, type ProductKey } from "@/components/district/districtLayout";
 
 export async function generateMetadata({
@@ -109,7 +110,16 @@ export default async function ProductPage() {
       {/* 제품이 모두 들어간 하나의 테마 지역 — 시설을 누르면 제품 상세 페이지로 */}
       <DistrictSection
         products={districtProducts}
-        texts={{ title: t("list.title"), subtitle: t("list.subtitle"), hint: t("district.hint"), more: t("district.more") }}
+        texts={{
+          title: t("list.title"),
+          subtitle: t("list.subtitle"),
+          hint: t("district.hint"),
+          more: t("district.more"),
+          view: { label: t("district.view.label"), city: t("district.view.city"), district: t("district.view.district") },
+          alerts: Object.fromEntries(
+            (["peak", "night"] as const).map((k) => [k, { alert: t(`district.alert.${k}.alert`), ai: t(`district.alert.${k}.ai`), resolved: t(`district.alert.${k}.resolved`) }]),
+          ) as AlertTexts,
+        }}
       />
 
       {/* Product list by category */}

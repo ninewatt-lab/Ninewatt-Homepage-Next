@@ -8,6 +8,7 @@
 import dynamic from "next/dynamic";
 import { Component, useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { Link, useRouter } from "@/i18n/navigation";
+import type { AlertTexts, DistrictView } from "./DistrictScene";
 import { PRODUCT_HREF, PRODUCT_ORDER, type ProductKey } from "./districtLayout";
 
 // three.js 는 크기가 커서 제목 · 목록을 먼저 그린 뒤에 불러온다
@@ -34,7 +35,7 @@ export default function DistrictSection({
   texts,
 }: {
   products: Record<ProductKey, DistrictProductInfo>;
-  texts: { title: string; subtitle: string; hint: string; more: string };
+  texts: { title: string; subtitle: string; hint: string; more: string; view: { label: string; city: string; district: string }; alerts: AlertTexts };
 }) {
   const router = useRouter();
   const sectionRef = useRef<HTMLElement>(null);
@@ -42,6 +43,7 @@ export default function DistrictSection({
   const [visible, setVisible] = useState(true);
   const [hover, setHoverState] = useState<ProductKey | null>(null);
   const [cycle, setCycle] = useState<number | null>(null);
+  const [view, setView] = useState<DistrictView>("district");
   const lastHover = useRef(0);
 
   const setHover = useCallback((k: ProductKey | null) => {
@@ -70,7 +72,8 @@ export default function DistrictSection({
   }, [ready]);
 
   const active = hover ?? (cycle === null ? null : PRODUCT_ORDER[cycle]);
-  const info = active ? products[active] : null;
+  // 도시 보기에서는 시설 카드를 감춘다 (지역 보기로 돌아오면 다시)
+  const info = active && view === "district" ? products[active] : null;
   const sceneProducts = Object.fromEntries(PRODUCT_ORDER.map((k) => [k, { name: products[k].name, place: products[k].place }])) as Record<ProductKey, { name: string; place: string }>;
 
   // 헤더 · 제품 탭이 위에 투명하게 겹치도록 헤더 높이만큼 끌어올리고 첫 화면을 꽉 채운다
@@ -85,6 +88,9 @@ export default function DistrictSection({
             onGo={go}
             onReady={() => setReady(true)}
             running={visible}
+            view={view}
+            onView={setView}
+            alertTexts={texts.alerts}
             overlay={
               <>
                 {/* 글자 쪽을 차분하게 (라벨보다는 아래) */}
@@ -97,6 +103,28 @@ export default function DistrictSection({
       </div>
 
       <div className="pointer-events-none relative z-10 mx-auto flex h-full max-w-7xl flex-col justify-between px-6 pb-6 pt-[7.5rem] sm:pb-10 sm:pt-[8.5rem] lg:px-10">
+        {/* 보기 범위: 도시 ↔ 지역 */}
+        <div
+          role="group"
+          aria-label={texts.view.label}
+          data-district-ui
+          className={`pointer-events-auto absolute right-6 top-[7.5rem] flex rounded-full border border-white/12 bg-[#07141b]/80 p-1 text-[12px] font-semibold shadow-lg shadow-black/30 backdrop-blur-sm transition-opacity duration-700 sm:top-[8.5rem] lg:right-10 ${
+            ready ? "opacity-100" : "opacity-0"
+          }`}
+        >
+          {(["city", "district"] as const).map((v) => (
+            <button
+              key={v}
+              type="button"
+              aria-pressed={view === v}
+              onClick={() => setView(v)}
+              className={`rounded-full px-3 py-1 transition-colors ${view === v ? "bg-primary text-white" : "text-white/60 hover:text-white"}`}
+            >
+              {texts.view[v]}
+            </button>
+          ))}
+        </div>
+
         <div className="max-w-md">
           <h1 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">{texts.title}</h1>
           <p className="mt-2 text-sm leading-relaxed text-white/65 sm:mt-3 sm:text-base md:text-lg">{texts.subtitle}</p>

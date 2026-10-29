@@ -7,15 +7,15 @@
  * 시간(인트로 · 낮과 밤)은 홈 히어로와 같은 시뮬레이션, 하늘 · 조명도 히어로 것을 쓴다.
  */
 
-import { Canvas, useFrame } from "@react-three/fiber";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { PerformanceMonitor } from "@react-three/drei";
-import { useCallback, useMemo, useRef, useState, type ReactNode, type RefObject } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode, type RefObject } from "react";
 import * as THREE from "three";
 import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
 import { Link } from "@/i18n/navigation";
 import { Lighting, Sky } from "@/components/hero/Atmosphere";
-import { SimContext, createSim, reveal, stepSim, useSim } from "@/components/hero/heroSim";
-import { Appear, DistrictContext } from "./common";
+import { BEMS_FLOOR, SimContext, createSim, reveal, stepSim, useSim, type BemsKind, type BemsStage, type Sim } from "@/components/hero/heroSim";
+import { Appear, DistrictContext, TEAL } from "./common";
 import CityContext from "./CityContext";
 import Effects from "./Effects";
 import { CloudShadows, Pedestrians } from "./Life";
@@ -36,6 +36,7 @@ import {
   RoadLamps,
   SharedEss,
   SolarScopeLot,
+  TOWER,
   Traffic,
 } from "./Facilities";
 
@@ -55,12 +56,16 @@ const GROUND_SHADOWS: [number, number, number, number, number][] = [
 const DAY_PACE = 1.35;
 const NIGHT_PACE = 0.7;
 
+function driveSim(sim: Sim, delta: number, frozen: boolean) {
+  const pace = THREE.MathUtils.lerp(DAY_PACE, NIGHT_PACE, sim.dark);
+  stepSim(sim, frozen ? 0 : Math.min(delta, 0.1) * pace, frozen);
+  // 움직임 줄이기(시각 고정)에서는 경보 장면이 멈춘 채 남지 않게 뺀다
+  if (frozen) sim.bems = null;
+}
+
 function SimDriver({ frozen }: { frozen: boolean }) {
   const sim = useSim();
-  useFrame((_, delta) => {
-    const pace = THREE.MathUtils.lerp(DAY_PACE, NIGHT_PACE, sim.current.dark);
-    stepSim(sim.current, frozen ? 0 : Math.min(delta, 0.1) * pace, frozen);
-  });
+  useFrame((_, delta) => driveSim(sim.current, delta, frozen));
   return null;
 }
 
@@ -69,6 +74,11 @@ function SimDriver({ frozen }: { frozen: boolean }) {
 const CAMERA_DIR = new THREE.Vector3(0.45, 0.72, 0.85).normalize();
 const LOOK = new THREE.Vector3(0.6, 0, 0.6);
 const DIVE_SECONDS = 0.8;
+/** 도시 보기: 더 높이 · 멀리서 지역 뒤 도시까지 */
+const CITY_DIR = new THREE.Vector3(0.36, 1.05, 0.72).normalize();
+const CITY_LOOK = new THREE.Vector3(-6, 0, -9);
+const CITY_ZOOM = 2.3;
+const VIEW_SECONDS = 1.3;
 /** 캔버스 위에 투명하게 겹친 헤더(64) + 제품 탭(약 51) — 지역과 라벨은 그 아래에 놓는다 */
 const TOP_INSET = 116;
 
@@ -76,6 +86,15 @@ type ChipNodes = Record<string, HTMLElement | null>;
 type Placed = { node: HTMLElement; x: number; y: number; w: number; h: number };
 type Dive = { key: ProductKey };
 type Flight = { req: Dive; start: number; from: THREE.Vector3; to: THREE.Vector3; look: THREE.Vector3; done: boolean };
+export type DistrictView = "city" | "district";
+export type AlertState = { kind: BemsKind; stage: BemsStage } | null;
+export type AlertTexts = Record<BemsKind, Record<BemsStage, string>>;
+
+/** 경보 칩이 가리키는 곳: 빌딩 서쪽 벽 (피크는 빌딩 중간, 대기전력은 그 층) */
+const ALERT_ANCHOR: Record<BemsKind, [number, number, number]> = {
+  peak: [TOWER.x - TOWER.w / 2, TOWER.h * 0.55, TOWER.z + TOWER.d / 2],
+  night: [TOWER.x - TOWER.w / 2, ((BEMS_FLOOR + 0.5) * TOWER.h) / 12, TOWER.z + TOWER.d / 2],
+};
 
 /** 라벨끼리 겹치면 아래쪽 라벨을 밀어 내린다 (y 는 라벨 아래 끝) */
 function placeLabels(items: Placed[], maxX: number, opacity: number) {
@@ -102,6 +121,24 @@ function placeLabels(items: Placed[], maxX: number, opacity: number) {
   }
 }
 
+/** 경보 칩은 가리키는 곳의 왼쪽 위 — 화면 밖으로 나가면 안쪽으로 밀고, 지시선은 칩 아래 끝에서 그곳까지 */
+function placeAlert(root: HTMLElement, sx: number, sy: number, maxX: number, opacity: number) {
+  const chip = root.firstElementChild as HTMLElement | null;
+  const line = root.querySelector("polyline");
+  const dot = root.querySelector("circle");
+  if (!chip || !line || !dot) return;
+  const w = chip.offsetWidth;
+  const h = chip.offsetHeight;
+  const right = Math.min(Math.max(sx - 22, w + 8), maxX - 8);
+  const bottom = Math.max(sy - 20, TOP_INSET + h + 6);
+  chip.style.transform = `translate3d(${right - w}px, ${bottom - h}px, 0)`;
+  const fromX = Math.min(Math.max(sx, right - w + 14), right - 14);
+  line.setAttribute("points", `${fromX},${bottom} ${sx},${sy}`);
+  dot.setAttribute("cx", String(sx));
+  dot.setAttribute("cy", String(sy));
+  root.style.opacity = String(opacity);
+}
+
 const ease = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
 
 function setOffset(cam: THREE.PerspectiveCamera, w: number, h: number, wide: boolean, k: number) {
@@ -113,14 +150,40 @@ function setOffset(cam: THREE.PerspectiveCamera, w: number, h: number, wide: boo
 }
 
 // 지도처럼 누르는 화면이라 마우스를 따라 돌지 않는다 — 누르려는 시설이 움직이지 않게
-function Rig({ chips, dive, onArrive, children }: { chips: RefObject<ChipNodes>; dive: Dive | null; onArrive: (k: ProductKey) => void; children: ReactNode }) {
+function Rig({
+  chips,
+  alertRef,
+  onAlert,
+  dive,
+  view,
+  viewRef,
+  frozen,
+  onArrive,
+  children,
+}: {
+  chips: RefObject<ChipNodes>;
+  alertRef: RefObject<HTMLElement | null>;
+  onAlert: (a: AlertState) => void;
+  dive: Dive | null;
+  view: DistrictView;
+  viewRef: RefObject<number>;
+  frozen: boolean;
+  onArrive: (k: ProductKey) => void;
+  children: ReactNode;
+}) {
   const sim = useSim();
+  // 움직임 줄이기에서는 매 프레임 그리지 않으므로 보기를 바꾸면 한 번 다시 그린다
+  const invalidate = useThree((st) => st.invalidate);
+  useEffect(() => invalidate(), [view, invalidate]);
   const group = useRef<THREE.Group>(null);
   const lastSize = useRef("");
+  const lastAlert = useRef("");
   const flight = useRef<Flight | null>(null);
   const v = useMemo(() => new THREE.Vector3(), []);
+  const dir = useMemo(() => new THREE.Vector3(), []);
+  const look = useMemo(() => new THREE.Vector3(), []);
 
-  useFrame(({ camera, size, scene, clock }) => {
+  useFrame(({ camera, size, scene, clock }, delta) => {
     const cam = camera as THREE.PerspectiveCamera;
     const aspect = size.width / size.height;
     const wide = aspect >= 1.05;
@@ -146,18 +209,33 @@ function Rig({ chips, dive, onArrive, children }: { chips: RefObject<ChipNodes>;
         f.done = true;
         onArrive(f.req.key);
       }
-    } else if (key !== lastSize.current) {
-      lastSize.current = key;
-      // 넓은 화면은 헤더 아래 남는 높이에 지역이 들어가도록 조금 물러선다
-      const dist = wide ? 42 * Math.min(1.25, (0.92 * size.height) / Math.max(size.height - TOP_INSET, 1)) : 42 * Math.min(2.0, 1.1 / Math.max(aspect, 0.4));
-      cam.position.copy(CAMERA_DIR).multiplyScalar(dist).add(LOOK);
-      cam.lookAt(LOOK);
-      // 안개는 카메라 거리에 맞춘다 (세로 화면은 멀리서 보므로) — 지역 너머 도시는 어둠에 묻힌다
-      if (scene.fog instanceof THREE.Fog) {
-        scene.fog.near = dist + 12;
-        scene.fog.far = dist + 42;
+    } else {
+      // 도시 ↔ 지역 보기: 같은 방향에서 높이 · 거리만 바꿔 날아간다
+      const goal = view === "city" ? 1 : 0;
+      const moving = viewRef.current !== goal;
+      if (moving) {
+        const step = frozen ? 1 : Math.min(delta, 0.1) / VIEW_SECONDS;
+        viewRef.current = goal > viewRef.current ? Math.min(goal, viewRef.current + step) : Math.max(goal, viewRef.current - step);
+        // 움직임 줄이기: 한 번에 옮기고, 지역 테두리도 바뀐 값으로 한 번 더 그린다
+        if (frozen) invalidate();
       }
-      setOffset(cam, size.width, size.height, wide, 1);
+      if (moving || key !== lastSize.current) {
+        lastSize.current = key;
+        // 넓은 화면은 헤더 아래 남는 높이에 지역이 들어가도록 조금 물러선다
+        const base = wide ? 42 * Math.min(1.25, (0.92 * size.height) / Math.max(size.height - TOP_INSET, 1)) : 42 * Math.min(2.0, 1.1 / Math.max(aspect, 0.4));
+        const e = ease(viewRef.current);
+        const dist = THREE.MathUtils.lerp(base, base * CITY_ZOOM, e);
+        dir.copy(CAMERA_DIR).lerp(CITY_DIR, e).normalize();
+        look.copy(LOOK).lerp(CITY_LOOK, e);
+        cam.position.copy(dir).multiplyScalar(dist).add(look);
+        cam.lookAt(look);
+        // 안개는 카메라 거리에 맞춘다 (세로 화면은 멀리서 보므로) — 지역 너머 도시는 어둠에 묻힌다
+        if (scene.fog instanceof THREE.Fog) {
+          scene.fog.near = THREE.MathUtils.lerp(base + 12, dist + 10, e);
+          scene.fog.far = THREE.MathUtils.lerp(base + 42, dist + 95, e);
+        }
+        setOffset(cam, size.width, size.height, wide, 1);
+      }
     }
     const g = group.current;
     if (!g) return;
@@ -172,16 +250,104 @@ function Rig({ chips, dive, onArrive, children }: { chips: RefObject<ChipNodes>;
       v.set(x, y, z).applyMatrix4(g.matrixWorld).project(cam);
       items.push({ node, x: ((v.x + 1) / 2) * size.width, y: ((1 - v.y) / 2) * size.height, w: node.offsetWidth, h: node.offsetHeight });
     }
-    placeLabels(items, size.width, reveal(sim.current.intro, 0.82, 0.18) * fade);
+    // 도시 보기에서는 시설 라벨 · 경보 칩을 감춘다
+    const shown = reveal(sim.current.intro, 0.82, 0.18) * fade * Math.max(0, 1 - viewRef.current * 2.5);
+    placeLabels(items, size.width, shown);
+
+    // 빌딩 경보 칩: 단계가 바뀔 때만 React 로 알리고, 위치는 매 프레임 직접 옮긴다
+    const b = sim.current.bems;
+    const akey = b ? `${b.kind}:${b.stage}` : "";
+    if (akey !== lastAlert.current) {
+      lastAlert.current = akey;
+      onAlert(b ? { kind: b.kind, stage: b.stage } : null);
+    }
+    const an = alertRef.current;
+    if (an && b) {
+      const [x, y, z] = ALERT_ANCHOR[b.kind];
+      v.set(x, y, z).applyMatrix4(g.matrixWorld).project(cam);
+      placeAlert(an, ((v.x + 1) / 2) * size.width, ((1 - v.y) / 2) * size.height, size.width, shown);
+    }
   });
 
   return <group ref={group}>{children}</group>;
 }
 
+/* ── 도시 보기에서 지역 테두리 (누르면 지역 보기로) ───────────────── */
+
+function tickOutline(group: THREE.Group, t: number, time: number) {
+  group.visible = t > 0.01;
+  group.children.forEach((c, i) => {
+    const m = (c as THREE.Mesh).material as THREE.MeshBasicMaterial;
+    m.opacity = t * (i === 0 ? 0.1 : 0.75 + 0.25 * Math.sin(time * 3));
+  });
+}
+
+function PlateOutline({ viewRef, onPick }: { viewRef: RefObject<number>; onPick: () => void }) {
+  const ref = useRef<THREE.Group>(null);
+  useFrame(({ clock }) => {
+    if (ref.current) tickOutline(ref.current, viewRef.current, clock.elapsedTime);
+  });
+  const W = PLATE.w + 0.8;
+  const D = PLATE.d + 0.8;
+  const bars: [number, number, number, number][] = [
+    [0, -D / 2, W, 0.28],
+    [0, D / 2, W, 0.28],
+    [-W / 2, 0, 0.28, D],
+    [W / 2, 0, 0.28, D],
+  ];
+  const mat = { transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, toneMapped: false, color: TEAL } as const;
+  return (
+    <group ref={ref} visible={false}>
+      <mesh
+        position={[0, 0.08, 0]}
+        rotation={[-Math.PI / 2, 0, 0]}
+        onClick={(e) => {
+          if (viewRef.current < 0.5) return;
+          e.stopPropagation();
+          onPick();
+        }}
+        onPointerOver={() => viewRef.current > 0.5 && (document.body.style.cursor = "pointer")}
+        onPointerOut={() => (document.body.style.cursor = "")}
+      >
+        <planeGeometry args={[W, D]} />
+        <meshBasicMaterial {...mat} />
+      </mesh>
+      {bars.map(([x, z, w, d], i) => (
+        <mesh key={i} position={[x, 0.09, z]} rotation={[-Math.PI / 2, 0, 0]}>
+          <planeGeometry args={[w, d]} />
+          <meshBasicMaterial {...mat} />
+        </mesh>
+      ))}
+    </group>
+  );
+}
+
 /* ── 장면 ─────────────────────────────────────────────────────────── */
 
 // 땅 → 큰 건물 → 설비 · 공원 → 전선 · 차 순으로 지어진다
-function Scene({ shadows, chips, frozen, dive, onArrive }: { shadows: boolean; chips: RefObject<ChipNodes>; frozen: boolean; dive: Dive | null; onArrive: (k: ProductKey) => void }) {
+function Scene({
+  shadows,
+  chips,
+  alertRef,
+  onAlert,
+  frozen,
+  dive,
+  view,
+  viewRef,
+  onView,
+  onArrive,
+}: {
+  shadows: boolean;
+  chips: RefObject<ChipNodes>;
+  alertRef: RefObject<HTMLElement | null>;
+  onAlert: (a: AlertState) => void;
+  frozen: boolean;
+  dive: Dive | null;
+  view: DistrictView;
+  viewRef: RefObject<number>;
+  onView: (v: DistrictView) => void;
+  onArrive: (k: ProductKey) => void;
+}) {
   return (
     <>
       <SimDriver frozen={frozen} />
@@ -189,7 +355,7 @@ function Scene({ shadows, chips, frozen, dive, onArrive }: { shadows: boolean; c
       <fog attach="fog" args={[BG, 52, 100]} />
       <Sky radius={220} />
       <Lighting shadows={shadows} mapSize={2048} bounds={16} reach={30} />
-      <Rig chips={chips} dive={dive} onArrive={onArrive}>
+      <Rig chips={chips} alertRef={alertRef} onAlert={onAlert} dive={dive} view={view} viewRef={viewRef} frozen={frozen} onArrive={onArrive}>
         <Appear at={0} dur={0.2}>
           <CityContext />
         </Appear>
@@ -239,12 +405,32 @@ function Scene({ shadows, chips, frozen, dive, onArrive }: { shadows: boolean; c
         <EnergyFlow />
         <CloudShadows w={PLATE.w} d={PLATE.d} />
         <Highlight />
+        <PlateOutline viewRef={viewRef} onPick={() => onView("district")} />
       </Rig>
     </>
   );
 }
 
 export type DistrictProduct = { name: string; place: string };
+
+function AlertIcon({ stage }: { stage: BemsStage }) {
+  if (stage === "resolved")
+    return (
+      <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">
+        <circle cx="6" cy="6" r="6" fill="#49B6CA" />
+        <path d="M3.4 6.2l1.8 1.8 3.4-3.6" stroke="white" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    );
+  const color = stage === "alert" ? "#ff4b4b" : "#F5A54A";
+  return (
+    <span className="relative flex h-3 w-3 items-center justify-center" aria-hidden="true">
+      <span className="hero-beacon absolute inset-0 rounded-full" style={{ backgroundColor: color }} />
+      <span className="relative flex h-3 w-3 items-center justify-center rounded-full text-[9px] font-bold leading-none" style={{ backgroundColor: color }}>
+        !
+      </span>
+    </span>
+  );
+}
 
 export default function DistrictScene({
   products,
@@ -253,6 +439,9 @@ export default function DistrictScene({
   onGo,
   onReady,
   running,
+  view,
+  onView,
+  alertTexts,
   overlay,
 }: {
   products: Record<ProductKey, DistrictProduct>;
@@ -261,6 +450,9 @@ export default function DistrictScene({
   onGo: (k: ProductKey) => void;
   onReady?: () => void;
   running: boolean;
+  view: DistrictView;
+  onView: (v: DistrictView) => void;
+  alertTexts: AlertTexts;
   /** 캔버스 위 · 라벨 아래에 깔 장식(그라데이션) */
   overlay?: ReactNode;
 }) {
@@ -272,6 +464,9 @@ export default function DistrictScene({
   const [dive, setDive] = useState<Dive | null>(null);
   const sim = useRef(createSim(frozen));
   const chips = useRef<ChipNodes>({});
+  const alertRef = useRef<HTMLDivElement>(null);
+  const [alert, setAlert] = useState<AlertState>(null);
+  const viewRef = useRef(view === "city" ? 1 : 0);
 
   // 움직임 줄이기에서는 다가가지 않고 바로 이동
   const startDive = useCallback(
@@ -315,7 +510,7 @@ export default function DistrictScene({
               }
             }}
           />
-          <Scene shadows={shadows} chips={chips} frozen={frozen} dive={dive} onArrive={onGo} />
+          <Scene shadows={shadows} chips={chips} alertRef={alertRef} onAlert={setAlert} frozen={frozen} dive={dive} view={view} viewRef={viewRef} onView={onView} onArrive={onGo} />
           {fx && <Effects />}
         </Canvas>
       </SimContext.Provider>
@@ -355,6 +550,23 @@ export default function DistrictScene({
           </svg>
         </Link>
       ))}
+      {/* 빌딩 경보 칩 — 빌딩 서쪽 벽을 지시선으로 가리킨다 */}
+      {alert && (
+        <div ref={alertRef} aria-live="polite" className="pointer-events-none absolute inset-0 opacity-0">
+          <span
+            className={`absolute left-0 top-0 flex items-center gap-1.5 whitespace-nowrap rounded-full border px-2.5 py-1 text-[11px] font-semibold text-white shadow-lg shadow-black/40 backdrop-blur-sm sm:text-[12px] ${
+              alert.stage === "alert" ? "border-[#ff4b4b]/70 bg-[#2b0e12]/85" : alert.stage === "ai" ? "border-[#F5A54A]/70 bg-[#2b1c0b]/85" : "border-primary/70 bg-[#0b2530]/85"
+            }`}
+          >
+            <AlertIcon stage={alert.stage} />
+            {alertTexts[alert.kind][alert.stage]}
+          </span>
+          <svg className="absolute inset-0 h-full w-full overflow-visible" aria-hidden="true">
+            <polyline fill="none" stroke="rgba(255,255,255,0.6)" strokeWidth="1" />
+            <circle r="2" fill="white" />
+          </svg>
+        </div>
+      )}
     </DistrictContext.Provider>
   );
 }
