@@ -2,6 +2,7 @@
 
 import { useLocale, useTranslations } from "next-intl";
 import { localizeOrg } from "@/lib/orgNames";
+import { localizeProjectName } from "@/lib/projectNames";
 
 export interface TrackRecordItem {
   year: number;
@@ -60,7 +61,7 @@ export function ProductTrackRecord({
                       <span className="inline-block shrink-0 min-w-16 rounded border border-border px-2 py-0.5 text-center text-sm text-muted">
                         {t(`trackRecord.types.${TYPE_KEYS[item.type]}`)}
                       </span>
-                      <span className="leading-relaxed">{item.name}</span>
+                      <span className="leading-relaxed">{localizeProjectName(item.name, locale)}</span>
                     </div>
                     {(item.period || item.department || item.org) && (
                       <div className="mt-1 ml-18 flex flex-wrap gap-x-4 text-sm text-muted">

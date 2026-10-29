@@ -114,6 +114,7 @@
     "title": "Historique R&D",
     "subtitle": "Développement de l'expertise technique à travers des projets R&D financés par l'État",
     "clickHint": "Cliquez sur le nom d'un projet pour en voir les détails.",
+    "goToSystem": "Accéder au système",
     "inProgress": "En cours",
     "completed": "Terminé",
     "count": "projets",
@@ -127,6 +128,7 @@
     "title": "Historique de développement de systèmes",
     "subtitleTemplate": "{count} projets de développement de systèmes en collaboration avec {partners} organisations partenaires",
     "clickHint": "Cliquez sur les éléments avec ▸ pour voir les détails",
+    "goToSystem": "Accéder au système",
     "tableHeaders": { "client": "Client (Organisation)", "period": "Période", "content": "Périmètre des travaux" },
     "projects": [
       { "client": "-", "period": "2026.09~2026.11", "title": "Développement de la plateforme SLM Hull Care (gestion de navires)", "detail": { "description": "Plateforme de gestion des opérations de nettoyage de coques de navires : tableau de bord des opérations, visualisation de l'avancement du nettoyage par zone de coque, supervision en temps réel des robots de nettoyage, gestion des résultats et justificatifs, et génération de rapports.", "images": ["https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/projects/SLM_1.png", "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/images/projects/SLM_2.png"] }},
