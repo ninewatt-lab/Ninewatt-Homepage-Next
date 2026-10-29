@@ -995,6 +995,23 @@
   "district": {
     "hint": "施設を選んで製品を見てみましょう",
     "more": "詳しく見る",
+    "view": {
+      "label": "表示範囲",
+      "city": "都市",
+      "district": "地区"
+    },
+    "alert": {
+      "peak": {
+        "alert": "ピーク電力が接近",
+        "ai": "ESS放電で対応",
+        "resolved": "ピーク削減完了"
+      },
+      "night": {
+        "alert": "夜間待機電力が増加",
+        "ai": "AIが原因を分析",
+        "resolved": "待機電力の対応完了"
+      }
+    },
     "place": {
       "bems": "オフィスビル",
       "peakEss": "ビルのESS",

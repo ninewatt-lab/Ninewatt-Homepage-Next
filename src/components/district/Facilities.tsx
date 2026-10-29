@@ -14,14 +14,14 @@
 import { useFrame } from "@react-three/fiber";
 import { Suspense, useMemo, useRef } from "react";
 import * as THREE from "three";
-import { seeded, useSim } from "@/components/hero/heroSim";
+import { BEMS_FLOOR, seeded, useSim, type BemsEvent } from "@/components/hero/heroSim";
 import { useModelGeometry, useModelMaterial } from "@/components/hero/models";
 import { fenceTexture, pavingTexture } from "@/components/hero/textures";
 import { AMBER, Building, Instances, PvPanels, TEAL, facadeTextures, iconTexture, m4, poolTexture, useDistrict, useFacility } from "./common";
 import { FACILITY, PLATE } from "./districtLayout";
 import { BuildingModel, CAR_COLORS, Props } from "./props";
 import { ChargingCables, SurveyDrone, createSwayMaterial, tickSway } from "./Life";
-import { CITY } from "./CityContext";
+import { CITY, GROUND_Y } from "./CityContext";
 import { ContactShadows, grassTexture } from "./Streetscape";
 
 /* ── 바닥 · 도로 ──────────────────────────────────────────────────── */
@@ -32,7 +32,8 @@ export function Ground() {
     <group>
       <mesh position={[0, -0.1, 0]} receiveShadow>
         <boxGeometry args={[PLATE.w, 0.2, PLATE.d]} />
-        <meshStandardMaterial map={paving} roughness={0.95} />
+        {/* 둘레 도시와 밝기를 맞춰 따로 떠 보이지 않게 */}
+        <meshStandardMaterial map={paving} color="#aab4b6" roughness={0.95} />
       </mesh>
       <mesh position={[0, -0.6, 0]}>
         <boxGeometry args={[PLATE.w + 0.4, 0.8, PLATE.d + 0.4]} />
@@ -199,10 +200,87 @@ export function OfficeTower() {
           <meshBasicMaterial color="#ff4a3d" toneMapped={false} />
         </mesh>
         <BemsScan />
+        <TowerAlert />
       </group>
       <group {...pvTarget}>
         <PvPanels matrices={roofPv} />
       </group>
+    </>
+  );
+}
+
+/* ── 빌딩 경보 장면 (홈 히어로와 같은 시뮬레이션) ───────────────────
+ * 낮: 피크 전력 임박 → 빌딩 ESS 방전으로 대응 → 피크 저감
+ * 밤: 한 층 대기전력 증가 → AI 원인 분석 → 조치 완료
+ * 경보는 빨강, 대응 중엔 주황으로 바뀌고, 해결되면 청록으로 잠깐 빛나다 사라진다. 문구는 DistrictScene 의 DOM 칩 */
+
+export const ALERT_RED = new THREE.Color("#ff4b4b");
+const ALERT_WORK = new THREE.Color("#F5A54A");
+
+/** 경보 단계별 색 · 세기 (없으면 0) */
+export function alertLook(e: BemsEvent | null, t: number, out: THREE.Color) {
+  if (!e) return 0;
+  if (e.stage === "alert") {
+    out.copy(ALERT_RED);
+    return 0.65 + 0.35 * Math.sin(t * 6);
+  }
+  if (e.stage === "ai") {
+    out.copy(ALERT_RED).lerp(ALERT_WORK, Math.min(1, e.p * 2));
+    return 0.6;
+  }
+  out.copy(TEAL);
+  return 0.8 * (1 - e.p);
+}
+
+const FLOOR_H = TOWER.h / TOWER_FLOORS;
+
+function tickTowerAlert(shell: THREE.Mesh, edges: THREE.LineSegments, ground: THREE.Mesh, e: BemsEvent | null, t: number, tmp: THREE.Color) {
+  const k = alertLook(e, t, tmp);
+  shell.visible = edges.visible = ground.visible = k > 0.001;
+  if (!e || k <= 0.001) return;
+  // 피크는 빌딩 전체, 대기전력은 그 층만
+  const floor = e.kind === "night";
+  const h = floor ? FLOOR_H : TOWER.h;
+  const y = floor ? (BEMS_FLOOR + 0.5) * FLOOR_H : TOWER.h / 2;
+  for (const o of [shell, edges]) {
+    o.position.set(TOWER.x, y, TOWER.z);
+    o.scale.set(TOWER.w + 0.12, h + (floor ? 0.04 : 0.1), TOWER.d + 0.12);
+  }
+  const sm = shell.material as THREE.MeshBasicMaterial;
+  sm.color.copy(tmp);
+  sm.opacity = k * (floor ? 0.5 : 0.22);
+  const em = edges.material as THREE.LineBasicMaterial;
+  em.color.copy(tmp);
+  em.opacity = k;
+  const gm = ground.material as THREE.MeshBasicMaterial;
+  gm.color.copy(tmp);
+  gm.opacity = k * (floor ? 0.4 : 0.85);
+}
+
+function TowerAlert() {
+  const sim = useSim();
+  const shell = useRef<THREE.Mesh>(null);
+  const edges = useRef<THREE.LineSegments>(null);
+  const ground = useRef<THREE.Mesh>(null);
+  const tex = useMemo(() => glowTexture(), []);
+  const edgeGeo = useMemo(() => new THREE.EdgesGeometry(new THREE.BoxGeometry(1, 1, 1)), []);
+  const tmp = useMemo(() => new THREE.Color(), []);
+  useFrame(({ clock }) => {
+    if (shell.current && edges.current && ground.current) tickTowerAlert(shell.current, edges.current, ground.current, sim.current.bems, clock.elapsedTime, tmp);
+  });
+  return (
+    <>
+      <mesh ref={shell} visible={false} renderOrder={2}>
+        <boxGeometry args={[1, 1, 1]} />
+        <meshBasicMaterial transparent blending={THREE.AdditiveBlending} depthWrite={false} toneMapped={false} />
+      </mesh>
+      <lineSegments ref={edges} geometry={edgeGeo} visible={false} renderOrder={2}>
+        <lineBasicMaterial transparent depthWrite={false} toneMapped={false} />
+      </lineSegments>
+      <mesh ref={ground} position={[TOWER.x, 0.065, TOWER.z]} rotation={[-Math.PI / 2, 0, 0]} visible={false} renderOrder={2}>
+        <planeGeometry args={[TOWER.w + 2.2, TOWER.d + 2.2]} />
+        <meshBasicMaterial map={tex} transparent blending={THREE.AdditiveBlending} depthWrite={false} toneMapped={false} />
+      </mesh>
     </>
   );
 }
@@ -477,9 +555,10 @@ export function EnergyFlow() {
     const s = sim.current;
     let i = 0;
     paths.forEach((path, pi) => {
-      // 피크저감 ESS 는 시뮬레이션에서 방전 중일 때만 흐른다
-      const amount = path.peak ? Math.min(1, Math.max(0, s.essKw) / 20) : 1;
-      const speed = path.peak ? 0.22 : 0.06;
+      // 피크저감 ESS 는 시뮬레이션에서 방전 중일 때만 흐른다 — 피크 경보에 대응하는 동안은 힘껏
+      const responding = path.peak && s.bems?.kind === "peak" && s.bems.stage !== "alert";
+      const amount = path.peak ? (responding ? 1 : Math.min(1, Math.max(0, s.essKw) / 20)) : 1;
+      const speed = path.peak ? (responding ? 0.4 : 0.22) : 0.06;
       for (let k = 0; k < PER; k++) {
         const t = (clock.elapsedTime * speed + k / PER + pi * 0.13) % 1;
         const d = t * path.total;
@@ -632,6 +711,19 @@ const TREE_SPOTS: [number, number, number][] = [
   [-5.6, 1.7, 0.85],
   [-11.6, 6.6, 0.9],
   [-7.4, 3.2, 1.2],
+  [-2.4, 5.8, 0.85],
+  [-9.9, 7.75, 0.9],
+  [-11.7, 5.3, 0.8],
+  [-4.3, 1.65, 0.8],
+];
+// 산책로 고리(타원 반지름 3.07 × 2.27) 바깥에서 안쪽을 보는 벤치 [x, z] — 옆에 휴지통
+const RING = { x: -7, z: 4.8, rx: 3.07, rz: 2.27 };
+const RING_BENCHES: number[] = [20, 90, 160, 200, 270, 330].map((deg) => (deg * Math.PI) / 180);
+// 잔디밭 돗자리 [x, z, 돌림, 색]
+const PICNIC: [number, number, number, string][] = [
+  [-10.1, 6.2, 0.4, "#d9735f"],
+  [-4.0, 2.25, -0.3, "#5f9fd9"],
+  [-9.4, 1.95, 1.1, "#e3c35a"],
 ];
 
 function brokenLevel(t: number) {
@@ -648,7 +740,7 @@ function TreeModels() {
   return (
     <>
       {TREE_SPOTS.map(([x, z, k], i) => (
-        <mesh key={i} geometry={i % 3 === 1 ? b : a} material={material} position={[x, 0.03, z]} scale={0.16 * k} rotation={[0, i * 1.7, 0]} castShadow receiveShadow />
+        <mesh key={i} geometry={i % 3 === 1 ? b : a} material={material} position={[x, 0.03, z]} scale={0.22 * k} rotation={[0, i * 1.7, 0]} castShadow receiveShadow />
       ))}
     </>
   );
@@ -660,7 +752,43 @@ export function Park() {
   const qr = useRef<THREE.InstancedMesh>(null);
   const ping = useRef<THREE.Mesh>(null);
   const stage = useRef<"alert" | "ok" | null>(null);
-  const benches = useMemo(() => [m4(-9.2, 0.04, 3.3, 0.4, 0.24, 0.24, 0.24), m4(-6.4, 0.04, 6.2, Math.PI - 0.3, 0.24, 0.24, 0.24), m4(-4.6, 0.04, 3.6, 1.1, 0.24, 0.24, 0.24)], []);
+  const benches = useMemo(() => {
+    const list = [m4(-9.2, 0.04, 3.3, 0.4, 0.24, 0.24, 0.24), m4(-6.4, 0.04, 6.2, Math.PI - 0.3, 0.24, 0.24, 0.24), m4(-4.6, 0.04, 3.6, 1.1, 0.24, 0.24, 0.24)];
+    for (const a of RING_BENCHES) {
+      const x = RING.x + Math.cos(a) * (RING.rx + 0.42);
+      const z = RING.z + Math.sin(a) * (RING.rz + 0.38);
+      list.push(m4(x, 0.04, z, Math.atan2(RING.x - x, RING.z - z), 0.24, 0.24, 0.24));
+    }
+    return list;
+  }, []);
+  // 벤치 옆 휴지통 · 공원 둘레 덤불
+  const bins = useMemo(
+    () =>
+      RING_BENCHES.map((a) => {
+        const t = a + 0.16;
+        return m4(RING.x + Math.cos(t) * (RING.rx + 0.42), 0.08, RING.z + Math.sin(t) * (RING.rz + 0.38));
+      }),
+    [],
+  );
+  const bushes = useMemo(() => {
+    const list: [THREE.Matrix4, THREE.Color][] = [];
+    const greens = ["#3f6a4c", "#4d7a52", "#365c43"].map((c) => new THREE.Color(c));
+    const rnd = seeded(11);
+    // 생울타리 안쪽 · 서쪽 · 남쪽 가장자리를 따라 덤불 무리
+    const edge: [number, number][] = [];
+    for (let x = -11.6; x < -2.6; x += 0.55) edge.push([x, PARK.z + PARK.d / 2 - 0.3], [x + 0.2, PARK.z - PARK.d / 2 + 0.38]);
+    for (let z = 1.8; z < 7.9; z += 0.6) edge.push([PARK.x - PARK.w / 2 + 0.3, z]);
+    for (const [x, z] of edge) {
+      if (rnd() < 0.45) continue;
+      // 입구 길 · 화장실 · 놀이터 자리는 비운다
+      if (Math.abs(x + 8) < 0.5 || (x < -10.3 && z > 7) || (x > -5 && x < -3.8 && z > 6)) continue;
+      const r = 0.1 + rnd() * 0.08;
+      list.push([m4(x + (rnd() - 0.5) * 0.2, 0.04 + r * 0.6, z, rnd() * 3, r, r * 0.75, r), greens[Math.floor(rnd() * greens.length)]]);
+    }
+    return list;
+  }, []);
+  // 입구 길: 북쪽 · 동쪽 생울타리 틈에서 산책로 고리까지
+  const entrances = useMemo(() => [m4(-8.0, 0.046, 1.98, 0, 0.5, 1, 1.36), m4(-3.0, 0.046, 4.5, 0, 2.0, 1, 0.5)], []);
   const restroom = useMemo(() => [m4(-11, 0.04, 7.6, 0, 0.11, 0.11, 0.11)], []);
   const grass = useMemo(() => grassTexture([PARK.w / 1.6, PARK.d / 1.6]), []);
   const hedges = useMemo(() => {
@@ -754,6 +882,39 @@ export function Park() {
       <Props node="Restroom" matrices={restroom} roughness={0.75} />
       <Props node="Playground" matrices={playground} roughness={0.55} />
       <Props node="Bench" matrices={benches} roughness={0.7} />
+      <Instances matrices={bins}>
+        <cylinderGeometry args={[0.035, 0.03, 0.09, 10]} />
+        <meshStandardMaterial color="#3e4a4f" metalness={0.4} roughness={0.5} />
+      </Instances>
+      <Instances matrices={entrances} cast={false}>
+        <boxGeometry args={[1, 0.008, 1]} />
+        <meshStandardMaterial color="#c7bfae" roughness={0.95} />
+      </Instances>
+      {/* 잔디밭 돗자리 */}
+      {PICNIC.map(([x, z, r, c], i) => (
+        <mesh key={i} position={[x, 0.046, z]} rotation={[0, r, 0]} receiveShadow>
+          <boxGeometry args={[0.34, 0.006, 0.26]} />
+          <meshStandardMaterial color={c} roughness={0.9} />
+        </mesh>
+      ))}
+      <instancedMesh
+        ref={(mesh) => {
+          if (!mesh) return;
+          bushes.forEach(([m, c], i) => {
+            mesh.setMatrixAt(i, m);
+            mesh.setColorAt(i, c);
+          });
+          mesh.instanceMatrix.needsUpdate = true;
+          if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true;
+          mesh.computeBoundingSphere();
+        }}
+        args={[undefined, undefined, bushes.length]}
+        castShadow
+        receiveShadow
+      >
+        <icosahedronGeometry args={[1, 1]} />
+        <meshStandardMaterial flatShading roughness={0.95} />
+      </instancedMesh>
       <Lamps spots={PARK_LAMPS} broken={BROKEN_LAMP} />
       <instancedMesh
         ref={(mesh) => {
@@ -1109,8 +1270,8 @@ export function Traffic() {
       let u = ((clock.elapsedTime * Math.abs(c.speed)) / span + c.offset) % 1;
       if (c.speed < 0) u = 1 - u;
       const pos = from + u * span;
-      // 지역 판 위(도로 면 0.03)와 둘레 도시 바닥(-0.04)의 높이가 다르다
-      const y = Math.abs(pos) < (c.axis === "x" ? PLATE.w : PLATE.d) / 2 ? 0.03 : -0.04;
+      // 지역 판 위(도로 면 0.03)와 둘레 도시 바닥의 높이가 다르다
+      const y = Math.abs(pos) < (c.axis === "x" ? PLATE.w : PLATE.d) / 2 ? 0.03 : GROUND_Y;
       if (c.axis === "x") tmp.p.set(pos, y, c.lane);
       else tmp.p.set(c.lane, y, pos);
       // 차 모델은 +x 가 앞 — 달리는 방향으로 돌린다

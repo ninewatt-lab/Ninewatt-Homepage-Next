@@ -865,6 +865,23 @@
   "district": {
     "hint": "Select a facility to explore its product",
     "more": "Learn more",
+    "view": {
+      "label": "View",
+      "city": "City",
+      "district": "District"
+    },
+    "alert": {
+      "peak": {
+        "alert": "Peak demand approaching",
+        "ai": "ESS discharging",
+        "resolved": "Peak shaved"
+      },
+      "night": {
+        "alert": "Standby power rising at night",
+        "ai": "AI analyzing the cause",
+        "resolved": "Standby power fixed"
+      }
+    },
     "place": {
       "bems": "Office building",
       "peakEss": "Building ESS",
