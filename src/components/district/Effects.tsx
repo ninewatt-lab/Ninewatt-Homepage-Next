@@ -39,6 +39,9 @@ const FinalShader = {
       c.rgb = ACESFilmicToneMapping(c.rgb);
       c = sRGBTransferOETF(c);
       float l = dot(c.rgb, vec3(0.2126, 0.7152, 0.0722));
+      // 밤: 어두운 면은 채도를 빼고 푸른 남색으로 (단색 야경) — 창 · 가로등 · 차 불빛 같은 밝은 점은 그대로
+      float night = uDark * (1.0 - smoothstep(0.35, 0.8, l));
+      c.rgb = mix(c.rgb, vec3(l) * vec3(0.84, 0.95, 1.2), night * 0.6);
       // 어두운 곳은 살짝 청록, 밝은 곳은 해 질 녘에 따뜻하게
       vec3 shadowTint = mix(vec3(1.0), vec3(0.94, 1.0, 1.04), (1.0 - l) * 0.6);
       vec3 lightTint = mix(vec3(1.0), vec3(1.06, 1.0, 0.92), l * uWarm);

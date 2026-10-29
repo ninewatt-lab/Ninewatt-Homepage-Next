@@ -14,13 +14,14 @@
 import { useFrame } from "@react-three/fiber";
 import { Suspense, useMemo, useRef } from "react";
 import * as THREE from "three";
-import { useSim } from "@/components/hero/heroSim";
+import { seeded, useSim } from "@/components/hero/heroSim";
 import { useModelGeometry, useModelMaterial } from "@/components/hero/models";
 import { fenceTexture, pavingTexture } from "@/components/hero/textures";
 import { AMBER, Building, Instances, PvPanels, TEAL, facadeTextures, iconTexture, m4, poolTexture, useDistrict, useFacility } from "./common";
 import { FACILITY, PLATE } from "./districtLayout";
 import { BuildingModel, CAR_COLORS, Props } from "./props";
 import { ChargingCables, SurveyDrone, createSwayMaterial, tickSway } from "./Life";
+import { CITY } from "./CityContext";
 import { ContactShadows, grassTexture } from "./Streetscape";
 
 /* ── 바닥 · 도로 ──────────────────────────────────────────────────── */
@@ -1057,49 +1058,83 @@ export function Fillers() {
   );
 }
 
-/* ── 차 (밤에는 전조등) ───────────────────────────────────────────── */
+/* ── 차 (밤에는 전조등 · 미등) — 큰길을 따라 둘레 도시까지 달린다 ───── */
+
+const CAR_HEAD = new THREE.Color("#fff3da");
+const CAR_TAIL = new THREE.Color("#ff3a2c");
+const CAR_HALF = 0.29; // 차 길이(4.4 m × 0.13)의 반
+
+type Lane = { axis: "x" | "z"; lane: number; speed: number; count: number };
+const LANES: Lane[] = [
+  { axis: "x", lane: -0.28, speed: 1.1, count: 7 },
+  { axis: "x", lane: 0.28, speed: -0.9, count: 7 },
+  { axis: "z", lane: -0.72, speed: 0.8, count: 5 },
+  { axis: "z", lane: -1.28, speed: -0.8, count: 5 },
+];
+
+function tickTrafficLights(head: THREE.MeshBasicMaterial, tail: THREE.MeshBasicMaterial, dark: number) {
+  head.color.copy(CAR_HEAD).multiplyScalar(0.15 + dark * 2.0);
+  tail.color.copy(CAR_TAIL).multiplyScalar(0.1 + dark * 1.5);
+}
 
 export function Traffic() {
   const sim = useSim();
   const ref = useRef<THREE.InstancedMesh | null>(null);
   const lights = useRef<THREE.InstancedMesh>(null);
-  const cars = useMemo(
-    () => [
-      { axis: "x", lane: -0.28, speed: 1.1, offset: 0 },
-      { axis: "x", lane: -0.28, speed: 1.1, offset: 0.45 },
-      { axis: "x", lane: 0.28, speed: -0.9, offset: 0.2 },
-      { axis: "x", lane: 0.28, speed: -0.9, offset: 0.75 },
-      { axis: "z", lane: -0.72, speed: 0.8, offset: 0.1 },
-      { axis: "z", lane: -1.28, speed: -0.8, offset: 0.6 },
-    ],
+  const heads = useRef<THREE.InstancedMesh>(null);
+  const tails = useRef<THREE.InstancedMesh>(null);
+  const cars = useMemo(() => {
+    const rand = seeded(13);
+    return LANES.flatMap((l) => Array.from({ length: l.count }, (_, k) => ({ ...l, offset: (k + rand() * 0.6) / l.count })));
+  }, []);
+  const mats = useMemo(
+    () => ({
+      head: new THREE.MeshBasicMaterial({ color: CAR_HEAD.clone(), toneMapped: false }),
+      tail: new THREE.MeshBasicMaterial({ color: CAR_TAIL.clone(), toneMapped: false }),
+    }),
     [],
   );
-  const tmp = useMemo(() => ({ m: new THREE.Matrix4(), p: new THREE.Vector3(), q: new THREE.Quaternion(), s: new THREE.Vector3(1, 1, 1), e: new THREE.Euler(), f: new THREE.Vector3() }), []);
+  const tmp = useMemo(() => ({ m: new THREE.Matrix4(), p: new THREE.Vector3(), q: new THREE.Quaternion(), s: new THREE.Vector3(1, 1, 1), e: new THREE.Euler(), f: new THREE.Vector3(), d: new THREE.Vector3() }), []);
   useFrame(({ clock }) => {
     const mesh = ref.current;
     const head = lights.current;
-    if (!mesh || !head) return;
+    const hd = heads.current;
+    const tl = tails.current;
+    if (!mesh || !head || !hd || !tl) return;
     const glow = sim.current.dark;
+    tickTrafficLights(mats.head, mats.tail, glow);
     cars.forEach((c, i) => {
-      const span = c.axis === "x" ? PLATE.w : PLATE.d;
+      const [from, to] = c.axis === "x" ? [CITY.x0, CITY.x1] : [CITY.z0, CITY.z1];
+      const span = to - from;
       let u = ((clock.elapsedTime * Math.abs(c.speed)) / span + c.offset) % 1;
       if (c.speed < 0) u = 1 - u;
-      const pos = -span / 2 + 0.3 + u * (span - 0.6);
-      if (c.axis === "x") tmp.p.set(pos, 0.03, c.lane);
-      else tmp.p.set(c.lane, 0.03, pos);
+      const pos = from + u * span;
+      // 지역 판 위(도로 면 0.03)와 둘레 도시 바닥(-0.04)의 높이가 다르다
+      const y = Math.abs(pos) < (c.axis === "x" ? PLATE.w : PLATE.d) / 2 ? 0.03 : -0.04;
+      if (c.axis === "x") tmp.p.set(pos, y, c.lane);
+      else tmp.p.set(c.lane, y, pos);
       // 차 모델은 +x 가 앞 — 달리는 방향으로 돌린다
       const forward = c.speed > 0;
       tmp.q.setFromEuler(tmp.e.set(0, c.axis === "x" ? (forward ? 0 : Math.PI) : forward ? -Math.PI / 2 : Math.PI / 2, 0));
       tmp.s.setScalar(CAR_SCALE);
       mesh.setMatrixAt(i, tmp.m.compose(tmp.p, tmp.q, tmp.s));
-      // 진행 방향 앞쪽에 전조등 빛
+      // 진행 방향 앞쪽 바닥에 전조등 빛, 차 앞뒤에 등
       const dir = Math.sign(c.speed);
-      tmp.f.copy(tmp.p).add(c.axis === "x" ? new THREE.Vector3(dir * 0.6, 0.005, 0) : new THREE.Vector3(0, 0.005, dir * 0.6));
+      if (c.axis === "x") tmp.d.set(dir, 0, 0);
+      else tmp.d.set(0, 0, dir);
+      tmp.f.copy(tmp.p).addScaledVector(tmp.d, 0.6).setY(y + 0.005);
       tmp.s.setScalar(Math.max(glow, 0.001));
       head.setMatrixAt(i, tmp.m.compose(tmp.f, tmp.q, tmp.s));
+      tmp.s.setScalar(1);
+      tmp.f.copy(tmp.p).addScaledVector(tmp.d, CAR_HALF).setY(y + 0.055);
+      hd.setMatrixAt(i, tmp.m.compose(tmp.f, tmp.q, tmp.s));
+      tmp.f.copy(tmp.p).addScaledVector(tmp.d, -CAR_HALF).setY(y + 0.07);
+      tl.setMatrixAt(i, tmp.m.compose(tmp.f, tmp.q, tmp.s));
     });
     mesh.instanceMatrix.needsUpdate = true;
     head.instanceMatrix.needsUpdate = true;
+    hd.instanceMatrix.needsUpdate = true;
+    tl.instanceMatrix.needsUpdate = true;
   });
   const pool = useMemo(() => poolTexture(), []);
   const initial = useMemo(() => cars.map(() => m4(0, -5, 0)), [cars]);
@@ -1119,6 +1154,13 @@ export function Traffic() {
       <instancedMesh ref={lights} args={[undefined, undefined, cars.length]} frustumCulled={false} renderOrder={1}>
         <boxGeometry args={[0.7, 0.002, 0.4]} />
         <meshBasicMaterial map={pool} color="#fff1cf" transparent opacity={0.6} blending={THREE.AdditiveBlending} depthWrite={false} toneMapped={false} />
+      </instancedMesh>
+      {/* 등은 차 모델 좌표(+x 가 앞)에서 차 폭만큼의 얇은 띠 */}
+      <instancedMesh ref={heads} args={[undefined, mats.head, cars.length]} frustumCulled={false}>
+        <boxGeometry args={[0.02, 0.025, 0.17]} />
+      </instancedMesh>
+      <instancedMesh ref={tails} args={[undefined, mats.tail, cars.length]} frustumCulled={false}>
+        <boxGeometry args={[0.02, 0.025, 0.17]} />
       </instancedMesh>
     </>
   );
