@@ -195,7 +195,8 @@ $PY scripts/lab/twin_data.py $DXF public/lab/ai-building-workspace-v2/twin.json
 
 ```bash
 "$BLENDER" -b --factory-startup --python scripts/lab/blender_envelope.py -- "$GLB" $W/env.json
-python3 scripts/lab/energy_scenarios.py $W/env.json $EPW $W/sc src/data/lab/ai-building-workspace-scenarios.json
+python3 scripts/lab/energy_scenarios.py $W/env.json $EPW $W/sc src/data/lab/ai-building-workspace-scenarios.json \
+    public/lab/ai-building-workspace-v2/hourly.json
 ```
 
 - `energy_idf.py` 는 `before` · `after` 말고도 `wall=<mm>,win=<old|lowe|triple>` 를 받는다. `w0-old` = before, `w100-lowe` = after 와 같은 값이 나와야 한다(확인함: 16,110 → 9,671 kWh).
@@ -203,3 +204,6 @@ python3 scripts/lab/energy_scenarios.py $W/env.json $EPW $W/sc src/data/lab/ai-b
 - EnergyPlus 의 ExpandObjects 가 실행 폴더에 임시 파일을 써서, 동시 실행은 실행마다 자기 출력 폴더에서 돌린다.
 - 삼중 로이 창(U 1.0, SHGC 0.40)과 50 · 150 mm 두께는 도면 사양이 아니라 비교용 가정이다. 페이지 문구에도 밝힌다.
 - 외단열만 하고 기존 창을 두면 냉방이 늘어난다(일사 열이 덜 빠짐). 계산 결과 그대로이며 페이지에서 안내한다.
+- `hourly.json`: 같은 실행에서 겨울 · 여름 대표일의 시간별 값(벽 · 지붕 Surface Inside Face Conduction per Area, 창 Surface Window
+  Net Heat Transfer Rate ÷ 창 면적, 부호를 뒤집어 + = 실내에서 나가는 열)을 뽑는다. 창 값에는 투과 일사가, 벽 · 지붕 값에는
+  구조체에 쌓이는 열이 들어 있다. 페이지 문구에도 밝힌다.

@@ -34,7 +34,17 @@ export type TwinModel = {
   glass: THREE.MeshStandardMaterial[];
   lamps: THREE.MeshBasicMaterial;
   /** 시나리오에 따라 색을 바꾸는 열화상 막 (외단열 판 · 새 창) 과 새 창 유리 */
-  heat: { shell: THREE.MeshBasicMaterial; fresh: THREE.MeshBasicMaterial };
+  /** 열화상 막 재질 — 벽 · 창은 층 · 방위(F1_N …)마다 따로 두어 시간별 열 흐름으로 칠할 수 있게 한다 (TwinScene 이 색을 정한다) */
+  heat: {
+    wall: Record<string, THREE.MeshBasicMaterial>;
+    shell: Record<string, THREE.MeshBasicMaterial>;
+    old: Record<string, THREE.MeshBasicMaterial>;
+    fresh: Record<string, THREE.MeshBasicMaterial>;
+    /** 2층 위 지붕 · 2층 베란다 바닥(1층 위 지붕) · 그 밖의 바닥판 */
+    roof: THREE.MeshBasicMaterial;
+    slab: THREE.MeshBasicMaterial;
+    floor: THREE.MeshBasicMaterial;
+  };
   freshGlass: THREE.MeshStandardMaterial;
   items: Item[];
 };
@@ -137,8 +147,13 @@ export function buildTwin(scene: THREE.Group): TwinModel {
 
   // 외벽 + 외단열 판
   const shellMat = new THREE.MeshStandardMaterial({ color: "#ddd6c9", roughness: 0.92, clippingPlanes: after });
-  const wallHeat = thermalMaterial(cache, U.before.wallU, [plane], scan);
-  const shellHeat = thermalMaterial(null, U.after.wallU, after, scan);
+  // 층 · 방위별 막 재질 (EnergyPlus 의 F1_N … 면과 같은 단위)
+  const keyed = (u: number, planes: THREE.Plane[]) => {
+    const made: Record<string, THREE.MeshBasicMaterial> = {};
+    return { made, get: (key: string) => (made[key] ??= thermalMaterial(null, u, planes, scan)) };
+  };
+  const wallHeat = keyed(U.before.wallU, [plane]);
+  const shellHeat = keyed(U.after.wallU, after);
   const walls: TwinModel["walls"] = parts
     .filter(isExteriorWall)
     .sort((a, b) => (a.floor === b.floor ? orderKey(a) - orderKey(b) : a.floor < b.floor ? -1 : 1))
@@ -151,8 +166,9 @@ export function buildTwin(scene: THREE.Group): TwinModel {
       shell.visible = false;
       shell.userData.special = true;
       root.add(shell);
-      addOverlay(p.mesh, wallHeat, overlays);
-      addOverlay(shell, shellHeat, overlays);
+      const key = surfaceKey(p.floor, out);
+      addOverlay(p.mesh, wallHeat.get(key), overlays);
+      addOverlay(shell, shellHeat.get(key), overlays);
       items.push({ obj: shell, floor: p.floor });
       return { shell, geos, out, floor: p.floor };
     });
@@ -161,8 +177,8 @@ export function buildTwin(scene: THREE.Group): TwinModel {
   const frame = new THREE.MeshStandardMaterial({ color: "#f1f3f2", roughness: 0.45, metalness: 0.1, clippingPlanes: after });
   const lowE = new THREE.MeshStandardMaterial({ color: "#86c3d1", roughness: 0.06, metalness: 0.7, transparent: true, opacity: 0.4, depthWrite: false, clippingPlanes: after });
   glass.add(lowE);
-  const oldHeat = thermalMaterial(null, U.before.windowU, before, scan);
-  const newHeat = thermalMaterial(null, U.after.windowU, after, scan);
+  const oldHeat = keyed(U.before.windowU, before);
+  const newHeat = keyed(U.after.windowU, after);
   // 창 부품 재질은 문 등과 같이 쓰므로, 전후 비교용으로 헌 창 · 새 창 쪽을 따로 복제한다
   const sided = (planes: THREE.Plane[]) => {
     const made = new Map<THREE.Material, THREE.Material>();
@@ -199,16 +215,21 @@ export function buildTwin(scene: THREE.Group): TwinModel {
       old.userData.special = true;
       fresh.userData.special = true;
       root.add(fresh);
-      addOverlay(old, oldHeat, overlays);
-      addOverlay(fresh, newHeat, overlays);
+      const key = surfaceKey(floor, outward(w.wall));
+      addOverlay(old, oldHeat.get(key), overlays);
+      addOverlay(fresh, newHeat.get(key), overlays);
       items.push({ obj: old, floor }, { obj: fresh, floor });
       return { old, fresh, at: old.position.clone(), out: outward(w.wall), floor };
     });
 
   // 지붕 · 바닥판 · 발코니: 전후 같은 값
+  const roofHeat = thermalMaterial(null, U.roofU, [plane], scan);
+  const slabHeat = thermalMaterial(null, U.roofU, [plane], scan);
+  const floorHeat = thermalMaterial(cache, U.floorU, [plane], scan);
   for (const p of parts) {
-    if (p.kind === "roof") addOverlay(p.mesh, thermalMaterial(cache, U.roofU, [plane], scan), overlays);
-    else if (p.kind === "slab" || p.kind === "floor1" || p.kind === "floor2") addOverlay(p.mesh, thermalMaterial(cache, U.floorU, [plane], scan), overlays);
+    if (p.kind === "roof") addOverlay(p.mesh, roofHeat, overlays);
+    else if (p.kind === "slab") addOverlay(p.mesh, slabHeat, overlays);
+    else if (p.kind === "floor1" || p.kind === "floor2") addOverlay(p.mesh, floorHeat, overlays);
   }
 
   // 층 보기용 목록 (창 부품은 묶음째로 위에서 넣었다)
@@ -220,7 +241,13 @@ export function buildTwin(scene: THREE.Group): TwinModel {
     items.push({ obj: top, floor: p.floor, ceiling: /Ceiling/.test(p.name) });
   }
 
-  return { root, plane, split, scan, walls, windows, pv: solar(root, parts, after, items), overlays, glass: [...glass], lamps, heat: { shell: shellHeat, fresh: newHeat }, freshGlass: lowE, items };
+  return { root, plane, split, scan, walls, windows, pv: solar(root, parts, after, items), overlays, glass: [...glass], lamps, heat: { wall: wallHeat.made, shell: shellHeat.made, old: oldHeat.made, fresh: newHeat.made, roof: roofHeat, slab: slabHeat, floor: floorHeat }, freshGlass: lowE, items };
+}
+
+/** EnergyPlus 면 이름과 같은 층 · 방위 키 (F1_N, F2_E …) */
+export function surfaceKey(floor: Floor, out: THREE.Vector3) {
+  const dir = out.z < 0 ? "N" : out.z > 0 ? "S" : out.x > 0 ? "E" : "W";
+  return `${floor === "2f" ? "F2" : "F1"}_${dir}`;
 }
 
 /** 같은 층 안 순서: 남 → 동 → 북 → 서 (카메라 쪽부터 돌아간다), 같은 면에서는 왼쪽부터 */

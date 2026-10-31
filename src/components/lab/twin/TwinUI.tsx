@@ -9,7 +9,7 @@
  * 계산한 ai-building-workspace-scenarios.json(scripts/lab/energy_scenarios.py)에서 그대로 읽는다.
  */
 
-import { useRef, useState } from "react";
+import { useRef, useState, useSyncExternalStore } from "react";
 import energy from "@/data/lab/ai-building-workspace-energy.json";
 import scenarioData from "@/data/lab/ai-building-workspace-scenarios.json";
 import {
@@ -25,6 +25,9 @@ import {
   scenarioKey,
   span,
   wallU,
+  GAIN_COLORS,
+  type HourlyData,
+  type ThermalBasis,
   type RemodelStep,
   type Scenario,
   type TwinFloor,
@@ -117,6 +120,22 @@ export type TwinLabels = {
     >;
     specs: Record<"insulation" | "none" | WinKind | "pv", string>;
     noteScenario: string;
+    basis: {
+      title: string;
+      u: string;
+      winter: string;
+      summer: string;
+      hintU: string;
+      hintDay: string;
+      legendLoss: string;
+      legendGain: string;
+      caption: string;
+      heating: string;
+      cooling: string;
+      chart: string;
+      now: string;
+      note: string;
+    };
     windowsQty: string;
     chart: string;
     note: string;
@@ -206,10 +225,15 @@ export function StageBar({
   tool,
   cut,
   onCut,
+  basis,
+  readout,
 }: {
   mode: TwinMode;
   labels: TwinLabels;
   scenario: Scenario;
+  basis: ThermalBasis;
+  /** 겨울 · 여름 하루 열화상일 때 지금 시각의 값 (쉬는 동안 자막 대신) */
+  readout: string | null;
   tool: "section" | "measure" | "compare" | null;
   cut: number;
   onCut: (v: number) => void;
@@ -271,6 +295,7 @@ export function StageBar({
           : L.remodel.doneNone
         : stepCaption(now);
   }
+  if (mode === "remodel" && readout && (remodel === 0 || remodel >= 1)) caption = readout;
   // 도구를 쓰는 동안은 자막이 도구 안내로 바뀐다 (단면은 챕터 자리에 높이 막대)
   if (tool === "section") caption = L.tools.sectionCaption;
   else if (tool === "measure") caption = L.tools.measureCaption;
@@ -298,14 +323,30 @@ export function StageBar({
             className="hidden shrink-0 items-center gap-2 pb-1 text-[10px] text-white/50 sm:flex"
             aria-hidden="true"
           >
-            <span>{L.remodel.legendLow}</span>
-            <span
-              className="h-1.5 w-24 rounded-full"
-              style={{
-                background: `linear-gradient(90deg, ${THERMAL_STOPS.join(", ")})`,
-              }}
-            />
-            <span>{L.remodel.legendHigh}</span>
+            {basis === "u" ? (
+              <>
+                <span>{L.remodel.legendLow}</span>
+                <span
+                  className="h-1.5 w-24 rounded-full"
+                  style={{
+                    background: `linear-gradient(90deg, ${THERMAL_STOPS.join(", ")})`,
+                  }}
+                />
+                <span>{L.remodel.legendHigh}</span>
+              </>
+            ) : (
+              // 들어오는 열(햇볕) ← 0 → 새는 열
+              <>
+                <span>{L.remodel.basis.legendGain}</span>
+                <span
+                  className="h-1.5 w-32 rounded-full"
+                  style={{
+                    background: `linear-gradient(90deg, ${[...GAIN_COLORS].reverse().join(", ")}, ${THERMAL_STOPS.join(", ")})`,
+                  }}
+                />
+                <span>{L.remodel.basis.legendLoss}</span>
+              </>
+            )}
           </div>
         )}
       </div>
@@ -501,11 +542,22 @@ export function TwinDetails({
   LinkComponent,
   scenario,
   onScenario,
+  basis,
+  onBasis,
+  hourly,
+  hour,
+  dates,
 }: {
   mode: TwinMode;
   labels: TwinLabels;
   scenario: Scenario;
   onScenario: (s: Scenario) => void;
+  basis: ThermalBasis;
+  onBasis: (b: ThermalBasis) => void;
+  hourly: HourlyData | null;
+  hour: number;
+  /** 대표일 표기 (예: 1월 23일) */
+  dates: Record<"winter" | "summer", string>;
   rooms: PanelRoom[];
   roomNames: Record<string, string>;
   floor: TwinFloor;
@@ -744,6 +796,9 @@ export function TwinDetails({
         </div>
       </div>
 
+      {/* 열화상 기준 — 겨울 · 여름 하루면 시간별 EnergyPlus 값으로 칠하고, 그날의 부하를 그린다 */}
+      <ThermalCard R={R} basis={basis} onBasis={onBasis} hourly={hourly} scenario={scenario} hour={hour} dates={dates} />
+
       <h3 className="mt-10 text-sm font-semibold">{R.results}</h3>
       <dl className="mt-3 grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-border bg-border lg:grid-cols-4">
         <Cell label={R.total}>
@@ -844,6 +899,73 @@ export function TwinDetails({
   );
 }
 
+// 넓은 칸(md 이상)인지 — 시간별 그래프의 viewBox 를 칸 폭에 맞춘다 (서버 값 false)
+const MD = "(min-width: 768px)";
+const subscribeMd = (cb: () => void) => {
+  const mq = window.matchMedia(MD);
+  mq.addEventListener("change", cb);
+  return () => mq.removeEventListener("change", cb);
+};
+
+function ThermalCard({
+  R,
+  basis,
+  onBasis,
+  hourly,
+  scenario,
+  hour,
+  dates,
+}: {
+  R: TwinLabels["remodel"];
+  basis: ThermalBasis;
+  onBasis: (b: ThermalBasis) => void;
+  hourly: HourlyData | null;
+  scenario: Scenario;
+  hour: number;
+  dates: Record<"winter" | "summer", string>;
+}) {
+  const wide = useSyncExternalStore(subscribeMd, () => window.matchMedia(MD).matches, () => false);
+  return (
+    <div className="mt-4 rounded-xl border border-border p-5">
+      <div className="grid gap-5 md:grid-cols-[1fr_2fr] md:items-start">
+        <div>
+          <Choice
+            label={R.basis.title}
+            hint=""
+            options={(["u", "winter", "summer"] as const).map((v) => ({ value: v, label: R.basis[v] }))}
+            value={basis}
+            onChange={onBasis}
+          />
+          <p className="mt-3 text-sm leading-relaxed text-muted">{basis === "u" ? R.basis.hintU : fill(R.basis.hintDay, { date: dates[basis] })}</p>
+        </div>
+        {basis !== "u" && hourly && (
+          <div>
+            <h4 className="text-xs font-semibold">
+              {fill(R.basis.chart, { date: dates[basis], kind: basis === "winter" ? R.basis.heating : R.basis.cooling })}
+            </h4>
+            <div className="mt-2">
+              <LineChart
+                before={hourly.runs["w0-old"][basis][basis === "winter" ? "heat" : "cool"]}
+                after={hourly.runs[scenarioKey(scenario)][basis][basis === "winter" ? "heat" : "cool"]}
+                labels={{ before: R.before, after: R.chosen }}
+                unit="kW"
+                digits={1}
+                ticks={[0, 6, 12, 18, 23]}
+                tickLabel={(i) => `${String(i).padStart(2, "0")}:00`}
+                now={hour / 24}
+                nowLabel={R.basis.now}
+                width={wide ? 640 : W}
+                height={wide ? 180 : H}
+              />
+            </div>
+          </div>
+        )}
+      </div>
+      {basis !== "u" && <p className="mt-4 text-xs leading-relaxed text-muted">{R.basis.note}</p>}
+    </div>
+  );
+}
+
 /* ── 월별 그래프 (라이트 · 다크 각각 검사를 통과한 계열 색) ───────── */
 
 const SERIES = {
@@ -862,20 +984,51 @@ const W = 360;
 const H = 170;
 const PAD = { l: 40, r: 8, t: 10, b: 22 };
 
-function MonthChart({
+function MonthChart(props: { before: number[]; after: number[]; labels: { before: string; after: string } }) {
+  return <LineChart {...props} unit="kWh" ticks={Array.from({ length: 12 }, (_, i) => i)} tickLabel={(i) => String(i + 1)} />;
+}
+
+/** 0 부터 올라가는 축의 깔끔한 끝값 (1 · 2 · 2.5 · 5 · 10 단위) */
+function niceTop(v: number) {
+  const p = Math.pow(10, Math.floor(Math.log10(Math.max(v, 1e-6))));
+  for (const m of [1, 2, 2.5, 5, 10]) if (v <= m * p) return m * p;
+  return 10 * p;
+}
+
+/** 두 계열 선 그래프 — 마우스를 올리면 세로선 + 툴팁. now(0~1)를 주면 그 위치에 "지금" 세로선 */
+function LineChart({
   before,
   after,
   labels,
+  unit,
+  ticks,
+  tickLabel,
+  digits = 0,
+  now = null,
+  nowLabel,
+  width = W,
+  height = H,
 }: {
   before: number[];
   after: number[];
   labels: { before: string; after: string };
+  unit: string;
+  ticks: number[];
+  tickLabel: (i: number) => string;
+  digits?: number;
+  now?: number | null;
+  nowLabel?: string;
+  /** viewBox 크기 — 넓은 칸에 놓을 때는 넓게 (글자가 커지지 않게) */
+  width?: number;
+  height?: number;
 }) {
   const [hover, setHover] = useState<number | null>(null);
   const svg = useRef<SVGSVGElement>(null);
-  const top = Math.ceil(Math.max(...before, ...after) / 1000) * 1000;
-  const x = (i: number) => PAD.l + ((i + 0.5) / 12) * (W - PAD.l - PAD.r);
-  const y = (v: number) => PAD.t + ((top - v) / top) * (H - PAD.t - PAD.b);
+  const n = before.length;
+  const top = niceTop(Math.max(...before, ...after, 1e-6) * 1.02);
+  const fmt = (v: number) => (digits ? v.toFixed(digits) : n0(v));
+  const x = (i: number) => PAD.l + ((i + 0.5) / n) * (width - PAD.l - PAD.r);
+  const y = (v: number) => PAD.t + ((top - v) / top) * (height - PAD.t - PAD.b);
   const path = (vs: number[]) =>
     vs
       .map((v, i) => `${i ? "L" : "M"}${x(i).toFixed(1)},${y(v).toFixed(1)}`)
@@ -888,11 +1041,11 @@ function MonthChart({
     const r = svg.current?.getBoundingClientRect();
     if (!r) return;
     const i = Math.round(
-      ((((e.clientX - r.left) / r.width) * W - PAD.l) / (W - PAD.l - PAD.r)) *
-        12 -
+      ((((e.clientX - r.left) / r.width) * width - PAD.l) / (width - PAD.l - PAD.r)) *
+        n -
         0.5,
     );
-    setHover(Math.min(11, Math.max(0, i)));
+    setHover(Math.min(n - 1, Math.max(0, i)));
   };
   return (
     <div className="relative">
@@ -908,7 +1061,7 @@ function MonthChart({
       </div>
       <svg
         ref={svg}
-        viewBox={`0 0 ${W} ${H}`}
+        viewBox={`0 0 ${width} ${height}`}
         className="block w-full touch-none select-none"
         onPointerMove={onMove}
         onPointerLeave={() => setHover(null)}
@@ -919,7 +1072,7 @@ function MonthChart({
           <g key={v}>
             <line
               x1={PAD.l}
-              x2={W - PAD.r}
+              x2={width - PAD.r}
               y1={y(v)}
               y2={y(v)}
               className="stroke-black/10 dark:stroke-white/10"
@@ -931,22 +1084,40 @@ function MonthChart({
               className="fill-muted"
               fontSize={10}
             >
-              {n0(v)}
+              {fmt(v)}
             </text>
           </g>
         ))}
-        {Array.from({ length: 12 }, (_, i) => i).map((i) => (
+        {ticks.map((i) => (
           <text
             key={i}
             x={x(i)}
-            y={H - 6}
+            y={height - 6}
             textAnchor="middle"
             className="fill-muted"
             fontSize={10}
           >
-            {i + 1}
+            {tickLabel(i)}
           </text>
         ))}
+        {now !== null && (
+          <g>
+            <line
+              x1={PAD.l + now * (width - PAD.l - PAD.r)}
+              x2={PAD.l + now * (width - PAD.l - PAD.r)}
+              y1={PAD.t}
+              y2={height - PAD.b}
+              className="stroke-primary"
+              strokeWidth={1}
+              strokeDasharray="3 3"
+            />
+            {nowLabel && (
+              <text x={PAD.l + now * (width - PAD.l - PAD.r) + 4} y={PAD.t + 8} className="fill-primary" fontSize={9}>
+                {nowLabel}
+              </text>
+            )}
+          </g>
+        )}
         {series.map((s) => (
           <path
             key={s.key}
@@ -964,7 +1135,7 @@ function MonthChart({
               x1={x(hover)}
               x2={x(hover)}
               y1={PAD.t}
-              y2={H - PAD.b}
+              y2={height - PAD.b}
               className="stroke-black/25 dark:stroke-white/30"
             />
             {series.map((s) => (
@@ -984,21 +1155,21 @@ function MonthChart({
         <div
           className="pointer-events-none absolute top-8 rounded-md border border-border bg-background px-2.5 py-1.5 text-xs leading-tight shadow-lg"
           style={{
-            left: `${(x(hover) / W) * 100}%`,
+            left: `${(x(hover) / width) * 100}%`,
             transform:
-              x(hover) > W * 0.6
+              x(hover) > width * 0.6
                 ? "translateX(calc(-100% - 8px))"
                 : "translateX(8px)",
           }}
         >
-          <div className="mb-0.5 text-muted">{hover + 1}</div>
+          <div className="mb-0.5 text-muted">{tickLabel(hover)}</div>
           {series.map((s) => (
             <div key={s.key} className="flex items-center gap-1.5 tabular-nums">
               <span
                 className={`inline-block h-2 w-2 rounded-sm ${SERIES[s.key].bg}`}
               />
-              <span className="font-semibold">{n0(s.values[hover])}</span>
-              <span className="text-muted">kWh</span>
+              <span className="font-semibold">{fmt(s.values[hover])}</span>
+              <span className="text-muted">{unit}</span>
             </div>
           ))}
         </div>

@@ -421,6 +421,22 @@
               "pv": {
                 "name": "Solar (extra proposal)"
               }
+            },
+            "basis": {
+              "title": "Thermal view",
+              "u": "U-value",
+              "winter": "Winter day",
+              "summer": "Summer day",
+              "hintU": "A fixed color per surface, proportional to its U-value.",
+              "hintDay": "{date}: hourly heat flow per surface calculated by EnergyPlus. Colors follow the scene's clock.",
+              "legendLoss": "Heat out",
+              "legendGain": "Heat in",
+              "caption": "{date} {time} · outside {out}℃ · {kind} {before} → {after} kW",
+              "heating": "heating",
+              "cooling": "cooling",
+              "chart": "Hourly {kind} load on {date} (kW)",
+              "now": "Now",
+              "note": "The representative days are the coldest January weekday and the hottest July/August weekday on which the ground-floor clinic is heated or cooled. Red means indoor heat escaping, blue means heat coming in. Window values include sunlight through the glass, so windows turn blue while the sun is on them. The ground floor lowers its heating setpoint at night and on weekends, so losses are small then. Wall and roof values are the heat entering the construction at the inside face, so right after the heating starts they include the heat that warms concrete cooled overnight."
             }
           },
           "tools": {

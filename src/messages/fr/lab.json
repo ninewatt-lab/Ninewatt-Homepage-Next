@@ -421,6 +421,22 @@
               "pv": {
                 "name": "Solaire (proposition)"
               }
+            },
+            "basis": {
+              "title": "Vue thermique",
+              "u": "Coefficient U",
+              "winter": "Jour d'hiver",
+              "summer": "Jour d'été",
+              "hintU": "Une couleur fixe par surface, proportionnelle à son coefficient U.",
+              "hintDay": "{date} : flux de chaleur horaire par surface calculé par EnergyPlus. Les couleurs suivent l'horloge de la scène.",
+              "legendLoss": "Chaleur perdue",
+              "legendGain": "Chaleur entrante",
+              "caption": "{date} {time} · extérieur {out} ℃ · {kind} {before} → {after} kW",
+              "heating": "chauffage",
+              "cooling": "climatisation",
+              "chart": "Charge horaire de {kind} le {date} (kW)",
+              "now": "Maintenant",
+              "note": "Les jours représentatifs sont le jour ouvré le plus froid de janvier et le plus chaud de juillet-août où le cabinet du rez-de-chaussée est chauffé ou climatisé. Rouge : la chaleur intérieure s'échappe ; bleu : la chaleur entre. Les valeurs des fenêtres incluent le soleil traversant le vitrage, elles passent donc au bleu quand le soleil les éclaire. Le rez-de-chaussée abaisse sa consigne la nuit et le week-end, d'où des pertes faibles à ces heures. Pour les murs et la toiture, la valeur est la chaleur qui entre dans la paroi côté intérieur : juste après la mise en chauffe, elle inclut la chaleur qui réchauffe le béton refroidi pendant la nuit."
             }
           },
           "tools": {

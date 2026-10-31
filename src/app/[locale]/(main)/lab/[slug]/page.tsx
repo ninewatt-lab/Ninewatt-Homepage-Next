@@ -451,6 +451,7 @@ export default async function LabProjectPage({ params }: { params: Params }) {
               <LabTwin
                 planUrl={project.twin.plan}
                 viewerUrl={project.twin.viewer}
+                hourlyUrl={project.twin.hourly}
                 poster={project.twin.poster}
                 posterAlt={t(`${key}.coverAlt`)}
                 labels={t.raw(`${key}.twin.ui`) as TwinLabels}
