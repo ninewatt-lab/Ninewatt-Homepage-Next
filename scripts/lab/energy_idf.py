@@ -28,6 +28,15 @@ CEIL = 2.74
 H = 3.3
 ROOF_F1 = round(AREA["F1"] - AREA["F2"], 2)  # 2층 베란다 아래 1층 천장 (외기 노출로 단순화)
 
+# 층(존) 목록. env.json 에 zones 가 있으면(auto_twin.py 가 만든 건물) 그것을, 없으면 건물 A(v1) 값을 쓴다.
+# use: clinic(평일 9–18시 진료) · home(주거, 상시) · daycare(평일 7–19시 보육)
+ZONES = env.get("zones") or [
+    {"name": "F1", "z": 0.0, "area": AREA["F1"], "ceiling": CEIL, "height": H, "roof": ROOF_F1, "use": "clinic"},
+    {"name": "F2", "z": H, "area": AREA["F2"], "ceiling": CEIL, "height": H, "roof": AREA["F2"], "use": "home"},
+]
+# 창이 놓이는 높이(바닥 기준) — 건물마다 다를 수 있다
+SILL, HEAD = env.get("window", {}).get("sill", 0.8), env.get("window", {}).get("head", 2.4)
+
 win = {}
 for o in env["openings"]:
     if not o["ext"] or o["id"] in INTERNAL:
@@ -75,6 +84,9 @@ Schedule:Compact,ClinicHeat,Any,Through: 12/31,For: Weekdays,Until: 08:00,12,Unt
 Schedule:Compact,ClinicCool,Any,Through: 12/31,For: Weekdays,Until: 08:00,32,Until: 18:00,26,Until: 24:00,32,For: AllOtherDays,Until: 24:00,32;
 Schedule:Constant,HomeHeat,Any,20;
 Schedule:Constant,HomeCool,Any,26;
+Schedule:Compact,DaycareOcc,Frac,Through: 12/31,For: Weekdays,Until: 07:00,0,Until: 19:00,1,Until: 24:00,0,For: AllOtherDays,Until: 24:00,0;
+Schedule:Compact,DaycareHeat,Any,Through: 12/31,For: Weekdays,Until: 06:00,15,Until: 19:00,20,Until: 24:00,15,For: AllOtherDays,Until: 24:00,15;
+Schedule:Compact,DaycareCool,Any,Through: 12/31,For: Weekdays,Until: 06:00,30,Until: 19:00,26,Until: 24:00,30,For: AllOtherDays,Until: 24:00,30;
 Material,Concrete200,MediumRough,0.2,1.6,2300,880,0.9,0.7,0.7;
 Material,Stucco10,Smooth,0.01,0.7,1800,840,0.9,0.5,0.5;
 """)
@@ -96,20 +108,21 @@ a(f"WindowMaterial:SimpleGlazingSystem,Glz,{win_u},{win_shgc},{win_vt};")
 a("Construction,Win,Glz;")
 wall_c = "NewWall" if wall_mm else "OldWall"
 
-for fl, z0 in (("F1", 0.0), ("F2", H)):
+for zi, zone in enumerate(ZONES):
+    fl, z0, A, CEIL, H = zone["name"], zone["z"], zone["area"], zone["ceiling"], zone["height"]
     zn = f"Z{fl}"
-    A = AREA[fl]
     side = A ** 0.5
     a(f"Zone,{zn},0,0,0,{z0},1,1,{CEIL},{A*CEIL:.2f},{A:.2f};")
-    # 바닥·천장
-    if fl == "F1":
+    # 바닥(맨 아래 층은 지면) · 위층과 닿는 천장 · 외기에 노출된 지붕
+    if zi == 0:
         a(f"BuildingSurface:Detailed,{zn}_Floor,Floor,Slab,{zn},Ground,,NoSun,NoWind,0,4,{side},0,0,0,0,0,0,{side},0,{side},{side},0;")
-        a(f"BuildingSurface:Detailed,{zn}_Ceil,Ceiling,Interfloor,{zn},Adiabatic,,NoSun,NoWind,0,4,0,0,{CEIL},{side},0,{CEIL},{side},{side},{CEIL},0,{side},{CEIL};")
-        s2 = ROOF_F1 ** 0.5
-        a(f"BuildingSurface:Detailed,{zn}_Roof,Roof,Roof,{zn},Outdoors,,SunExposed,WindExposed,0,4,0,0,{CEIL},{s2},0,{CEIL},{s2},{s2},{CEIL},0,{s2},{CEIL};")
     else:
         a(f"BuildingSurface:Detailed,{zn}_Floor,Floor,Interfloor,{zn},Adiabatic,,NoSun,NoWind,0,4,{side},0,0,0,0,0,0,{side},0,{side},{side},0;")
-        a(f"BuildingSurface:Detailed,{zn}_Roof,Roof,Roof,{zn},Outdoors,,SunExposed,WindExposed,0,4,0,0,{CEIL},{side},0,{CEIL},{side},{side},{CEIL},0,{side},{CEIL};")
+    if zi < len(ZONES) - 1:
+        a(f"BuildingSurface:Detailed,{zn}_Ceil,Ceiling,Interfloor,{zn},Adiabatic,,NoSun,NoWind,0,4,0,0,{CEIL},{side},0,{CEIL},{side},{side},{CEIL},0,{side},{CEIL};")
+    if zone["roof"]:
+        s2 = zone["roof"] ** 0.5
+        a(f"BuildingSurface:Detailed,{zn}_Roof,Roof,Roof,{zn},Outdoors,,SunExposed,WindExposed,0,4,0,0,{CEIL},{s2},0,{CEIL},{s2},{s2},{CEIL},0,{s2},{CEIL};")
     # 방위별 외벽 (면적이 맞도록 폭을 정한 직사각형)
     for o in "NESW":
         net = env["walls"][f"{fl}_{o}"]
@@ -129,23 +142,25 @@ for fl, z0 in (("F1", 0.0), ("F2", H)):
         a(f"BuildingSurface:Detailed,{zn}_W{o},Wall,{wall_c},{zn},Outdoors,,SunExposed,WindExposed,0.5,4,"
           f"{x1:.3f},{y1:.3f},{H},{x1:.3f},{y1:.3f},0,{x2:.3f},{y2:.3f},0,{x2:.3f},{y2:.3f},{H};")
         if w > 0:
-            wh = 1.6
+            wh = max(HEAD - SILL, w / wd / 0.95)  # 창이 벽 폭을 넘지 않게
             ww = w / wh
             f0 = (wd - ww) / 2 / wd
             f1 = f0 + ww / wd
             xa, ya = x1 + (x2 - x1) * f0, y1 + (y2 - y1) * f0
             xb, yb = x1 + (x2 - x1) * f1, y1 + (y2 - y1) * f1
             a(f"FenestrationSurface:Detailed,{zn}_G{o},Window,Win,{zn}_W{o},,0.5,,1,4,"
-              f"{xa:.3f},{ya:.3f},2.4,{xa:.3f},{ya:.3f},0.8,{xb:.3f},{yb:.3f},0.8,{xb:.3f},{yb:.3f},2.4;")
-    occ = "ClinicOcc" if fl == "F1" else "HomeOcc"
-    ppl = 0.1 * A if fl == "F1" else 2
-    lpd, epd = (10, 8) if fl == "F1" else (5, 4)
+              f"{xa:.3f},{ya:.3f},{SILL + wh:g},{xa:.3f},{ya:.3f},{SILL:g},{xb:.3f},{yb:.3f},{SILL:g},{xb:.3f},{yb:.3f},{SILL + wh:g};")
+    use = zone["use"]
+    occ = {"clinic": "ClinicOcc", "home": "HomeOcc", "daycare": "DaycareOcc"}[use]
+    # 재실 · 조명 · 기기: 진료 0.1인/㎡ · 10 · 8 W/㎡, 주거 2인 · 5 · 4 W/㎡, 보육 0.25인/㎡(아동 · 교사) · 10 · 5 W/㎡
+    ppl = {"clinic": 0.1 * A, "home": 2, "daycare": 0.25 * A}[use]
+    lpd, epd = {"clinic": (10, 8), "home": (5, 4), "daycare": (10, 5)}[use]
     a(f"People,{zn}_Ppl,{zn},{occ},People,{ppl:.1f},,,0.3,,ActLvl;")
     a(f"Lights,{zn}_Lt,{zn},{occ},Watts/Area,,{lpd},,0,0.4,0.2;")
     a(f"ElectricEquipment,{zn}_Eq,{zn},{occ},Watts/Area,,{epd},,0,0.3,0;")
     # 침기: 두 경우 같게 둔다 (창호 교체의 기밀 개선은 반영하지 않음 = 보수적)
     a(f"ZoneInfiltration:DesignFlowRate,{zn}_Inf,{zn},Always1,AirChanges/Hour,,,,0.7,1,0,0,0;")
-    hs, cs = ("ClinicHeat", "ClinicCool") if fl == "F1" else ("HomeHeat", "HomeCool")
+    hs, cs = {"clinic": ("ClinicHeat", "ClinicCool"), "home": ("HomeHeat", "HomeCool"), "daycare": ("DaycareHeat", "DaycareCool")}[use]
     a(f"ThermostatSetpoint:DualSetpoint,{zn}_SP,{hs},{cs};")
     a(f"ZoneControl:Thermostat,{zn}_TC,{zn},HVACType,ThermostatSetpoint:DualSetpoint,{zn}_SP;")
     a(f"HVACTemplate:Zone:IdealLoadsAirSystem,{zn},;")

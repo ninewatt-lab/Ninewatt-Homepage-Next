@@ -10,11 +10,9 @@
  */
 
 import { useRef, useState, useSyncExternalStore } from "react";
-import energy from "@/data/lab/ai-building-workspace-energy.json";
-import scenarioData from "@/data/lab/ai-building-workspace-scenarios.json";
+import type { ScenarioRun, TwinBuilding } from "./buildings";
 import {
   BUILD,
-  DRAWN,
   PV_OPTIONS,
   REMODEL,
   REMODEL_STEP_KEYS,
@@ -36,6 +34,11 @@ import {
 } from "./twinModel";
 
 export type TwinLabels = {
+  buildings: {
+    label: string;
+    a: { name: string; desc: string; roofNote: string };
+    b: { name: string; desc: string; roofNote: string; drawnNote: string; autoNote: string; footnote: string };
+  };
   tools: {
     label: string;
     section: string;
@@ -62,7 +65,6 @@ export type TwinLabels = {
     captions: Record<"plan" | "rise" | "done", string>;
     stats: Record<"lines" | "layers" | "walls" | "windows", string>;
     windowsValue: string;
-    roofNote: string;
   };
   rooms: {
     caption: string;
@@ -74,6 +76,7 @@ export type TwinLabels = {
     review: string;
     total: string;
     note: string;
+    unnamed: string;
   };
   remodel: {
     steps: Record<RemodelStep, { short: string; caption: string }>;
@@ -105,6 +108,9 @@ export type TwinLabels = {
       count: string;
       pvHint: string;
       reset: string;
+      example: string;
+      resetExample: string;
+      descNoPv: string;
     };
     chosen: string;
     coolingUp: string;
@@ -118,7 +124,7 @@ export type TwinLabels = {
       | "pvNone",
       string
     >;
-    specs: Record<"insulation" | "none" | WinKind | "pv", string>;
+    specs: Record<"insulation" | "insulationGeneric" | "none" | WinKind | "pv", string>;
     noteScenario: string;
     basis: {
       title: string;
@@ -160,23 +166,15 @@ const n0 = (v: number) => Math.round(v).toLocaleString("ko-KR");
 /** 열관류율: 1 → "1.0", 0.16 → "0.16" */
 const uv = (v: number) => (Number.isInteger(v) ? v.toFixed(1) : String(v));
 
-const ENV = energy.envelope;
-const PV = energy.pv;
-
-type Run = { heat: number; cool: number; heat_m: number[]; cool_m: number[] };
-const RUNS = scenarioData.scenarios as Record<string, Run>;
-const PV_RUNS = scenarioData.pv as Record<
-  string,
-  { annual: number; monthly: number[] }
->;
+type Run = ScenarioRun;
 /** 리모델링 전 = 외단열 없음 · 기존 창 */
-const BASE = RUNS["w0-old"];
-const runOf = (s: Scenario) => RUNS[scenarioKey(s)];
+const baseOf = (b: TwinBuilding) => b.runs["w0-old"];
+const runOf = (b: TwinBuilding, s: Scenario) => b.runs[scenarioKey(s)];
 const total = (r: Run) => r.heat + r.cool;
 const monthly = (r: Run) => r.heat_m.map((h, i) => h + r.cool_m[i]);
-const savingOf = (s: Scenario) =>
-  Math.round((1 - total(runOf(s)) / total(BASE)) * 100);
-const MONTHLY_BEFORE = monthly(BASE);
+const savingOf = (b: TwinBuilding, s: Scenario) => Math.round((1 - total(runOf(b, s)) / total(baseOf(b))) * 100);
+/** 태양광을 3D 지붕에 놓은 건물만 태양광 단계 · 선택이 있다 */
+const stepsOf = (b: TwinBuilding) => REMODEL_STEP_KEYS.filter((k) => k !== "pv" || b.pv);
 
 /* ── 장면 아래쪽: 자막 · 챕터 ─────────────────────────────────────── */
 
@@ -222,6 +220,7 @@ export function StageBar({
   onThermal,
   onReplay,
   scenario,
+  building,
   tool,
   cut,
   onCut,
@@ -231,6 +230,7 @@ export function StageBar({
   mode: TwinMode;
   labels: TwinLabels;
   scenario: Scenario;
+  building: TwinBuilding;
   basis: ThermalBasis;
   /** 겨울 · 여름 하루 열화상일 때 지금 시각의 값 (쉬는 동안 자막 대신) */
   readout: string | null;
@@ -265,14 +265,14 @@ export function StageBar({
   } else if (mode === "rooms") {
     caption = L.rooms.caption;
   } else {
-    chapters = REMODEL_STEP_KEYS.map((k) => ({
+    chapters = stepsOf(building).map((k) => ({
       key: k,
       label: L.remodel.steps[k].short,
       amount: span(remodel, REMODEL[k]),
     }));
-    const now = REMODEL_STEP_KEYS.find((k) => span(remodel, REMODEL[k]) < 1);
+    const now = stepsOf(building).find((k) => span(remodel, REMODEL[k]) < 1);
     const C = L.remodel.captions;
-    const pct = savingOf(scenario);
+    const pct = savingOf(building, scenario);
     // 고른 조합에 맞춘 자막 (그 공사가 없는 조합이면 없다고 알려 준다)
     const stepCaption = (k: RemodelStep) =>
       k === "scan"
@@ -386,7 +386,7 @@ export function StageBar({
               <input
                 type="range"
                 min={0.3}
-                max={7.2}
+                max={+(building.frame.height - 0.1).toFixed(2)}
                 step={0.05}
                 value={cut}
                 onChange={(e) => onCut(Number(e.target.value))}
@@ -412,7 +412,7 @@ export function StageBar({
           )}
         </div>
 
-        {mode === "rooms" && (
+        {mode === "rooms" && building.frame.floors.length > 1 && (
           <div
             role="group"
             aria-label={L.rooms.floorLabel}
@@ -542,6 +542,8 @@ export function TwinDetails({
   LinkComponent,
   scenario,
   onScenario,
+  building,
+  planLines,
   basis,
   onBasis,
   hourly,
@@ -552,6 +554,9 @@ export function TwinDetails({
   labels: TwinLabels;
   scenario: Scenario;
   onScenario: (s: Scenario) => void;
+  building: TwinBuilding;
+  /** 평면 도면 선 수 (twin.json 의 선분) */
+  planLines: number;
   basis: ThermalBasis;
   onBasis: (b: ThermalBasis) => void;
   hourly: HourlyData | null;
@@ -570,32 +575,35 @@ export function TwinDetails({
     children: React.ReactNode;
   }>;
 }) {
+  const ST = building.stats;
+  const BL = L.buildings[building.key];
   if (mode === "build") {
     return (
       <div>
         <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-border bg-border sm:grid-cols-4">
           <Cell label={L.build.stats.lines}>
-            <span className={big}>14,682</span>
+            <span className={big}>{n0(planLines)}</span>
           </Cell>
           <Cell label={L.build.stats.layers}>
-            <span className={big}>38</span>
+            <span className={big}>{ST.layers}</span>
           </Cell>
           <Cell label={L.build.stats.walls}>
-            <span className={big}>{ENV.wallArea.toFixed(1)}</span>
+            <span className={big}>{ST.wallArea.toFixed(1)}</span>
             <span className={unit}>㎡</span>
           </Cell>
           <Cell label={L.build.stats.windows}>
             {/* "{count}개 · {area} ㎡" — 개수만 크게 */}
-            <span className={big}>{ENV.windows}</span>
+            <span className={big}>{ST.windows}</span>
             <span className={unit}>
               {fill(L.build.windowsValue.split("{count}")[1] ?? "", {
-                area: ENV.windowArea.toFixed(1),
+                area: ST.windowArea.toFixed(1),
               })}
             </span>
           </Cell>
         </dl>
         <p className="mt-3 text-sm leading-relaxed text-muted">
-          {L.build.roofNote}
+          {BL.roofNote}
+          {building.auto && ` ${L.buildings.b.autoNote}`}
         </p>
       </div>
     );
@@ -697,9 +705,12 @@ export function TwinDetails({
   }
 
   const R = L.remodel;
-  const run = runOf(scenario);
-  const pvRun = scenario.pv ? PV_RUNS[String(scenario.pv)] : null;
-  const pct = savingOf(scenario);
+  const BASE = baseOf(building);
+  const run = runOf(building, scenario);
+  const PV = building.pv;
+  const pvRun = PV && scenario.pv ? PV.runs[String(scenario.pv)] : null;
+  const pct = savingOf(building, scenario);
+  const DRAWN = building.start;
   const isDrawn =
     scenario.wall === DRAWN.wall &&
     scenario.win === DRAWN.win &&
@@ -708,9 +719,9 @@ export function TwinDetails({
     {
       key: "insulation",
       spec: scenario.wall
-        ? fill(R.specs.insulation, { mm: scenario.wall })
+        ? fill(building.drawn ? R.specs.insulation : R.specs.insulationGeneric, { mm: scenario.wall })
         : R.specs.none,
-      qty: scenario.wall ? `${ENV.wallArea.toFixed(1)} ㎡` : "–",
+      qty: scenario.wall ? `${ST.wallArea.toFixed(1)} ㎡` : "–",
       u: scenario.wall
         ? `${uv(wallU(0))} → ${wallU(scenario.wall).toFixed(2)}`
         : uv(wallU(0)),
@@ -721,8 +732,8 @@ export function TwinDetails({
       qty:
         scenario.win !== "old"
           ? fill(R.windowsQty, {
-              count: ENV.windows,
-              area: ENV.windowArea.toFixed(1),
+              count: ST.windows,
+              area: ST.windowArea.toFixed(1),
             })
           : "–",
       u:
@@ -732,15 +743,17 @@ export function TwinDetails({
     },
     {
       key: "pv",
-      spec: scenario.pv
+      spec: PV && scenario.pv
         ? fill(R.specs.pv, { w: PV.moduleW, count: scenario.pv })
         : R.specs.none,
-      qty: scenario.pv
+      qty: PV && scenario.pv
         ? `${((scenario.pv * PV.moduleW) / 1000).toFixed(2)} kW`
         : "–",
       u: "–",
     },
-  ] as const;
+  ].filter((w) => w.key !== "pv" || PV) as { key: "insulation" | "windows" | "pv"; spec: string; qty: string; u: string }[];
+  // 도면 사양과 같은 재료면 "도면", 아니면 "예시"
+  const tag = building.drawn ? R.scenario.drawn : R.scenario.example;
   const set = (patch: Partial<Scenario>) =>
     onScenario({ ...scenario, ...patch });
   return (
@@ -755,17 +768,17 @@ export function TwinDetails({
               onClick={() => onScenario(DRAWN)}
               className="text-sm font-semibold text-primary hover:underline"
             >
-              {R.scenario.reset}
+              {building.drawn ? R.scenario.reset : R.scenario.resetExample}
             </button>
           )}
         </div>
         <p className="mt-1 text-sm leading-relaxed text-muted">
-          {R.scenario.desc}
+          {building.pv ? R.scenario.desc : R.scenario.descNoPv}
         </p>
-        <div className="mt-5 grid gap-5 md:grid-cols-3">
+        <div className={`mt-5 grid gap-5 ${PV ? "md:grid-cols-3" : "md:grid-cols-2"}`}>
           <Choice
             label={R.scenario.wall}
-            hint={`${R.scenario.drawn} ${DRAWN.wall} mm`}
+            hint={`${tag} ${DRAWN.wall} mm`}
             options={WALL_OPTIONS.map((v) => ({
               value: v,
               label: v ? `${v} mm` : R.scenario.none,
@@ -775,7 +788,7 @@ export function TwinDetails({
           />
           <Choice
             label={R.scenario.win}
-            hint={`${R.scenario.drawn} ${R.scenario.wins[DRAWN.win]}`}
+            hint={`${tag} ${R.scenario.wins[DRAWN.win]}`}
             options={WIN_OPTIONS.map((v) => ({
               value: v,
               label: R.scenario.wins[v],
@@ -783,24 +796,27 @@ export function TwinDetails({
             value={scenario.win}
             onChange={(win) => set({ win })}
           />
-          <Choice
-            label={R.scenario.pv}
-            hint={R.scenario.pvHint}
-            options={PV_OPTIONS.map((v) => ({
-              value: v,
-              label: v ? fill(R.scenario.count, { count: v }) : R.scenario.none,
-            }))}
-            value={scenario.pv}
-            onChange={(pv) => set({ pv })}
-          />
+          {PV && (
+            <Choice
+              label={R.scenario.pv}
+              hint={R.scenario.pvHint}
+              options={PV_OPTIONS.map((v) => ({
+                value: v,
+                label: v ? fill(R.scenario.count, { count: v }) : R.scenario.none,
+              }))}
+              value={scenario.pv}
+              onChange={(pv) => set({ pv })}
+            />
+          )}
         </div>
+        {!building.drawn && <p className="mt-4 text-xs leading-relaxed text-muted">{L.buildings.b.drawnNote}</p>}
       </div>
 
       {/* 열화상 기준 — 겨울 · 여름 하루면 시간별 EnergyPlus 값으로 칠하고, 그날의 부하를 그린다 */}
       <ThermalCard R={R} basis={basis} onBasis={onBasis} hourly={hourly} scenario={scenario} hour={hour} dates={dates} />
 
       <h3 className="mt-10 text-sm font-semibold">{R.results}</h3>
-      <dl className="mt-3 grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-border bg-border lg:grid-cols-4">
+      <dl className={`mt-3 grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-border bg-border ${PV ? "lg:grid-cols-4" : "lg:grid-cols-3"}`}>
         <Cell label={R.total}>
           <span className={`${big} ${pct > 0 ? "text-primary" : ""}`}>
             {pct > 0 ? `−${pct}%` : `${-pct}%`}
@@ -821,9 +837,11 @@ export function TwinDetails({
             {n0(BASE.cool)} → {n0(run.cool)}
           </span>
         </Cell>
+{PV && (
         <Cell label={`${R.pv} · ${R.unit}`}>
           <span className={big}>{pvRun ? n0(pvRun.annual) : "–"}</span>
         </Cell>
+        )}
       </dl>
       {run.cool > BASE.cool && (
         <p className="mt-3 border-l-2 border-amber-500 pl-3 text-sm leading-relaxed text-muted">
@@ -875,7 +893,7 @@ export function TwinDetails({
           <h3 className="text-sm font-semibold">{R.chart}</h3>
           <div className="mt-3">
             <MonthChart
-              before={MONTHLY_BEFORE}
+              before={monthly(BASE)}
               after={monthly(run)}
               labels={{ before: R.before, after: R.chosen }}
             />
@@ -886,15 +904,18 @@ export function TwinDetails({
       <div className="mt-8 space-y-2 text-sm leading-relaxed text-muted">
         <p>{R.note}</p>
         <p>{R.noteScenario}</p>
-        <p>{R.pvNote}</p>
+        {PV && <p>{R.pvNote}</p>}
       </div>
-      <LinkComponent
-        href={v1Href}
-        className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:underline"
-      >
-        {R.more}
-        <span aria-hidden="true">→</span>
-      </LinkComponent>
+      {/* 물량 · 견적은 v1(건물 A)에만 있다 */}
+      {!building.auto && (
+        <LinkComponent
+          href={v1Href}
+          className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:underline"
+        >
+          {R.more}
+          <span aria-hidden="true">→</span>
+        </LinkComponent>
+      )}
     </div>
   );
 }

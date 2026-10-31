@@ -279,6 +279,22 @@
         "title": "A 3D twin you can explore",
         "intro": "It starts by building the house from its drawings. Use the tabs at the top to look at rooms and areas, then the green remodeling work.",
         "ui": {
+          "buildings": {
+            "label": "Choose a building",
+            "a": {
+              "name": "Building A",
+              "desc": "2-storey health facility · model checked against the drawings (v1)",
+              "roofNote": "The roof shape isn't fixed by the drawings, so it's an estimate."
+            },
+            "b": {
+              "name": "Building B",
+              "desc": "1-storey daycare · model generated automatically from the DXF",
+              "roofNote": "The flat roof is simplified to a single level (the drawings show two).",
+              "drawnNote": "The specs noted on this drawing (urethane foam board 100 mm · low-E double glazing, applied U-value 0.994) differ from the materials in the table, so it starts from an 'example' combination: the same thickness and window type, calculated with Building A's material properties.",
+              "autoNote": "Walls, windows, rooms, the 3D model and the energy model were all generated from the drawing lines, with no manual fixes. The small unnamed rooms have no label in the drawing.",
+              "footnote": "Built from a 3D model and calculations generated automatically from real construction drawings (institution and architect details removed). The sun path uses a central-Korea latitude, assuming the top of the drawing is north."
+            }
+          },
           "loading": "Preparing the 3D scene…",
           "unsupported": "This browser can't display 3D. Turn on hardware acceleration or try another browser.",
           "tabsLabel": "View",
@@ -307,8 +323,7 @@
               "walls": "Exterior wall area",
               "windows": "Exterior windows"
             },
-            "windowsValue": "{count} · {area} ㎡",
-            "roofNote": "The roof shape isn't fixed by the drawings, so it's an estimate."
+            "windowsValue": "{count} · {area} ㎡"
           },
           "rooms": {
             "caption": "Tap a room or its label to find it in the table below.",
@@ -328,7 +343,8 @@
             "auto": "Computed",
             "review": "Review needed",
             "total": "Total",
-            "note": "Areas are computed automatically from the drawing layers as regions enclosed by wall and window lines. Where missing partition lines merge several rooms, it's marked 'Review needed'."
+            "note": "Areas are computed automatically from the drawing layers as regions enclosed by wall and window lines. Where missing partition lines merge several rooms, it's marked 'Review needed'.",
+            "unnamed": "Room"
           },
           "remodel": {
             "steps": {
@@ -389,13 +405,16 @@
               },
               "count": "{count}",
               "reset": "Back to the drawing spec",
-              "pvHint": "Not in the drawings"
+              "pvHint": "Not in the drawings",
+              "example": "Example",
+              "resetExample": "Back to the example",
+              "descNoPv": "Pick the insulation thickness and windows. Each combination was calculated in advance with EnergyPlus, and the 3D building above changes to match."
             },
             "chosen": "Chosen combination",
             "coolingUp": "With this combination, cooling energy goes up compared with before ({before} → {after} kWh): the insulated walls let less of the solar heat coming through the windows escape. Replacing the windows as well brings it down.",
             "doneNone": "This combination is the same as before remodeling. Pick insulation and windows below.",
             "captions": {
-              "insulation": "{mm} mm PF board insulation goes onto the 18 exterior walls.",
+              "insulation": "{mm} mm external insulation goes onto every exterior wall.",
               "insulationNone": "No external insulation in this combination.",
               "windows": "The 23 windows are replaced with {type} windows.",
               "windowsNone": "The windows stay as they are.",
@@ -408,9 +427,10 @@
               "old": "Existing windows kept (aluminium · standard double glazing, assumed)",
               "lowe": "PVC double windows · Low-E double glazing 24 mm",
               "triple": "Low-E triple-glazed windows (typical product values, assumed)",
-              "pv": "{count} × {w} W modules · south roof slope"
+              "pv": "{count} × {w} W modules · south roof slope",
+              "insulationGeneric": "External insulation {mm} mm (calculated with Building A's PF board properties)"
             },
-            "noteScenario": "For 50 and 150 mm only the thickness of the drawing's PF board was changed, and the Low-E triple windows (U-value 1.0, SHGC 0.40) assume typical product values. Roof, floor, infiltration, occupancy and systems are the same in every combination.",
+            "noteScenario": "For 50 and 150 mm only the thickness of Building A's PF board (from its drawings) was changed, and the Low-E triple windows (U-value 1.0, SHGC 0.40) assume typical product values. Roof, floor, infiltration, occupancy and systems are the same in every combination.",
             "items": {
               "insulation": {
                 "name": "External wall insulation"
@@ -436,7 +456,7 @@
               "cooling": "cooling",
               "chart": "Hourly {kind} load on {date} (kW)",
               "now": "Now",
-              "note": "The representative days are the coldest January weekday and the hottest July/August weekday on which the ground-floor clinic is heated or cooled. Red means indoor heat escaping, blue means heat coming in. Window values include sunlight through the glass, so windows turn blue while the sun is on them. The ground floor lowers its heating setpoint at night and on weekends, so losses are small then. Wall and roof values are the heat entering the construction at the inside face, so right after the heating starts they include the heat that warms concrete cooled overnight."
+              "note": "The representative days are the coldest January weekday and the hottest July/August weekday on which the ground floor is heated or cooled. Red means indoor heat escaping, blue means heat coming in. Window values include sunlight through the glass, so windows turn blue while the sun is on them. The ground floor lowers its heating setpoint at night and on weekends, so losses are small then. Wall and roof values are the heat entering the construction at the inside face, so right after the heating starts they include the heat that warms concrete cooled overnight."
             }
           },
           "tools": {
@@ -451,6 +471,16 @@
             "sectionCaption": "Slice the building like a floor plan. Use the slider to change the cut height.",
             "measureCaption": "Tap two points on the building to measure the distance. Tap again to start over.",
             "compareCaption": "Left is before remodeling, right is the chosen combination. Drag the handle in the middle."
+          },
+          "roomWords": {
+            "보일러실": "Boiler room",
+            "보육실": "Classroom",
+            "현관": "Entrance",
+            "원장실": "Director's office",
+            "복도": "Corridor",
+            "화장실": "Restroom",
+            "다용도실": "Utility room",
+            "주방": "Kitchen"
           }
         }
       },
@@ -472,6 +502,10 @@
           {
             "title": "Energy calculation",
             "desc": "EnergyPlus 9.0 was run with the wall and window areas and orientations of the same model to compare yearly heating and cooling energy before and after. Every number in the scene comes straight from this result."
+          },
+          {
+            "title": "Just add the drawing (Building B)",
+            "desc": "No one touched Building B by hand. Given the DXF and a short config with the floor extents and a few heights, the script thickens and merges wall lines to find the outline and rooms, groups windows and doors, builds the 3D and EnergyPlus models, and calculates all 12 combinations."
           }
         ],
         "v1": "v1 — figures, quantity takeoff and film"

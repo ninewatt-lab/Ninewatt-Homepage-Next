@@ -1,0 +1,24 @@
+{
+ "floors": [
+  {
+   "key": "1f",
+   "z": 0,
+   "footprint": [
+    0.0,
+    0.0,
+    21.475,
+    14.542
+   ],
+   "area": 252.35
+  }
+ ],
+ "rooms": 12,
+ "walls": 41,
+ "windows": 27,
+ "lines": 1506,
+ "layers": 30,
+ "height": 3.61,
+ "wallArea": 186.4,
+ "windowArea": 34.0,
+ "floorArea": 224.9
+}

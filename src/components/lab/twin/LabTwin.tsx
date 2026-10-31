@@ -5,6 +5,7 @@
  * 화면에 가까워지면 데이터(twin.json · viewer.json)와 3D 장면을 불러오고, 처음 보이면 도면 → 3D 구축을 한 번 보여 준다.
  * 보기: 도면 → 3D · 실 · 면적 · 그린리모델링. 장면 아래쪽에 자막 · 챕터(StageBar), 장면 밑 본문에 수치(TwinDetails).
  * 도구: 단면 · 치수 · 전후 비교 · 링크 복사. 보기 · 층 · 조합은 주소(?view=remodel&wall=150&win=old&pv=2)에 담아 그대로 공유된다.
+ * 건물: A(v1 보건시설) · B(도면에서 자동 생성한 어린이집). 고르면 장면을 새로 만든다(주소 &b=b).
  */
 
 import dynamic from "next/dynamic";
@@ -14,8 +15,8 @@ import { useLocale } from "next-intl";
 import { Component, useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore, type ReactNode } from "react";
 import { Link } from "@/i18n/navigation";
 import { StageBar, TwinDetails, type PanelRoom, type TwinLabels } from "./TwinUI";
+import { BUILDINGS, type BuildingKey, type TwinBuilding } from "./buildings";
 import {
-  DRAWN,
   PV_OPTIONS,
   STATIC_HOUR,
   WALL_OPTIONS,
@@ -59,7 +60,8 @@ const getReduce = () => window.matchMedia(REDUCE).matches;
 const getReduceServer = () => false;
 
 /** 주소의 보기 · 층 · 조합 (틀린 값은 기본값으로) */
-function readView(q: URLSearchParams | null) {
+function readView(q: URLSearchParams | null, b: TwinBuilding) {
+  const DRAWN = b.start;
   const pick = <T,>(list: readonly T[], v: T | undefined, fallback: T) => (v !== undefined && list.includes(v) ? v : fallback);
   const num = (k: string) => (q?.get(k) == null ? undefined : Number(q.get(k)));
   return {
@@ -74,8 +76,10 @@ function readView(q: URLSearchParams | null) {
   };
 }
 
-function writeView(mode: TwinMode, floor: TwinFloor, s: Scenario, basis: ThermalBasis) {
+function writeView(mode: TwinMode, floor: TwinFloor, s: Scenario, basis: ThermalBasis, b: TwinBuilding) {
+  const DRAWN = b.start;
   const q = new URLSearchParams();
+  if (b.key !== "a") q.set("b", b.key);
   if (mode !== "build") q.set("view", mode);
   if (mode === "rooms" && floor !== "1f") q.set("floor", floor);
   if (mode === "remodel" && (s.wall !== DRAWN.wall || s.win !== DRAWN.win || s.pv !== DRAWN.pv)) {
@@ -129,27 +133,54 @@ function ToolButton({ on, label, onClick, children }: { on: boolean; label: stri
   );
 }
 
-export default function LabTwin({
-  planUrl,
-  viewerUrl,
-  hourlyUrl,
-  poster,
-  posterAlt,
-  labels,
-  roomNames,
-  v1Href,
-}: {
-  planUrl: string;
-  /** v1 뷰어 데이터 (실 · 모델 경로) */
-  viewerUrl: string;
-  /** 겨울 · 여름 대표일의 시간별 열 흐름 — 열화상 기준을 고를 때 불러온다 */
-  hourlyUrl: string;
+type Props = {
   poster: { src: string; width: number; height: number };
   posterAlt: string;
   labels: TwinLabels;
+  /** 건물 A 의 실 이름 (v1 번역 키) */
   roomNames: Record<string, string>;
+  /** 자동 생성 건물의 도면 실 이름(한국어)을 옮길 낱말 — 한국어 페이지는 비어 있다 */
+  roomWords: Record<string, string>;
   v1Href: string;
-}) {
+};
+
+/** 건물 고르기 + 고른 건물의 트윈 */
+export default function LabTwin(props: Props) {
+  const params = useSearchParams();
+  const [bkey, setBkey] = useState<BuildingKey>(() => (params?.get("b") === "b" ? "b" : "a"));
+  const L = props.labels.buildings;
+  return (
+    <div>
+      <div role="group" aria-label={L.label} className="mb-4 grid grid-cols-2 gap-2 sm:gap-3">
+        {(["a", "b"] as const).map((k) => (
+          <button
+            key={k}
+            type="button"
+            aria-pressed={bkey === k}
+            onClick={() => setBkey(k)}
+            className={`rounded-xl border px-3 py-2.5 text-left transition-colors sm:px-4 sm:py-3 ${bkey === k ? "border-primary bg-primary/5" : "border-border hover:bg-surface"}`}
+          >
+            <span className="block text-sm font-semibold">{L[k].name}</span>
+            <span className="mt-0.5 block text-xs leading-relaxed text-muted">{L[k].desc}</span>
+          </button>
+        ))}
+      </div>
+      <TwinView key={bkey} building={BUILDINGS[bkey]} {...props} />
+    </div>
+  );
+}
+
+/** 낱말 바꾸기 (긴 것부터) — 도면의 실 이름을 다른 언어로 */
+function translateRoom(name: string, words: Record<string, string>) {
+  let out = name;
+  for (const w of Object.keys(words).sort((a, b) => b.length - a.length)) out = out.split(w).join(words[w]);
+  return out;
+}
+
+function TwinView({ building, poster, posterAlt, labels, roomNames, roomWords, v1Href }: Props & { building: TwinBuilding }) {
+  const planUrl = building.data.plan;
+  const viewerUrl = building.data.viewer;
+  const hourlyUrl = building.data.hourly;
   const section = useRef<HTMLDivElement>(null);
   const [near, setNear] = useState(false);
   const [visible, setVisible] = useState(false);
@@ -168,7 +199,7 @@ export default function LabTwin({
   }, [frozen]);
 
   const params = useSearchParams();
-  const [start] = useState(() => readView(params));
+  const [start] = useState(() => readView(params, building));
   const [mode, setMode] = useState<TwinMode>(start.mode);
   const [floor, setFloor] = useState<TwinFloor>(start.floor);
   const [selected, setSelected] = useState<string | null>(null);
@@ -235,9 +266,9 @@ export default function LabTwin({
 
   // 보기 · 층 · 조합 · 열화상 기준을 주소에 (기록은 남기지 않고 바꿔 둔다)
   useEffect(() => {
-    const url = writeView(mode, floor, scenario, basis);
+    const url = writeView(mode, floor, scenario, basis, building);
     if (url !== window.location.pathname + window.location.search) window.history.replaceState(window.history.state, "", url);
-  }, [mode, floor, scenario, basis]);
+  }, [mode, floor, scenario, basis, building]);
 
   // 시간별 값은 겨울 · 여름 하루를 고를 때 한 번 불러온다
   useEffect(() => {
@@ -345,7 +376,17 @@ export default function LabTwin({
     }
   }, [mode]);
 
-  const rooms = data?.rooms ?? [];
+  const rooms = useMemo(() => data?.rooms ?? [], [data]);
+  // 실 이름: 건물 A 는 v1 번역, 자동 생성 건물은 도면 글자(다른 언어는 낱말을 옮긴다), 없으면 "실 n"
+  const names = useMemo(() => {
+    const out: Record<string, string> = {};
+    rooms.forEach((r, i) => {
+      out[r.key] = roomNames[r.key] ?? (r.name ? translateRoom(r.name, roomWords) : `${labels.rooms.unnamed} ${i + 1}`);
+    });
+    return out;
+  }, [rooms, roomNames, roomWords, labels]);
+  // 평면 도면 선 수 (twin.json 의 선분)
+  const planLines = useMemo(() => (data ? Object.values(data.plan.floors).reduce((a, f) => a + Object.values(f.groups).reduce((b, g) => b + g.length / 4, 0), 0) : 0), [data]);
 
   return (
     <div ref={section}>
@@ -363,6 +404,7 @@ export default function LabTwin({
           <div className={`absolute inset-0 transition-opacity duration-1000 ${ready ? "opacity-100" : "opacity-0"}`}>
             <Boundary fallback={<p className="absolute inset-x-6 top-1/2 text-center text-sm text-white/70">{labels.unsupported}</p>}>
               <TwinScene
+                building={building}
                 simRef={sim}
                 modelUrl={data.model}
                 plan={data.plan}
@@ -408,7 +450,7 @@ export default function LabTwin({
                 selected === r.key ? "border-primary-light bg-[#0b2a33]/90 text-white" : "border-white/15 bg-[#07141b]/75 text-white/85 hover:border-white/40"
               }`}
             >
-              {roomNames[r.key] ?? r.key}
+              {names[r.key]}
               <span className="ml-1.5 font-medium text-white/55">{r.area.toFixed(1)} ㎡</span>
             </button>
           ))}
@@ -523,6 +565,7 @@ export default function LabTwin({
         {ready && (
           <div data-twin-chrome>
             <StageBar
+              building={building}
               mode={mode}
               labels={labels}
               scenario={scenario}
@@ -558,9 +601,9 @@ export default function LabTwin({
           onBasis={setBasis}
           hourly={hourly}
           hour={snap.hour}
-          dates={dates} rooms={rooms} roomNames={roomNames} floor={floor} selected={selected} onSelect={setSelected} v1Href={v1Href} LinkComponent={Link} />
+          dates={dates} rooms={rooms} roomNames={names} building={building} planLines={planLines} floor={floor} selected={selected} onSelect={setSelected} v1Href={v1Href} LinkComponent={Link} />
       </div>
-      <p className="mt-8 border-t border-border pt-4 text-xs leading-relaxed text-muted">{labels.footnote}</p>
+      <p className="mt-8 border-t border-border pt-4 text-xs leading-relaxed text-muted">{building.auto ? labels.buildings.b.footnote : labels.footnote}</p>
     </div>
   );
 }

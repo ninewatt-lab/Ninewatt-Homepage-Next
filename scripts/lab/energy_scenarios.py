@@ -26,8 +26,12 @@ EPLUS = "/Applications/EnergyPlus-9-0-1/energyplus"
 WALLS = [0, 50, 100, 150]
 WINS = ["old", "lowe", "triple"]
 MODULE_W = 430
-FLOORS = ["F1", "F2"]
 DIRS = "NESW"
+ENV_DATA = json.load(open(ENV))
+# 층 목록 (auto_twin.py 가 만든 env.json 은 zones 를 갖는다. 없으면 건물 A 의 두 층)
+FLOORS = [z["name"] for z in ENV_DATA.get("zones", [])] or ["F1", "F2"]
+# 태양광 모듈을 3D 지붕에 놓지 않은 건물은 태양광 계산을 건너뛴다 (NO_PV=1)
+NO_PV = os.environ.get("NO_PV") == "1"
 os.makedirs(WORK, exist_ok=True)
 
 HOURLY_OUTPUTS = """
@@ -42,7 +46,7 @@ Output:Variable,Environment,Site Outdoor Air Drybulb Temperature,Hourly;
 # 창 면적 (층 · 방위) — energy_idf.py 와 같은 계산
 INTERNAL = {"F1_StairSouth_0", "F1_LobbyInner_0", "F2_StairSouth_0", "F2_MasterSouthInternal_0"}
 WIN_AREA = {}
-for o in json.load(open(ENV))["openings"]:
+for o in ENV_DATA["openings"]:
     if o["ext"] and o["id"] not in INTERNAL:
         WIN_AREA[(o["floor"], o["ext"])] = WIN_AREA.get((o["floor"], o["ext"]), 0) + o["area"]
 
@@ -78,7 +82,8 @@ def read_hourly(path):
         cols[f"zone_{fl}"] = find(f"Z{fl}:Zone Mean Air")
         cols["heat"].append(find(f"Z{fl} IDEAL LOADS AIR SYSTEM:Zone Ideal Loads Supply Air Total Heating Rate"))
         cols["cool"].append(find(f"Z{fl} IDEAL LOADS AIR SYSTEM:Zone Ideal Loads Supply Air Total Cooling Rate"))
-        cols[f"roof_{fl}"] = find(f"Z{fl}_ROOF:Surface Inside Face")
+        if any(f"Z{fl}_ROOF:Surface Inside Face" in h for h in head):
+            cols[f"roof_{fl}"] = find(f"Z{fl}_ROOF:Surface Inside Face")
         for d in DIRS:
             cols[f"wall_{fl}_{d}"] = find(f"Z{fl}_W{d}:Surface Inside Face")
             if WIN_AREA.get((fl, d)):
@@ -99,7 +104,7 @@ def day_values(hours, md):
         "zone": {fl: r1(f(cols[f"zone_{fl}"])) for fl in FLOORS},
         "heat": r1([sum(float(r[i]) for i in cols["heat"]) / 1000 for r in rows]),  # kW
         "cool": r1([sum(float(r[i]) for i in cols["cool"]) / 1000 for r in rows]),
-        "roof": {fl: r1([-v for v in f(cols[f"roof_{fl}"])]) for fl in FLOORS},
+        "roof": {fl: r1([-v for v in f(cols[f"roof_{fl}"])]) for fl in FLOORS if f"roof_{fl}" in cols},
         "wall": {},
         "win": {},
     }
@@ -124,7 +129,7 @@ def pick_days(hours):
 jobs = [(f"w{w}-{g}", f"wall={w},win={g}") for w in WALLS for g in WINS]
 with ThreadPoolExecutor(max_workers=4) as pool:
     results = dict(pool.map(lambda j: run(*j, hourly=True), jobs))
-    pv = dict(pool.map(lambda n: run(f"pv{n}", "after", n * MODULE_W), [2, 4]))
+    pv = {} if NO_PV else dict(pool.map(lambda n: run(f"pv{n}", "after", n * MODULE_W), [2, 4]))
 
 scenarios = {}
 for name, r in results.items():
@@ -133,7 +138,7 @@ data = {
     "walls": WALLS,
     "windows": WINS,
     "scenarios": scenarios,
-    "pv": {str(n): {"annual": round(sum(pv[f"pv{n}"]["pv"])), "monthly": [round(v) for v in pv[f"pv{n}"]["pv"]]} for n in (2, 4)},
+    "pv": {str(n): {"annual": round(sum(pv[f"pv{n}"]["pv"])), "monthly": [round(v) for v in pv[f"pv{n}"]["pv"]]} for n in (2, 4) if f"pv{n}" in pv},
 }
 with open(OUT, "w") as f:
     json.dump(data, f, ensure_ascii=False, indent=1)
