@@ -3,14 +3,14 @@
 /**
  * Lab v2 — 도면으로 지은 3D 트윈 섹션.
  * 화면에 가까워지면 데이터(twin.json · viewer.json)와 3D 장면을 불러오고, 처음 보이면 도면 → 3D 구축을 한 번 보여 준다.
- * 보기: 도면 → 3D · 실 · 면적 · 그린리모델링. 옆 패널은 넓은 화면에서 장면 위 오른쪽, 좁은 화면에서 장면 아래.
+ * 보기: 도면 → 3D · 실 · 면적 · 그린리모델링. 장면 아래쪽에 자막 · 챕터(StageBar), 장면 밑 본문에 수치(TwinDetails).
  */
 
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import { Component, useCallback, useEffect, useRef, useState, useSyncExternalStore, type ReactNode } from "react";
 import { Link } from "@/i18n/navigation";
-import TwinPanel, { type PanelRoom, type TwinLabels } from "./TwinPanel";
+import { StageBar, TwinDetails, type PanelRoom, type TwinLabels } from "./TwinUI";
 import { STATIC_HOUR, createTwinSim, type TwinFloor, type TwinMode, type TwinSim } from "./twinModel";
 import type { TwinPlanData, TwinRoom } from "./TwinScene";
 
@@ -169,8 +169,7 @@ export default function LabTwin({
 
   return (
     <div ref={section}>
-      <div className="relative">
-      <div data-twin-stage className="relative h-[68vh] min-h-[460px] max-h-[860px] overflow-hidden rounded-2xl border border-white/10 bg-[#050d13] lg:h-[82vh]">
+      <div data-twin-stage className="relative h-[68vh] min-h-[460px] max-h-[820px] overflow-hidden rounded-2xl border border-white/10 bg-[#050d13] lg:h-[76vh]">
         {/* 불러오기 전 · 실패하면 v1 모델 투시도 */}
         <Image
           src={poster.src}
@@ -229,7 +228,7 @@ export default function LabTwin({
 
         {/* 보기 고르기 */}
         <div data-twin-chrome role="tablist" aria-label={labels.tabsLabel} className="absolute left-3 top-3 z-10 flex gap-1 rounded-full border border-white/12 bg-[#07141b]/80 p-1 backdrop-blur-sm sm:left-4 sm:top-4">
-          {MODES.map((m, i) => (
+          {MODES.map((m) => (
             <button
               key={m}
               type="button"
@@ -238,7 +237,6 @@ export default function LabTwin({
               onClick={() => choose(m)}
               className={`rounded-full px-3 py-1.5 text-[12px] font-semibold transition-colors sm:px-4 sm:text-[13px] ${mode === m ? "bg-primary text-white" : "text-white/65 hover:text-white"}`}
             >
-              <span className="mr-1 text-[10px] opacity-60">{i + 1}</span>
               {labels.tabs[m]}
             </button>
           ))}
@@ -246,7 +244,7 @@ export default function LabTwin({
 
         {/* 시계 · 시간 멈추기 */}
         {ready && (
-          <div data-twin-chrome className="absolute right-3 top-14 z-10 flex items-center gap-1 rounded-full border border-white/12 bg-[#07141b]/80 py-1 pl-3 pr-1 text-[12px] font-semibold tabular-nums text-white/80 backdrop-blur-sm sm:top-4 sm:right-4 lg:right-[24.5rem]">
+          <div data-twin-chrome className="absolute right-3 top-14 z-10 flex items-center gap-1 rounded-full border border-white/12 bg-[#07141b]/80 py-1 pl-3 pr-1 text-[12px] font-semibold tabular-nums text-white/80 backdrop-blur-sm sm:top-4 sm:right-4">
             {hhmm(snap.hour)}
             {!frozen && (
               <button
@@ -269,34 +267,32 @@ export default function LabTwin({
           </div>
         )}
 
-        {ready && <p data-twin-chrome className="pointer-events-none absolute bottom-3 left-4 z-10 hidden text-[11px] text-white/45 sm:block">{labels.hint}</p>}
+        {ready && (
+          <div data-twin-chrome>
+            <StageBar
+              mode={mode}
+              labels={labels}
+              build={snap.build}
+              remodel={snap.remodel}
+              floor={floor}
+              onFloor={(f) => {
+                setFloor(f);
+                setSelected(null);
+              }}
+              before={before}
+              onBefore={setBefore}
+              thermal={thermal}
+              onThermal={setThermal}
+              onReplay={frozen ? null : replay}
+            />
+          </div>
+        )}
       </div>
 
-      <TwinPanel
-        mode={mode}
-        labels={labels}
-        build={snap.build}
-        remodel={snap.remodel}
-        floor={floor}
-        onFloor={(f) => {
-          setFloor(f);
-          setSelected(null);
-        }}
-        rooms={rooms}
-        roomNames={roomNames}
-        selected={selected}
-        onSelect={setSelected}
-        before={before}
-        onBefore={setBefore}
-        thermal={thermal}
-        onThermal={setThermal}
-        onReplay={frozen ? null : replay}
-        v1Href={v1Href}
-        LinkComponent={Link}
-        className="mt-4 lg:absolute lg:bottom-4 lg:right-4 lg:top-4 lg:mt-0 lg:w-[22rem] lg:overflow-y-auto"
-      />
+      <div className="mt-8">
+        <TwinDetails mode={mode} labels={labels} rooms={rooms} roomNames={roomNames} floor={floor} selected={selected} onSelect={setSelected} v1Href={v1Href} LinkComponent={Link} />
       </div>
-      <p className="mt-3 text-[12px] leading-relaxed text-muted">{labels.footnote}</p>
+      <p className="mt-8 border-t border-border pt-4 text-xs leading-relaxed text-muted">{labels.footnote}</p>
     </div>
   );
 }

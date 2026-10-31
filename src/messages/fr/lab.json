@@ -281,7 +281,6 @@
         "ui": {
           "loading": "Préparation de la scène 3D…",
           "unsupported": "Ce navigateur ne peut pas afficher la 3D. Activez l'accélération matérielle ou essayez un autre navigateur.",
-          "hint": "Glisser pour tourner · molette ou pincer pour zoomer",
           "tabsLabel": "Vue",
           "tabs": {
             "build": "Plan → 3D",
@@ -291,80 +290,103 @@
           "play": "Faire avancer le temps",
           "pause": "Arrêter le temps",
           "footnote": "Scène construite à partir des vrais plans de travaux (informations sur l'établissement et l'architecte retirées) ainsi que de la maquette 3D et des calculs de la v1. La course du soleil utilise une latitude du centre de la Corée, en supposant que le haut du plan est le nord.",
+          "replay": "Revoir",
           "build": {
-            "kicker": "1 · Plan → 3D",
-            "title": "Les traits du plan deviennent des murs",
-            "desc": "Les traits des murs, des menuiseries et des cotes des plans du rez-de-chaussée et de l'étage sont tracés tels quels, puis la maquette 3D construite sur les mêmes coordonnées s'élève depuis le sol. Le plan de l'étage flotte à sa vraie hauteur (3,3 m).",
+            "steps": {
+              "plan": "Traits du plan",
+              "rise": "Murs · fenêtres · toit"
+            },
+            "captions": {
+              "plan": "Les traits des plans du rez-de-chaussée et de l'étage sont tracés tels quels. Le plan de l'étage flotte à sa vraie hauteur (3,3 m).",
+              "rise": "La maquette 3D construite sur les mêmes coordonnées s'élève depuis le sol.",
+              "done": "Un bâtiment construit à partir des traits du plan. Faites-le tourner en le faisant glisser."
+            },
             "stats": {
               "lines": "Traits du plan",
               "layers": "Calques du plan",
               "walls": "Surface des murs extérieurs",
               "windows": "Fenêtres extérieures"
             },
-            "steps": {
-              "plan": "Tracé du plan",
-              "rise": "Élévation des murs, fenêtres et toiture"
-            },
-            "replay": "Reconstruire",
+            "windowsValue": "{count} · {area} ㎡",
             "roofNote": "La forme de la toiture n'est pas fixée par les plans : c'est une estimation."
           },
           "rooms": {
-            "kicker": "2 · Pièces · surfaces",
-            "title": "Pièces calculées à partir des calques",
-            "desc": "Les zones fermées par les traits des murs et des menuiseries ont été détectées automatiquement pour calculer les limites et surfaces des pièces. Touchez un sol ou une étiquette pour voir les métrés.",
+            "caption": "Touchez une pièce ou son étiquette pour la retrouver dans le tableau ci-dessous.",
             "floorLabel": "Niveau",
             "floors": {
               "1f": "Rez-de-chaussée",
               "2f": "Étage"
             },
-            "area": "Surface",
-            "perimeter": "Périmètre",
-            "wallArea": "Surface murale",
-            "railing": "Garde-corps",
+            "cols": {
+              "room": "Pièce",
+              "area": "Surface (㎡)",
+              "perimeter": "Périmètre (m)",
+              "wallArea": "Surface murale (㎡)",
+              "status": "Limite"
+            },
+            "railing": "Garde-corps {length} m",
             "auto": "Calculée",
-            "review": "Limite à vérifier",
-            "total": "Total du niveau",
-            "pick": "Touchez une pièce pour voir son périmètre et sa surface murale."
+            "review": "À vérifier",
+            "total": "Total",
+            "note": "Les surfaces sont calculées automatiquement à partir des calques comme des zones fermées par les traits des murs et des menuiseries. Là où l'absence de cloison regroupe plusieurs pièces, la mention « À vérifier » s'affiche."
           },
           "remodel": {
-            "kicker": "3 · Rénovation énergétique",
-            "title": "Réaliser les travaux notés sur les plans",
-            "desc": "L'isolation par l'extérieur et le remplacement des fenêtres indiqués dans les notes des plans sont appliqués pas à pas à la même maquette 3D, puis l'énergie annuelle de chauffage et de climatisation calculée avec EnergyPlus est comparée.",
             "steps": {
               "scan": {
-                "title": "Vue thermique",
-                "desc": "Les surfaces sont colorées selon les coefficients U de la simulation. Plus c'est clair, plus la chaleur s'échappe."
+                "short": "Thermique",
+                "caption": "Les surfaces sont colorées selon le coefficient U. Plus c'est clair, plus la chaleur s'échappe."
               },
               "insulation": {
-                "title": "Isolation par l'extérieur",
-                "desc": "Panneau PF 100 mm + enduit 10 mm · murs extérieurs {area} ㎡ · coefficient U {before} → {after} W/㎡K"
+                "short": "Isolation",
+                "caption": "Un isolant PF de 100 mm est posé sur les 18 murs extérieurs."
               },
               "windows": {
-                "title": "Remplacement des fenêtres",
-                "desc": "Doubles fenêtres PVC · double vitrage à faible émissivité · {count} fenêtres, {area} ㎡ · coefficient U {before} → {after} W/㎡K"
+                "short": "Fenêtres",
+                "caption": "Les 23 fenêtres sont remplacées par des doubles fenêtres à vitrage faible émissivité."
               },
               "pv": {
-                "title": "Solaire (proposition en plus)",
-                "desc": "Absent des plans · {count} modules de {w} W sur le versant sud ({kw} kW)"
+                "short": "Solaire",
+                "caption": "Quatre modules solaires sont posés sur le versant sud — une proposition en plus, absente des plans."
               }
             },
-            "waiting": "En attente",
-            "done": "Terminé",
+            "done": "L'énergie annuelle de chauffage et de climatisation baisse de {pct} %. Comparez avant/après ou activez la vue thermique.",
             "legendLow": "Faibles pertes",
             "legendHigh": "Fortes",
-            "result": "Énergie annuelle de chauffage et de climatisation",
+            "view": "Vue",
             "before": "Avant",
             "after": "Après",
+            "thermal": "Thermique",
+            "results": "Résultats EnergyPlus",
+            "total": "Chauffage + climatisation",
             "heating": "Chauffage",
             "cooling": "Climatisation",
+            "pv": "Production solaire (proposition)",
             "unit": "kWh/an",
+            "works": "Travaux",
+            "cols": {
+              "work": "Travaux",
+              "spec": "Spécification",
+              "qty": "Quantité",
+              "u": "Coefficient U (W/㎡K)"
+            },
+            "items": {
+              "insulation": {
+                "name": "Isolation par l'extérieur",
+                "spec": "Panneau PF 100 mm + enduit 10 mm"
+              },
+              "windows": {
+                "name": "Remplacement des fenêtres",
+                "spec": "Doubles fenêtres PVC · double vitrage faible émissivité 24 mm"
+              },
+              "pv": {
+                "name": "Solaire (proposition)",
+                "spec": "{count} modules de {w} W · versant sud"
+              }
+            },
+            "windowsQty": "{count} · {area} ㎡",
             "chart": "Énergie mensuelle de chauffage et de climatisation (kWh)",
-            "pvAnnual": "Production solaire annuelle",
-            "pvNote": "Calcul simplifié EnergyPlus PVWatts, non inclus dans l'estimation. La forme et l'orientation de la toiture ne sont pas fixées par les plans et sont donc supposées.",
-            "view": "Afficher",
-            "thermal": "Thermique",
-            "replay": "Refaire les travaux",
             "note": "Simulation simplifiée EnergyPlus 9.0 (données météo standard coréennes), et non un classement énergétique officiel. Les coefficients U des murs et fenêtres avant travaux supposent un bâtiment ancien. Les couleurs thermiques sont proportionnelles aux coefficients U et ne sont pas une thermographie.",
+            "pvNote": "Le solaire est un calcul simplifié EnergyPlus PVWatts, non inclus dans l'estimation. La forme et l'orientation de la toiture ne sont pas fixées par les plans et sont donc supposées.",
             "more": "Métrés et estimation indicative dans la v1"
           }
         }
