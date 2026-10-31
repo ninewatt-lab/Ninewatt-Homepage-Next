@@ -15,7 +15,7 @@ import Effects from "@/components/district/Effects";
 import { Sky } from "@/components/hero/Atmosphere";
 import { SimContext, type Sim } from "@/components/hero/heroSim";
 import { buildTwin, type TwinModel } from "./twinBuild";
-import { BUILD, CENTER, FLOOR_Y, REMODEL, TOP_Y, ease, easeOut, piece, span, stepTwin, type TwinFloor, type TwinMode, type TwinSim } from "./twinModel";
+import { BUILD, CENTER, FLOOR_Y, REMODEL, TOP_Y, WIN_U, ease, easeOut, piece, span, stepTwin, thermalColor, wallU, type Scenario, type TwinFloor, type TwinMode, type TwinSim } from "./twinModel";
 
 const BG = "#050d13";
 const TEAL = new THREE.Color("#49B6CA");
@@ -202,7 +202,10 @@ function stepPlanLines(s: TwinSim, mode: TwinMode, floor: TwinFloor, f1: PlanLay
 const LAMP = new THREE.Color("#ffd9a8");
 const GLOW = new THREE.Color("#ffc983");
 
-function stepBuilding(m: TwinModel, s: TwinSim, mode: TwinMode, floor: TwinFloor, before: boolean, thermal: boolean, scanRef: { value: number }, delta: number, frozen: boolean) {
+const GLASS_LOWE = new THREE.Color("#86c3d1");
+const GLASS_TRIPLE = new THREE.Color("#7db8ae");
+
+function stepBuilding(m: TwinModel, s: TwinSim, mode: TwinMode, floor: TwinFloor, before: boolean, thermal: boolean, scenario: Scenario, scanRef: { value: number }, delta: number, frozen: boolean) {
   // 구축: 자르는 면이 올라간다 (다 지으면 치운다)
   const rise = span(s.build, BUILD.rise);
   m.plane.constant = s.build >= 1 ? 100 : rise <= 0 ? -0.01 : ease(rise) * TOP_Y;
@@ -217,14 +220,24 @@ function stepBuilding(m: TwinModel, s: TwinSim, mode: TwinMode, floor: TwinFloor
   // 리모델링 (전후 비교에서 "전"이면 시공 전 모습)
   const r = before ? 0 : s.remodel;
   const ins = span(r, REMODEL.insulation);
+  // 고른 조합의 두께로 외단열 판을 바꿔 끼운다 (열화상 막도 같은 형상)
   m.walls.forEach((w, k) => {
-    const e = easeOut(piece(ins, k / m.walls.length));
+    const g = w.geos[scenario.wall];
+    if (g && w.shell.geometry !== g) {
+      w.shell.geometry = g;
+      for (const c of w.shell.children) (c as THREE.Mesh).geometry = g;
+    }
+    const e = scenario.wall ? easeOut(piece(ins, k / m.walls.length)) : 0;
     w.shell.visible = e > 0 && !w.shell.userData.hidden;
     w.shell.position.copy(w.out).multiplyScalar((1 - e) * 1.8);
   });
+  m.heat.shell.color.copy(thermalColor(wallU(scenario.wall)));
+  m.heat.fresh.color.copy(thermalColor(WIN_U[scenario.win]));
+  m.freshGlass.color.copy(scenario.win === "triple" ? GLASS_TRIPLE : GLASS_LOWE);
   const win = span(r, REMODEL.windows);
   m.windows.forEach((w, k) => {
-    const p = piece(win, k / m.windows.length);
+    // 기존 창을 고르면 바꾸지 않는다
+    const p = scenario.win === "old" ? 0 : piece(win, k / m.windows.length);
     // 헌 창이 바깥으로 빠지며 작아지고, 새 창이 바깥에서 들어온다
     const out = easeOut(Math.min(1, p / 0.45));
     const inn = easeOut(Math.max(0, (p - 0.4) / 0.6));
@@ -237,8 +250,11 @@ function stepBuilding(m: TwinModel, s: TwinSim, mode: TwinMode, floor: TwinFloor
   if (m.pv) {
     const pv = m.pv;
     const ph = span(r, REMODEL.pv);
+    // 2장이면 가운데 두 장
+    const skip = (pv.modules.length - scenario.pv) / 2;
     pv.modules.forEach((mod, k) => {
-      const e = easeOut(piece(ph, k / pv.modules.length));
+      const i = k - skip;
+      const e = i >= 0 && i < scenario.pv ? easeOut(piece(ph, i / scenario.pv)) : 0;
       mod.visible = e > 0 && !pv.group.userData.hidden;
       mod.position.copy(pv.base[k]).addScaledVector(pv.normal, (1 - e) * 2.5);
     });
@@ -264,14 +280,32 @@ function stepBuilding(m: TwinModel, s: TwinSim, mode: TwinMode, floor: TwinFloor
   m.lamps.color.copy(LAMP).multiplyScalar(0.2 + s.dark * 1.4);
 }
 
-function Building({ url, simRef, mode, floor, before, thermal, frozen }: { url: string; simRef: RefObject<TwinSim>; mode: TwinMode; floor: TwinFloor; before: boolean; thermal: boolean; frozen: boolean }) {
+function Building({
+  url,
+  simRef,
+  mode,
+  floor,
+  before,
+  thermal,
+  scenario,
+  frozen,
+}: {
+  url: string;
+  simRef: RefObject<TwinSim>;
+  mode: TwinMode;
+  floor: TwinFloor;
+  before: boolean;
+  thermal: boolean;
+  scenario: Scenario;
+  frozen: boolean;
+}) {
   const { scene } = useGLTF(url);
   const invalidate = useThree((s) => s.invalidate);
   const model = useMemo(() => buildTwin(scene), [scene]);
   const scanRef = useRef({ value: -0.5 });
   // 움직임 줄이기(그때만 그리는 모드)에서도 보기를 바꾸면 바로 그린다
-  useEffect(() => invalidate(), [mode, floor, before, thermal, invalidate]);
-  useFrame((_, delta) => stepBuilding(model, simRef.current, mode, floor, before, thermal, scanRef.current, delta, frozen));
+  useEffect(() => invalidate(), [mode, floor, before, thermal, scenario, invalidate]);
+  useFrame((_, delta) => stepBuilding(model, simRef.current, mode, floor, before, thermal, scenario, scanRef.current, delta, frozen));
   return <primitive object={model.root} />;
 }
 
@@ -440,6 +474,7 @@ export default function TwinScene({
   onSelect,
   before,
   thermal,
+  scenario,
   chipsRef,
   active,
   frozen,
@@ -456,6 +491,7 @@ export default function TwinScene({
   onSelect: (key: string | null) => void;
   before: boolean;
   thermal: boolean;
+  scenario: Scenario;
   chipsRef: RefObject<Record<string, HTMLElement | null>>;
   active: boolean;
   frozen: boolean;
@@ -501,7 +537,7 @@ export default function TwinScene({
         <Lights shadows={shadows} />
         <Stage />
         <PlanLines plan={plan} simRef={simRef} mode={mode} floor={floor} />
-        <Building url={modelUrl} simRef={simRef} mode={mode} floor={floor} before={before} thermal={thermal} frozen={frozen} />
+        <Building url={modelUrl} simRef={simRef} mode={mode} floor={floor} before={before} thermal={thermal} scenario={scenario} frozen={frozen} />
         {mode === "rooms" && <Rooms rooms={rooms} floor={floor} selected={selected} onSelect={onSelect} />}
         <Labels rooms={rooms} floor={floor} mode={mode} chipsRef={chipsRef} />
         <OrbitControls makeDefault enableDamping enablePan={false} minDistance={9} maxDistance={60} maxPolarAngle={Math.PI / 2 - 0.08} target={POSES.plan.target.toArray()} />

@@ -11,7 +11,7 @@ import Image from "next/image";
 import { Component, useCallback, useEffect, useRef, useState, useSyncExternalStore, type ReactNode } from "react";
 import { Link } from "@/i18n/navigation";
 import { StageBar, TwinDetails, type PanelRoom, type TwinLabels } from "./TwinUI";
-import { STATIC_HOUR, createTwinSim, type TwinFloor, type TwinMode, type TwinSim } from "./twinModel";
+import { DRAWN, STATIC_HOUR, createTwinSim, type Scenario, type TwinFloor, type TwinMode, type TwinSim } from "./twinModel";
 import type { TwinPlanData, TwinRoom } from "./TwinScene";
 
 const TwinScene = dynamic(() => import("./TwinScene"), { ssr: false });
@@ -82,6 +82,8 @@ export default function LabTwin({
   const [selected, setSelected] = useState<string | null>(null);
   const [before, setBefore] = useState(false);
   const [thermal, setThermal] = useState(false);
+  // 리모델링 조합 — 처음엔 도면 사양 (+ 태양광 제안 4장)
+  const [scenario, setScenario] = useState<Scenario>(DRAWN);
   const [paused, setPaused] = useState(false);
   const [snap, setSnap] = useState({ hour: initial.hour, build: initial.build, remodel: 0 });
   const chips = useRef<Record<string, HTMLElement | null>>({});
@@ -193,6 +195,7 @@ export default function LabTwin({
                 onSelect={setSelected}
                 before={before}
                 thermal={thermal}
+                scenario={scenario}
                 chipsRef={chips}
                 active={visible}
                 frozen={frozen}
@@ -272,6 +275,7 @@ export default function LabTwin({
             <StageBar
               mode={mode}
               labels={labels}
+              scenario={scenario}
               build={snap.build}
               remodel={snap.remodel}
               floor={floor}
@@ -290,7 +294,7 @@ export default function LabTwin({
       </div>
 
       <div className="mt-8">
-        <TwinDetails mode={mode} labels={labels} rooms={rooms} roomNames={roomNames} floor={floor} selected={selected} onSelect={setSelected} v1Href={v1Href} LinkComponent={Link} />
+        <TwinDetails mode={mode} labels={labels} scenario={scenario} onScenario={setScenario} rooms={rooms} roomNames={roomNames} floor={floor} selected={selected} onSelect={setSelected} v1Href={v1Href} LinkComponent={Link} />
       </div>
       <p className="mt-8 border-t border-border pt-4 text-xs leading-relaxed text-muted">{labels.footnote}</p>
     </div>

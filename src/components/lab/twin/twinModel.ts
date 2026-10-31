@@ -52,6 +52,22 @@ export const easeOut = (t: number) => 1 - (1 - t) ** 3;
 /** 단계 진행(0~1) 중 order(0~1) 번째 부품의 진행 — 부품마다 단계의 35% 동안 움직인다 */
 export const piece = (phase: number, order: number) => Math.min(1, Math.max(0, (phase - order * 0.65) / 0.35));
 
+/* ── 리모델링 조합 (시나리오 비교) ───────────────────────────────── */
+// 수치는 scripts/lab/energy_scenarios.py 가 조합마다 EnergyPlus 로 계산한 ai-building-workspace-scenarios.json
+
+export type WinKind = "old" | "lowe" | "triple";
+export type Scenario = { wall: 0 | 50 | 100 | 150; win: WinKind; pv: 0 | 2 | 4 };
+/** 도면에 적힌 공사 (+ 태양광 제안 4장) */
+export const DRAWN: Scenario = { wall: 100, win: "lowe", pv: 4 };
+export const WALL_OPTIONS = [0, 50, 100, 150] as const;
+export const WIN_OPTIONS: WinKind[] = ["old", "lowe", "triple"];
+export const PV_OPTIONS = [0, 2, 4] as const;
+/** 창호 열관류율 (energy_idf.py 의 WINDOWS 와 같다) */
+export const WIN_U: Record<WinKind, number> = { old: 4.0, lowe: 1.8, triple: 1.0 };
+/** 외벽 열관류율 — energy_idf.py 와 같은 계산: 노후 외벽(U 1.0) + PF보드(λ 0.019) + 스타코 10 mm(λ 0.7) */
+export const wallU = (mm: number) => (mm ? 1 / (1 / 1.0 + 0.01 / 0.7 + mm / 1000 / 0.019) : 1.0);
+export const scenarioKey = (s: Pick<Scenario, "wall" | "win">) => `w${s.wall}-${s.win}`;
+
 /* ── 상태 ─────────────────────────────────────────────────────────── */
 
 export type TwinMode = "build" | "rooms" | "remodel";

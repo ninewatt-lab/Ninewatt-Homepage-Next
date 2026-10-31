@@ -5,20 +5,31 @@
  *
  * 장면 위에는 지금 무엇을 하는지(자막)와 어디까지 왔는지(챕터)만 두고, 숫자 · 표는 페이지 본문 모양
  * (v1 상세의 통계 칸 · 표와 같은 모양, 라이트/다크 테마를 따른다)으로 장면 밑에 둔다.
- * 수치는 v1 데이터(viewer.json · ai-building-workspace-energy.json)를 그대로 읽는다.
+ * 실 수치는 v1 데이터(viewer.json · ai-building-workspace-energy.json), 리모델링 수치는 조합마다 EnergyPlus 로
+ * 계산한 ai-building-workspace-scenarios.json(scripts/lab/energy_scenarios.py)에서 그대로 읽는다.
  */
 
 import { useRef, useState } from "react";
 import energy from "@/data/lab/ai-building-workspace-energy.json";
+import scenarioData from "@/data/lab/ai-building-workspace-scenarios.json";
 import {
   BUILD,
+  DRAWN,
+  PV_OPTIONS,
   REMODEL,
   REMODEL_STEP_KEYS,
   THERMAL_STOPS,
+  WALL_OPTIONS,
+  WIN_OPTIONS,
+  WIN_U,
+  scenarioKey,
   span,
+  wallU,
   type RemodelStep,
+  type Scenario,
   type TwinFloor,
   type TwinMode,
+  type WinKind,
 } from "./twinModel";
 
 export type TwinLabels = {
@@ -65,10 +76,26 @@ export type TwinLabels = {
     unit: string;
     works: string;
     cols: Record<"work" | "spec" | "qty" | "u", string>;
-    items: Record<
-      "insulation" | "windows" | "pv",
-      { name: string; spec: string }
-    >;
+    items: Record<"insulation" | "windows" | "pv", { name: string }>;
+    scenario: {
+      title: string;
+      desc: string;
+      wall: string;
+      win: string;
+      pv: string;
+      none: string;
+      drawn: string;
+      wins: Record<WinKind, string>;
+      count: string;
+      pvHint: string;
+      reset: string;
+    };
+    chosen: string;
+    coolingUp: string;
+    doneNone: string;
+    captions: Record<"insulation" | "insulationNone" | "windows" | "windowsNone" | "pv" | "pvNone", string>;
+    specs: Record<"insulation" | "none" | WinKind | "pv", string>;
+    noteScenario: string;
     windowsQty: string;
     chart: string;
     note: string;
@@ -93,15 +120,19 @@ const n0 = (v: number) => Math.round(v).toLocaleString("ko-KR");
 /** 열관류율: 1 → "1.0", 0.16 → "0.16" */
 const uv = (v: number) => (Number.isInteger(v) ? v.toFixed(1) : String(v));
 
-const E = energy.energy;
-const A = energy.assumptions;
 const ENV = energy.envelope;
 const PV = energy.pv;
-const TOTAL_BEFORE = E.before.heat + E.before.cool;
-const TOTAL_AFTER = E.after.heat + E.after.cool;
-const SAVING = Math.round((1 - TOTAL_AFTER / TOTAL_BEFORE) * 100);
-const MONTHLY_BEFORE = E.before.heat_m.map((h, i) => h + E.before.cool_m[i]);
-const MONTHLY_AFTER = E.after.heat_m.map((h, i) => h + E.after.cool_m[i]);
+
+type Run = { heat: number; cool: number; heat_m: number[]; cool_m: number[] };
+const RUNS = scenarioData.scenarios as Record<string, Run>;
+const PV_RUNS = scenarioData.pv as Record<string, { annual: number; monthly: number[] }>;
+/** 리모델링 전 = 외단열 없음 · 기존 창 */
+const BASE = RUNS["w0-old"];
+const runOf = (s: Scenario) => RUNS[scenarioKey(s)];
+const total = (r: Run) => r.heat + r.cool;
+const monthly = (r: Run) => r.heat_m.map((h, i) => h + r.cool_m[i]);
+const savingOf = (s: Scenario) => Math.round((1 - total(runOf(s)) / total(BASE)) * 100);
+const MONTHLY_BEFORE = monthly(BASE);
 
 /* ── 장면 아래쪽: 자막 · 챕터 ─────────────────────────────────────── */
 
@@ -146,9 +177,11 @@ export function StageBar({
   thermal,
   onThermal,
   onReplay,
+  scenario,
 }: {
   mode: TwinMode;
   labels: TwinLabels;
+  scenario: Scenario;
   build: number;
   remodel: number;
   floor: TwinFloor;
@@ -183,10 +216,29 @@ export function StageBar({
       amount: span(remodel, REMODEL[k]),
     }));
     const now = REMODEL_STEP_KEYS.find((k) => span(remodel, REMODEL[k]) < 1);
+    const C = L.remodel.captions;
+    const pct = savingOf(scenario);
+    // 고른 조합에 맞춘 자막 (그 공사가 없는 조합이면 없다고 알려 준다)
+    const stepCaption = (k: RemodelStep) =>
+      k === "scan"
+        ? L.remodel.steps.scan.caption
+        : k === "insulation"
+          ? scenario.wall
+            ? fill(C.insulation, { mm: scenario.wall })
+            : C.insulationNone
+          : k === "windows"
+            ? scenario.win !== "old"
+              ? fill(C.windows, { type: L.remodel.scenario.wins[scenario.win] })
+              : C.windowsNone
+            : scenario.pv
+              ? fill(C.pv, { count: scenario.pv })
+              : C.pvNone;
     caption =
       remodel >= 1 || !now
-        ? fill(L.remodel.done, { pct: SAVING })
-        : L.remodel.steps[now].caption;
+        ? pct > 0
+          ? fill(L.remodel.done, { pct })
+          : L.remodel.doneNone
+        : stepCaption(now);
   }
   const activeKey = chapters.find((c) => c.amount < 1)?.key;
   const done =
@@ -320,6 +372,31 @@ export function StageBar({
 
 /* ── 장면 밑: 수치 ────────────────────────────────────────────────── */
 
+/** 한 줄 선택 (사이트 본문 모양 · 라이트/다크) */
+function Choice<T extends string | number>({ label, hint, options, value, onChange }: { label: string; hint: string; options: { value: T; label: string }[]; value: T; onChange: (v: T) => void }) {
+  return (
+    <div>
+      <div className="flex items-baseline justify-between gap-2">
+        <span className="text-xs font-semibold">{label}</span>
+        <span className="truncate text-xs text-muted">{hint}</span>
+      </div>
+      <div role="group" aria-label={label} className="mt-2 flex rounded-lg border border-border bg-surface p-0.5">
+        {options.map((o) => (
+          <button
+            key={String(o.value)}
+            type="button"
+            aria-pressed={value === o.value}
+            onClick={() => onChange(o.value)}
+            className={`min-w-0 flex-1 truncate rounded-md px-2 py-1.5 text-sm transition-colors ${value === o.value ? "bg-background font-semibold text-foreground shadow-sm" : "text-muted hover:text-foreground"}`}
+          >
+            {o.label}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function Cell({
   label,
   children,
@@ -349,9 +426,13 @@ export function TwinDetails({
   onSelect,
   v1Href,
   LinkComponent,
+  scenario,
+  onScenario,
 }: {
   mode: TwinMode;
   labels: TwinLabels;
+  scenario: Scenario;
+  onScenario: (s: Scenario) => void;
   rooms: PanelRoom[];
   roomNames: Record<string, string>;
   floor: TwinFloor;
@@ -491,53 +572,96 @@ export function TwinDetails({
   }
 
   const R = L.remodel;
+  const run = runOf(scenario);
+  const pvRun = scenario.pv ? PV_RUNS[String(scenario.pv)] : null;
+  const pct = savingOf(scenario);
+  const isDrawn = scenario.wall === DRAWN.wall && scenario.win === DRAWN.win && scenario.pv === DRAWN.pv;
   const works = [
     {
       key: "insulation",
-      spec: R.items.insulation.spec,
-      qty: `${ENV.wallArea.toFixed(1)} ㎡`,
-      u: `${uv(A.before.wallU)} → ${uv(A.after.wallU)}`,
+      spec: scenario.wall ? fill(R.specs.insulation, { mm: scenario.wall }) : R.specs.none,
+      qty: scenario.wall ? `${ENV.wallArea.toFixed(1)} ㎡` : "–",
+      u: scenario.wall ? `${uv(wallU(0))} → ${wallU(scenario.wall).toFixed(2)}` : uv(wallU(0)),
     },
     {
       key: "windows",
-      spec: R.items.windows.spec,
-      qty: fill(R.windowsQty, {
-        count: ENV.windows,
-        area: ENV.windowArea.toFixed(1),
-      }),
-      u: `${uv(A.before.windowU)} → ${uv(A.after.windowU)}`,
+      spec: R.specs[scenario.win],
+      qty: scenario.win !== "old" ? fill(R.windowsQty, { count: ENV.windows, area: ENV.windowArea.toFixed(1) }) : "–",
+      u: scenario.win !== "old" ? `${uv(WIN_U.old)} → ${uv(WIN_U[scenario.win])}` : uv(WIN_U.old),
     },
     {
       key: "pv",
-      spec: fill(R.items.pv.spec, { w: PV.moduleW, count: PV.modules }),
-      qty: `${PV.kw} kW`,
+      spec: scenario.pv ? fill(R.specs.pv, { w: PV.moduleW, count: scenario.pv }) : R.specs.none,
+      qty: scenario.pv ? `${((scenario.pv * PV.moduleW) / 1000).toFixed(2)} kW` : "–",
       u: "–",
     },
   ] as const;
+  const set = (patch: Partial<Scenario>) => onScenario({ ...scenario, ...patch });
   return (
     <div>
-      <h3 className="text-sm font-semibold">{R.results}</h3>
+      {/* 조합 고르기 — 위 3D 건물도 같이 바뀐다 */}
+      <div className="rounded-xl border border-border p-5">
+        <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+          <h3 className="text-sm font-semibold">{R.scenario.title}</h3>
+          {!isDrawn && (
+            <button type="button" onClick={() => onScenario(DRAWN)} className="text-sm font-semibold text-primary hover:underline">
+              {R.scenario.reset}
+            </button>
+          )}
+        </div>
+        <p className="mt-1 text-sm leading-relaxed text-muted">{R.scenario.desc}</p>
+        <div className="mt-5 grid gap-5 md:grid-cols-3">
+          <Choice
+            label={R.scenario.wall}
+            hint={`${R.scenario.drawn} ${DRAWN.wall} mm`}
+            options={WALL_OPTIONS.map((v) => ({ value: v, label: v ? `${v} mm` : R.scenario.none }))}
+            value={scenario.wall}
+            onChange={(wall) => set({ wall })}
+          />
+          <Choice
+            label={R.scenario.win}
+            hint={`${R.scenario.drawn} ${R.scenario.wins[DRAWN.win]}`}
+            options={WIN_OPTIONS.map((v) => ({ value: v, label: R.scenario.wins[v] }))}
+            value={scenario.win}
+            onChange={(win) => set({ win })}
+          />
+          <Choice
+            label={R.scenario.pv}
+            hint={R.scenario.pvHint}
+            options={PV_OPTIONS.map((v) => ({ value: v, label: v ? fill(R.scenario.count, { count: v }) : R.scenario.none }))}
+            value={scenario.pv}
+            onChange={(pv) => set({ pv })}
+          />
+        </div>
+      </div>
+
+      <h3 className="mt-10 text-sm font-semibold">{R.results}</h3>
       <dl className="mt-3 grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-border bg-border lg:grid-cols-4">
         <Cell label={R.total}>
-          <span className={`${big} text-primary`}>−{SAVING}%</span>
+          <span className={`${big} ${pct > 0 ? "text-primary" : ""}`}>{pct > 0 ? `−${pct}%` : `${-pct}%`}</span>
           <span className="mt-1 block text-xs tabular-nums text-muted">
-            {n0(TOTAL_BEFORE)} → {n0(TOTAL_AFTER)} {R.unit}
+            {n0(total(BASE))} → {n0(total(run))} {R.unit}
           </span>
         </Cell>
         <Cell label={`${R.heating} · ${R.unit}`}>
           <span className={big}>
-            {n0(E.before.heat)} → {n0(E.after.heat)}
+            {n0(BASE.heat)} → {n0(run.heat)}
           </span>
         </Cell>
         <Cell label={`${R.cooling} · ${R.unit}`}>
-          <span className={big}>
-            {n0(E.before.cool)} → {n0(E.after.cool)}
+          <span className={`${big} ${run.cool > BASE.cool ? "text-amber-700 dark:text-amber-400" : ""}`}>
+            {n0(BASE.cool)} → {n0(run.cool)}
           </span>
         </Cell>
         <Cell label={`${R.pv} · ${R.unit}`}>
-          <span className={big}>{n0(PV.annualKWh)}</span>
+          <span className={big}>{pvRun ? n0(pvRun.annual) : "–"}</span>
         </Cell>
       </dl>
+      {run.cool > BASE.cool && (
+        <p className="mt-3 border-l-2 border-amber-500 pl-3 text-sm leading-relaxed text-muted">
+          {fill(R.coolingUp, { before: n0(BASE.cool), after: n0(run.cool) })}
+        </p>
+      )}
 
       <div className="mt-10 grid gap-10 lg:grid-cols-[1.2fr_1fr]">
         <div>
@@ -584,8 +708,8 @@ export function TwinDetails({
           <div className="mt-3">
             <MonthChart
               before={MONTHLY_BEFORE}
-              after={MONTHLY_AFTER}
-              labels={{ before: R.before, after: R.after }}
+              after={monthly(run)}
+              labels={{ before: R.before, after: R.chosen }}
             />
           </div>
         </div>
@@ -593,6 +717,7 @@ export function TwinDetails({
 
       <div className="mt-8 space-y-2 text-sm leading-relaxed text-muted">
         <p>{R.note}</p>
+        <p>{R.noteScenario}</p>
         <p>{R.pvNote}</p>
       </div>
       <LinkComponent

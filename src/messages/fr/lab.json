@@ -369,25 +369,59 @@
               "qty": "Quantité",
               "u": "Coefficient U (W/㎡K)"
             },
-            "items": {
-              "insulation": {
-                "name": "Isolation par l'extérieur",
-                "spec": "Panneau PF 100 mm + enduit 10 mm"
-              },
-              "windows": {
-                "name": "Remplacement des fenêtres",
-                "spec": "Doubles fenêtres PVC · double vitrage faible émissivité 24 mm"
-              },
-              "pv": {
-                "name": "Solaire (proposition)",
-                "spec": "{count} modules de {w} W · versant sud"
-              }
-            },
             "windowsQty": "{count} · {area} ㎡",
             "chart": "Énergie mensuelle de chauffage et de climatisation (kWh)",
             "note": "Simulation simplifiée EnergyPlus 9.0 (données météo standard coréennes), et non un classement énergétique officiel. Les coefficients U des murs et fenêtres avant travaux supposent un bâtiment ancien. Les couleurs thermiques sont proportionnelles aux coefficients U et ne sont pas une thermographie.",
             "pvNote": "Le solaire est un calcul simplifié EnergyPlus PVWatts, non inclus dans l'estimation. La forme et l'orientation de la toiture ne sont pas fixées par les plans et sont donc supposées.",
-            "more": "Métrés et estimation indicative dans la v1"
+            "more": "Métrés et estimation indicative dans la v1",
+            "scenario": {
+              "title": "Essayer d'autres combinaisons",
+              "desc": "Choisissez l'isolation, les fenêtres et le solaire. Chaque combinaison a été calculée à l'avance avec EnergyPlus, et le bâtiment 3D ci-dessus change en conséquence.",
+              "wall": "Isolation",
+              "win": "Fenêtres",
+              "pv": "Solaire",
+              "none": "Aucune",
+              "drawn": "Plan",
+              "wins": {
+                "old": "Existantes",
+                "lowe": "Double FE",
+                "triple": "Triple FE"
+              },
+              "count": "{count}",
+              "reset": "Revenir au plan",
+              "pvHint": "Absent des plans"
+            },
+            "chosen": "Combinaison choisie",
+            "coolingUp": "Avec cette combinaison, l'énergie de climatisation augmente par rapport à avant ({before} → {after} kWh) : les murs isolés laissent moins s'échapper la chaleur solaire entrée par les fenêtres. Remplacer aussi les fenêtres la fait baisser.",
+            "doneNone": "Cette combinaison est identique à l'état avant travaux. Choisissez l'isolation et les fenêtres ci-dessous.",
+            "captions": {
+              "insulation": "Un isolant PF de {mm} mm est posé sur les 18 murs extérieurs.",
+              "insulationNone": "Pas d'isolation par l'extérieur dans cette combinaison.",
+              "windows": "Les 23 fenêtres sont remplacées par des fenêtres {type}.",
+              "windowsNone": "Les fenêtres restent telles quelles.",
+              "pv": "{count} modules solaires sont posés sur le versant sud — une proposition en plus, absente des plans.",
+              "pvNone": "Pas de solaire dans cette combinaison."
+            },
+            "specs": {
+              "insulation": "Panneau PF {mm} mm + enduit 10 mm",
+              "none": "Aucune",
+              "old": "Fenêtres existantes conservées (aluminium · double vitrage standard, supposé)",
+              "lowe": "Doubles fenêtres PVC · double vitrage faible émissivité 24 mm",
+              "triple": "Fenêtres triple vitrage faible émissivité (valeurs produit typiques, supposées)",
+              "pv": "{count} modules de {w} W · versant sud"
+            },
+            "noteScenario": "Pour 50 et 150 mm, seule l'épaisseur du panneau PF du plan a été changée ; les fenêtres triple vitrage (U 1,0, facteur solaire 0,40) reprennent des valeurs produit typiques. Toiture, plancher, infiltrations, occupation et équipements sont identiques dans toutes les combinaisons.",
+            "items": {
+              "insulation": {
+                "name": "Isolation par l'extérieur"
+              },
+              "windows": {
+                "name": "Fenêtres"
+              },
+              "pv": {
+                "name": "Solaire (proposition)"
+              }
+            }
           }
         }
       },

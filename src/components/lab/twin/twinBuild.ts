@@ -12,8 +12,8 @@ import energy from "@/data/lab/ai-building-workspace-energy.json";
 import { pvTexture } from "@/components/hero/textures";
 import { isExteriorWall, outward, readParts, roofPlane, shellGeometry, thermalColor, windowGroups, type Part } from "./twinModel";
 
-/** 외단열 PF보드 100 mm + 스타코 10 mm */
-const SHELL = 0.11;
+/** 외단열 판 두께(m) — PF보드 두께(mm) + 스타코 10 mm. 시나리오 비교에서 고른 두께로 바꿔 끼운다 */
+export const SHELL: Record<number, number> = { 50: 0.06, 100: 0.11, 150: 0.16 };
 /** 430 W 모듈 (1.72 × 1.13 m), 남쪽 지붕면에 한 줄 */
 const MODULE = { w: 1.13, l: 1.72, gap: 0.04 };
 
@@ -24,20 +24,23 @@ export type TwinModel = {
   root: THREE.Group;
   plane: THREE.Plane;
   scan: { value: number };
-  walls: { shell: THREE.Mesh; out: THREE.Vector3; floor: Floor }[];
+  walls: { shell: THREE.Mesh; geos: Record<number, THREE.BufferGeometry>; out: THREE.Vector3; floor: Floor }[];
   windows: { old: THREE.Group; fresh: THREE.Group; at: THREE.Vector3; out: THREE.Vector3; floor: Floor }[];
   pv: { group: THREE.Group; modules: THREE.Mesh[]; base: THREE.Vector3[]; normal: THREE.Vector3 } | null;
   overlays: THREE.Mesh[];
   glass: THREE.MeshStandardMaterial[];
   lamps: THREE.MeshBasicMaterial;
+  /** 시나리오에 따라 색을 바꾸는 열화상 막 (외단열 판 · 새 창) 과 새 창 유리 */
+  heat: { shell: THREE.MeshBasicMaterial; fresh: THREE.MeshBasicMaterial };
+  freshGlass: THREE.MeshStandardMaterial;
   items: Item[];
 };
 
 const U = energy.assumptions;
 
-// 같은 열관류율은 막 재질 하나를 같이 쓴다
-function thermalMaterial(cache: Map<number, THREE.MeshBasicMaterial>, u: number, plane: THREE.Plane, scan: { value: number }) {
-  let m = cache.get(u);
+// 같은 열관류율은 막 재질 하나를 같이 쓴다 (cache 가 없으면 따로 — 색을 바꿀 막)
+function thermalMaterial(cache: Map<number, THREE.MeshBasicMaterial> | null, u: number, plane: THREE.Plane, scan: { value: number }) {
+  let m = cache?.get(u);
   if (m) return m;
   m = new THREE.MeshBasicMaterial({
     color: thermalColor(u),
@@ -57,7 +60,7 @@ function thermalMaterial(cache: Map<number, THREE.MeshBasicMaterial>, u: number,
       .replace("#include <clipping_planes_fragment>", "#include <clipping_planes_fragment>\nif (vWY > uScan) discard;");
   };
   m.customProgramCacheKey = () => "twin-thermal";
-  cache.set(u, m);
+  cache?.set(u, m);
   return m;
 }
 
@@ -129,13 +132,14 @@ export function buildTwin(scene: THREE.Group): TwinModel {
   // 외벽 + 외단열 판
   const shellMat = new THREE.MeshStandardMaterial({ color: "#ddd6c9", roughness: 0.92, clippingPlanes: [plane] });
   const wallHeat = thermalMaterial(cache, U.before.wallU, plane, scan);
-  const shellHeat = thermalMaterial(cache, U.after.wallU, plane, scan);
+  const shellHeat = thermalMaterial(null, U.after.wallU, plane, scan);
   const walls: TwinModel["walls"] = parts
     .filter(isExteriorWall)
     .sort((a, b) => (a.floor === b.floor ? orderKey(a) - orderKey(b) : a.floor < b.floor ? -1 : 1))
     .map((p) => {
       const out = outward(p.name);
-      const shell = new THREE.Mesh(shellGeometry(p.mesh.geometry, out, SHELL), shellMat);
+      const geos = Object.fromEntries(Object.entries(SHELL).map(([mm, t]) => [mm, shellGeometry(p.mesh.geometry, out, t)]));
+      const shell = new THREE.Mesh(geos[100], shellMat);
       shell.castShadow = true;
       shell.receiveShadow = true;
       shell.visible = false;
@@ -144,7 +148,7 @@ export function buildTwin(scene: THREE.Group): TwinModel {
       addOverlay(p.mesh, wallHeat, overlays);
       addOverlay(shell, shellHeat, overlays);
       items.push({ obj: shell, floor: p.floor });
-      return { shell, out, floor: p.floor };
+      return { shell, geos, out, floor: p.floor };
     });
 
   // 바깥 창 → 묶음으로 옮기고, 같은 형상의 새 창을 만든다
@@ -152,7 +156,7 @@ export function buildTwin(scene: THREE.Group): TwinModel {
   const lowE = new THREE.MeshStandardMaterial({ color: "#86c3d1", roughness: 0.06, metalness: 0.7, transparent: true, opacity: 0.4, depthWrite: false, clippingPlanes: [plane] });
   glass.add(lowE);
   const oldHeat = thermalMaterial(cache, U.before.windowU, plane, scan);
-  const newHeat = thermalMaterial(cache, U.after.windowU, plane, scan);
+  const newHeat = thermalMaterial(null, U.after.windowU, plane, scan);
   const windows: TwinModel["windows"] = windowGroups(parts)
     .sort((a, b) => (a.parts[0].floor === b.parts[0].floor ? orderKey(a.parts[0], a.wall) - orderKey(b.parts[0], b.wall) : a.parts[0].floor < b.parts[0].floor ? -1 : 1))
     .map((w) => {
@@ -191,7 +195,7 @@ export function buildTwin(scene: THREE.Group): TwinModel {
     items.push({ obj: top, floor: p.floor, ceiling: /Ceiling/.test(p.name) });
   }
 
-  return { root, plane, scan, walls, windows, pv: solar(root, parts, plane, items), overlays, glass: [...glass], lamps, items };
+  return { root, plane, scan, walls, windows, pv: solar(root, parts, plane, items), overlays, glass: [...glass], lamps, heat: { shell: shellHeat, fresh: newHeat }, freshGlass: lowE, items };
 }
 
 /** 같은 층 안 순서: 남 → 동 → 북 → 서 (카메라 쪽부터 돌아간다), 같은 면에서는 왼쪽부터 */

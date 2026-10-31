@@ -369,25 +369,59 @@
               "qty": "Quantity",
               "u": "U-value (W/㎡K)"
             },
-            "items": {
-              "insulation": {
-                "name": "External wall insulation",
-                "spec": "PF board 100 mm + stucco 10 mm"
-              },
-              "windows": {
-                "name": "Window replacement",
-                "spec": "PVC double windows · Low-E double glazing 24 mm"
-              },
-              "pv": {
-                "name": "Solar (extra proposal)",
-                "spec": "{count} × {w} W modules · south roof slope"
-              }
-            },
             "windowsQty": "{count} · {area} ㎡",
             "chart": "Monthly heating & cooling energy (kWh)",
             "note": "A simple EnergyPlus 9.0 simulation (Korean standard weather data), not an official energy rating. Pre-remodeling wall and window U-values assume an aging building. Thermal colors are proportional to U-values, not a thermal photograph.",
             "pvNote": "Solar is a simple EnergyPlus PVWatts calculation, not included in the estimate. The roof shape and orientation aren't fixed by the drawings, so they're assumed.",
-            "more": "Quantities and the example estimate are in v1"
+            "more": "Quantities and the example estimate are in v1",
+            "scenario": {
+              "title": "Try other combinations",
+              "desc": "Pick the insulation, windows and solar. Each combination was calculated in advance with EnergyPlus, and the 3D building above changes to match.",
+              "wall": "Insulation",
+              "win": "Windows",
+              "pv": "Solar",
+              "none": "None",
+              "drawn": "Drawing",
+              "wins": {
+                "old": "Existing",
+                "lowe": "Low-E double",
+                "triple": "Low-E triple"
+              },
+              "count": "{count}",
+              "reset": "Back to the drawing spec",
+              "pvHint": "Not in the drawings"
+            },
+            "chosen": "Chosen combination",
+            "coolingUp": "With this combination, cooling energy goes up compared with before ({before} → {after} kWh): the insulated walls let less of the solar heat coming through the windows escape. Replacing the windows as well brings it down.",
+            "doneNone": "This combination is the same as before remodeling. Pick insulation and windows below.",
+            "captions": {
+              "insulation": "{mm} mm PF board insulation goes onto the 18 exterior walls.",
+              "insulationNone": "No external insulation in this combination.",
+              "windows": "The 23 windows are replaced with {type} windows.",
+              "windowsNone": "The windows stay as they are.",
+              "pv": "{count} solar modules go onto the south roof slope — an extra proposal, not in the drawings.",
+              "pvNone": "No solar in this combination."
+            },
+            "specs": {
+              "insulation": "PF board {mm} mm + stucco 10 mm",
+              "none": "None",
+              "old": "Existing windows kept (aluminium · standard double glazing, assumed)",
+              "lowe": "PVC double windows · Low-E double glazing 24 mm",
+              "triple": "Low-E triple-glazed windows (typical product values, assumed)",
+              "pv": "{count} × {w} W modules · south roof slope"
+            },
+            "noteScenario": "For 50 and 150 mm only the thickness of the drawing's PF board was changed, and the Low-E triple windows (U-value 1.0, SHGC 0.40) assume typical product values. Roof, floor, infiltration, occupancy and systems are the same in every combination.",
+            "items": {
+              "insulation": {
+                "name": "External wall insulation"
+              },
+              "windows": {
+                "name": "Windows"
+              },
+              "pv": {
+                "name": "Solar (extra proposal)"
+              }
+            }
           }
         }
       },
