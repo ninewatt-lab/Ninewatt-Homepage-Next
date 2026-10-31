@@ -33,6 +33,19 @@ import {
 } from "./twinModel";
 
 export type TwinLabels = {
+  tools: {
+    label: string;
+    section: string;
+    measure: string;
+    compare: string;
+    share: string;
+    copied: string;
+    handle: string;
+    height: string;
+    sectionCaption: string;
+    measureCaption: string;
+    compareCaption: string;
+  };
   loading: string;
   unsupported: string;
   tabsLabel: string;
@@ -93,7 +106,15 @@ export type TwinLabels = {
     chosen: string;
     coolingUp: string;
     doneNone: string;
-    captions: Record<"insulation" | "insulationNone" | "windows" | "windowsNone" | "pv" | "pvNone", string>;
+    captions: Record<
+      | "insulation"
+      | "insulationNone"
+      | "windows"
+      | "windowsNone"
+      | "pv"
+      | "pvNone",
+      string
+    >;
     specs: Record<"insulation" | "none" | WinKind | "pv", string>;
     noteScenario: string;
     windowsQty: string;
@@ -125,13 +146,17 @@ const PV = energy.pv;
 
 type Run = { heat: number; cool: number; heat_m: number[]; cool_m: number[] };
 const RUNS = scenarioData.scenarios as Record<string, Run>;
-const PV_RUNS = scenarioData.pv as Record<string, { annual: number; monthly: number[] }>;
+const PV_RUNS = scenarioData.pv as Record<
+  string,
+  { annual: number; monthly: number[] }
+>;
 /** 리모델링 전 = 외단열 없음 · 기존 창 */
 const BASE = RUNS["w0-old"];
 const runOf = (s: Scenario) => RUNS[scenarioKey(s)];
 const total = (r: Run) => r.heat + r.cool;
 const monthly = (r: Run) => r.heat_m.map((h, i) => h + r.cool_m[i]);
-const savingOf = (s: Scenario) => Math.round((1 - total(runOf(s)) / total(BASE)) * 100);
+const savingOf = (s: Scenario) =>
+  Math.round((1 - total(runOf(s)) / total(BASE)) * 100);
 const MONTHLY_BEFORE = monthly(BASE);
 
 /* ── 장면 아래쪽: 자막 · 챕터 ─────────────────────────────────────── */
@@ -178,10 +203,16 @@ export function StageBar({
   onThermal,
   onReplay,
   scenario,
+  tool,
+  cut,
+  onCut,
 }: {
   mode: TwinMode;
   labels: TwinLabels;
   scenario: Scenario;
+  tool: "section" | "measure" | "compare" | null;
+  cut: number;
+  onCut: (v: number) => void;
   build: number;
   remodel: number;
   floor: TwinFloor;
@@ -240,6 +271,12 @@ export function StageBar({
           : L.remodel.doneNone
         : stepCaption(now);
   }
+  // 도구를 쓰는 동안은 자막이 도구 안내로 바뀐다 (단면은 챕터 자리에 높이 막대)
+  if (tool === "section") caption = L.tools.sectionCaption;
+  else if (tool === "measure") caption = L.tools.measureCaption;
+  else if (tool === "compare" && mode === "remodel" && remodel >= 1)
+    caption = L.tools.compareCaption;
+  if (tool === "section") chapters = [];
   const activeKey = chapters.find((c) => c.amount < 1)?.key;
   const done =
     mode === "build" ? build >= 1 : mode === "remodel" ? remodel >= 1 : false;
@@ -302,6 +339,24 @@ export function StageBar({
             </button>
           )}
 
+          {tool === "section" && (
+            <label className="flex min-w-0 flex-1 items-center gap-3 text-[11px] font-medium text-white/70">
+              <span className="shrink-0">{L.tools.height}</span>
+              <input
+                type="range"
+                min={0.3}
+                max={7.2}
+                step={0.05}
+                value={cut}
+                onChange={(e) => onCut(Number(e.target.value))}
+                className="h-1 min-w-0 flex-1 cursor-pointer accent-[#7fe3f3]"
+              />
+              <span className="w-14 shrink-0 text-right text-[13px] font-semibold tabular-nums text-white">
+                {cut.toFixed(2)} m
+              </span>
+            </label>
+          )}
+
           {chapters.length > 0 && (
             <ol className="flex min-w-0 flex-1 gap-1.5 pb-[3px]">
               {chapters.map((c) => (
@@ -338,23 +393,25 @@ export function StageBar({
 
         {mode === "remodel" && done && (
           <div className="flex shrink-0 items-center gap-2">
-            <div
-              role="group"
-              aria-label={L.remodel.view}
-              className="flex rounded-full bg-white/10 p-0.5"
-            >
-              {[true, false].map((b) => (
-                <button
-                  key={String(b)}
-                  type="button"
-                  aria-pressed={before === b}
-                  onClick={() => onBefore(b)}
-                  className={`${pill} ${before === b ? "bg-white text-[#07141b]" : "text-white/70 hover:text-white"}`}
-                >
-                  {b ? L.remodel.before : L.remodel.after}
-                </button>
-              ))}
-            </div>
+            {tool !== "compare" && (
+              <div
+                role="group"
+                aria-label={L.remodel.view}
+                className="flex rounded-full bg-white/10 p-0.5"
+              >
+                {[true, false].map((b) => (
+                  <button
+                    key={String(b)}
+                    type="button"
+                    aria-pressed={before === b}
+                    onClick={() => onBefore(b)}
+                    className={`${pill} ${before === b ? "bg-white text-[#07141b]" : "text-white/70 hover:text-white"}`}
+                  >
+                    {b ? L.remodel.before : L.remodel.after}
+                  </button>
+                ))}
+              </div>
+            )}
             <button
               type="button"
               aria-pressed={thermal}
@@ -373,14 +430,30 @@ export function StageBar({
 /* ── 장면 밑: 수치 ────────────────────────────────────────────────── */
 
 /** 한 줄 선택 (사이트 본문 모양 · 라이트/다크) */
-function Choice<T extends string | number>({ label, hint, options, value, onChange }: { label: string; hint: string; options: { value: T; label: string }[]; value: T; onChange: (v: T) => void }) {
+function Choice<T extends string | number>({
+  label,
+  hint,
+  options,
+  value,
+  onChange,
+}: {
+  label: string;
+  hint: string;
+  options: { value: T; label: string }[];
+  value: T;
+  onChange: (v: T) => void;
+}) {
   return (
     <div>
       <div className="flex items-baseline justify-between gap-2">
         <span className="text-xs font-semibold">{label}</span>
         <span className="truncate text-xs text-muted">{hint}</span>
       </div>
-      <div role="group" aria-label={label} className="mt-2 flex rounded-lg border border-border bg-surface p-0.5">
+      <div
+        role="group"
+        aria-label={label}
+        className="mt-2 flex rounded-lg border border-border bg-surface p-0.5"
+      >
         {options.map((o) => (
           <button
             key={String(o.value)}
@@ -575,28 +648,49 @@ export function TwinDetails({
   const run = runOf(scenario);
   const pvRun = scenario.pv ? PV_RUNS[String(scenario.pv)] : null;
   const pct = savingOf(scenario);
-  const isDrawn = scenario.wall === DRAWN.wall && scenario.win === DRAWN.win && scenario.pv === DRAWN.pv;
+  const isDrawn =
+    scenario.wall === DRAWN.wall &&
+    scenario.win === DRAWN.win &&
+    scenario.pv === DRAWN.pv;
   const works = [
     {
       key: "insulation",
-      spec: scenario.wall ? fill(R.specs.insulation, { mm: scenario.wall }) : R.specs.none,
+      spec: scenario.wall
+        ? fill(R.specs.insulation, { mm: scenario.wall })
+        : R.specs.none,
       qty: scenario.wall ? `${ENV.wallArea.toFixed(1)} ㎡` : "–",
-      u: scenario.wall ? `${uv(wallU(0))} → ${wallU(scenario.wall).toFixed(2)}` : uv(wallU(0)),
+      u: scenario.wall
+        ? `${uv(wallU(0))} → ${wallU(scenario.wall).toFixed(2)}`
+        : uv(wallU(0)),
     },
     {
       key: "windows",
       spec: R.specs[scenario.win],
-      qty: scenario.win !== "old" ? fill(R.windowsQty, { count: ENV.windows, area: ENV.windowArea.toFixed(1) }) : "–",
-      u: scenario.win !== "old" ? `${uv(WIN_U.old)} → ${uv(WIN_U[scenario.win])}` : uv(WIN_U.old),
+      qty:
+        scenario.win !== "old"
+          ? fill(R.windowsQty, {
+              count: ENV.windows,
+              area: ENV.windowArea.toFixed(1),
+            })
+          : "–",
+      u:
+        scenario.win !== "old"
+          ? `${uv(WIN_U.old)} → ${uv(WIN_U[scenario.win])}`
+          : uv(WIN_U.old),
     },
     {
       key: "pv",
-      spec: scenario.pv ? fill(R.specs.pv, { w: PV.moduleW, count: scenario.pv }) : R.specs.none,
-      qty: scenario.pv ? `${((scenario.pv * PV.moduleW) / 1000).toFixed(2)} kW` : "–",
+      spec: scenario.pv
+        ? fill(R.specs.pv, { w: PV.moduleW, count: scenario.pv })
+        : R.specs.none,
+      qty: scenario.pv
+        ? `${((scenario.pv * PV.moduleW) / 1000).toFixed(2)} kW`
+        : "–",
       u: "–",
     },
   ] as const;
-  const set = (patch: Partial<Scenario>) => onScenario({ ...scenario, ...patch });
+  const set = (patch: Partial<Scenario>) =>
+    onScenario({ ...scenario, ...patch });
   return (
     <div>
       {/* 조합 고르기 — 위 3D 건물도 같이 바뀐다 */}
@@ -604,31 +698,46 @@ export function TwinDetails({
         <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
           <h3 className="text-sm font-semibold">{R.scenario.title}</h3>
           {!isDrawn && (
-            <button type="button" onClick={() => onScenario(DRAWN)} className="text-sm font-semibold text-primary hover:underline">
+            <button
+              type="button"
+              onClick={() => onScenario(DRAWN)}
+              className="text-sm font-semibold text-primary hover:underline"
+            >
               {R.scenario.reset}
             </button>
           )}
         </div>
-        <p className="mt-1 text-sm leading-relaxed text-muted">{R.scenario.desc}</p>
+        <p className="mt-1 text-sm leading-relaxed text-muted">
+          {R.scenario.desc}
+        </p>
         <div className="mt-5 grid gap-5 md:grid-cols-3">
           <Choice
             label={R.scenario.wall}
             hint={`${R.scenario.drawn} ${DRAWN.wall} mm`}
-            options={WALL_OPTIONS.map((v) => ({ value: v, label: v ? `${v} mm` : R.scenario.none }))}
+            options={WALL_OPTIONS.map((v) => ({
+              value: v,
+              label: v ? `${v} mm` : R.scenario.none,
+            }))}
             value={scenario.wall}
             onChange={(wall) => set({ wall })}
           />
           <Choice
             label={R.scenario.win}
             hint={`${R.scenario.drawn} ${R.scenario.wins[DRAWN.win]}`}
-            options={WIN_OPTIONS.map((v) => ({ value: v, label: R.scenario.wins[v] }))}
+            options={WIN_OPTIONS.map((v) => ({
+              value: v,
+              label: R.scenario.wins[v],
+            }))}
             value={scenario.win}
             onChange={(win) => set({ win })}
           />
           <Choice
             label={R.scenario.pv}
             hint={R.scenario.pvHint}
-            options={PV_OPTIONS.map((v) => ({ value: v, label: v ? fill(R.scenario.count, { count: v }) : R.scenario.none }))}
+            options={PV_OPTIONS.map((v) => ({
+              value: v,
+              label: v ? fill(R.scenario.count, { count: v }) : R.scenario.none,
+            }))}
             value={scenario.pv}
             onChange={(pv) => set({ pv })}
           />
@@ -638,7 +747,9 @@ export function TwinDetails({
       <h3 className="mt-10 text-sm font-semibold">{R.results}</h3>
       <dl className="mt-3 grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-border bg-border lg:grid-cols-4">
         <Cell label={R.total}>
-          <span className={`${big} ${pct > 0 ? "text-primary" : ""}`}>{pct > 0 ? `−${pct}%` : `${-pct}%`}</span>
+          <span className={`${big} ${pct > 0 ? "text-primary" : ""}`}>
+            {pct > 0 ? `−${pct}%` : `${-pct}%`}
+          </span>
           <span className="mt-1 block text-xs tabular-nums text-muted">
             {n0(total(BASE))} → {n0(total(run))} {R.unit}
           </span>
@@ -649,7 +760,9 @@ export function TwinDetails({
           </span>
         </Cell>
         <Cell label={`${R.cooling} · ${R.unit}`}>
-          <span className={`${big} ${run.cool > BASE.cool ? "text-amber-700 dark:text-amber-400" : ""}`}>
+          <span
+            className={`${big} ${run.cool > BASE.cool ? "text-amber-700 dark:text-amber-400" : ""}`}
+          >
             {n0(BASE.cool)} → {n0(run.cool)}
           </span>
         </Cell>

@@ -422,6 +422,19 @@
                 "name": "Solar (extra proposal)"
               }
             }
+          },
+          "tools": {
+            "label": "Tools",
+            "section": "Section",
+            "measure": "Measure",
+            "compare": "Compare",
+            "share": "Copy link",
+            "copied": "Copied",
+            "handle": "Before/after split position",
+            "height": "Cut height",
+            "sectionCaption": "Slice the building like a floor plan. Use the slider to change the cut height.",
+            "measureCaption": "Tap two points on the building to measure the distance. Tap again to start over.",
+            "compareCaption": "Left is before remodeling, right is the chosen combination. Drag the handle in the middle."
           }
         }
       },
