@@ -52,10 +52,12 @@ export const piece = (phase: number, order: number) => Math.min(1, Math.max(0, (
 // 수치는 scripts/lab/energy_scenarios.py 가 조합마다 EnergyPlus 로 계산한 ai-building-workspace-scenarios.json
 
 export type WinKind = "old" | "lowe" | "triple";
-export type Scenario = { wall: 0 | 50 | 100 | 150; win: WinKind; pv: 0 | 2 | 4 };
+export type Scenario = { wall: WallMm; win: WinKind; pv: 0 | 2 | 4 };
+/** 외단열 두께 mm — 80 은 도면 사양이 80 mm 인 건물(C)에만 있다 */
+export type WallMm = 0 | 50 | 80 | 100 | 150;
 /** 도면에 적힌 공사 (+ 태양광 제안 4장) */
 export const DRAWN: Scenario = { wall: 100, win: "lowe", pv: 4 };
-export const WALL_OPTIONS = [0, 50, 100, 150] as const;
+export const WALL_OPTIONS: WallMm[] = [0, 50, 100, 150];
 export const WIN_OPTIONS: WinKind[] = ["old", "lowe", "triple"];
 export const PV_OPTIONS = [0, 2, 4] as const;
 /** 창호 열관류율 (energy_idf.py 의 WINDOWS 와 같다) */
@@ -67,7 +69,8 @@ export const scenarioKey = (s: Pick<Scenario, "wall" | "win">) => `w${s.wall}-${
 /* ── 상태 ─────────────────────────────────────────────────────────── */
 
 export type TwinMode = "build" | "rooms" | "remodel";
-export type TwinFloor = "1f" | "2f";
+export type TwinFloor = "1f" | "2f" | "3f";
+export const FLOOR_ORDER: (TwinFloor | "roof")[] = ["1f", "2f", "3f", "roof"];
 
 /** 홈 히어로 Sim 을 그대로 써서 하늘 · 후처리(Sky, Effects)를 재사용한다. hour · sunAlt · dark 만 여기서 채운다 */
 export type TwinSim = Sim & {
@@ -142,7 +145,7 @@ export function stepTwin(sim: TwinSim, delta: number, frozen: boolean, paused: b
 
 /* ── 모델 분류 ────────────────────────────────────────────────────── */
 
-export type Part = { mesh: THREE.Mesh; floor: "1f" | "2f" | "roof"; kind: string; name: string };
+export type Part = { mesh: THREE.Mesh; floor: TwinFloor | "roof"; kind: string; name: string };
 
 // 실내 쪽 벽 (외단열 대상이 아니다)
 const INTERNAL = /Internal|LobbyInner|MultipurposeWest|Stair|Toilet|BedroomNorth/;
@@ -272,13 +275,13 @@ export type ThermalBasis = "u" | "winter" | "summer";
 export type HourlyDay = {
   /** 바깥 기온 · 층별 실온(℃) · 건물 난방 · 냉방 부하(kW), 0시부터 24개 (n시 값 = n~n+1시 평균) */
   out: number[];
-  zone: Record<"F1" | "F2", number[]>;
+  zone: Record<string, number[]>;
   heat: number[];
   cool: number[];
   /** 면적당 열 흐름 W/㎡ (+ 밖으로 새는 열, − 안으로 들어오는 열). 키는 F1_N … */
   wall: Record<string, number[]>;
   win: Record<string, number[]>;
-  roof: Record<"F1" | "F2", number[]>;
+  roof: Record<string, number[]>;
 };
 export type HourlyData = { days: Record<"winter" | "summer", string>; runs: Record<string, Record<"winter" | "summer", HourlyDay>> };
 

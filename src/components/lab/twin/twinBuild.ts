@@ -12,14 +12,14 @@
 import * as THREE from "three";
 import energy from "@/data/lab/ai-building-workspace-energy.json";
 import { pvTexture } from "@/components/hero/textures";
-import { isExteriorWall, outward, readParts, roofPlane, shellGeometry, thermalColor, windowGroups, type Part } from "./twinModel";
+import { isExteriorWall, outward, readParts, roofPlane, shellGeometry, thermalColor, windowGroups, type Part, type TwinFloor } from "./twinModel";
 
 /** 외단열 판 두께(m) — PF보드 두께(mm) + 스타코 10 mm. 시나리오 비교에서 고른 두께로 바꿔 끼운다 */
-export const SHELL: Record<number, number> = { 50: 0.06, 100: 0.11, 150: 0.16 };
+export const SHELL: Record<number, number> = { 50: 0.06, 80: 0.09, 100: 0.11, 150: 0.16 };
 /** 430 W 모듈 (1.72 × 1.13 m), 남쪽 지붕면에 한 줄 */
 const MODULE = { w: 1.13, l: 1.72, gap: 0.04 };
 
-export type Floor = "1f" | "2f" | "roof";
+export type Floor = TwinFloor | "roof";
 type Item = { obj: THREE.Object3D; floor: Floor; ceiling?: boolean };
 
 export type TwinModel = {
@@ -244,10 +244,10 @@ export function buildTwin(scene: THREE.Group): TwinModel {
   return { root, plane, split, scan, walls, windows, pv: solar(root, parts, after, items), overlays, glass: [...glass], lamps, heat: { wall: wallHeat.made, shell: shellHeat.made, old: oldHeat.made, fresh: newHeat.made, roof: roofHeat, slab: slabHeat, floor: floorHeat }, freshGlass: lowE, items };
 }
 
-/** EnergyPlus 면 이름과 같은 층 · 방위 키 (F1_N, F2_E …) */
+/** EnergyPlus 면 이름과 같은 층 · 방위 키 (F1_N, F2_E, F3_S …) */
 export function surfaceKey(floor: Floor, out: THREE.Vector3) {
   const dir = out.z < 0 ? "N" : out.z > 0 ? "S" : out.x > 0 ? "E" : "W";
-  return `${floor === "2f" ? "F2" : "F1"}_${dir}`;
+  return `F${floor === "roof" ? 1 : floor[0]}_${dir}`;
 }
 
 /** 같은 층 안 순서: 남 → 동 → 북 → 서 (카메라 쪽부터 돌아간다), 같은 면에서는 왼쪽부터 */

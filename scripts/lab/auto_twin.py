@@ -2,14 +2,19 @@
 
     python3 scripts/lab/auto_twin.py <building.json> <source.dxf> <out_dir>
 
-사람이 정하는 것은 building.json 의 몇 줄뿐이다 — 층별 평면 시트 범위(box), 벽 · 개구부 레이어 이름,
-단면도에서 읽은 높이(천장 · 지붕 슬래브 · 파라펫 · 창대 · 창 머리 · 문). 나머지는 도면 선에서 계산한다.
+사람이 정하는 것은 building.json 의 몇 줄뿐이다 — 층별 평면 시트 범위(box), 벽 · 개구부 · 기준선 레이어 이름,
+단면도에서 읽은 높이(천장 · 층고 · 파라펫 · 창대 · 창 머리 · 문, 층마다 다르면 층에 따로). 나머지는 도면 선에서 계산한다.
 
-  1. 실: 벽 · 개구부 선을 얇게 두껍게 해 합친 뒤 닫힌 구멍(폭 0.6 m 이상) = 실
+  0. 층 맞추기: 층마다 평면 시트가 도면의 다른 자리에 있으므로, 기준선(grid 레이어의 긴 가로 · 세로선) 위치가
+     1층과 가장 많이 겹치는 이동량을 찾아 위층을 1층 좌표에 놓는다
+
+  1. 실: 벽 · 개구부 선을 얇게 두껍게 해 합친 뒤 닫힌 구멍(폭 0.6 m 이상) = 실.
+     closeGaps(m)를 주면 그 폭보다 좁은 벽 틈(열림 호 없이 그린 문 자리)을 메우고 그 자리를 문으로 본다
   2. 벽체: 건물 외곽(합친 선의 바깥 테두리)에서 실을 뺀 나머지 = 벽 · 기둥
   3. 개구부: 개구부 레이어 선을 이어진 묶음별로 모아 벽체와 겹치는 부분. 열림 호(ARC)가 있으면 문
   4. 외벽: 외곽선 변마다 안쪽 0.7 m 띠와 벽체가 겹치는 부분, 변의 바깥 방향으로 북 · 동 · 남 · 서를 정한다(도면 위쪽 = 북)
   5. 3D: 벽은 개구부를 뺀 부분을 바닥~위까지, 개구부 자리는 창대 아래 · 창 머리 위만 세운다. 외벽 창에는 유리 · 틀 · 창대
+  6. 지붕: 맨 위 층은 평지붕, 아래층에서 위층이 덮지 않는 부분은 그 층 지붕(kind slab, 위층 바닥 높이)
 
 출력(out_dir): model.glb(노드 이름 · extras 는 v1 모델과 같은 규칙 — VIS_F1_SouthA, VIS_F1_SouthA_0_Glass …),
 viewer.json(실 경계 · 면적), twin.json(도면 선), env.json(EnergyPlus 입력: 층 · 방위별 외벽 면적 · 창), meta.json(규모 · 통계).
@@ -25,10 +30,11 @@ import ezdxf
 import numpy as np
 import trimesh
 from ezdxf import bbox, disassemble
-from shapely.affinity import translate
+from shapely.affinity import scale, translate
 from shapely.geometry import LineString, MultiPolygon, Point, Polygon
 from shapely.geometry.polygon import orient
 from shapely.ops import unary_union
+from shapely.validation import make_valid
 
 CFG = json.load(open(sys.argv[1]))
 DXF, OUT = sys.argv[2], sys.argv[3]
@@ -39,22 +45,35 @@ H = CFG["heights"]
 
 doc = ezdxf.readfile(DXF)
 msp = doc.modelspace()
+ENTS = list(msp)  # 같은 엔티티 객체를 계속 쓰도록 (범위 캐시 키)
 
 
 # ── 도면 읽기 ──────────────────────────────────────────────────────
 
-def primitives(box, layers):
-    """box 안 · layers 의 선 → [(layer, 점 목록(m, 원본 좌표 기준), 원 엔티티 종류)]"""
+_extents = {}
+
+
+def extents(e):
+    """엔티티 범위 (x0, y0, x1, y1) — 큰 도면은 여러 번 훑으므로 한 번만 계산한다"""
+    k = id(e)
+    if k not in _extents:
+        try:
+            b = bbox.extents([e], fast=True)
+            _extents[k] = (b.extmin.x, b.extmin.y, b.extmax.x, b.extmax.y) if b.has_data else None
+        except Exception:
+            _extents[k] = None
+    return _extents[k]
+
+
+def primitives(box, layers, off=(0.0, 0.0)):
+    """box 안 · layers 의 선 → [(layer, 점 목록(m, box 왼쪽 아래 기준 + 층 맞춤 이동 off), 원 엔티티 종류)]"""
     x0, y0, x1, y1 = box
 
     def within(e):
-        try:
-            b = bbox.extents([e], fast=True)
-        except Exception:
-            return False
-        return b.has_data and b.extmin.x >= x0 and b.extmax.x <= x1 and b.extmin.y >= y0 and b.extmax.y <= y1
+        b = extents(e)
+        return b is not None and b[0] >= x0 and b[2] <= x1 and b[1] >= y0 and b[3] <= y1
 
-    ents = [e for e in msp if e.dxf.layer in layers and within(e)]
+    ents = [e for e in ENTS if e.dxf.layer in layers and within(e)]
     out = []
     for prim in disassemble.to_primitives(disassemble.recursive_decompose(ents)):
         ent = prim.entity
@@ -66,7 +85,7 @@ def primitives(box, layers):
             continue
         if len(pts) < 2:
             continue
-        q = [((p.x - x0) * UNIT, (p.y - y0) * UNIT) for p in pts]
+        q = [((p.x - x0) * UNIT + off[0], (p.y - y0) * UNIT + off[1]) for p in pts]
         # 호 · 원 · 볼록(bulge) 폴리라인처럼 휜 선은 "ARC" 로 본다 (문 열림 호)
         kind = "ARC" if ent.dxftype() in ("ARC", "CIRCLE", "ELLIPSE") or curved(q) else ent.dxftype()
         out.append((ent.dxf.layer, q, kind))
@@ -86,30 +105,90 @@ def circumcenter(a, b, c):
 
 
 def curved(q):
-    """점이 4개 넘게 이어지면서 한 직선에서 벗어나면 휜 선"""
-    if len(q) <= 4:
-        return False
-    (ax, ay), (bx, by) = q[0], q[-1]
-    L = math.hypot(bx - ax, by - ay)
-    if L < 1e-6:
-        return True
-    return max(abs((bx - ax) * (ay - y) - (ax - x) * (by - ay)) / L for x, y in q) > 0.05
+    """휜 선: 작은 각도(1~35°)로 3번 넘게 잇달아 꺾이면 호를 잘게 나눈 선이다. 기둥 같은 닫힌 사각형(90° 꺾임)은 아니다"""
+    run = best = 0
+    for (ax, ay), (bx, by), (cx, cy) in zip(q, q[1:], q[2:]):
+        u, v = (bx - ax, by - ay), (cx - bx, cy - by)
+        lu, lv = math.hypot(*u), math.hypot(*v)
+        if lu < 1e-6 or lv < 1e-6:
+            continue
+        turn = math.degrees(math.acos(max(-1.0, min(1.0, (u[0] * v[0] + u[1] * v[1]) / (lu * lv)))))
+        run = run + 1 if 1 <= turn <= 35 else 0
+        best = max(best, run)
+    return best >= 3
 
 
-def texts(box):
+def texts(box, off=(0.0, 0.0)):
     x0, y0, x1, y1 = box
     for e in msp.query("TEXT MTEXT"):
         p = e.dxf.insert
         if x0 <= p[0] <= x1 and y0 <= p[1] <= y1:
             t = e.dxf.text if e.dxftype() == "TEXT" else e.plain_text()
-            yield ((p[0] - x0) * UNIT, (p[1] - y0) * UNIT), t.replace(" ", "").strip(), e.dxf.layer
+            yield ((p[0] - x0) * UNIT + off[0], (p[1] - y0) * UNIT + off[1]), t.replace(" ", "").strip(), e.dxf.layer
+
+
+def grid_lines(box):
+    """기준선: grid 레이어의 긴(5 m 이상) 세로선 x · 가로선 y (m, box 기준)"""
+    xs, ys = [], []
+    for _, q, _ in primitives(box, set(CFG["layers"].get("grid", []))):
+        (ax, ay), (bx, by) = q[0], q[-1]
+        if abs(ax - bx) < 0.01 and abs(ay - by) > 5:
+            xs.append(ax)
+        elif abs(ay - by) < 0.01 and abs(ax - bx) > 5:
+            ys.append(ay)
+    return xs, ys
+
+
+def best_shift(ref, mine):
+    """mine 을 d 만큼 옮겼을 때 ref 와 2 cm 안에서 겹치는 선이 가장 많은 d (겹치는 수)"""
+    best = (0, 0.0)
+    for a in ref:
+        for b in mine:
+            d = a - b
+            n = sum(any(abs(m + d - r) < 0.02 for r in ref) for m in set(round(v, 3) for v in mine))
+            if n > best[0] or (n == best[0] and abs(d) < abs(best[1])):
+                best = (n, d)
+    return best[1], best[0]
+
+
+def register(floors):
+    """층마다 1층 기준선에 맞추는 이동량(m). 기준선이 2개 미만으로 겹치면 이동하지 않는다(경고)"""
+    if not CFG["layers"].get("grid"):
+        return [(0.0, 0.0)] * len(floors)
+    ref = grid_lines(floors[0]["box"])
+    out = [(0.0, 0.0)]
+    for fl in floors[1:]:
+        mine = grid_lines(fl["box"])
+        dx, nx = best_shift(ref[0], mine[0])
+        dy, ny = best_shift(ref[1], mine[1])
+        if nx < 2 or ny < 2:
+            print(f"warning: {fl['key']} 기준선이 충분히 겹치지 않음 (x {nx}, y {ny}) — 이동 없이 둔다")
+            dx, dy = 0.0, 0.0
+        print(f"register {fl['key']}: dx {dx:+.3f} m · dy {dy:+.3f} m (기준선 x {nx} · y {ny}개 일치)")
+        out.append((dx, dy))
+    return out
 
 
 # ── 평면 → 실 · 벽체 · 개구부 ─────────────────────────────────────
 
+def wall_gaps(merged, width):
+    """같은 줄의 벽 끝 사이 width 보다 좁은 틈 (가로 · 세로로 따로 넓혔다 줄인다 — 한 방향만 넓히면
+    모서리가 메워지지 않아 틈 조각이 벽 두께 직사각형으로 깔끔하게 나온다). 길이 0.5 m~ · 두께 0.08~0.45 m 만"""
+    out = []
+    for sx, sy in ((1, 1000), (1000, 1)):
+        st = scale(merged, sx, sy, origin=(0, 0))
+        back = scale(st.buffer(width / 2, join_style=2).buffer(-width / 2, join_style=2), 1 / sx, 1 / sy, origin=(0, 0))
+        for g in polys(back.difference(merged).buffer(-0.01, join_style=2).buffer(0.01, join_style=2)):
+            x0, y0, x1, y1 = g.bounds
+            along, across = (x1 - x0, y1 - y0) if sy > 1 else (y1 - y0, x1 - x0)
+            if 0.5 <= along <= width + 0.05 and 0.08 <= across <= 0.45 and g.area >= 0.7 * along * across:
+                out.append(g)
+    return out
+
+
 def analyse(fl):
     L = CFG["layers"]
-    prims = primitives(fl["box"], set(L["wall"]) | set(L["opening"]))
+    prims = primitives(fl["box"], set(L["wall"]) | set(L["opening"]), fl["_off"])
     # 문 열림 호는 건물 밖 · 실 안으로 나가 있어 외곽 · 실 경계에는 쓰지 않는다
     lines = [LineString(p) for _, p, kind in prims if kind != "ARC"]
     # 문 자리는 문짝으로 막는다: 경첩(호 중심)에서 호 양 끝으로 — 닫힌 쪽이 문 자리를 막고,
@@ -118,12 +197,27 @@ def analyse(fl):
         if kind != "ARC" or len(p) < 3:
             continue
         c = circumcenter(p[0], p[len(p) // 2], p[-1])
-        if c is not None:
+        # 문짝 폭(반지름 0.4~2.2 m)인 호만 — 위생기구 곡선처럼 거의 곧은 선은 중심이 아주 멀리 잡힌다
+        if c is not None and 0.4 <= math.dist(c, p[0]) <= 2.2:
             lines += [LineString([c, p[0]]), LineString([c, p[-1]])]
     merged = unary_union(lines).buffer(BUF, join_style=2)
+    # 열림 호 없이 그린 문 자리: 두 번에 걸쳐 벽 틈을 메운다.
+    #   1) 30 cm 미만 틈 — 벽 끝이 덜 닿게 그려진 곳, 문 없이 메운다 (뾰족 모서리로 넓혔다 줄여 실 모서리는 그대로)
+    #   2) 같은 줄의 벽 끝 사이 closeGaps 미만 틈 — 메우고 그 자리를 문으로 본다
+    gaps = []
+    G = CFG.get("closeGaps", 0)
+    if G:
+        merged = merged.buffer(0.15, join_style=2).buffer(-0.15, join_style=2)
+        gaps = wall_gaps(merged, G)
+        if gaps:
+            merged = unary_union([merged, *[g.buffer(0.02, join_style=2) for g in gaps]])
     body = max(merged.geoms, key=lambda g: g.area) if isinstance(merged, MultiPolygon) else merged
     # 바깥으로 삐져나온 문짝 선 같은 얇은 돌출(폭 0.3 m 미만)은 깎아 낸다
-    footprint = Polygon(body.exterior).buffer(-BUF, join_style=2).buffer(-0.15, join_style=2).buffer(0.15, join_style=2)
+    # 바깥 테두리가 한 점에서 스스로 닿으면(문 자리를 메운 조각이 벽과 꼭짓점으로 만날 때) 고쳐서 채운다
+    footprint = unary_union(polys(make_valid(Polygon(body.exterior))))
+    footprint = footprint.buffer(-BUF, join_style=2).buffer(-0.15, join_style=2).buffer(0.15, join_style=2)
+    # 깎다가 떨어져 나간 조각(얇은 다리로 붙어 있던 부분)이 있으면 가장 큰 덩어리만
+    footprint = max(polys(footprint), key=lambda g: g.area)
     rooms = []
     for ring in body.interiors:
         hole = Polygon(ring)
@@ -144,7 +238,14 @@ def analyse(fl):
     clusters = list(clusters.geoms) if isinstance(clusters, MultiPolygon) else [clusters]
     openings = []
     edge = footprint.exterior.buffer(0.15, join_style=2).intersection(footprint)
+    for g in gaps:
+        region = g.buffer(0.02, join_style=2).intersection(walls).buffer(0)
+        if region.area > 0.03:
+            openings.append({"poly": region, "door": True, "ext": region.distance(footprint.exterior) < 0.06})
     for c in clusters:
+        # 틈으로 이미 잡은 문은 다시 세지 않는다
+        if any(c.intersects(g) for g in gaps):
+            continue
         arcs = any(k == "ARC" and c.intersects(g) for g, k in op)
         region = c.minimum_rotated_rectangle.buffer(0.03, join_style=2).intersection(walls).buffer(0)
         # 벽 없이 외곽에 걸친 문(현관 · 양개문): 외곽선을 따라 0.15 m 띠를 벽으로 세우고 그 자리를 문으로
@@ -232,8 +333,10 @@ def polys(g):
 
 
 def extrude(g, z0, z1):
-    """모델 좌표 다각형 → three 좌표(x, 높이, -y) 메시"""
+    """모델 좌표 다각형 → three 좌표(x, 높이, -y) 메시 (높이 0 이면 없음 — 창 머리가 천장과 같은 층)"""
     out = []
+    if z1 - z0 < 1e-3:
+        return out
     for p in polys(g):
         m = trimesh.creation.extrude_polygon(p, z1 - z0)
         v = m.vertices.copy()
@@ -298,27 +401,43 @@ def add(name, kind, floor, meshes):
 meta = {"floors": [], "rooms": 0, "walls": 0, "windows": 0}
 env = {"walls": {}, "openings": [], "zones": [], "window": {"sill": H["sill"], "head": H["head"]}}
 viewer_rooms = []
-origin = None
-
-for fl in CFG["floors"]:
-    footprint, rooms, walls, openings = analyse(fl)
-    if origin is None:
-        minx, miny, _, _ = footprint.bounds
-        origin = (minx, miny)
-    shift = lambda g: translate(g, -origin[0], -origin[1])  # noqa: E731
-    footprint, walls = shift(footprint), shift(walls)
-    rooms = [shift(r) for r in rooms]
+FLOORS = CFG["floors"]
+for fl, off in zip(FLOORS, register(FLOORS)):
+    fl["_off"] = off
+plans = [analyse(fl) for fl in FLOORS]
+origin = plans[0][0].bounds[:2]
+shift = lambda g: translate(g, -origin[0], -origin[1])  # noqa: E731
+# clipToGround: 위층을 1층 외곽(+0.3 m) 안으로 자른다 — 위층 평면에 함께 그린 외부 계단 · 발코니를 건물로 보지 않는다
+ground = plans[0][0].buffer(0.3, join_style=2) if CFG.get("clipToGround") else None
+for fi, (fl, (footprint, rooms, walls, openings)) in enumerate(zip(FLOORS, plans)):
+    if ground is not None and fi > 0:
+        footprint = max(polys(footprint.intersection(ground)), key=lambda g: g.area)
+        # 잘린 변(외부 계단으로 열려 있던 자리)에도 외벽이 서도록 외곽을 따라 0.2 m 띠를 벽으로 둔다
+        band = footprint.difference(footprint.buffer(-0.2, join_style=2))
+        rooms = [r2 for r in rooms for r2 in polys(r.intersection(footprint).difference(band)) if r2.area >= 1.5]
+        walls = unary_union([walls.intersection(footprint), band]).buffer(0)
+        openings = [o for o in openings if o["poly"].intersects(footprint)]
+        for o in openings:
+            o["poly"] = o["poly"].intersection(footprint)
+            o["ext"] = o["ext"] or o["poly"].distance(footprint.exterior) < 0.06
+    fl["_plan"] = (shift(footprint), [shift(r) for r in rooms], shift(walls), openings)
     for o in openings:
         o["poly"] = shift(o["poly"])
+
+for fi, fl in enumerate(FLOORS):
+    footprint, rooms, walls, openings = fl["_plan"]
+    Hf = {**H, **fl.get("heights", {})}
+    top = fi == len(FLOORS) - 1
+    upper = None if top else FLOORS[fi + 1]
     z = fl["z"]
     F = fl["zone"]  # F1, F2 …
     key = fl["key"]
-    top_ext = H["parapet"] if fl is CFG["floors"][-1] else H["floor"]
-    top_int = H["ceiling"]
+    top_ext = Hf["parapet"] if top else upper["z"] - z
+    top_int = Hf["ceiling"]
 
     pieces, interior = split_exterior(footprint, walls)
     if os.environ.get("QA_PNG"):
-        qa_plot(os.environ["QA_PNG"], footprint, rooms, pieces, interior, openings)
+        qa_plot(os.environ["QA_PNG"].replace(".png", f"-{key}.png"), footprint, rooms, pieces, interior, openings)
     for piece in pieces:
         mine = [o for o in openings if o["poly"].intersection(piece["poly"]).area > 0.02]
         piece["openings"] = mine
@@ -326,8 +445,8 @@ for fl in CFG["floors"]:
         parts = extrude(solid, z, z + top_ext)
         for o in mine:
             reg = o["poly"].intersection(piece["poly"])
-            sill = 0 if o["door"] else H["sill"]
-            head = H["door"] if o["door"] else H["head"]
+            sill = 0 if o["door"] else Hf["sill"]
+            head = Hf["door"] if o["door"] else Hf["head"]
             if sill > 0:
                 parts += extrude(reg, z, z + sill)
             parts += extrude(reg, z + head, z + top_ext)
@@ -335,8 +454,8 @@ for fl in CFG["floors"]:
         # 외벽 개구부: 유리 · 틀 · 창대 (문은 유리문으로 본다)
         for k, o in enumerate(mine):
             cx, cy, along, across, ang = axis(o["poly"].intersection(piece["poly"]))
-            sill = 0 if o["door"] else H["sill"]
-            head = H["door"] if o["door"] else H["head"]
+            sill = 0 if o["door"] else Hf["sill"]
+            head = Hf["door"] if o["door"] else Hf["head"]
             base = f"VIS_{F}_{piece['name']}_{k}"
             add(f"{base}_Glass", "glass", key, [box_mesh(cx, cy, z + sill + 0.05, z + head - 0.05, along - 0.1, 0.024, ang)])
             t = 0.05
@@ -355,7 +474,7 @@ for fl in CFG["floors"]:
             meta["windows"] += 1
         # 방위별 외벽 순면적 (외곽 변 길이 × 층고 − 창)
         wkey = f"{F}_{piece['side']}"
-        gross = piece["length"] * H["floor"]
+        gross = piece["length"] * (Hf["floor"] if top else top_ext)
         env["walls"][wkey] = round(env["walls"].get(wkey, 0) + gross - sum(o2["area"] for o2 in env["openings"] if o2["id"].startswith(f"{F}_{piece['name']}_")), 2)
         meta["walls"] += 1
 
@@ -368,26 +487,35 @@ for fl in CFG["floors"]:
             reg = o["poly"].intersection(p)
             # 실내 창(채광창)은 창대 아래도 막는다
             if not o["door"]:
-                parts += extrude(reg, z, z + H["sill"])
-            parts += extrude(reg, z + (H["door"] if o["door"] else H["head"]), z + top_int)
+                parts += extrude(reg, z, z + Hf["sill"])
+            parts += extrude(reg, z + (Hf["door"] if o["door"] else Hf["head"]), z + top_int)
         name = f"VIS_{F}_Internal{letters(i)}"
         add(name, "wall", key, parts)
         for k, o in enumerate(mine):
             cx, cy, along, across, ang = axis(o["poly"].intersection(p))
             if o["door"]:
-                add(f"{name}_{k}_DoorLeaf", "door", key, [box_mesh(cx, cy, z, z + H["door"], along - 0.04, 0.04, ang)])
+                add(f"{name}_{k}_DoorLeaf", "door", key, [box_mesh(cx, cy, z, z + Hf["door"], along - 0.04, 0.04, ang)])
             else:
-                add(f"{name}_{k}_Glass", "glass", key, [box_mesh(cx, cy, z + H["sill"], z + H["head"], along - 0.04, 0.02, ang)])
+                add(f"{name}_{k}_Glass", "glass", key, [box_mesh(cx, cy, z + Hf["sill"], z + Hf["head"], along - 0.04, 0.02, ang)])
 
     # 바닥 · 천장 · 지붕
     add(f"VIS_{F}_Floor_0", "floor1", key, extrude(footprint, z - 0.15, z))
     add(f"VIS_{F}_ContinuousCeiling", "ceiling", key, extrude(unary_union(rooms), z + top_int, z + top_int + 0.03))
-    if fl is CFG["floors"][-1]:
-        add("VIS_Roof_Flat_0", "roof", "roof", extrude(footprint.difference(unary_union([p["poly"] for p in pieces])).buffer(0), z + top_int + 0.03, z + H["floor"]))
+    exposed = 0.0
+    if top:
+        add("VIS_Roof_Flat_0", "roof", "roof", extrude(footprint.difference(unary_union([p["poly"] for p in pieces])).buffer(0), z + top_int + 0.03, z + Hf["floor"]))
+        exposed = footprint.area
+    else:
+        # 위층이 덮지 않는 부분 = 이 층의 지붕 (위층 바닥 높이, 층 보기에서는 위층과 함께 보인다)
+        open_ = footprint.difference(upper["_plan"][0]).buffer(-0.2, join_style=2).buffer(0.2, join_style=2)
+        slab = [g for g in polys(open_) if g.area > 1.0]
+        if slab:
+            add(f"VIS_{F}_RoofSlab_0", "slab", upper["key"], extrude(unary_union(slab).difference(unary_union([p["poly"] for p in pieces])).buffer(0), z + top_int + 0.03, upper["z"]))
+            exposed = sum(g.area for g in slab)
 
     # 실 (이름은 실 안에 놓인 짧은 글자)
     named = []
-    for (tx, ty), t, layer in texts(fl["box"]):
+    for (tx, ty), t, layer in texts(fl["box"], fl["_off"]):
         named.append((Point(tx - origin[0], ty - origin[1]), t, layer))
     for i, r in enumerate(rooms):
         inside = [t for pt, t, layer in named if r.contains(pt) and room_name(t) and layer in CFG.get("roomTextLayers", [layer])]
@@ -401,15 +529,14 @@ for fl in CFG["floors"]:
             "area": round(r.area, 2),
             "review": len(set(inside)) > 1,
             "L": round(r.exterior.length, 2),
-            "WA": round(r.exterior.length * H["ceiling"], 1),
+            "WA": round(r.exterior.length * Hf["ceiling"], 1),
             "label": [round(c.x, 3), round(c.y, 3)],
             "polygon": [[round(x, 3), round(y, 3)] for x, y in r.exterior.coords],
         })
-    env["zones"].append({"name": F, "z": z, "area": round(sum(r.area for r in rooms), 2), "ceiling": H["ceiling"], "height": H["floor"],
-                         "roof": round(footprint.area, 2) if fl is CFG["floors"][-1] else 0, "use": fl.get("use", "office")})
+    env["zones"].append({"name": F, "z": z, "area": round(sum(r.area for r in rooms), 2), "ceiling": Hf["ceiling"], "height": round(top_ext if not top else Hf["floor"], 3),
+                         "roof": round(exposed, 2), "use": fl.get("use", "office"), "sill": Hf["sill"], "head": Hf["head"]})
     meta["floors"].append({"key": key, "z": z, "footprint": [round(v, 3) for v in footprint.bounds], "area": round(footprint.area, 2)})
     meta["rooms"] += len(rooms)
-    fl["_origin"] = origin
 
 
 # ── glb (v1 모델과 같은 노드 이름 · extras · 재질 이름) ──────────
@@ -417,7 +544,7 @@ for fl in CFG["floors"]:
 MATERIALS = {
     "wall": ([0.86, 0.84, 0.80, 1], "OPAQUE"), "glass": ([0.62, 0.78, 0.84, 0.35], "BLEND"), "frame": ([0.42, 0.45, 0.47, 1], "OPAQUE"),
     "sill": ([0.72, 0.70, 0.65, 1], "OPAQUE"), "floor1": ([0.74, 0.70, 0.63, 1], "OPAQUE"), "ceiling": ([0.94, 0.94, 0.93, 1], "OPAQUE"),
-    "roof": ([0.48, 0.51, 0.53, 1], "OPAQUE"), "door": ([0.55, 0.44, 0.33, 1], "OPAQUE"),
+    "roof": ([0.48, 0.51, 0.53, 1], "OPAQUE"), "door": ([0.55, 0.44, 0.33, 1], "OPAQUE"), "slab": ([0.48, 0.51, 0.53, 1], "OPAQUE"),
 }
 
 
@@ -479,10 +606,10 @@ write_glb(os.path.join(OUT, "model.glb"))
 GROUPS = {l: "wall" for l in CFG["layers"]["wall"]} | {l: "window" for l in CFG["layers"]["opening"]} | {l: "dim" for l in CFG["layers"].get("dim", ["DIM"])}
 plan = {"floors": {}}
 line_count = 0
-for fl in CFG["floors"]:
-    ox, oy = fl["_origin"]
+for fl in FLOORS:
+    ox, oy = origin
     groups = {}
-    for layer, pts, _ in primitives(fl["box"], set(CFG["layers"]["draw"])):
+    for layer, pts, _ in primitives(fl["box"], set(CFG["layers"]["draw"]), fl["_off"]):
         g = GROUPS.get(layer, "detail")
         q = [(x - ox, y - oy) for x, y in pts]
         for a, b in zip(q, q[1:]):
@@ -495,7 +622,7 @@ for fl in CFG["floors"]:
 meta.update({
     "lines": line_count,
     "layers": len({e.dxf.layer for e in msp}),
-    "height": H["parapet"] + CFG["floors"][-1]["z"],
+    "height": {**H, **FLOORS[-1].get("heights", {})}["parapet"] + FLOORS[-1]["z"],
     "wallArea": round(sum(env["walls"].values()), 1),
     "windowArea": round(sum(o["area"] for o in env["openings"]), 1),
     "floorArea": round(sum(z["area"] for z in env["zones"]), 2),

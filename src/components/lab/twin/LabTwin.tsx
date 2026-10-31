@@ -19,7 +19,6 @@ import { BUILDINGS, type BuildingKey, type TwinBuilding } from "./buildings";
 import {
   PV_OPTIONS,
   STATIC_HOUR,
-  WALL_OPTIONS,
   WIN_OPTIONS,
   atHour,
   createTwinSim,
@@ -66,10 +65,10 @@ function readView(q: URLSearchParams | null, b: TwinBuilding) {
   const num = (k: string) => (q?.get(k) == null ? undefined : Number(q.get(k)));
   return {
     mode: pick(MODES, (q?.get("view") ?? undefined) as TwinMode | undefined, "build"),
-    floor: pick(["1f", "2f"] as TwinFloor[], (q?.get("floor") ?? undefined) as TwinFloor | undefined, "1f"),
+    floor: pick(b.frame.floors, (q?.get("floor") ?? undefined) as TwinFloor | undefined, "1f"),
     basis: pick(["u", "winter", "summer"] as ThermalBasis[], (q?.get("heat") ?? undefined) as ThermalBasis | undefined, "u"),
     scenario: {
-      wall: pick(WALL_OPTIONS, num("wall") as Scenario["wall"] | undefined, DRAWN.wall),
+      wall: pick(b.walls, num("wall") as Scenario["wall"] | undefined, DRAWN.wall),
       win: pick(WIN_OPTIONS, (q?.get("win") ?? undefined) as Scenario["win"] | undefined, DRAWN.win),
       pv: pick(PV_OPTIONS, num("pv") as Scenario["pv"] | undefined, DRAWN.pv),
     } as Scenario,
@@ -147,12 +146,15 @@ type Props = {
 /** 건물 고르기 + 고른 건물의 트윈 */
 export default function LabTwin(props: Props) {
   const params = useSearchParams();
-  const [bkey, setBkey] = useState<BuildingKey>(() => (params?.get("b") === "b" ? "b" : "a"));
+  const [bkey, setBkey] = useState<BuildingKey>(() => {
+    const b = params?.get("b");
+    return b && b in BUILDINGS ? (b as BuildingKey) : "a";
+  });
   const L = props.labels.buildings;
   return (
     <div>
-      <div role="group" aria-label={L.label} className="mb-4 grid grid-cols-2 gap-2 sm:gap-3">
-        {(["a", "b"] as const).map((k) => (
+      <div role="group" aria-label={L.label} className="mb-4 grid grid-cols-3 gap-2 sm:gap-3">
+        {(Object.keys(BUILDINGS) as BuildingKey[]).map((k) => (
           <button
             key={k}
             type="button"
@@ -161,7 +163,8 @@ export default function LabTwin(props: Props) {
             className={`rounded-xl border px-3 py-2.5 text-left transition-colors sm:px-4 sm:py-3 ${bkey === k ? "border-primary bg-primary/5" : "border-border hover:bg-surface"}`}
           >
             <span className="block text-sm font-semibold">{L[k].name}</span>
-            <span className="mt-0.5 block text-xs leading-relaxed text-muted">{L[k].desc}</span>
+            <span className="mt-0.5 block text-xs leading-relaxed text-muted sm:hidden">{L[k].short}</span>
+            <span className="mt-0.5 hidden text-xs leading-relaxed text-muted sm:block">{L[k].desc}</span>
           </button>
         ))}
       </div>
@@ -603,7 +606,7 @@ function TwinView({ building, poster, posterAlt, labels, roomNames, roomWords, v
           hour={snap.hour}
           dates={dates} rooms={rooms} roomNames={names} building={building} planLines={planLines} floor={floor} selected={selected} onSelect={setSelected} v1Href={v1Href} LinkComponent={Link} />
       </div>
-      <p className="mt-8 border-t border-border pt-4 text-xs leading-relaxed text-muted">{building.auto ? labels.buildings.b.footnote : labels.footnote}</p>
+      <p className="mt-8 border-t border-border pt-4 text-xs leading-relaxed text-muted">{labels.buildings[building.key].footnote ?? labels.footnote}</p>
     </div>
   );
 }

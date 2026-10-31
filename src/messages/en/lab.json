@@ -283,16 +283,26 @@
             "label": "Choose a building",
             "a": {
               "name": "Building A",
+              "short": "2 storeys · checked",
               "desc": "2-storey health facility · model checked against the drawings (v1)",
               "roofNote": "The roof shape isn't fixed by the drawings, so it's an estimate."
             },
             "b": {
               "name": "Building B",
+              "short": "1 storey · auto",
               "desc": "1-storey daycare · model generated automatically from the DXF",
               "roofNote": "The flat roof is simplified to a single level (the drawings show two).",
               "drawnNote": "The specs noted on this drawing (urethane foam board 100 mm · low-E double glazing, applied U-value 0.994) differ from the materials in the table, so it starts from an 'example' combination: the same thickness and window type, calculated with Building A's material properties.",
               "autoNote": "Walls, windows, rooms, the 3D model and the energy model were all generated from the drawing lines, with no manual fixes. The small unnamed rooms have no label in the drawing.",
               "footnote": "Built from a 3D model and calculations generated automatically from real construction drawings (institution and architect details removed). The sun path uses a central-Korea latitude, assuming the top of the drawing is north."
+            },
+            "c": {
+              "name": "Building C",
+              "short": "3 storeys · auto",
+              "desc": "3-storey daycare · three separately drawn floor plans aligned on the grid lines automatically",
+              "roofNote": "The rooftop stair tower and roof railings are not modelled.",
+              "autoNote": "The three floor plans sit in different places on the drawing; they were stacked automatically by aligning the grid lines (X1–X3 · Y1–Y4). Walls, windows, doors, rooms and the energy model had no manual fixes. Interior doors drawn without a swing arc were found as wall gaps narrower than 1 m.",
+              "footnote": "Built from a 3D model and calculations generated automatically from real construction drawings (institution and architect details removed). The insulation in the drawing spec (PF board 80 mm, conductivity 0.020) is calculated with the same properties as the other combinations (0.019 · stucco 10 mm). The sun path uses a central-Korea latitude, assuming the top of the drawing is north."
             }
           },
           "loading": "Preparing the 3D scene…",
@@ -330,7 +340,8 @@
             "floorLabel": "Floor",
             "floors": {
               "1f": "Ground floor",
-              "2f": "First floor"
+              "2f": "First floor",
+              "3f": "Second floor"
             },
             "cols": {
               "room": "Room",
@@ -480,7 +491,14 @@
             "복도": "Corridor",
             "화장실": "Restroom",
             "다용도실": "Utility room",
-            "주방": "Kitchen"
+            "주방": "Kitchen",
+            "사무실": "Office",
+            "양호실": "Sick bay",
+            "교사실": "Teachers' room",
+            "강당": "Hall",
+            "도서방": "Reading room",
+            "계단실": "Stairwell",
+            "유희실": "Playroom"
           }
         }
       },
@@ -506,6 +524,10 @@
           {
             "title": "Just add the drawing (Building B)",
             "desc": "No one touched Building B by hand. Given the DXF and a short config with the floor extents and a few heights, the script thickens and merges wall lines to find the outline and rooms, groups windows and doors, builds the 3D and EnergyPlus models, and calculates all 12 combinations."
+          },
+          {
+            "title": "Stacking the floors (Building C)",
+            "desc": "In a multi-storey set, each floor plan sits somewhere else on the drawing. The script compares each plan's grid lines with the ground floor, finds the shift that makes the most of them coincide, places the upper floors on ground-floor coordinates, and treats any part of a lower floor not covered by the floor above as that floor's roof."
           }
         ],
         "v1": "v1 — figures, quantity takeoff and film"

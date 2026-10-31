@@ -19,6 +19,7 @@ import energy from "@/data/lab/ai-building-workspace-energy.json";
 import { frameScale, type TwinBuilding } from "./buildings";
 import {
   BUILD,
+  FLOOR_ORDER,
   REMODEL,
   WIN_U,
   atHour,
@@ -50,14 +51,15 @@ type Pose = { pos: THREE.Vector3; target: THREE.Vector3 };
 export type Frame = { center: THREE.Vector3; k: number; top: number; floorY: Partial<Record<TwinFloor, number>>; size: [number, number]; poses: Record<string, Pose> };
 
 export function makeFrame(b: TwinBuilding): Frame {
-  const { cx, cy, w, d, height, floors } = b.frame;
+  const { cx, cy, w, d, height, floors, levels } = b.frame;
   const k = frameScale(b);
   const hk = height / 7.39;
   const c = new THREE.Vector3(cx, 0, -cy);
   const at = (x: number, y: number, z: number) => new THREE.Vector3(c.x + x * k, y * k, c.z + z * k);
   const look = (y: number, dz = 0) => new THREE.Vector3(c.x, y, c.z + dz * k);
-  const floorY: Frame["floorY"] = { "1f": 0 };
-  if (floors.includes("2f")) floorY["2f"] = 3.3;
+  const floorY: Frame["floorY"] = Object.fromEntries(floors.map((f, i) => [f, levels[i]]));
+  // 실 보기 카메라: 층마다 그 층 바닥을 내려다본다 (높을수록 조금 더 위에서)
+  const rooms = Object.fromEntries(floors.map((f, i) => [`rooms${f}`, { pos: at(0.35, 25 + levels[i] / 1.1, 14.4), target: look(levels[i], 0.5) }]));
   return {
     center: new THREE.Vector3(cx, height * 0.4, -cy),
     k,
@@ -67,8 +69,7 @@ export function makeFrame(b: TwinBuilding): Frame {
     poses: {
       plan: { pos: at(-1.25, 29, 19.9), target: look(0, 0.5) },
       overview: { pos: at(-14.75, 10.5, 21.4), target: look(2.8 * hk) },
-      rooms1f: { pos: at(0.35, 25, 14.4), target: look(0, 0.5) },
-      rooms2f: { pos: at(0.35, 28, 14.4), target: look(3.3, 0.5) },
+      ...rooms,
       remodel: { pos: at(17.75, 10.5, 22.9), target: look(3 * hk) },
     },
   };
@@ -216,21 +217,28 @@ function stepPlan(layers: PlanLayer[], progress: number, opacity: number, wallsO
   }
 }
 
+type PlanFloor = { key: TwinFloor; y: number; layers: PlanLayer[]; ring: THREE.LineSegments };
+
 function PlanLines({ plan, simRef, mode, floor }: { plan: TwinPlanData; simRef: RefObject<TwinSim>; mode: TwinMode; floor: TwinFloor }) {
-  const f1 = useMemo(() => planLayers(plan, "1f"), [plan]);
-  const f2 = useMemo(() => planLayers(plan, "2f"), [plan]);
-  // 벽이 솟는 높이에 1층(→ 2층) 벽선을 띄워 자르는 면을 보여 준다
-  const ring1 = useMemo(() => ringLine(f1), [f1]);
-  const ring2 = useMemo(() => ringLine(f2), [f2]);
   const f = useFrameInfo();
-  useFrame(() => stepPlanLines(simRef.current, mode, floor, f1, f2, ring1, ring2, f));
+  // 층마다 도면 선 + 벽이 솟는 높이에 그 층 벽선을 띄워 자르는 면을 보여 주는 고리
+  const floors = useMemo<PlanFloor[]>(
+    () =>
+      (Object.keys(f.floorY) as TwinFloor[]).map((key) => {
+        const layers = planLayers(plan, key);
+        return { key, y: f.floorY[key] ?? 0, layers, ring: ringLine(layers) };
+      }),
+    [plan, f],
+  );
+  useFrame(() => stepPlanLines(simRef.current, mode, floor, floors, f));
   return (
     <>
-      {[...f1, ...f2].map((l, i) => (
+      {floors.flatMap((p) => p.layers).map((l, i) => (
         <primitive key={i} object={l.line} />
       ))}
-      <primitive object={ring1} />
-      <primitive object={ring2} />
+      {floors.map((p) => (
+        <primitive key={p.key} object={p.ring} />
+      ))}
     </>
   );
 }
@@ -245,29 +253,29 @@ function ringLine(layers: PlanLayer[]) {
   return line;
 }
 
-function stepPlanLines(s: TwinSim, mode: TwinMode, floor: TwinFloor, f1: PlanLayer[], f2: PlanLayer[], ring1: THREE.LineSegments, ring2: THREE.LineSegments, f: Frame) {
+function stepPlanLines(s: TwinSim, mode: TwinMode, floor: TwinFloor, floors: PlanFloor[], f: Frame) {
   const b = s.build;
   const rise = span(b, BUILD.rise);
   const clip = rise * f.top;
-  const y2 = f.floorY["2f"] ?? Infinity;
-  if (mode === "rooms") {
-    // 실 보기: 고른 층의 벽 · 창 선만 바닥에
-    stepPlan(f1, 1, floor === "1f" ? 0.55 : 0, true);
-    stepPlan(f2, 1, floor === "2f" ? 0.55 : 0, true);
-  } else {
-    // 다 지은 뒤 1층 도면은 대지에 흐리게 남고, 2층 도면은 벽이 그 높이를 지나면 사라진다
-    stepPlan(f1, span(b, BUILD.plan1), 1 - span(b, [0.84, 1]) * 0.7, false);
-    stepPlan(f2, span(b, BUILD.plan2), 1 - smooth(y2 - 0.4, y2 + 0.3, clip), false);
-  }
   const rising = mode !== "rooms" && rise > 0 && rise < 1;
-  const upper = clip > y2;
-  ring1.visible = rising && !upper;
-  ring2.visible = rising && upper;
-  ring1.position.y = clip - 0.02;
-  ring2.position.y = Number.isFinite(y2) ? clip - y2 - 0.02 : 0;
   const fade = Math.min(1, rise * 12, (1 - rise) * 12);
-  (ring1.material as THREE.LineBasicMaterial).opacity = fade;
-  (ring2.material as THREE.LineBasicMaterial).opacity = fade;
+  floors.forEach((p, i) => {
+    if (mode === "rooms") {
+      // 실 보기: 고른 층의 벽 · 창 선만 바닥에
+      stepPlan(p.layers, 1, floor === p.key ? 0.55 : 0, true);
+    } else if (i === 0) {
+      // 다 지은 뒤 1층 도면은 대지에 흐리게 남는다
+      stepPlan(p.layers, span(b, BUILD.plan1), 1 - span(b, [0.84, 1]) * 0.7, false);
+    } else {
+      // 위층 도면은 제 높이에 떠 있다가 벽이 그 높이를 지나면 사라진다
+      stepPlan(p.layers, span(b, BUILD.plan2), 1 - smooth(p.y - 0.4, p.y + 0.3, clip), false);
+    }
+    // 자르는 면이 지나는 층의 고리만
+    const next = floors[i + 1]?.y ?? Infinity;
+    p.ring.visible = rising && clip >= p.y && clip < next;
+    p.ring.position.y = clip - p.y - 0.02;
+    (p.ring.material as THREE.LineBasicMaterial).opacity = fade;
+  });
 }
 
 /* ── 건물 ─────────────────────────────────────────────────────────── */
@@ -304,9 +312,11 @@ function paintHeat(m: TwinModel, v: View, hourly: HourlyData | null, hour: numbe
   for (const [k, mat] of Object.entries(H.shell)) fluxColor(atHour(run.wall[k], hour), mat.color);
   for (const [k, mat] of Object.entries(H.old)) fluxColor(atHour(before.win[k], hour), mat.color);
   for (const [k, mat] of Object.entries(H.fresh)) fluxColor(atHour(run.win[k], hour), mat.color);
-  // 지붕 = 맨 위 층의 지붕, 바닥판(2층 베란다 바닥) = 1층 위 지붕
-  fluxColor(atHour(before.roof.F2 ?? before.roof.F1, hour), H.roof.color);
-  fluxColor(atHour(before.roof.F1, hour), H.slab.color);
+  // 지붕 = 맨 위 층의 지붕, 바닥판(위층이 덮지 않는 아래층 지붕 · 베란다 바닥) = 그 아래층의 지붕
+  const zones = Object.keys(before.roof).sort();
+  const top = zones[zones.length - 1];
+  fluxColor(atHour(before.roof[top], hour), H.roof.color);
+  fluxColor(atHour(before.roof[zones.find((z) => z !== top) ?? top], hour), H.slab.color);
   fluxColor(0, H.floor.color);
 }
 type SplitTmp = { a: THREE.Vector3; b: THREE.Vector3; c: THREE.Vector3 };
@@ -341,7 +351,11 @@ function stepBuilding(m: TwinModel, s: TwinSim, v: View, hourly: HourlyData | nu
   // 층 보기: 실 보기에서는 위층 · 지붕 · 천장을 걷는다
   for (const it of m.items) {
     let show = true;
-    if (mode === "rooms") show = floor === "1f" ? it.floor === "1f" && !it.ceiling : it.floor !== "roof" && !(it.floor === "2f" && it.ceiling);
+    if (mode === "rooms") {
+      const a = FLOOR_ORDER.indexOf(it.floor);
+      const sel = FLOOR_ORDER.indexOf(floor);
+      show = a < sel || (a === sel && !it.ceiling);
+    }
     it.obj.userData.hidden = !show;
   }
 
@@ -617,7 +631,7 @@ function Labels({ rooms, floor, mode, chipsRef }: { rooms: TwinRoom[]; floor: Tw
 type Controls = { target: THREE.Vector3; update: () => void; autoRotate: boolean; autoRotateSpeed: number; addEventListener: (t: string, f: () => void) => void; removeEventListener: (t: string, f: () => void) => void };
 
 function poseKey(mode: TwinMode, floor: TwinFloor, build: number) {
-  if (mode === "rooms") return floor === "1f" ? "rooms1f" : "rooms2f";
+  if (mode === "rooms") return `rooms${floor}`;
   if (mode === "remodel") return "remodel";
   return build < BUILD.rise[0] + 0.04 ? "plan" : "overview";
 }

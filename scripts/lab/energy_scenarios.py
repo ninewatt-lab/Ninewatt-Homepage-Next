@@ -23,7 +23,8 @@ from concurrent.futures import ThreadPoolExecutor
 ENV, EPW, WORK, OUT, HOURLY = sys.argv[1:6]
 HERE = os.path.dirname(os.path.abspath(__file__))
 EPLUS = "/Applications/EnergyPlus-9-0-1/energyplus"
-WALLS = [0, 50, 100, 150]
+# 외단열 두께 — 도면 사양이 표에 없는 건물은 WALLS=0,50,80,100,150 처럼 더한다
+WALLS = [int(v) for v in os.environ.get("WALLS", "0,50,100,150").split(",")]
 WINS = ["old", "lowe", "triple"]
 MODULE_W = 430
 DIRS = "NESW"
