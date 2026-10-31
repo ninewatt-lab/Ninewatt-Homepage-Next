@@ -3,7 +3,7 @@
 `/lab`, `/lab/ai-building-workspace` 작업을 다른 PC나 새 Claude 세션에서 이어갈 때 먼저 읽는 문서.
 도판·영상·물량을 다시 만드는 명령은 [scripts/lab/README.md](../scripts/lab/README.md) 에 있다.
 
-마지막 정리: 2026-10-19 (main = dev = `97bc303`)
+마지막 정리: 2026-10-31 (Lab v2 추가)
 
 ## 지금 상태
 
@@ -24,6 +24,15 @@
   Lab 영상은 v4 Lab 편집본 `public/lab/ai-building-workspace/lab-film-v5.mp4`(88초, 전시회 이름 · QR 없음)로 바꿨다.
   S3 의 예전 `ai-building-workspace-case-v4.mp4` 는 더 쓰지 않는다 — aws CLI 가 있는 PC 에서 지운다.
 - /expo 는 전시가 끝나면 내리거나 Lab 상세로 연결(리다이렉트)할지 정한다.
+
+### Lab v2 — 도면으로 지은 3D 트윈 (2026-10-31 추가)
+
+- `/lab/ai-building-workspace-v2` (ko · en · ja · fr). 목록이 카드 2장 그리드로 바뀌었다.
+- v1 의 도면 · 3D 모델 · 실 면적 · EnergyPlus 결과를 한 장면에 겹친다. 보기 셋: 도면 → 3D(도면 선이 그려지고 벽이 바닥부터 솟는다) ·
+  실 · 면적(지붕 · 위층을 걷고 실을 눌러 물량) · 그린리모델링(열화상 → 외단열 18면 → 창 23개 → 태양광 4장, 끝나면 −40% · 월별 그래프 · 전후/열화상 토글).
+- 코드 `src/components/lab/twin/` (LabTwin · TwinScene · TwinPanel · twinBuild · twinModel). 하늘 · 빛 번짐은 홈 히어로 것을 같이 쓴다.
+- 새 데이터는 평면 선(`public/lab/ai-building-workspace-v2/twin.json`, `scripts/lab/twin_data.py`) 하나. 나머지는 v1 파일을 읽는다 — v1 데이터를 바꾸면 v2 도 바뀐다.
+- 문구 `lab.json` 의 `projects.ai-building-workspace-v2` (실 이름은 v1 의 `case.rooms` 를 그대로 쓴다). 만드는 법은 scripts/lab/README.md 끝.
 
 ## 파일 지도
 

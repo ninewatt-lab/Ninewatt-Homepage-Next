@@ -164,3 +164,26 @@ python3 scripts/lab/expo_film.py $F <QR.svg> <PretendardVariable.woff2>   # film
 NODE_PATH=<puppeteer-core node_modules> node scripts/lab/expo_capture.cjs $F/film.html $F/cap
 ffmpeg -framerate 30 -i $F/cap/f_%05d.jpg -vf "noise=alls=3:allf=t" -c:v libx264 -preset slow -crf 17 -pix_fmt yuv420p $F/film.mp4
 ```
+
+## Lab v2 — 도면으로 지은 3D 트윈 (/lab/ai-building-workspace-v2)
+
+v1 결과를 한 장면으로 묶었다. 새로 만드는 데이터는 평면 선 하나뿐이고, 모델 · 실 · 에너지 수치는 v1 것을 그대로 읽는다.
+
+```bash
+# 1·2층 평면의 벽 · 창호 · 치수 · 기타 선 → 모델 좌표(m) 선분 (글자 · 해치 · 바닥 줄눈 제외, gzip 약 24 KB)
+$PY scripts/lab/twin_data.py $DXF public/lab/ai-building-workspace-v2/twin.json
+```
+
+| 장면에서 쓰는 것 | 어디서 |
+|---|---|
+| 평면 선 (도면 → 3D) | `public/lab/ai-building-workspace-v2/twin.json` (twin_data.py) |
+| 3D 모델 · 실 경계 · 면적 · 물량 | v1 `public/lab/ai-building-workspace/viewer/` (viewer.json · model.glb) |
+| 외피 면적 · 열관류율 · 냉난방 · 태양광 | `src/data/lab/ai-building-workspace-energy.json` |
+| 외단열 판 · 새 창 · 태양광 모듈 · 열화상 막 | 브라우저에서 glb 노드 이름으로 만든다 (`src/components/lab/twin/twinBuild.ts`) |
+
+- 외벽은 이름이 `VIS_F<층>_<방위…>` 이고 실내 벽(Internal · Stair · Toilet …)이 아닌 18면, 바깥 창은 유리가 있는 개구부 묶음 중
+  실내 칸막이(LobbyInner)를 뺀 23개다. EnergyPlus 의 외벽 · 창호 범위와 같다. 모델을 다시 만들어 이름이 바뀌면 `twinModel.ts` 의 정규식을 맞춘다.
+- 외단열 판은 외벽 형상(창 구멍 포함)을 바깥면에서 0.11 m(PF보드 100 mm + 스타코 10 mm) 두께로 눌러 만든다. 바깥 방향은 벽 이름의 방위로 정한다.
+- 열화상 색은 열관류율 / 4 W/㎡K 에 비례하는 ironbow 색이다(홈 히어로 그린리모델링과 같은 색). 실측이 아님을 페이지에 밝힌다.
+- 해 방향은 위도 37.5°(중부 지방)와 오늘 날짜로 계산한다. 실제 위치는 쓰지 않는다.
+- 목록 표지(cover.webp 1600×1000) · 공유 이미지(og.jpg 1200×630)는 이 장면을 브라우저로 캡처해 만들었다(UI 를 숨기고 `[data-twin-stage]` 요소만).

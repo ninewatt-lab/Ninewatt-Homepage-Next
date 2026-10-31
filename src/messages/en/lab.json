@@ -259,6 +259,138 @@
           "verandaEast": "Veranda (east)"
         }
       }
+    },
+    "ai-building-workspace-v2": {
+      "name": "AI Building Workspace v2",
+      "tagline": "Build it from the drawing. Retrofit it in 3D.",
+      "summary": "We combined the 3D model and calculations from v1 into one interactive scene. Drawing lines become walls, rooms show their computed areas, and the green remodeling work and EnergyPlus results play out on the same building.",
+      "tags": [
+        "DXF",
+        "3D twin",
+        "Green remodeling",
+        "EnergyPlus"
+      ],
+      "coverAlt": "A 3D building rising out of its drawing lines: the ground-floor walls grow from the floor while the first-floor plan lines float above",
+      "why": [
+        "v1 turned one set of drawings into room areas, quantities, a 3D model and an energy calculation, but the results were spread across figures and tables. It was hard to see which part of the building each number came from.",
+        "v2 layers the same results onto a single 3D scene. Drawing lines and walls, room boundaries and areas, remodeling work and energy results all share one coordinate system, so you can click to see where each number comes from."
+      ],
+      "twin": {
+        "title": "A 3D twin you can explore",
+        "intro": "It starts by building the house from its drawings. Use the tabs at the top to look at rooms and areas, then the green remodeling work.",
+        "ui": {
+          "loading": "Preparing the 3D scene…",
+          "unsupported": "This browser can't display 3D. Turn on hardware acceleration or try another browser.",
+          "hint": "Drag to rotate · wheel or pinch to zoom",
+          "tabsLabel": "View",
+          "tabs": {
+            "build": "Drawing → 3D",
+            "rooms": "Rooms · areas",
+            "remodel": "Green remodeling"
+          },
+          "play": "Run time",
+          "pause": "Pause time",
+          "footnote": "Built from the real construction drawings (institution and architect details removed) and the 3D model and calculations from v1. The sun path uses a central-Korea latitude, assuming the top of the drawing is north.",
+          "build": {
+            "kicker": "1 · Drawing → 3D",
+            "title": "Drawing lines become walls",
+            "desc": "The wall, window and dimension lines of the ground- and first-floor plans are drawn as they are, then the 3D model built on the same coordinates rises from the ground up. The first-floor plan floats at its real storey height (3.3 m).",
+            "stats": {
+              "lines": "Drawing lines",
+              "layers": "Drawing layers",
+              "walls": "Exterior wall area",
+              "windows": "Exterior windows"
+            },
+            "steps": {
+              "plan": "Drawing the plan lines",
+              "rise": "Raising walls, windows and roof"
+            },
+            "replay": "Build again",
+            "roofNote": "The roof shape isn't fixed by the drawings, so it's an estimate."
+          },
+          "rooms": {
+            "kicker": "2 · Rooms · areas",
+            "title": "Rooms computed from drawing layers",
+            "desc": "Areas enclosed by wall and window lines were found automatically to compute room boundaries and areas. Tap a floor or a label to see its quantities.",
+            "floorLabel": "Floor",
+            "floors": {
+              "1f": "Ground floor",
+              "2f": "First floor"
+            },
+            "area": "Area",
+            "perimeter": "Perimeter",
+            "wallArea": "Wall area",
+            "railing": "Railing",
+            "auto": "Computed",
+            "review": "Boundary review needed",
+            "total": "Floor total",
+            "pick": "Tap a room to see its perimeter and wall area."
+          },
+          "remodel": {
+            "kicker": "3 · Green remodeling",
+            "title": "Carrying out the work noted on the drawings",
+            "desc": "The external insulation and window work from the drawing notes is applied step by step to the same 3D model, and the yearly heating and cooling energy calculated with EnergyPlus is compared.",
+            "steps": {
+              "scan": {
+                "title": "Thermal view",
+                "desc": "Surfaces are colored by the U-values used in the simulation. Brighter means more heat loss."
+              },
+              "insulation": {
+                "title": "External wall insulation",
+                "desc": "PF board 100 mm + stucco 10 mm · exterior walls {area} ㎡ · U-value {before} → {after} W/㎡K"
+              },
+              "windows": {
+                "title": "Window replacement",
+                "desc": "PVC double windows · Low-E double glazing · {count} windows, {area} ㎡ · U-value {before} → {after} W/㎡K"
+              },
+              "pv": {
+                "title": "Solar (extra proposal)",
+                "desc": "Not in the drawings · {count} × {w} W modules on the south roof slope ({kw} kW)"
+              }
+            },
+            "waiting": "Waiting",
+            "done": "Done",
+            "legendLow": "Low heat loss",
+            "legendHigh": "High",
+            "result": "Yearly heating & cooling energy",
+            "before": "Before",
+            "after": "After",
+            "heating": "Heating",
+            "cooling": "Cooling",
+            "unit": "kWh/yr",
+            "chart": "Monthly heating & cooling energy (kWh)",
+            "pvAnnual": "Yearly solar output",
+            "pvNote": "A simple EnergyPlus PVWatts calculation, not included in the estimate. The roof shape and orientation aren't fixed by the drawings, so they're assumed.",
+            "view": "Show",
+            "thermal": "Thermal",
+            "replay": "Run the work again",
+            "note": "A simple EnergyPlus 9.0 simulation (Korean standard weather data), not an official energy rating. Pre-remodeling wall and window U-values assume an aging building. Thermal colors are proportional to U-values, not a thermal photograph.",
+            "more": "Quantities and the example estimate are in v1"
+          }
+        }
+      },
+      "how": {
+        "title": "How it's made",
+        "steps": [
+          {
+            "title": "Drawing lines → data",
+            "desc": "Only the lines on the wall, window and dimension layers of the DXF drawings are taken and moved into model coordinates (m). Text layers holding the title, institution or architect details aren't used."
+          },
+          {
+            "title": "Room boundaries · areas",
+            "desc": "Areas enclosed by wall and window lines are computed as rooms (v1). Where missing partition lines merge several rooms, it's marked 'Boundary review needed'."
+          },
+          {
+            "title": "3D model · retrofit parts",
+            "desc": "In the v1 3D model we found the 18 exterior walls and 23 exterior windows, then made an insulation layer for each wall and a new window for each opening with the same geometry."
+          },
+          {
+            "title": "Energy calculation",
+            "desc": "EnergyPlus 9.0 was run with the wall and window areas and orientations of the same model to compare yearly heating and cooling energy before and after. Every number in the scene comes straight from this result."
+          }
+        ],
+        "v1": "v1 — figures, quantity takeoff and film"
+      }
     }
   }
 }

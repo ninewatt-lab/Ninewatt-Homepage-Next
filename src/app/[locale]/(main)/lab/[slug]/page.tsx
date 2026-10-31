@@ -13,6 +13,8 @@ import { LabFilm } from "@/components/lab/LabFilm";
 import LabCompare from "@/components/lab/LabCompare";
 import LabModelViewer, { type ViewerLabels } from "@/components/lab/LabModelViewer";
 import Retrofit from "@/components/lab/Retrofit";
+import LabTwin from "@/components/lab/twin/LabTwin";
+import type { TwinLabels } from "@/components/lab/twin/TwinPanel";
 
 type Params = Promise<{ locale: string; slug: string }>;
 
@@ -439,6 +441,27 @@ export default async function LabProjectPage({ params }: { params: Params }) {
         </div>
       </section>
 
+      {/* v2: 도면으로 지은 3D 트윈 */}
+      {project.twin && (
+        <section className="px-4 py-14 sm:px-6">
+          <div className="mx-auto max-w-7xl">
+            <h2 className="text-2xl font-bold md:text-3xl">{t(`${key}.twin.title`)}</h2>
+            <p className="mt-3 max-w-3xl text-base leading-relaxed text-muted">{t(`${key}.twin.intro`)}</p>
+            <div className="mt-8">
+              <LabTwin
+                planUrl={project.twin.plan}
+                viewerUrl={project.twin.viewer}
+                poster={project.twin.poster}
+                posterAlt={t(`${key}.coverAlt`)}
+                labels={t.raw(`${key}.twin.ui`) as TwinLabels}
+                roomNames={t.raw("projects.ai-building-workspace.case.rooms") as Record<string, string>}
+                v1Href={project.twin.v1}
+              />
+            </div>
+          </div>
+        </section>
+      )}
+
       {project.video && (
         <section className="px-6 py-16">
           <div className="mx-auto max-w-5xl">
@@ -470,6 +493,31 @@ export default async function LabProjectPage({ params }: { params: Params }) {
       </section>
 
       {project.caseStudy && <CaseStudy cs={project.caseStudy} t={t} k={key} />}
+
+      {/* v2: 어떻게 만들었나 · v1 로 */}
+      {project.twin && (
+        <section className="border-t border-border px-6 py-20">
+          <div className="mx-auto max-w-5xl">
+            <h2 className="text-2xl font-bold md:text-3xl">{t(`${key}.how.title`)}</h2>
+            <ol className="mt-10 grid gap-6 md:grid-cols-2">
+              {(t.raw(`${key}.how.steps`) as { title: string; desc: string }[]).map((step, i) => (
+                <li key={i} className="rounded-xl border border-border p-5">
+                  <span className="text-xs font-semibold text-primary">{String(i + 1).padStart(2, "0")}</span>
+                  <h3 className="mt-2 font-semibold">{step.title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-muted">{step.desc}</p>
+                </li>
+              ))}
+            </ol>
+            <Link
+              href={project.twin.v1}
+              className="mt-10 inline-flex items-center gap-2 rounded-full border border-border px-5 py-2.5 text-sm font-semibold transition-colors hover:bg-surface"
+            >
+              {t(`${key}.how.v1`)}
+              <span aria-hidden="true">→</span>
+            </Link>
+          </div>
+        </section>
+      )}
 
       {/* 2026-10 추가: 그린리모델링 · 에너지 · 태양광 · 견적 (/expo 와 같은 섹션) */}
       {slug === "ai-building-workspace" && (

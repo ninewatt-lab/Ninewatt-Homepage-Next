@@ -82,12 +82,16 @@ export interface LabProject {
     chapters: number[];
   };
   caseStudy?: LabCaseStudy;
+  /** 도면으로 지은 3D 트윈 (src/components/lab/twin). plan 은 scripts/lab/twin_data.py 결과,
+   *  viewer 는 실 · 모델이 든 v1 뷰어 데이터, poster 는 장면을 불러오기 전에 보여 줄 이미지 */
+  twin?: { plan: string; viewer: string; poster: LabImage; v1: string };
   /** 제품으로 졸업한 경우 해당 제품 페이지 경로 */
   graduatedTo?: string;
 }
 
 const S3 = "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com";
 const ABW = "/lab/ai-building-workspace";
+const ABW2 = "/lab/ai-building-workspace-v2";
 
 export const labProjects: LabProject[] = [
   {
@@ -144,6 +148,19 @@ export const labProjects: LabProject[] = [
         // 1층 평면도 주석: "진료실,대기실,다목적실,현관 천정,바닥 공사 … 공사면적 60.00㎡"
         noted: { value: 60.0, rooms: ["clinic", "waiting", "multipurpose", "entrance"] },
       },
+    },
+  },
+  {
+    // v1 의 도면 · 3D 모델 · EnergyPlus 결과를 한 장면(도면 → 3D · 실 · 그린리모델링)으로 묶었다
+    slug: "ai-building-workspace-v2",
+    status: "experimenting",
+    cover: `${ABW2}/cover.webp`,
+    og: `${ABW2}/og.jpg`,
+    twin: {
+      plan: `${ABW2}/twin.json`,
+      viewer: `${ABW}/viewer/viewer.json`,
+      poster: { src: `${ABW2}/cover.webp`, width: 1600, height: 1000 },
+      v1: "/lab/ai-building-workspace",
     },
   },
 ];
