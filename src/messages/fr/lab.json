@@ -279,6 +279,22 @@
         "title": "Un jumeau 3D à explorer",
         "intro": "La scène commence par construire le bâtiment à partir de ses plans. Les onglets du haut montrent ensuite les pièces et surfaces, puis les travaux de rénovation énergétique.",
         "ui": {
+          "buildings": {
+            "label": "Choisir un bâtiment",
+            "a": {
+              "name": "Bâtiment A",
+              "desc": "Centre de santé sur 2 niveaux · modèle vérifié sur les plans (v1)",
+              "roofNote": "La forme de la toiture n'est pas fixée par les plans : c'est une estimation."
+            },
+            "b": {
+              "name": "Bâtiment B",
+              "desc": "Crèche de plain-pied · modèle généré automatiquement depuis le DXF",
+              "roofNote": "La toiture-terrasse est simplifiée à un seul niveau (les plans en montrent deux).",
+              "drawnNote": "Les caractéristiques notées sur ce plan (panneau de mousse polyuréthane 100 mm · double vitrage FE, U appliqué 0,994) diffèrent des matériaux du tableau : on part donc d'une combinaison « exemple », même épaisseur et même type de fenêtre, calculée avec les propriétés des matériaux du bâtiment A.",
+              "autoNote": "Murs, fenêtres, pièces, modèle 3D et modèle énergétique ont tous été générés à partir des traits du plan, sans retouche manuelle. Les petites pièces sans nom n'ont pas d'étiquette sur le plan.",
+              "footnote": "Scène construite à partir d'une maquette 3D et de calculs générés automatiquement depuis de vrais plans de travaux (informations sur l'établissement et l'architecte retirées). La course du soleil utilise une latitude du centre de la Corée, en supposant que le haut du plan est le nord."
+            }
+          },
           "loading": "Préparation de la scène 3D…",
           "unsupported": "Ce navigateur ne peut pas afficher la 3D. Activez l'accélération matérielle ou essayez un autre navigateur.",
           "tabsLabel": "Vue",
@@ -307,8 +323,7 @@
               "walls": "Surface des murs extérieurs",
               "windows": "Fenêtres extérieures"
             },
-            "windowsValue": "{count} · {area} ㎡",
-            "roofNote": "La forme de la toiture n'est pas fixée par les plans : c'est une estimation."
+            "windowsValue": "{count} · {area} ㎡"
           },
           "rooms": {
             "caption": "Touchez une pièce ou son étiquette pour la retrouver dans le tableau ci-dessous.",
@@ -328,7 +343,8 @@
             "auto": "Calculée",
             "review": "À vérifier",
             "total": "Total",
-            "note": "Les surfaces sont calculées automatiquement à partir des calques comme des zones fermées par les traits des murs et des menuiseries. Là où l'absence de cloison regroupe plusieurs pièces, la mention « À vérifier » s'affiche."
+            "note": "Les surfaces sont calculées automatiquement à partir des calques comme des zones fermées par les traits des murs et des menuiseries. Là où l'absence de cloison regroupe plusieurs pièces, la mention « À vérifier » s'affiche.",
+            "unnamed": "Pièce"
           },
           "remodel": {
             "steps": {
@@ -389,13 +405,16 @@
               },
               "count": "{count}",
               "reset": "Revenir au plan",
-              "pvHint": "Absent des plans"
+              "pvHint": "Absent des plans",
+              "example": "Exemple",
+              "resetExample": "Revenir à l'exemple",
+              "descNoPv": "Choisissez l'épaisseur d'isolation et les fenêtres. Chaque combinaison a été calculée à l'avance avec EnergyPlus, et le bâtiment 3D ci-dessus change en conséquence."
             },
             "chosen": "Combinaison choisie",
             "coolingUp": "Avec cette combinaison, l'énergie de climatisation augmente par rapport à avant ({before} → {after} kWh) : les murs isolés laissent moins s'échapper la chaleur solaire entrée par les fenêtres. Remplacer aussi les fenêtres la fait baisser.",
             "doneNone": "Cette combinaison est identique à l'état avant travaux. Choisissez l'isolation et les fenêtres ci-dessous.",
             "captions": {
-              "insulation": "Un isolant PF de {mm} mm est posé sur les 18 murs extérieurs.",
+              "insulation": "Un isolant de {mm} mm est posé sur tous les murs extérieurs.",
               "insulationNone": "Pas d'isolation par l'extérieur dans cette combinaison.",
               "windows": "Les 23 fenêtres sont remplacées par des fenêtres {type}.",
               "windowsNone": "Les fenêtres restent telles quelles.",
@@ -408,9 +427,10 @@
               "old": "Fenêtres existantes conservées (aluminium · double vitrage standard, supposé)",
               "lowe": "Doubles fenêtres PVC · double vitrage faible émissivité 24 mm",
               "triple": "Fenêtres triple vitrage faible émissivité (valeurs produit typiques, supposées)",
-              "pv": "{count} modules de {w} W · versant sud"
+              "pv": "{count} modules de {w} W · versant sud",
+              "insulationGeneric": "Isolation extérieure {mm} mm (calculée avec les propriétés du panneau PF du bâtiment A)"
             },
-            "noteScenario": "Pour 50 et 150 mm, seule l'épaisseur du panneau PF du plan a été changée ; les fenêtres triple vitrage (U 1,0, facteur solaire 0,40) reprennent des valeurs produit typiques. Toiture, plancher, infiltrations, occupation et équipements sont identiques dans toutes les combinaisons.",
+            "noteScenario": "Pour 50 et 150 mm, seule l'épaisseur du panneau PF du plan du bâtiment A a été changée ; les fenêtres triple vitrage (U 1,0, facteur solaire 0,40) reprennent des valeurs produit typiques. Toiture, plancher, infiltrations, occupation et équipements sont identiques dans toutes les combinaisons.",
             "items": {
               "insulation": {
                 "name": "Isolation par l'extérieur"
@@ -436,7 +456,7 @@
               "cooling": "climatisation",
               "chart": "Charge horaire de {kind} le {date} (kW)",
               "now": "Maintenant",
-              "note": "Les jours représentatifs sont le jour ouvré le plus froid de janvier et le plus chaud de juillet-août où le cabinet du rez-de-chaussée est chauffé ou climatisé. Rouge : la chaleur intérieure s'échappe ; bleu : la chaleur entre. Les valeurs des fenêtres incluent le soleil traversant le vitrage, elles passent donc au bleu quand le soleil les éclaire. Le rez-de-chaussée abaisse sa consigne la nuit et le week-end, d'où des pertes faibles à ces heures. Pour les murs et la toiture, la valeur est la chaleur qui entre dans la paroi côté intérieur : juste après la mise en chauffe, elle inclut la chaleur qui réchauffe le béton refroidi pendant la nuit."
+              "note": "Les jours représentatifs sont le jour ouvré le plus froid de janvier et le plus chaud de juillet-août où le rez-de-chaussée est chauffé ou climatisé. Rouge : la chaleur intérieure s'échappe ; bleu : la chaleur entre. Les valeurs des fenêtres incluent le soleil traversant le vitrage, elles passent donc au bleu quand le soleil les éclaire. Le rez-de-chaussée abaisse sa consigne la nuit et le week-end, d'où des pertes faibles à ces heures. Pour les murs et la toiture, la valeur est la chaleur qui entre dans la paroi côté intérieur : juste après la mise en chauffe, elle inclut la chaleur qui réchauffe le béton refroidi pendant la nuit."
             }
           },
           "tools": {
@@ -451,6 +471,16 @@
             "sectionCaption": "Coupez le bâtiment comme un plan. Changez la hauteur de coupe avec le curseur.",
             "measureCaption": "Touchez deux points du bâtiment pour mesurer la distance. Touchez à nouveau pour recommencer.",
             "compareCaption": "À gauche avant travaux, à droite la combinaison choisie. Faites glisser la poignée au milieu."
+          },
+          "roomWords": {
+            "보일러실": "Chaufferie",
+            "보육실": "Salle d'activités",
+            "현관": "Entrée",
+            "원장실": "Bureau de la direction",
+            "복도": "Couloir",
+            "화장실": "Toilettes",
+            "다용도실": "Buanderie",
+            "주방": "Cuisine"
           }
         }
       },
@@ -472,6 +502,10 @@
           {
             "title": "Calcul énergétique",
             "desc": "EnergyPlus 9.0 a été lancé avec les surfaces et orientations des murs et fenêtres de la même maquette pour comparer l'énergie annuelle de chauffage et de climatisation avant et après. Tous les chiffres de la scène viennent directement de ce résultat."
+          },
+          {
+            "title": "Il suffit du plan (bâtiment B)",
+            "desc": "Personne n'a retouché le bâtiment B. À partir du DXF et d'un court fichier de réglages (emprise des niveaux, quelques hauteurs), le script épaissit et fusionne les traits des murs pour trouver le contour et les pièces, regroupe fenêtres et portes, construit les modèles 3D et EnergyPlus, puis calcule les 12 combinaisons."
           }
         ],
         "v1": "v1 — figures, métrés et film"

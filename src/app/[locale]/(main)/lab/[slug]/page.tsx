@@ -449,13 +449,11 @@ export default async function LabProjectPage({ params }: { params: Params }) {
             <p className="mt-3 max-w-3xl text-base leading-relaxed text-muted">{t(`${key}.twin.intro`)}</p>
             <div className="mt-8">
               <LabTwin
-                planUrl={project.twin.plan}
-                viewerUrl={project.twin.viewer}
-                hourlyUrl={project.twin.hourly}
                 poster={project.twin.poster}
                 posterAlt={t(`${key}.coverAlt`)}
                 labels={t.raw(`${key}.twin.ui`) as TwinLabels}
                 roomNames={t.raw("projects.ai-building-workspace.case.rooms") as Record<string, string>}
+                roomWords={(t.raw(`${key}.twin.ui.roomWords`) ?? {}) as Record<string, string>}
                 v1Href={project.twin.v1}
               />
             </div>
@@ -502,7 +500,7 @@ export default async function LabProjectPage({ params }: { params: Params }) {
             <h2 className="text-2xl font-bold md:text-3xl">{t(`${key}.how.title`)}</h2>
             <ol className="mt-10 grid gap-6 md:grid-cols-2">
               {(t.raw(`${key}.how.steps`) as { title: string; desc: string }[]).map((step, i) => (
-                <li key={i} className="rounded-xl border border-border p-5">
+                <li key={i} className="rounded-xl border border-border p-5 md:last:odd:col-span-2">
                   <span className="text-xs font-semibold text-primary">{String(i + 1).padStart(2, "0")}</span>
                   <h3 className="mt-2 font-semibold">{step.title}</h3>
                   <p className="mt-2 text-sm leading-relaxed text-muted">{step.desc}</p>

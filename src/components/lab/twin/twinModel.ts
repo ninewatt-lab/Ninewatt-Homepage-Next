@@ -40,11 +40,7 @@ export const REMODEL = {
 export type RemodelStep = "scan" | "insulation" | "windows" | "pv";
 export const REMODEL_STEP_KEYS: RemodelStep[] = ["scan", "insulation", "windows", "pv"];
 
-/** 벽 꼭대기(지붕 용마루) 높이 + 여유 — 구축 때 자르는 면이 올라가는 끝 */
-export const TOP_Y = 7.6;
-export const FLOOR_Y = { "1f": 0, "2f": 3.3 } as const;
-/** 건물 가운데 (카메라가 바라보는 점) */
-export const CENTER = new THREE.Vector3(5.25, 3, -4.9);
+// 건물 크기 · 꼭대기 높이 · 카메라 자리는 건물마다 다르다 → buildings.ts 의 frame, TwinScene 의 makeFrame
 
 export const span = (t: number, [a, b]: readonly [number, number]) => Math.min(1, Math.max(0, (t - a) / (b - a)));
 export const ease = (t: number) => t * t * (3 - 2 * t);

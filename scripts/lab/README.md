@@ -207,3 +207,32 @@ python3 scripts/lab/energy_scenarios.py $W/env.json $EPW $W/sc src/data/lab/ai-b
 - `hourly.json`: 같은 실행에서 겨울 · 여름 대표일의 시간별 값(벽 · 지붕 Surface Inside Face Conduction per Area, 창 Surface Window
   Net Heat Transfer Rate ÷ 창 면적, 부호를 뒤집어 + = 실내에서 나가는 열)을 뽑는다. 창 값에는 투과 일사가, 벽 · 지붕 값에는
   구조체에 쌓이는 열이 들어 있다. 페이지 문구에도 밝힌다.
+
+### 도면만 넣으면 — 다른 건물 자동 생성 (건물 B)
+
+설정 파일 하나(층 범위 · 레이어 · 높이)와 DXF 로 3D 모델 · 실 · 평면 선 · 에너지 입력을 한 번에 만든다. 사람이 고치는 단계가 없다.
+
+```bash
+PY=/tmp/lab-venv/bin/python   # ezdxf · shapely · trimesh · mapbox-earcut (+ QA 그림은 matplotlib)
+W=/tmp/lab-work/b2
+QA_PNG=$W/qa.png $PY scripts/lab/auto_twin.py scripts/lab/buildings/building-b.json "$DXF_B" $W/out
+NO_PV=1 python3 scripts/lab/energy_scenarios.py $W/out/env.json $EPW $W/sc $W/out/scenarios.json $W/out/hourly.json
+# 사이트로 복사
+cp $W/out/{model.glb,viewer.json,twin.json,hourly.json} public/lab/ai-building-workspace-v2/b/
+cp $W/out/scenarios.json src/data/lab/ai-building-workspace-b-scenarios.json
+cp $W/out/meta.json src/data/lab/ai-building-workspace-b-meta.json
+```
+
+- 설정(`scripts/lab/buildings/*.json`): `unit`(DXF 단위 → m), `floors[]`(층 키 · 존 이름 · 도면 범위 box · 바닥 높이 · 용도),
+  `layers`(벽 · 개구부 · 치수 · 그릴 선), `heights`(천장 · 층고 · 파라펫 · 창 밑 · 창 위 · 문, 단면도 치수에서 읽는다).
+- 외곽: 호(문 열림)를 뺀 벽 · 개구부 선을 굵게 합쳐 바깥 테두리를 얻고, 열림 호의 중심 → 양 끝 선으로 문 틈을 막는다.
+  실: 테두리 안의 구멍(1.5 ㎡ 이상) = 실, 외곽 − 실 = 벽. 개구부 선 묶음 중 호가 있으면 문, 없으면 창.
+- 외벽은 같은 직선 위 모서리를 합쳐 방위 + 글자(SouthA …)로 이름 짓는다. 이름 규칙이 v1 모델과 같아(`VIS_F1_<방위…>`)
+  `twinBuild.ts` 가 그대로 외단열 판 · 새 창 · 열화상 막을 만든다. 지붕은 평지붕 한 장(`VIS_Roof_Flat_0`).
+- 실 이름은 실 안의 한글 글자(치수 · 면적 표기 제외). 글자가 없으면 페이지에서 "실 n".
+- `energy_idf.py` 는 env.json 에 `zones` · `window` 가 있으면 그것을 쓴다(층마다 바닥 · 층간 · 지붕, 용도별 재실 · 조명 · 설정 온도 —
+  어린이집은 평일 7–19시, 난방 20/15 ℃ · 냉방 26/30 ℃). 없으면 건물 A 의 두 층 값 그대로라 A 결과는 바이트 단위로 같다(확인함).
+- 화면에 넣을 때: `src/components/lab/twin/buildings.ts` 에 건물을 추가하고(데이터 경로 · frame · stats · runs · pv · drawn · start),
+  `lab.json` 의 `twin.ui.buildings` 에 이름 · 설명 · 지붕 · 자동 생성 안내를 넣는다.
+- 알려진 한계: 층이 여럿인 건물은 층마다 box 를 주면 되지만 아직 1층 건물(B)로만 확인했다. 경사 지붕 · 단 차이 지붕은 평지붕으로 단순화한다.
+  B 의 보육실-1(72 ㎡)은 "검토 필요"로 나온다 — 도면과 대조해 확인할 것.
