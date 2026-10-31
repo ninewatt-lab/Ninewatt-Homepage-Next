@@ -379,7 +379,7 @@ function stepCamera(camera: THREE.Camera, controls: Controls, pose: Pose, k: num
   return camera.position.distanceTo(tmp) < 0.05;
 }
 
-function CameraRig({ simRef, mode, floor, frozen, offset }: { simRef: RefObject<TwinSim>; mode: TwinMode; floor: TwinFloor; frozen: boolean; offset: number }) {
+function CameraRig({ simRef, mode, floor, frozen }: { simRef: RefObject<TwinSim>; mode: TwinMode; floor: TwinFloor; frozen: boolean }) {
   const { camera, controls, size, invalidate } = useThree();
   const tween = useRef<string | null>("plan");
   const tmp = useMemo(() => new THREE.Vector3(), []);
@@ -411,17 +411,18 @@ function CameraRig({ simRef, mode, floor, frozen, offset }: { simRef: RefObject<
       const done = stepCamera(camera, c, POSES[tween.current], frozen ? 1 : 1 - Math.exp(-Math.min(delta, 0.1) * 1.8), narrow, tmp);
       if (done) tween.current = null;
     }
-    finishRig(c, camera as THREE.PerspectiveCamera, !frozen && mode === "build" && simRef.current.build >= 1 && !tween.current, offset * size.width, size.width, size.height);
+    finishRig(c, camera as THREE.PerspectiveCamera, !frozen && mode === "build" && simRef.current.build >= 1 && !tween.current, size.width, size.height);
   });
   return null;
 }
 
-/** 다 지은 뒤 천천히 돈다. 넓은 화면은 오른쪽 패널을 비켜 건물을 왼쪽으로 (화면 중심을 옮긴다) */
-function finishRig(c: Controls, cam: THREE.PerspectiveCamera, rotate: boolean, ox: number, w: number, h: number) {
+/** 다 지은 뒤 천천히 돈다. 아래쪽 자막 · 챕터를 비켜 건물을 조금 위로 (화면 중심을 옮긴다) */
+function finishRig(c: Controls, cam: THREE.PerspectiveCamera, rotate: boolean, w: number, h: number) {
   c.autoRotate = rotate;
   c.autoRotateSpeed = 0.35;
-  if (cam.view?.offsetX !== ox || cam.view?.fullWidth !== w || cam.view?.fullHeight !== h) {
-    cam.setViewOffset(w, h, ox, 0, w, h);
+  const oy = Math.round(h * 0.06);
+  if (cam.view?.offsetY !== oy || cam.view?.fullWidth !== w || cam.view?.fullHeight !== h) {
+    cam.setViewOffset(w, h, 0, oy, w, h);
     cam.updateProjectionMatrix();
   }
 }
@@ -465,12 +466,6 @@ export default function TwinScene({
   const [fx, setFx] = useState(true);
   const [shadows, setShadows] = useState(true);
   const declines = useRef(0);
-  const [wide, setWide] = useState(() => window.innerWidth >= 1024);
-  useEffect(() => {
-    const onResize = () => setWide(window.innerWidth >= 1024);
-    window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
-  }, []);
 
   return (
     <SimContext.Provider value={simRef as RefObject<Sim>}>
@@ -510,7 +505,7 @@ export default function TwinScene({
         {mode === "rooms" && <Rooms rooms={rooms} floor={floor} selected={selected} onSelect={onSelect} />}
         <Labels rooms={rooms} floor={floor} mode={mode} chipsRef={chipsRef} />
         <OrbitControls makeDefault enableDamping enablePan={false} minDistance={9} maxDistance={60} maxPolarAngle={Math.PI / 2 - 0.08} target={POSES.plan.target.toArray()} />
-        <CameraRig simRef={simRef} mode={mode} floor={floor} frozen={frozen} offset={wide ? 0.13 : 0} />
+        <CameraRig simRef={simRef} mode={mode} floor={floor} frozen={frozen} />
         {fx && <Effects glow={0.7} />}
       </Canvas>
     </SimContext.Provider>

@@ -14,7 +14,7 @@ import LabCompare from "@/components/lab/LabCompare";
 import LabModelViewer, { type ViewerLabels } from "@/components/lab/LabModelViewer";
 import Retrofit from "@/components/lab/Retrofit";
 import LabTwin from "@/components/lab/twin/LabTwin";
-import type { TwinLabels } from "@/components/lab/twin/TwinPanel";
+import type { TwinLabels } from "@/components/lab/twin/TwinUI";
 
 type Params = Promise<{ locale: string; slug: string }>;
 

@@ -281,7 +281,6 @@
         "ui": {
           "loading": "Preparing the 3D scene…",
           "unsupported": "This browser can't display 3D. Turn on hardware acceleration or try another browser.",
-          "hint": "Drag to rotate · wheel or pinch to zoom",
           "tabsLabel": "View",
           "tabs": {
             "build": "Drawing → 3D",
@@ -291,80 +290,103 @@
           "play": "Run time",
           "pause": "Pause time",
           "footnote": "Built from the real construction drawings (institution and architect details removed) and the 3D model and calculations from v1. The sun path uses a central-Korea latitude, assuming the top of the drawing is north.",
+          "replay": "Replay",
           "build": {
-            "kicker": "1 · Drawing → 3D",
-            "title": "Drawing lines become walls",
-            "desc": "The wall, window and dimension lines of the ground- and first-floor plans are drawn as they are, then the 3D model built on the same coordinates rises from the ground up. The first-floor plan floats at its real storey height (3.3 m).",
+            "steps": {
+              "plan": "Plan lines",
+              "rise": "Walls · windows · roof"
+            },
+            "captions": {
+              "plan": "The lines of the ground- and first-floor plans are drawn as they are. The first-floor plan floats at its real storey height (3.3 m).",
+              "rise": "The 3D model built on the same coordinates rises from the ground up.",
+              "done": "A building raised from its drawing lines. Drag to turn it around."
+            },
             "stats": {
               "lines": "Drawing lines",
               "layers": "Drawing layers",
               "walls": "Exterior wall area",
               "windows": "Exterior windows"
             },
-            "steps": {
-              "plan": "Drawing the plan lines",
-              "rise": "Raising walls, windows and roof"
-            },
-            "replay": "Build again",
+            "windowsValue": "{count} · {area} ㎡",
             "roofNote": "The roof shape isn't fixed by the drawings, so it's an estimate."
           },
           "rooms": {
-            "kicker": "2 · Rooms · areas",
-            "title": "Rooms computed from drawing layers",
-            "desc": "Areas enclosed by wall and window lines were found automatically to compute room boundaries and areas. Tap a floor or a label to see its quantities.",
+            "caption": "Tap a room or its label to find it in the table below.",
             "floorLabel": "Floor",
             "floors": {
               "1f": "Ground floor",
               "2f": "First floor"
             },
-            "area": "Area",
-            "perimeter": "Perimeter",
-            "wallArea": "Wall area",
-            "railing": "Railing",
+            "cols": {
+              "room": "Room",
+              "area": "Area (㎡)",
+              "perimeter": "Perimeter (m)",
+              "wallArea": "Wall area (㎡)",
+              "status": "Boundary"
+            },
+            "railing": "Railing {length} m",
             "auto": "Computed",
-            "review": "Boundary review needed",
-            "total": "Floor total",
-            "pick": "Tap a room to see its perimeter and wall area."
+            "review": "Review needed",
+            "total": "Total",
+            "note": "Areas are computed automatically from the drawing layers as regions enclosed by wall and window lines. Where missing partition lines merge several rooms, it's marked 'Review needed'."
           },
           "remodel": {
-            "kicker": "3 · Green remodeling",
-            "title": "Carrying out the work noted on the drawings",
-            "desc": "The external insulation and window work from the drawing notes is applied step by step to the same 3D model, and the yearly heating and cooling energy calculated with EnergyPlus is compared.",
             "steps": {
               "scan": {
-                "title": "Thermal view",
-                "desc": "Surfaces are colored by the U-values used in the simulation. Brighter means more heat loss."
+                "short": "Thermal",
+                "caption": "Surfaces are colored by U-value. Brighter means more heat loss."
               },
               "insulation": {
-                "title": "External wall insulation",
-                "desc": "PF board 100 mm + stucco 10 mm · exterior walls {area} ㎡ · U-value {before} → {after} W/㎡K"
+                "short": "Insulation",
+                "caption": "100 mm PF board insulation goes onto the 18 exterior walls."
               },
               "windows": {
-                "title": "Window replacement",
-                "desc": "PVC double windows · Low-E double glazing · {count} windows, {area} ㎡ · U-value {before} → {after} W/㎡K"
+                "short": "Windows",
+                "caption": "The 23 windows are replaced with Low-E double-glazed windows."
               },
               "pv": {
-                "title": "Solar (extra proposal)",
-                "desc": "Not in the drawings · {count} × {w} W modules on the south roof slope ({kw} kW)"
+                "short": "Solar",
+                "caption": "Four solar modules go onto the south roof slope — an extra proposal, not in the drawings."
               }
             },
-            "waiting": "Waiting",
-            "done": "Done",
+            "done": "Yearly heating and cooling energy drops by {pct}%. Switch before/after or turn on the thermal view.",
             "legendLow": "Low heat loss",
             "legendHigh": "High",
-            "result": "Yearly heating & cooling energy",
+            "view": "View",
             "before": "Before",
             "after": "After",
+            "thermal": "Thermal",
+            "results": "EnergyPlus results",
+            "total": "Heating + cooling",
             "heating": "Heating",
             "cooling": "Cooling",
+            "pv": "Solar output (extra proposal)",
             "unit": "kWh/yr",
+            "works": "Work items",
+            "cols": {
+              "work": "Work",
+              "spec": "Specification",
+              "qty": "Quantity",
+              "u": "U-value (W/㎡K)"
+            },
+            "items": {
+              "insulation": {
+                "name": "External wall insulation",
+                "spec": "PF board 100 mm + stucco 10 mm"
+              },
+              "windows": {
+                "name": "Window replacement",
+                "spec": "PVC double windows · Low-E double glazing 24 mm"
+              },
+              "pv": {
+                "name": "Solar (extra proposal)",
+                "spec": "{count} × {w} W modules · south roof slope"
+              }
+            },
+            "windowsQty": "{count} · {area} ㎡",
             "chart": "Monthly heating & cooling energy (kWh)",
-            "pvAnnual": "Yearly solar output",
-            "pvNote": "A simple EnergyPlus PVWatts calculation, not included in the estimate. The roof shape and orientation aren't fixed by the drawings, so they're assumed.",
-            "view": "Show",
-            "thermal": "Thermal",
-            "replay": "Run the work again",
             "note": "A simple EnergyPlus 9.0 simulation (Korean standard weather data), not an official energy rating. Pre-remodeling wall and window U-values assume an aging building. Thermal colors are proportional to U-values, not a thermal photograph.",
+            "pvNote": "Solar is a simple EnergyPlus PVWatts calculation, not included in the estimate. The roof shape and orientation aren't fixed by the drawings, so they're assumed.",
             "more": "Quantities and the example estimate are in v1"
           }
         }
