@@ -208,7 +208,7 @@ python3 scripts/lab/energy_scenarios.py $W/env.json $EPW $W/sc src/data/lab/ai-b
   Net Heat Transfer Rate ÷ 창 면적, 부호를 뒤집어 + = 실내에서 나가는 열)을 뽑는다. 창 값에는 투과 일사가, 벽 · 지붕 값에는
   구조체에 쌓이는 열이 들어 있다. 페이지 문구에도 밝힌다.
 
-### 도면만 넣으면 — 다른 건물 자동 생성 (건물 B)
+### 도면만 넣으면 — 다른 건물 자동 생성 (건물 B · C)
 
 설정 파일 하나(층 범위 · 레이어 · 높이)와 DXF 로 3D 모델 · 실 · 평면 선 · 에너지 입력을 한 번에 만든다. 사람이 고치는 단계가 없다.
 
@@ -234,5 +234,21 @@ cp $W/out/meta.json src/data/lab/ai-building-workspace-b-meta.json
   어린이집은 평일 7–19시, 난방 20/15 ℃ · 냉방 26/30 ℃). 없으면 건물 A 의 두 층 값 그대로라 A 결과는 바이트 단위로 같다(확인함).
 - 화면에 넣을 때: `src/components/lab/twin/buildings.ts` 에 건물을 추가하고(데이터 경로 · frame · stats · runs · pv · drawn · start),
   `lab.json` 의 `twin.ui.buildings` 에 이름 · 설명 · 지붕 · 자동 생성 안내를 넣는다.
-- 알려진 한계: 층이 여럿인 건물은 층마다 box 를 주면 되지만 아직 1층 건물(B)로만 확인했다. 경사 지붕 · 단 차이 지붕은 평지붕으로 단순화한다.
-  B 의 보육실-1(72 ㎡)은 "검토 필요"로 나온다 — 도면과 대조해 확인할 것.
+- 여러 층 건물(C, 지상 3층): 층마다 `floors[]` 에 box · z 를 주고, 층마다 다른 높이는 그 층의 `heights` 로 덮어쓴다.
+  - 층 맞추기: `layers.grid`(기준선 레이어)의 긴 가로 · 세로선이 1층과 가장 많이 겹치는 이동량을 찾는다. box 는 대강 잡아도 된다
+    (C 는 일부러 0.2~0.3 m 어긋나게 잡았고 `register 2f: dx -0.300 m · dy -0.300 m (기준선 x 3 · y 5개 일치)` 로 바로잡힌다).
+  - `closeGaps`(m): 열림 호 없이 그린 실내 문. 30 cm 미만 틈은 먼저 메우고, 같은 줄 벽 끝 사이 closeGaps 미만 틈(가로 · 세로로 따로
+    넓혔다 줄여 찾는다)을 메우고 문으로 본다. C 는 1.2~1.5 m 미닫이 자리가 있어 1.6.
+  - `clipToGround`: 위층 평면에 함께 그린 외부 계단을 1층 외곽(+0.3 m)으로 잘라 내고, 잘린 변에 0.2 m 외벽을 세운다.
+  - 위층이 덮지 않는 아래층 부분은 그 층 지붕(`VIS_F1_RoofSlab_0`, kind slab)이 되고 EnergyPlus 에서도 그 층의 지붕으로 계산한다.
+  - 도면 사양 두께가 표에 없으면 `WALLS=0,50,80,100,150` 으로 조합을 더한다(C).
+  ```bash
+  $PY scripts/lab/auto_twin.py scripts/lab/buildings/building-c.json "$DXF_C" /tmp/lab-work/c/out
+  WALLS=0,50,80,100,150 NO_PV=1 python3 scripts/lab/energy_scenarios.py /tmp/lab-work/c/out/env.json $EPW /tmp/lab-work/c/sc \
+      /tmp/lab-work/c/out/scenarios.json /tmp/lab-work/c/out/hourly.json
+  # → public/lab/ai-building-workspace-v2/c/ (model.glb · viewer.json · twin.json · hourly.json), src/data/lab/ai-building-workspace-c-{scenarios,meta}.json
+  ```
+- 큰 도면(6만 개체)은 엔티티 범위를 한 번만 계산해 둔다. 휜 선(문 열림 호)은 작은 각도로 잇달아 꺾이는 선이고, 문 경첩은 반지름 0.4~2.2 m 인 호만 쓴다
+  (위생기구 곡선을 문으로 보면 경첩이 아주 멀리 잡혀 계산이 멈춘다). 기둥(닫힌 사각형)은 벽으로 들어간다.
+- 알려진 한계: 경사 지붕 · 단 차이 지붕은 평지붕으로, 옥상 계단실(탑)은 넣지 않는다. 대각선 벽 사이 틈은 문으로 찾지 못한다.
+  B 의 보육실-1(72 ㎡) · C 의 강당 등은 "검토 필요"(실 안에 이름이 둘 이상)로 나온다 — 도면과 대조해 확인할 것.

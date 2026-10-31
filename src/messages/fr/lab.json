@@ -283,16 +283,26 @@
             "label": "Choisir un bâtiment",
             "a": {
               "name": "Bâtiment A",
+              "short": "R+1 · vérifié",
               "desc": "Centre de santé sur 2 niveaux · modèle vérifié sur les plans (v1)",
               "roofNote": "La forme de la toiture n'est pas fixée par les plans : c'est une estimation."
             },
             "b": {
               "name": "Bâtiment B",
+              "short": "Plain-pied · auto",
               "desc": "Crèche de plain-pied · modèle généré automatiquement depuis le DXF",
               "roofNote": "La toiture-terrasse est simplifiée à un seul niveau (les plans en montrent deux).",
               "drawnNote": "Les caractéristiques notées sur ce plan (panneau de mousse polyuréthane 100 mm · double vitrage FE, U appliqué 0,994) diffèrent des matériaux du tableau : on part donc d'une combinaison « exemple », même épaisseur et même type de fenêtre, calculée avec les propriétés des matériaux du bâtiment A.",
               "autoNote": "Murs, fenêtres, pièces, modèle 3D et modèle énergétique ont tous été générés à partir des traits du plan, sans retouche manuelle. Les petites pièces sans nom n'ont pas d'étiquette sur le plan.",
               "footnote": "Scène construite à partir d'une maquette 3D et de calculs générés automatiquement depuis de vrais plans de travaux (informations sur l'établissement et l'architecte retirées). La course du soleil utilise une latitude du centre de la Corée, en supposant que le haut du plan est le nord."
+            },
+            "c": {
+              "name": "Bâtiment C",
+              "short": "R+2 · auto",
+              "desc": "Crèche R+2 · trois plans dessinés séparément, recalés automatiquement sur les axes",
+              "roofNote": "La cage d'escalier en toiture et les garde-corps ne sont pas modélisés.",
+              "autoNote": "Les trois plans d'étage se trouvent à des endroits différents du dessin ; ils ont été empilés automatiquement en faisant coïncider les axes (X1–X3 · Y1–Y4). Murs, fenêtres, portes, pièces et modèle énergétique n'ont pas été retouchés. Les portes intérieures dessinées sans arc d'ouverture ont été détectées comme des ouvertures de mur de moins de 1 m.",
+              "footnote": "Scène construite à partir d'une maquette 3D et de calculs générés automatiquement depuis de vrais plans de travaux (informations sur l'établissement et l'architecte retirées). L'isolation du plan (panneau PF 80 mm, conductivité 0,020) est calculée avec les mêmes propriétés que les autres combinaisons (0,019 · enduit 10 mm). La course du soleil utilise une latitude du centre de la Corée, en supposant que le haut du plan est le nord."
             }
           },
           "loading": "Préparation de la scène 3D…",
@@ -330,7 +340,8 @@
             "floorLabel": "Niveau",
             "floors": {
               "1f": "Rez-de-chaussée",
-              "2f": "Étage"
+              "2f": "1er étage",
+              "3f": "2e étage"
             },
             "cols": {
               "room": "Pièce",
@@ -480,7 +491,14 @@
             "복도": "Couloir",
             "화장실": "Toilettes",
             "다용도실": "Buanderie",
-            "주방": "Cuisine"
+            "주방": "Cuisine",
+            "사무실": "Bureau",
+            "양호실": "Infirmerie",
+            "교사실": "Salle des enseignants",
+            "강당": "Salle polyvalente",
+            "도서방": "Coin lecture",
+            "계단실": "Cage d'escalier",
+            "유희실": "Salle de jeux"
           }
         }
       },
@@ -506,6 +524,10 @@
           {
             "title": "Il suffit du plan (bâtiment B)",
             "desc": "Personne n'a retouché le bâtiment B. À partir du DXF et d'un court fichier de réglages (emprise des niveaux, quelques hauteurs), le script épaissit et fusionne les traits des murs pour trouver le contour et les pièces, regroupe fenêtres et portes, construit les modèles 3D et EnergyPlus, puis calcule les 12 combinaisons."
+          },
+          {
+            "title": "Empiler les niveaux (bâtiment C)",
+            "desc": "Dans un jeu de plans à plusieurs niveaux, chaque plan se trouve ailleurs sur le dessin. Le script compare les axes de chaque plan à ceux du rez-de-chaussée, cherche le décalage qui en fait coïncider le plus, place les étages dans les coordonnées du rez-de-chaussée et traite la partie d'un niveau non couverte par l'étage supérieur comme sa toiture."
           }
         ],
         "v1": "v1 — figures, métrés et film"

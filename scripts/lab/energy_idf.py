@@ -110,6 +110,7 @@ wall_c = "NewWall" if wall_mm else "OldWall"
 
 for zi, zone in enumerate(ZONES):
     fl, z0, A, CEIL, H = zone["name"], zone["z"], zone["area"], zone["ceiling"], zone["height"]
+    sill, head = zone.get("sill", SILL), zone.get("head", HEAD)
     zn = f"Z{fl}"
     side = A ** 0.5
     a(f"Zone,{zn},0,0,0,{z0},1,1,{CEIL},{A*CEIL:.2f},{A:.2f};")
@@ -142,14 +143,14 @@ for zi, zone in enumerate(ZONES):
         a(f"BuildingSurface:Detailed,{zn}_W{o},Wall,{wall_c},{zn},Outdoors,,SunExposed,WindExposed,0.5,4,"
           f"{x1:.3f},{y1:.3f},{H},{x1:.3f},{y1:.3f},0,{x2:.3f},{y2:.3f},0,{x2:.3f},{y2:.3f},{H};")
         if w > 0:
-            wh = max(HEAD - SILL, w / wd / 0.95)  # 창이 벽 폭을 넘지 않게
+            wh = max(head - sill, w / wd / 0.95)  # 창이 벽 폭을 넘지 않게
             ww = w / wh
             f0 = (wd - ww) / 2 / wd
             f1 = f0 + ww / wd
             xa, ya = x1 + (x2 - x1) * f0, y1 + (y2 - y1) * f0
             xb, yb = x1 + (x2 - x1) * f1, y1 + (y2 - y1) * f1
             a(f"FenestrationSurface:Detailed,{zn}_G{o},Window,Win,{zn}_W{o},,0.5,,1,4,"
-              f"{xa:.3f},{ya:.3f},{SILL + wh:g},{xa:.3f},{ya:.3f},{SILL:g},{xb:.3f},{yb:.3f},{SILL:g},{xb:.3f},{yb:.3f},{SILL + wh:g};")
+              f"{xa:.3f},{ya:.3f},{sill + wh:g},{xa:.3f},{ya:.3f},{sill:g},{xb:.3f},{yb:.3f},{sill:g},{xb:.3f},{yb:.3f},{sill + wh:g};")
     use = zone["use"]
     occ = {"clinic": "ClinicOcc", "home": "HomeOcc", "daycare": "DaycareOcc"}[use]
     # 재실 · 조명 · 기기: 진료 0.1인/㎡ · 10 · 8 W/㎡, 주거 2인 · 5 · 4 W/㎡, 보육 0.25인/㎡(아동 · 교사) · 10 · 5 W/㎡

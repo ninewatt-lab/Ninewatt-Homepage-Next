@@ -10,14 +10,13 @@
  */
 
 import { useRef, useState, useSyncExternalStore } from "react";
-import type { ScenarioRun, TwinBuilding } from "./buildings";
+import type { BuildingKey, ScenarioRun, TwinBuilding } from "./buildings";
 import {
   BUILD,
   PV_OPTIONS,
   REMODEL,
   REMODEL_STEP_KEYS,
   THERMAL_STOPS,
-  WALL_OPTIONS,
   WIN_OPTIONS,
   WIN_U,
   scenarioKey,
@@ -34,11 +33,20 @@ import {
 } from "./twinModel";
 
 export type TwinLabels = {
-  buildings: {
-    label: string;
-    a: { name: string; desc: string; roofNote: string };
-    b: { name: string; desc: string; roofNote: string; drawnNote: string; autoNote: string; footnote: string };
-  };
+  buildings: { label: string } & Record<
+    BuildingKey,
+    {
+      name: string;
+      /** 좁은 화면의 카드에 쓰는 짧은 설명 */
+      short: string;
+      desc: string;
+      roofNote: string;
+      /** 도면 사양이 조합 표에 없을 때의 안내 · 자동 생성 안내 · 장면 아래 출처 (자동 생성 건물) */
+      drawnNote?: string;
+      autoNote?: string;
+      footnote?: string;
+    }
+  >;
   tools: {
     label: string;
     section: string;
@@ -418,7 +426,7 @@ export function StageBar({
             aria-label={L.rooms.floorLabel}
             className="flex self-start rounded-full bg-white/10 p-0.5 sm:order-first"
           >
-            {(["1f", "2f"] as const).map((f) => (
+            {building.frame.floors.map((f) => (
               <button
                 key={f}
                 type="button"
@@ -603,7 +611,7 @@ export function TwinDetails({
         </dl>
         <p className="mt-3 text-sm leading-relaxed text-muted">
           {BL.roofNote}
-          {building.auto && ` ${L.buildings.b.autoNote}`}
+          {BL.autoNote && ` ${BL.autoNote}`}
         </p>
       </div>
     );
@@ -779,7 +787,7 @@ export function TwinDetails({
           <Choice
             label={R.scenario.wall}
             hint={`${tag} ${DRAWN.wall} mm`}
-            options={WALL_OPTIONS.map((v) => ({
+            options={building.walls.map((v) => ({
               value: v,
               label: v ? `${v} mm` : R.scenario.none,
             }))}
@@ -809,7 +817,7 @@ export function TwinDetails({
             />
           )}
         </div>
-        {!building.drawn && <p className="mt-4 text-xs leading-relaxed text-muted">{L.buildings.b.drawnNote}</p>}
+        {!building.drawn && <p className="mt-4 text-xs leading-relaxed text-muted">{L.buildings[building.key].drawnNote}</p>}
       </div>
 
       {/* 열화상 기준 — 겨울 · 여름 하루면 시간별 EnergyPlus 값으로 칠하고, 그날의 부하를 그린다 */}
