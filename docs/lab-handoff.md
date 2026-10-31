@@ -33,6 +33,9 @@
 - 코드 `src/components/lab/twin/` (LabTwin · TwinScene · TwinPanel · twinBuild · twinModel). 하늘 · 빛 번짐은 홈 히어로 것을 같이 쓴다.
 - 새 데이터는 평면 선(`public/lab/ai-building-workspace-v2/twin.json`, `scripts/lab/twin_data.py`) 하나. 나머지는 v1 파일을 읽는다 — v1 데이터를 바꾸면 v2 도 바뀐다.
 - 문구 `lab.json` 의 `projects.ai-building-workspace-v2` (실 이름은 v1 의 `case.rooms` 를 그대로 쓴다). 만드는 법은 scripts/lab/README.md 끝.
+- 그린리모델링 탭의 "조합 바꿔 보기": 외단열 두께 · 창호 · 태양광을 고르면 3D(외단열 두께 · 창 교체 · 모듈 수 · 열화상 색)와 수치가 바뀐다.
+  수치는 `src/data/lab/ai-building-workspace-scenarios.json`(EnergyPlus 12조합, `scripts/lab/energy_scenarios.py`). 공사비 · 회수 기간은
+  다른 사양의 단가를 지어내야 해서 넣지 않았다.
 
 ## 파일 지도
 

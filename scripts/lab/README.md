@@ -187,3 +187,19 @@ $PY scripts/lab/twin_data.py $DXF public/lab/ai-building-workspace-v2/twin.json
 - 열화상 색은 열관류율 / 4 W/㎡K 에 비례하는 ironbow 색이다(홈 히어로 그린리모델링과 같은 색). 실측이 아님을 페이지에 밝힌다.
 - 해 방향은 위도 37.5°(중부 지방)와 오늘 날짜로 계산한다. 실제 위치는 쓰지 않는다.
 - 목록 표지(cover.webp 1600×1000) · 공유 이미지(og.jpg 1200×630)는 이 장면을 브라우저로 캡처해 만들었다(UI 를 숨기고 `[data-twin-stage]` 요소만).
+
+### 리모델링 조합 비교 (v2 그린리모델링 탭의 "조합 바꿔 보기")
+
+외단열 0 · 50 · 100 · 150 mm × 창호 기존 · 로이 복층 · 삼중 로이 12가지와 태양광 2 · 4장을 EnergyPlus 로 미리 계산해
+`src/data/lab/ai-building-workspace-scenarios.json` 하나로 둔다. 브라우저는 이 표에서 꺼내 쓰기만 한다(약 11초, 4개 동시 실행).
+
+```bash
+"$BLENDER" -b --factory-startup --python scripts/lab/blender_envelope.py -- "$GLB" $W/env.json
+python3 scripts/lab/energy_scenarios.py $W/env.json $EPW $W/sc src/data/lab/ai-building-workspace-scenarios.json
+```
+
+- `energy_idf.py` 는 `before` · `after` 말고도 `wall=<mm>,win=<old|lowe|triple>` 를 받는다. `w0-old` = before, `w100-lowe` = after 와 같은 값이 나와야 한다(확인함: 16,110 → 9,671 kWh).
+- 기상 파일은 climate.onebuilding.org 의 `WMO_Region_2_Asia/KOR_South_Korea/KW_Gangwon-do/KOR_KW_Sokcho.470900_TMYx.2004-2018.zip` (경로가 예전과 바뀌었다).
+- EnergyPlus 의 ExpandObjects 가 실행 폴더에 임시 파일을 써서, 동시 실행은 실행마다 자기 출력 폴더에서 돌린다.
+- 삼중 로이 창(U 1.0, SHGC 0.40)과 50 · 150 mm 두께는 도면 사양이 아니라 비교용 가정이다. 페이지 문구에도 밝힌다.
+- 외단열만 하고 기존 창을 두면 냉방이 늘어난다(일사 열이 덜 빠짐). 계산 결과 그대로이며 페이지에서 안내한다.

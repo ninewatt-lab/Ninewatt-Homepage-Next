@@ -2,9 +2,11 @@
 
 case before: 리모델링 전 (노후 외피 가정값)
 case after : 도면 공사 내용만 반영 — 외벽 외단열 PF보드 100 mm, 창호 로이 복층유리
-지붕·바닥·침기·재실·설비 가정은 두 경우가 같다. 방위: 도면 위쪽 = 북 (진북 미확정).
+case wall=<mm>,win=<old|lowe|triple> : 시나리오 (Lab v2 비교용, energy_scenarios.py 가 쓴다)
+  wall 0 = 외단열 없음, 50·100·150 = PF보드 두께. win old = 기존, lowe = 도면 사양, triple = 삼중 로이(가정값)
+지붕·바닥·침기·재실·설비 가정은 모든 경우가 같다. 방위: 도면 위쪽 = 북 (진북 미확정).
 
-    python3 scripts/lab/energy_idf.py <env.json> before|after <out.idf> <weather.epw> [태양광 W]
+    python3 scripts/lab/energy_idf.py <env.json> before|after|wall=..,win=.. <out.idf> <weather.epw> [태양광 W]
     energyplus -x -r -w <weather.epw> -d <out_dir> <out.idf>   # EnergyPlus 9.0
 """
 import json
@@ -33,10 +35,14 @@ for o in env["openings"]:
     k = (o["floor"], o["ext"])
     win[k] = win.get(k, 0) + o["area"]
 
-U = {
-    "before": {"wall": 1.0, "win": 4.0, "shgc": 0.70},
-    "after": {"wall": None, "win": 1.8, "shgc": 0.45},
-}[case]
+# 창호: 열관류율 W/㎡K · 일사 취득 계수 · 가시광 투과율
+WINDOWS = {"old": (4.0, 0.70, 0.7), "lowe": (1.8, 0.45, 0.6), "triple": (1.0, 0.40, 0.5)}
+if case in ("before", "after"):
+    wall_mm, win_key = (0, "old") if case == "before" else (100, "lowe")
+else:
+    spec = dict(kv.split("=") for kv in case.split(","))
+    wall_mm, win_key = int(spec["wall"]), spec["win"]
+win_u, win_shgc, win_vt = WINDOWS[win_key]
 
 # 지면 온도: EPW 머리말의 0.5 m 깊이 월별 값
 gt = None
@@ -70,23 +76,25 @@ Schedule:Compact,ClinicCool,Any,Through: 12/31,For: Weekdays,Until: 08:00,32,Unt
 Schedule:Constant,HomeHeat,Any,20;
 Schedule:Constant,HomeCool,Any,26;
 Material,Concrete200,MediumRough,0.2,1.6,2300,880,0.9,0.7,0.7;
-Material,PFBoard100,MediumSmooth,0.1,0.019,40,1400,0.9,0.6,0.6;
 Material,Stucco10,Smooth,0.01,0.7,1800,840,0.9,0.5,0.5;
 """)
+if wall_mm:
+    a(f"Material,PFBoard{wall_mm},MediumSmooth,{wall_mm / 1000},0.019,40,1400,0.9,0.6,0.6;")
 # 노후 외벽: 콘크리트 200 + 저항층 → U(표면저항 포함) ≈ 1.0
 r_old = 1 / 1.0 - 0.17 - 0.2 / 1.6
 a(f"Material:NoMass,OldWallR,Rough,{r_old:.3f},0.9,0.7,0.7;")
 a("Construction,OldWall,Concrete200,OldWallR;")
-a("Construction,NewWall,Stucco10,PFBoard100,Concrete200,OldWallR;")
+if wall_mm:
+    a(f"Construction,NewWall,Stucco10,PFBoard{wall_mm},Concrete200,OldWallR;")
 # 지붕 U≈0.5, 지면 바닥 U≈0.6 (두 경우 동일)
 a(f"Material:NoMass,RoofR,Rough,{1/0.5-0.14-0.125:.3f},0.9,0.7,0.7;")
 a("Construction,Roof,RoofR,Concrete200;")
 a(f"Material:NoMass,FloorR,Rough,{1/0.6-0.17-0.125:.3f},0.9,0.7,0.7;")
 a("Construction,Slab,FloorR,Concrete200;")
 a("Construction,Interfloor,Concrete200;")
-a(f"WindowMaterial:SimpleGlazingSystem,Glz,{U['win']},{U['shgc']},{0.7 if case=='before' else 0.6};")
+a(f"WindowMaterial:SimpleGlazingSystem,Glz,{win_u},{win_shgc},{win_vt};")
 a("Construction,Win,Glz;")
-wall_c = "OldWall" if case == "before" else "NewWall"
+wall_c = "NewWall" if wall_mm else "OldWall"
 
 for fl, z0 in (("F1", 0.0), ("F2", H)):
     zn = f"Z{fl}"
