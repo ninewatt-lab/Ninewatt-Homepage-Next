@@ -259,6 +259,138 @@
           "verandaEast": "Véranda (est)"
         }
       }
+    },
+    "ai-building-workspace-v2": {
+      "name": "AI Building Workspace v2",
+      "tagline": "Construire à partir du plan, rénover en 3D",
+      "summary": "Nous avons réuni la maquette 3D et les calculs de la v1 dans une seule scène interactive. Les traits du plan deviennent des murs, les pièces affichent leur surface calculée, et les travaux de rénovation énergétique comme les résultats EnergyPlus se déroulent sur le même bâtiment.",
+      "tags": [
+        "DXF",
+        "Jumeau 3D",
+        "Rénovation énergétique",
+        "EnergyPlus"
+      ],
+      "coverAlt": "Un bâtiment 3D qui s'élève de ses traits de plan : les murs du rez-de-chaussée montent depuis le sol tandis que le plan de l'étage flotte au-dessus",
+      "why": [
+        "La v1 a transformé un jeu de plans en surfaces de pièces, métrés, maquette 3D et calcul énergétique, mais les résultats restaient dispersés entre figures et tableaux. Il était difficile de voir de quelle partie du bâtiment venait chaque chiffre.",
+        "La v2 superpose ces mêmes résultats dans une seule scène 3D. Traits du plan et murs, limites et surfaces des pièces, travaux et résultats énergétiques partagent les mêmes coordonnées : on peut cliquer pour voir d'où vient chaque chiffre."
+      ],
+      "twin": {
+        "title": "Un jumeau 3D à explorer",
+        "intro": "La scène commence par construire le bâtiment à partir de ses plans. Les onglets du haut montrent ensuite les pièces et surfaces, puis les travaux de rénovation énergétique.",
+        "ui": {
+          "loading": "Préparation de la scène 3D…",
+          "unsupported": "Ce navigateur ne peut pas afficher la 3D. Activez l'accélération matérielle ou essayez un autre navigateur.",
+          "hint": "Glisser pour tourner · molette ou pincer pour zoomer",
+          "tabsLabel": "Vue",
+          "tabs": {
+            "build": "Plan → 3D",
+            "rooms": "Pièces · surfaces",
+            "remodel": "Rénovation"
+          },
+          "play": "Faire avancer le temps",
+          "pause": "Arrêter le temps",
+          "footnote": "Scène construite à partir des vrais plans de travaux (informations sur l'établissement et l'architecte retirées) ainsi que de la maquette 3D et des calculs de la v1. La course du soleil utilise une latitude du centre de la Corée, en supposant que le haut du plan est le nord.",
+          "build": {
+            "kicker": "1 · Plan → 3D",
+            "title": "Les traits du plan deviennent des murs",
+            "desc": "Les traits des murs, des menuiseries et des cotes des plans du rez-de-chaussée et de l'étage sont tracés tels quels, puis la maquette 3D construite sur les mêmes coordonnées s'élève depuis le sol. Le plan de l'étage flotte à sa vraie hauteur (3,3 m).",
+            "stats": {
+              "lines": "Traits du plan",
+              "layers": "Calques du plan",
+              "walls": "Surface des murs extérieurs",
+              "windows": "Fenêtres extérieures"
+            },
+            "steps": {
+              "plan": "Tracé du plan",
+              "rise": "Élévation des murs, fenêtres et toiture"
+            },
+            "replay": "Reconstruire",
+            "roofNote": "La forme de la toiture n'est pas fixée par les plans : c'est une estimation."
+          },
+          "rooms": {
+            "kicker": "2 · Pièces · surfaces",
+            "title": "Pièces calculées à partir des calques",
+            "desc": "Les zones fermées par les traits des murs et des menuiseries ont été détectées automatiquement pour calculer les limites et surfaces des pièces. Touchez un sol ou une étiquette pour voir les métrés.",
+            "floorLabel": "Niveau",
+            "floors": {
+              "1f": "Rez-de-chaussée",
+              "2f": "Étage"
+            },
+            "area": "Surface",
+            "perimeter": "Périmètre",
+            "wallArea": "Surface murale",
+            "railing": "Garde-corps",
+            "auto": "Calculée",
+            "review": "Limite à vérifier",
+            "total": "Total du niveau",
+            "pick": "Touchez une pièce pour voir son périmètre et sa surface murale."
+          },
+          "remodel": {
+            "kicker": "3 · Rénovation énergétique",
+            "title": "Réaliser les travaux notés sur les plans",
+            "desc": "L'isolation par l'extérieur et le remplacement des fenêtres indiqués dans les notes des plans sont appliqués pas à pas à la même maquette 3D, puis l'énergie annuelle de chauffage et de climatisation calculée avec EnergyPlus est comparée.",
+            "steps": {
+              "scan": {
+                "title": "Vue thermique",
+                "desc": "Les surfaces sont colorées selon les coefficients U de la simulation. Plus c'est clair, plus la chaleur s'échappe."
+              },
+              "insulation": {
+                "title": "Isolation par l'extérieur",
+                "desc": "Panneau PF 100 mm + enduit 10 mm · murs extérieurs {area} ㎡ · coefficient U {before} → {after} W/㎡K"
+              },
+              "windows": {
+                "title": "Remplacement des fenêtres",
+                "desc": "Doubles fenêtres PVC · double vitrage à faible émissivité · {count} fenêtres, {area} ㎡ · coefficient U {before} → {after} W/㎡K"
+              },
+              "pv": {
+                "title": "Solaire (proposition en plus)",
+                "desc": "Absent des plans · {count} modules de {w} W sur le versant sud ({kw} kW)"
+              }
+            },
+            "waiting": "En attente",
+            "done": "Terminé",
+            "legendLow": "Faibles pertes",
+            "legendHigh": "Fortes",
+            "result": "Énergie annuelle de chauffage et de climatisation",
+            "before": "Avant",
+            "after": "Après",
+            "heating": "Chauffage",
+            "cooling": "Climatisation",
+            "unit": "kWh/an",
+            "chart": "Énergie mensuelle de chauffage et de climatisation (kWh)",
+            "pvAnnual": "Production solaire annuelle",
+            "pvNote": "Calcul simplifié EnergyPlus PVWatts, non inclus dans l'estimation. La forme et l'orientation de la toiture ne sont pas fixées par les plans et sont donc supposées.",
+            "view": "Afficher",
+            "thermal": "Thermique",
+            "replay": "Refaire les travaux",
+            "note": "Simulation simplifiée EnergyPlus 9.0 (données météo standard coréennes), et non un classement énergétique officiel. Les coefficients U des murs et fenêtres avant travaux supposent un bâtiment ancien. Les couleurs thermiques sont proportionnelles aux coefficients U et ne sont pas une thermographie.",
+            "more": "Métrés et estimation indicative dans la v1"
+          }
+        }
+      },
+      "how": {
+        "title": "Comment c'est fait",
+        "steps": [
+          {
+            "title": "Traits du plan → données",
+            "desc": "Seuls les traits des calques murs, menuiseries et cotes des plans DXF sont repris et placés dans les coordonnées de la maquette (m). Les calques de texte contenant le titre, l'établissement ou l'architecte ne sont pas utilisés."
+          },
+          {
+            "title": "Limites · surfaces des pièces",
+            "desc": "Les zones fermées par les traits des murs et menuiseries sont calculées comme des pièces (v1). Là où l'absence de cloison regroupe plusieurs pièces, la mention « Limite à vérifier » s'affiche."
+          },
+          {
+            "title": "Maquette 3D · éléments de travaux",
+            "desc": "Dans la maquette 3D de la v1, nous avons repéré les 18 murs extérieurs et les 23 fenêtres extérieures, puis créé un isolant pour chaque mur et une nouvelle fenêtre pour chaque baie, avec la même géométrie."
+          },
+          {
+            "title": "Calcul énergétique",
+            "desc": "EnergyPlus 9.0 a été lancé avec les surfaces et orientations des murs et fenêtres de la même maquette pour comparer l'énergie annuelle de chauffage et de climatisation avant et après. Tous les chiffres de la scène viennent directement de ce résultat."
+          }
+        ],
+        "v1": "v1 — figures, métrés et film"
+      }
     }
   }
 }
