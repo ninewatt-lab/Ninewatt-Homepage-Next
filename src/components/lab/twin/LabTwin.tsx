@@ -10,10 +10,26 @@
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
-import { Component, useCallback, useEffect, useRef, useState, useSyncExternalStore, type ReactNode } from "react";
+import { useLocale } from "next-intl";
+import { Component, useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore, type ReactNode } from "react";
 import { Link } from "@/i18n/navigation";
 import { StageBar, TwinDetails, type PanelRoom, type TwinLabels } from "./TwinUI";
-import { DRAWN, PV_OPTIONS, STATIC_HOUR, WALL_OPTIONS, WIN_OPTIONS, createTwinSim, type Scenario, type TwinFloor, type TwinMode, type TwinSim } from "./twinModel";
+import {
+  DRAWN,
+  PV_OPTIONS,
+  STATIC_HOUR,
+  WALL_OPTIONS,
+  WIN_OPTIONS,
+  atHour,
+  createTwinSim,
+  scenarioKey,
+  type HourlyData,
+  type Scenario,
+  type ThermalBasis,
+  type TwinFloor,
+  type TwinMode,
+  type TwinSim,
+} from "./twinModel";
 import type { MeasureState, TwinPlanData, TwinRoom, TwinTool } from "./TwinScene";
 
 const TwinScene = dynamic(() => import("./TwinScene"), { ssr: false });
@@ -49,6 +65,7 @@ function readView(q: URLSearchParams | null) {
   return {
     mode: pick(MODES, (q?.get("view") ?? undefined) as TwinMode | undefined, "build"),
     floor: pick(["1f", "2f"] as TwinFloor[], (q?.get("floor") ?? undefined) as TwinFloor | undefined, "1f"),
+    basis: pick(["u", "winter", "summer"] as ThermalBasis[], (q?.get("heat") ?? undefined) as ThermalBasis | undefined, "u"),
     scenario: {
       wall: pick(WALL_OPTIONS, num("wall") as Scenario["wall"] | undefined, DRAWN.wall),
       win: pick(WIN_OPTIONS, (q?.get("win") ?? undefined) as Scenario["win"] | undefined, DRAWN.win),
@@ -57,7 +74,7 @@ function readView(q: URLSearchParams | null) {
   };
 }
 
-function writeView(mode: TwinMode, floor: TwinFloor, s: Scenario) {
+function writeView(mode: TwinMode, floor: TwinFloor, s: Scenario, basis: ThermalBasis) {
   const q = new URLSearchParams();
   if (mode !== "build") q.set("view", mode);
   if (mode === "rooms" && floor !== "1f") q.set("floor", floor);
@@ -66,6 +83,7 @@ function writeView(mode: TwinMode, floor: TwinFloor, s: Scenario) {
     q.set("win", s.win);
     q.set("pv", String(s.pv));
   }
+  if (mode === "remodel" && basis !== "u") q.set("heat", basis);
   const qs = q.toString();
   return `${window.location.pathname}${qs ? `?${qs}` : ""}`;
 }
@@ -114,6 +132,7 @@ function ToolButton({ on, label, onClick, children }: { on: boolean; label: stri
 export default function LabTwin({
   planUrl,
   viewerUrl,
+  hourlyUrl,
   poster,
   posterAlt,
   labels,
@@ -123,6 +142,8 @@ export default function LabTwin({
   planUrl: string;
   /** v1 뷰어 데이터 (실 · 모델 경로) */
   viewerUrl: string;
+  /** 겨울 · 여름 대표일의 시간별 열 흐름 — 열화상 기준을 고를 때 불러온다 */
+  hourlyUrl: string;
   poster: { src: string; width: number; height: number };
   posterAlt: string;
   labels: TwinLabels;
@@ -152,7 +173,8 @@ export default function LabTwin({
   const [floor, setFloor] = useState<TwinFloor>(start.floor);
   const [selected, setSelected] = useState<string | null>(null);
   const [before, setBefore] = useState(false);
-  const [thermal, setThermal] = useState(false);
+  // 공유 링크가 겨울 · 여름 하루 열화상이면 켠 채로 시작
+  const [thermal, setThermal] = useState(start.basis !== "u");
   // 리모델링 조합 — 처음엔 도면 사양 (+ 태양광 제안 4장)
   const [scenario, setScenario] = useState<Scenario>(start.scenario);
   // 도구 — 단면 높이(m, 평면도처럼 1.2 m 에서 시작) · 비교 막대 위치(0~1) · 잰 점
@@ -161,6 +183,10 @@ export default function LabTwin({
   const split = useRef(0.5);
   const measure = useRef<MeasureState>({ pts: [] });
   const [splitPct, setSplitPct] = useState(50);
+  // 열화상 기준 — 열관류율(고정 색) · 겨울 하루 · 여름 하루(EnergyPlus 시간별)
+  const [basis, setBasisState] = useState<ThermalBasis>(start.basis);
+  const [hourly, setHourly] = useState<HourlyData | null>(null);
+  const locale = useLocale();
   const [copied, setCopied] = useState(false);
   const [paused, setPaused] = useState(false);
   const [snap, setSnap] = useState({ hour: initial.hour, build: initial.build, remodel: 0 });
@@ -207,11 +233,56 @@ export default function LabTwin({
     }
   }, [ready, visible, start.mode]);
 
-  // 보기 · 층 · 조합을 주소에 (기록은 남기지 않고 바꿔 둔다)
+  // 보기 · 층 · 조합 · 열화상 기준을 주소에 (기록은 남기지 않고 바꿔 둔다)
   useEffect(() => {
-    const url = writeView(mode, floor, scenario);
+    const url = writeView(mode, floor, scenario, basis);
     if (url !== window.location.pathname + window.location.search) window.history.replaceState(window.history.state, "", url);
-  }, [mode, floor, scenario]);
+  }, [mode, floor, scenario, basis]);
+
+  // 시간별 값은 겨울 · 여름 하루를 고를 때 한 번 불러온다
+  useEffect(() => {
+    if (basis === "u" || hourly) return;
+    let cancelled = false;
+    fetch(hourlyUrl)
+      .then((r) => r.json())
+      .then((d: HourlyData) => !cancelled && setHourly(d))
+      .catch(() => undefined);
+    return () => {
+      cancelled = true;
+    };
+  }, [basis, hourly, hourlyUrl]);
+
+  const setBasis = useCallback((b: ThermalBasis) => {
+    setBasisState(b);
+    // 겨울 · 여름 하루를 고르면 열화상을 켠다
+    if (b !== "u") setThermal(true);
+  }, []);
+
+  // 대표일 표기 (예: 1월 23일 · Jan 23)
+  const dates = useMemo(() => {
+    const f = new Intl.DateTimeFormat(locale, { month: "long", day: "numeric" });
+    const fmt = (md: string) => {
+      const [m, d] = md.split("-").map(Number);
+      return f.format(new Date(2026, m - 1, d));
+    };
+    return { winter: fmt(hourly?.days.winter ?? "01-23"), summer: fmt(hourly?.days.summer ?? "07-28") };
+  }, [locale, hourly]);
+
+  // 겨울 · 여름 하루 열화상: 지금 시각의 바깥 기온 · 건물 부하 (전 → 고른 조합)
+  const readout = useMemo(() => {
+    if (basis === "u" || !hourly) return null;
+    const base = hourly.runs["w0-old"][basis];
+    const run = hourly.runs[scenarioKey(scenario)][basis];
+    const k = basis === "winter" ? "heat" : "cool";
+    const B = labels.remodel.basis;
+    return B.caption
+      .replace("{date}", dates[basis])
+      .replace("{time}", hhmm(snap.hour))
+      .replace("{out}", atHour(base.out, snap.hour).toFixed(1))
+      .replace("{kind}", basis === "winter" ? B.heating : B.cooling)
+      .replace("{before}", atHour(base[k], snap.hour).toFixed(1))
+      .replace("{after}", atHour(run[k], snap.hour).toFixed(1));
+  }, [basis, hourly, scenario, snap.hour, dates, labels]);
 
   const share = useCallback(() => {
     navigator.clipboard?.writeText(window.location.href).then(() => {
@@ -305,6 +376,8 @@ export default function LabTwin({
                 scenario={scenario}
                 tool={tool}
                 cut={cut}
+                basis={basis}
+                hourly={hourly}
                 splitRef={split}
                 measureRef={measure}
                 chipsRef={chips}
@@ -468,13 +541,24 @@ export default function LabTwin({
               tool={tool}
               cut={cut}
               onCut={setCut}
+              basis={basis}
+              readout={readout}
             />
           </div>
         )}
       </div>
 
       <div className="mt-8">
-        <TwinDetails mode={mode} labels={labels} scenario={scenario} onScenario={setScenario} rooms={rooms} roomNames={roomNames} floor={floor} selected={selected} onSelect={setSelected} v1Href={v1Href} LinkComponent={Link} />
+        <TwinDetails
+          mode={mode}
+          labels={labels}
+          scenario={scenario}
+          onScenario={setScenario}
+          basis={basis}
+          onBasis={setBasis}
+          hourly={hourly}
+          hour={snap.hour}
+          dates={dates} rooms={rooms} roomNames={roomNames} floor={floor} selected={selected} onSelect={setSelected} v1Href={v1Href} LinkComponent={Link} />
       </div>
       <p className="mt-8 border-t border-border pt-4 text-xs leading-relaxed text-muted">{labels.footnote}</p>
     </div>

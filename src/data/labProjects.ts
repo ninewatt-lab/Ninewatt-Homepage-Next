@@ -84,7 +84,7 @@ export interface LabProject {
   caseStudy?: LabCaseStudy;
   /** 도면으로 지은 3D 트윈 (src/components/lab/twin). plan 은 scripts/lab/twin_data.py 결과,
    *  viewer 는 실 · 모델이 든 v1 뷰어 데이터, poster 는 장면을 불러오기 전에 보여 줄 이미지 */
-  twin?: { plan: string; viewer: string; poster: LabImage; v1: string };
+  twin?: { plan: string; viewer: string; hourly: string; poster: LabImage; v1: string };
   /** 제품으로 졸업한 경우 해당 제품 페이지 경로 */
   graduatedTo?: string;
 }
@@ -158,6 +158,8 @@ export const labProjects: LabProject[] = [
     og: `${ABW2}/og.jpg`,
     twin: {
       plan: `${ABW2}/twin.json`,
+      // 겨울 · 여름 대표일의 면별 · 시간별 열 흐름 (scripts/lab/energy_scenarios.py)
+      hourly: `${ABW2}/hourly.json`,
       viewer: `${ABW}/viewer/viewer.json`,
       poster: { src: `${ABW2}/cover.webp`, width: 1600, height: 1000 },
       v1: "/lab/ai-building-workspace",

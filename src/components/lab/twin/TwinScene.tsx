@@ -15,7 +15,31 @@ import Effects from "@/components/district/Effects";
 import { Sky } from "@/components/hero/Atmosphere";
 import { SimContext, type Sim } from "@/components/hero/heroSim";
 import { buildTwin, type TwinModel } from "./twinBuild";
-import { BUILD, CENTER, FLOOR_Y, REMODEL, TOP_Y, WIN_U, ease, easeOut, piece, span, stepTwin, thermalColor, wallU, type Scenario, type TwinFloor, type TwinMode, type TwinSim } from "./twinModel";
+import energy from "@/data/lab/ai-building-workspace-energy.json";
+import {
+  BUILD,
+  CENTER,
+  FLOOR_Y,
+  REMODEL,
+  TOP_Y,
+  WIN_U,
+  atHour,
+  ease,
+  easeOut,
+  fluxColor,
+  piece,
+  scenarioKey,
+  span,
+  stepTwin,
+  thermalColor,
+  wallU,
+  type HourlyData,
+  type Scenario,
+  type ThermalBasis,
+  type TwinFloor,
+  type TwinMode,
+  type TwinSim,
+} from "./twinModel";
 
 const BG = "#050d13";
 const TEAL = new THREE.Color("#49B6CA");
@@ -29,8 +53,13 @@ export type TwinPlanData = { floors: Record<TwinFloor, { z: number; groups: Reco
 
 /* ── 시간 ─────────────────────────────────────────────────────────── */
 
-function Driver({ simRef, frozen, paused }: { simRef: RefObject<TwinSim>; frozen: boolean; paused: boolean }) {
-  const date = useMemo(() => new Date(), []);
+function Driver({ simRef, frozen, paused, day }: { simRef: RefObject<TwinSim>; frozen: boolean; paused: boolean; day: string | null }) {
+  // day "MM-DD" (겨울 · 여름 대표일) — 없으면 오늘
+  const date = useMemo(() => {
+    if (!day) return new Date();
+    const [m, d] = day.split("-").map(Number);
+    return new Date(new Date().getFullYear(), m - 1, d);
+  }, [day]);
   useFrame((_, delta) => stepTwin(simRef.current, delta, frozen, paused, date), -1);
   return null;
 }
@@ -209,7 +238,36 @@ const GLOW = new THREE.Color("#ffc983");
 const GLASS_LOWE = new THREE.Color("#86c3d1");
 const GLASS_TRIPLE = new THREE.Color("#7db8ae");
 
-type View = { mode: TwinMode; floor: TwinFloor; before: boolean; thermal: boolean; scenario: Scenario; tool: TwinTool; cut: number };
+type View = { mode: TwinMode; floor: TwinFloor; before: boolean; thermal: boolean; scenario: Scenario; tool: TwinTool; cut: number; basis: ThermalBasis };
+
+/**
+ * 열화상 막의 색. 기준이 열관류율이면 면마다 고정 색, 겨울 · 여름 하루면 지금 시각의 EnergyPlus 면별 열 흐름으로 칠한다.
+ * 시공 전 부품(맨 벽 · 헌 창)이 보이는 경우(전 보기 · 비교 왼쪽)는 리모델링 전 결과, 나머지는 고른 조합의 결과를 쓴다.
+ */
+function paintHeat(m: TwinModel, v: View, hourly: HourlyData | null, hour: number, pre: boolean) {
+  const H = m.heat;
+  const s = v.scenario;
+  if (v.basis === "u" || !hourly) {
+    for (const mat of Object.values(H.wall)) thermalColor(wallU(0), mat.color);
+    for (const mat of Object.values(H.shell)) thermalColor(wallU(s.wall), mat.color);
+    for (const mat of Object.values(H.old)) thermalColor(WIN_U.old, mat.color);
+    for (const mat of Object.values(H.fresh)) thermalColor(WIN_U[s.win], mat.color);
+    thermalColor(energy.assumptions.roofU, H.roof.color);
+    thermalColor(energy.assumptions.roofU, H.slab.color);
+    thermalColor(energy.assumptions.floorU, H.floor.color);
+    return;
+  }
+  const base = hourly.runs["w0-old"][v.basis];
+  const run = hourly.runs[scenarioKey(s)][v.basis];
+  const before = pre ? base : run;
+  for (const [k, mat] of Object.entries(H.wall)) fluxColor(atHour(before.wall[k], hour), mat.color);
+  for (const [k, mat] of Object.entries(H.shell)) fluxColor(atHour(run.wall[k], hour), mat.color);
+  for (const [k, mat] of Object.entries(H.old)) fluxColor(atHour(before.win[k], hour), mat.color);
+  for (const [k, mat] of Object.entries(H.fresh)) fluxColor(atHour(run.win[k], hour), mat.color);
+  fluxColor(atHour(before.roof.F2, hour), H.roof.color);
+  fluxColor(atHour(before.roof.F1, hour), H.slab.color);
+  fluxColor(0, H.floor.color);
+}
 type SplitTmp = { a: THREE.Vector3; b: THREE.Vector3; c: THREE.Vector3 };
 
 /** 화면 x(0~1)에서 세로로 나누는 면 — 카메라를 지나므로 화면에서는 세로선이 된다. right 는 오른쪽이 보이는 면 */
@@ -224,7 +282,7 @@ function setSplit(m: TwinModel, camera: THREE.Camera, x: number, t: SplitTmp) {
   m.split.left.copy(m.split.right).negate();
 }
 
-function stepBuilding(m: TwinModel, s: TwinSim, v: View, split: number | null, camera: THREE.Camera, t: SplitTmp, scanRef: { value: number }, delta: number, frozen: boolean) {
+function stepBuilding(m: TwinModel, s: TwinSim, v: View, hourly: HourlyData | null, split: number | null, camera: THREE.Camera, t: SplitTmp, scanRef: { value: number }, delta: number, frozen: boolean) {
   const { mode, floor, thermal, scenario } = v;
   // 전후 비교: 시공이 끝난 뒤 화면을 나눠 왼쪽은 전, 오른쪽은 후 (둘 다 제자리에 둔다)
   const comparing = v.tool === "compare" && split !== null && s.remodel >= 1;
@@ -259,8 +317,7 @@ function stepBuilding(m: TwinModel, s: TwinSim, v: View, split: number | null, c
     w.shell.visible = e > 0 && !w.shell.userData.hidden;
     w.shell.position.copy(w.out).multiplyScalar((1 - e) * 1.8);
   });
-  m.heat.shell.color.copy(thermalColor(wallU(scenario.wall)));
-  m.heat.fresh.color.copy(thermalColor(WIN_U[scenario.win]));
+  paintHeat(m, v, hourly, s.hour, v.before || comparing);
   m.freshGlass.color.copy(scenario.win === "triple" ? GLASS_TRIPLE : GLASS_LOWE);
   const win = span(r, REMODEL.windows);
   m.windows.forEach((w, k) => {
@@ -314,6 +371,7 @@ function Building({
   url,
   simRef,
   view,
+  hourly,
   splitRef,
   measureRef,
   frozen,
@@ -321,6 +379,7 @@ function Building({
   url: string;
   simRef: RefObject<TwinSim>;
   view: View;
+  hourly: HourlyData | null;
   splitRef: RefObject<number>;
   measureRef: RefObject<MeasureState>;
   frozen: boolean;
@@ -331,8 +390,8 @@ function Building({
   const scanRef = useRef({ value: -0.5 });
   // 움직임 줄이기(그때만 그리는 모드)에서도 보기를 바꾸면 바로 그린다
   const tmp = useMemo<SplitTmp>(() => ({ a: new THREE.Vector3(), b: new THREE.Vector3(), c: new THREE.Vector3() }), []);
-  useEffect(() => invalidate(), [view, invalidate]);
-  useFrame(({ camera }, delta) => stepBuilding(model, simRef.current, view, splitRef.current, camera, tmp, scanRef.current, delta, frozen));
+  useEffect(() => invalidate(), [view, hourly, invalidate]);
+  useFrame(({ camera }, delta) => stepBuilding(model, simRef.current, view, hourly, splitRef.current, camera, tmp, scanRef.current, delta, frozen));
   // 치수: 건물에서 누른 점 (끌어서 돌린 것은 무시, 잘려 나간 부분 · 숨긴 부품은 건너뛴다)
   const pick = (e: ThreeEvent<MouseEvent>) => {
     if (view.tool !== "measure" || e.delta > 4) return;
@@ -598,6 +657,8 @@ export default function TwinScene({
   scenario,
   tool,
   cut,
+  basis,
+  hourly,
   splitRef,
   measureRef,
   chipsRef,
@@ -619,6 +680,8 @@ export default function TwinScene({
   scenario: Scenario;
   tool: TwinTool;
   cut: number;
+  basis: ThermalBasis;
+  hourly: HourlyData | null;
   splitRef: RefObject<number>;
   measureRef: RefObject<MeasureState>;
   chipsRef: RefObject<Record<string, HTMLElement | null>>;
@@ -628,7 +691,9 @@ export default function TwinScene({
   onReady: () => void;
 }) {
   const [dpr, setDpr] = useState(() => Math.min(window.devicePixelRatio || 1, 1.75));
-  const view = useMemo<View>(() => ({ mode, floor, before, thermal, scenario, tool, cut }), [mode, floor, before, thermal, scenario, tool, cut]);
+  const view = useMemo<View>(() => ({ mode, floor, before, thermal, scenario, tool, cut, basis }), [mode, floor, before, thermal, scenario, tool, cut, basis]);
+  // 해 경로 날짜: 겨울 · 여름 하루를 보면 그날, 아니면 오늘
+  const day = basis !== "u" && hourly ? hourly.days[basis] : null;
   const [fx, setFx] = useState(true);
   const [shadows, setShadows] = useState(true);
   const declines = useRef(0);
@@ -660,14 +725,14 @@ export default function TwinScene({
             }
           }}
         />
-        <Driver simRef={simRef} frozen={frozen} paused={paused} />
+        <Driver simRef={simRef} frozen={frozen} paused={paused} day={day} />
         <color attach="background" args={[BG]} />
         <fog attach="fog" args={[BG, 45, 110]} />
         <Sky radius={160} />
         <Lights shadows={shadows} />
         <Stage />
         <PlanLines plan={plan} simRef={simRef} mode={mode} floor={floor} />
-        <Building url={modelUrl} simRef={simRef} view={view} splitRef={splitRef} measureRef={measureRef} frozen={frozen} />
+        <Building url={modelUrl} simRef={simRef} view={view} hourly={hourly} splitRef={splitRef} measureRef={measureRef} frozen={frozen} />
         <SectionPlane cut={cut} on={tool === "section"} />
         <Measure on={tool === "measure"} measureRef={measureRef} chipsRef={chipsRef} />
         {mode === "rooms" && <Rooms rooms={rooms} floor={floor} selected={selected} onSelect={onSelect} />}

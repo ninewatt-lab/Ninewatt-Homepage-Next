@@ -259,8 +259,48 @@ const STOPS = THERMAL_STOPS.map((c) => new THREE.Color(c));
 /** 이 열관류율(W/㎡K)을 가장 밝은 색으로 — 밝기는 열관류율에 비례한다 */
 export const U_MAX = 4;
 
+function ramp(stops: THREE.Color[], t: number, out: THREE.Color) {
+  const x = Math.min(1, Math.max(0, t)) * (stops.length - 1);
+  const i = Math.min(stops.length - 2, Math.floor(x));
+  return out.copy(stops[i]).lerp(stops[i + 1], x - i);
+}
+
 export function thermalColor(u: number, out = new THREE.Color()) {
-  const x = Math.min(1, Math.max(0, u / U_MAX)) * (STOPS.length - 1);
-  const i = Math.min(STOPS.length - 2, Math.floor(x));
-  return out.copy(STOPS[i]).lerp(STOPS[i + 1], x - i);
+  return ramp(STOPS, u / U_MAX, out);
+}
+
+/* ── 시간별 열 흐름 (겨울 · 여름 대표일) ───────────────────────────── */
+// public/lab/ai-building-workspace-v2/hourly.json — scripts/lab/energy_scenarios.py 가 조합마다 EnergyPlus 로 계산
+
+export type ThermalBasis = "u" | "winter" | "summer";
+export type HourlyDay = {
+  /** 바깥 기온 · 층별 실온(℃) · 건물 난방 · 냉방 부하(kW), 0시부터 24개 (n시 값 = n~n+1시 평균) */
+  out: number[];
+  zone: Record<"F1" | "F2", number[]>;
+  heat: number[];
+  cool: number[];
+  /** 면적당 열 흐름 W/㎡ (+ 밖으로 새는 열, − 안으로 들어오는 열). 키는 F1_N … */
+  wall: Record<string, number[]>;
+  win: Record<string, number[]>;
+  roof: Record<"F1" | "F2", number[]>;
+};
+export type HourlyData = { days: Record<"winter" | "summer", string>; runs: Record<string, Record<"winter" | "summer", HourlyDay>> };
+
+/** 시각 h(0~24)의 값 — 각 시간 값을 그 시간 가운데(n+0.5시)에 두고 이어서 읽는다 */
+export function atHour(arr: number[] | undefined, h: number) {
+  if (!arr) return 0;
+  const x = (((h - 0.5) % 24) + 24) % 24;
+  const i = Math.floor(x);
+  return arr[i] + (arr[(i + 1) % 24] - arr[i]) * (x - i);
+}
+
+// 들어오는 열은 차가운 색 (0 은 열화상과 같은 남색에서 시작해 이어진다)
+const GAIN_STOPS = ["#0d1450", "#1d4e89", "#2aa7c9", "#c4f4ff"].map((c) => new THREE.Color(c));
+export const GAIN_COLORS = ["#0d1450", "#1d4e89", "#2aa7c9", "#c4f4ff"];
+/** 이만큼(W/㎡)이면 가장 밝게 — 새는 열 · 들어오는 열(창으로 드는 햇볕) */
+export const LOSS_MAX = 60;
+export const GAIN_MAX = 300;
+
+export function fluxColor(v: number, out = new THREE.Color()) {
+  return v >= 0 ? ramp(STOPS, v / LOSS_MAX, out) : ramp(GAIN_STOPS, -v / GAIN_MAX, out);
 }
