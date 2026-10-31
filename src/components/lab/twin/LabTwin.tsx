@@ -4,15 +4,17 @@
  * Lab v2 — 도면으로 지은 3D 트윈 섹션.
  * 화면에 가까워지면 데이터(twin.json · viewer.json)와 3D 장면을 불러오고, 처음 보이면 도면 → 3D 구축을 한 번 보여 준다.
  * 보기: 도면 → 3D · 실 · 면적 · 그린리모델링. 장면 아래쪽에 자막 · 챕터(StageBar), 장면 밑 본문에 수치(TwinDetails).
+ * 도구: 단면 · 치수 · 전후 비교 · 링크 복사. 보기 · 층 · 조합은 주소(?view=remodel&wall=150&win=old&pv=2)에 담아 그대로 공유된다.
  */
 
 import dynamic from "next/dynamic";
 import Image from "next/image";
+import { useSearchParams } from "next/navigation";
 import { Component, useCallback, useEffect, useRef, useState, useSyncExternalStore, type ReactNode } from "react";
 import { Link } from "@/i18n/navigation";
 import { StageBar, TwinDetails, type PanelRoom, type TwinLabels } from "./TwinUI";
-import { DRAWN, STATIC_HOUR, createTwinSim, type Scenario, type TwinFloor, type TwinMode, type TwinSim } from "./twinModel";
-import type { TwinPlanData, TwinRoom } from "./TwinScene";
+import { DRAWN, PV_OPTIONS, STATIC_HOUR, WALL_OPTIONS, WIN_OPTIONS, createTwinSim, type Scenario, type TwinFloor, type TwinMode, type TwinSim } from "./twinModel";
+import type { MeasureState, TwinPlanData, TwinRoom, TwinTool } from "./TwinScene";
 
 const TwinScene = dynamic(() => import("./TwinScene"), { ssr: false });
 
@@ -40,7 +42,74 @@ const subscribeReduce = (cb: () => void) => {
 const getReduce = () => window.matchMedia(REDUCE).matches;
 const getReduceServer = () => false;
 
+/** 주소의 보기 · 층 · 조합 (틀린 값은 기본값으로) */
+function readView(q: URLSearchParams | null) {
+  const pick = <T,>(list: readonly T[], v: T | undefined, fallback: T) => (v !== undefined && list.includes(v) ? v : fallback);
+  const num = (k: string) => (q?.get(k) == null ? undefined : Number(q.get(k)));
+  return {
+    mode: pick(MODES, (q?.get("view") ?? undefined) as TwinMode | undefined, "build"),
+    floor: pick(["1f", "2f"] as TwinFloor[], (q?.get("floor") ?? undefined) as TwinFloor | undefined, "1f"),
+    scenario: {
+      wall: pick(WALL_OPTIONS, num("wall") as Scenario["wall"] | undefined, DRAWN.wall),
+      win: pick(WIN_OPTIONS, (q?.get("win") ?? undefined) as Scenario["win"] | undefined, DRAWN.win),
+      pv: pick(PV_OPTIONS, num("pv") as Scenario["pv"] | undefined, DRAWN.pv),
+    } as Scenario,
+  };
+}
+
+function writeView(mode: TwinMode, floor: TwinFloor, s: Scenario) {
+  const q = new URLSearchParams();
+  if (mode !== "build") q.set("view", mode);
+  if (mode === "rooms" && floor !== "1f") q.set("floor", floor);
+  if (mode === "remodel" && (s.wall !== DRAWN.wall || s.win !== DRAWN.win || s.pv !== DRAWN.pv)) {
+    q.set("wall", String(s.wall));
+    q.set("win", s.win);
+    q.set("pv", String(s.pv));
+  }
+  const qs = q.toString();
+  return `${window.location.pathname}${qs ? `?${qs}` : ""}`;
+}
+
 const hhmm = (h: number) => `${String(Math.floor(h) % 24).padStart(2, "0")}:${String(Math.floor((h % 1) * 60)).padStart(2, "0")}`;
+
+const TOOL_ICONS = {
+  section: (
+    <svg width="15" height="15" viewBox="0 0 16 16" aria-hidden="true">
+      <path d="M2 10.5l6 3 6-3M2 7.5l6 3 6-3M8 1.5l6 3-6 3-6-3z" stroke="currentColor" strokeWidth="1.3" fill="none" strokeLinejoin="round" />
+    </svg>
+  ),
+  measure: (
+    <svg width="15" height="15" viewBox="0 0 16 16" aria-hidden="true">
+      <path d="M2.5 11.5l9-9 2 2-9 9zM5 9l1.2 1.2M7 7l1.6 1.6M9 5l1.2 1.2" stroke="currentColor" strokeWidth="1.3" fill="none" strokeLinejoin="round" strokeLinecap="round" />
+    </svg>
+  ),
+  compare: (
+    <svg width="15" height="15" viewBox="0 0 16 16" aria-hidden="true">
+      <rect x="2" y="3" width="12" height="10" rx="1.5" stroke="currentColor" strokeWidth="1.3" fill="none" />
+      <path d="M8 1.5v13" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
+    </svg>
+  ),
+  share: (
+    <svg width="15" height="15" viewBox="0 0 16 16" aria-hidden="true">
+      <path d="M6.5 9.5a3 3 0 004.2 0l2.1-2.1a3 3 0 00-4.2-4.2l-.9.9M9.5 6.5a3 3 0 00-4.2 0L3.2 8.6a3 3 0 004.2 4.2l.9-.9" stroke="currentColor" strokeWidth="1.3" fill="none" strokeLinecap="round" />
+    </svg>
+  ),
+};
+
+function ToolButton({ on, label, onClick, children }: { on: boolean; label: string; onClick: () => void; children: ReactNode }) {
+  return (
+    <button
+      type="button"
+      aria-pressed={on}
+      onClick={onClick}
+      title={label}
+      className={`flex h-7 items-center gap-1.5 rounded-full px-2 text-[12px] font-semibold transition-colors ${on ? "bg-white text-[#07141b]" : "text-white/70 hover:text-white"}`}
+    >
+      {children}
+      <span className="hidden lg:inline">{label}</span>
+    </button>
+  );
+}
 
 export default function LabTwin({
   planUrl,
@@ -77,13 +146,22 @@ export default function LabTwin({
     sim.current.hour = STATIC_HOUR;
   }, [frozen]);
 
-  const [mode, setMode] = useState<TwinMode>("build");
-  const [floor, setFloor] = useState<TwinFloor>("1f");
+  const params = useSearchParams();
+  const [start] = useState(() => readView(params));
+  const [mode, setMode] = useState<TwinMode>(start.mode);
+  const [floor, setFloor] = useState<TwinFloor>(start.floor);
   const [selected, setSelected] = useState<string | null>(null);
   const [before, setBefore] = useState(false);
   const [thermal, setThermal] = useState(false);
   // 리모델링 조합 — 처음엔 도면 사양 (+ 태양광 제안 4장)
-  const [scenario, setScenario] = useState<Scenario>(DRAWN);
+  const [scenario, setScenario] = useState<Scenario>(start.scenario);
+  // 도구 — 단면 높이(m, 평면도처럼 1.2 m 에서 시작) · 비교 막대 위치(0~1) · 잰 점
+  const [tool, setTool] = useState<TwinTool>(null);
+  const [cut, setCut] = useState(1.2);
+  const split = useRef(0.5);
+  const measure = useRef<MeasureState>({ pts: [] });
+  const [splitPct, setSplitPct] = useState(50);
+  const [copied, setCopied] = useState(false);
   const [paused, setPaused] = useState(false);
   const [snap, setSnap] = useState({ hour: initial.hour, build: initial.build, remodel: 0 });
   const chips = useRef<Record<string, HTMLElement | null>>({});
@@ -118,10 +196,38 @@ export default function LabTwin({
     };
   }, [near, data, planUrl, viewerUrl]);
 
-  // 처음 보이면 도면 → 3D 를 한 번
+  // 처음 보이면 도면 → 3D 를 한 번. 공유 링크로 다른 보기에서 시작하면 다 지은(· 다 고친) 모습으로
   useEffect(() => {
-    if (ready && visible && sim.current.build === 0) sim.current.buildRun = true;
-  }, [ready, visible]);
+    const s = sim.current;
+    if (!ready || !visible || s.build !== 0) return;
+    if (start.mode === "build") s.buildRun = true;
+    else {
+      s.build = 1;
+      if (start.mode === "remodel") s.remodel = 1;
+    }
+  }, [ready, visible, start.mode]);
+
+  // 보기 · 층 · 조합을 주소에 (기록은 남기지 않고 바꿔 둔다)
+  useEffect(() => {
+    const url = writeView(mode, floor, scenario);
+    if (url !== window.location.pathname + window.location.search) window.history.replaceState(window.history.state, "", url);
+  }, [mode, floor, scenario]);
+
+  const share = useCallback(() => {
+    navigator.clipboard?.writeText(window.location.href).then(() => {
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 1800);
+    });
+  }, []);
+
+  // 비교 막대 끌기 — 3D 는 매 프레임 split 을 읽고, 막대 위치는 직접 옮긴다
+  const dragSplit = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+    const stage = e.currentTarget.parentElement?.getBoundingClientRect();
+    if (!stage || !(e.buttons & 1)) return;
+    const x = Math.min(0.95, Math.max(0.05, (e.clientX - stage.left) / stage.width));
+    split.current = x;
+    e.currentTarget.style.left = `${x * 100}%`;
+  }, []);
 
   // 패널 · 시계는 0.25초마다 읽는다
   useEffect(() => {
@@ -143,6 +249,7 @@ export default function LabTwin({
     const s = sim.current;
     setMode(m);
     setSelected(null);
+    setTool(null);
     // 다른 보기로 가면 짓는 장면은 끝낸다
     if (m !== "build" && s.build < 1) {
       s.build = 1;
@@ -196,6 +303,10 @@ export default function LabTwin({
                 before={before}
                 thermal={thermal}
                 scenario={scenario}
+                tool={tool}
+                cut={cut}
+                splitRef={split}
+                measureRef={measure}
                 chipsRef={chips}
                 active={visible}
                 frozen={frozen}
@@ -245,9 +356,74 @@ export default function LabTwin({
           ))}
         </div>
 
-        {/* 시계 · 시간 멈추기 */}
+        {/* 치수 결과 — 장면이 두 점 가운데로 옮긴다 */}
+        <div
+          ref={(el) => {
+            chips.current.measure = el;
+          }}
+          style={{ visibility: "hidden" }}
+          className="pointer-events-none absolute left-0 top-0 z-10 rounded-md bg-[#ffd27a] px-2 py-1 text-[12px] font-semibold tabular-nums text-[#1a1406] shadow-lg"
+        />
+
+        {/* 전후 비교 막대 */}
+        {tool === "compare" && snap.remodel >= 1 && (
+          <div
+            data-twin-chrome
+            role="slider"
+            aria-label={labels.tools.handle}
+            aria-valuemin={5}
+            aria-valuemax={95}
+            aria-valuenow={splitPct}
+            tabIndex={0}
+            onPointerDown={(e) => e.currentTarget.setPointerCapture(e.pointerId)}
+            onPointerMove={dragSplit}
+            onPointerUp={() => setSplitPct(Math.round(split.current * 100))}
+            onKeyDown={(e) => {
+              if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
+              split.current = Math.min(0.95, Math.max(0.05, split.current + (e.key === "ArrowLeft" ? -0.03 : 0.03)));
+              e.currentTarget.style.left = `${split.current * 100}%`;
+              setSplitPct(Math.round(split.current * 100));
+            }}
+            style={{ left: "50%" }}
+            className="absolute bottom-0 top-28 z-[5] w-10 -translate-x-1/2 cursor-ew-resize touch-none focus-visible:outline-none sm:top-16"
+          >
+            <div className="absolute inset-y-0 left-1/2 w-px -translate-x-1/2 bg-white/80" />
+            <div className="absolute left-1/2 top-1/2 flex h-9 w-9 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/70 bg-[#07141b]/80 text-white shadow-lg backdrop-blur-sm">
+              <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">
+                <path d="M5 3.5L1.5 7 5 10.5M9 3.5L12.5 7 9 10.5" stroke="currentColor" strokeWidth="1.4" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </div>
+            <span className="absolute right-6 top-3 whitespace-nowrap rounded bg-black/50 px-1.5 py-0.5 text-[11px] font-semibold text-white/85">{labels.remodel.before}</span>
+            <span className="absolute left-6 top-3 whitespace-nowrap rounded bg-black/50 px-1.5 py-0.5 text-[11px] font-semibold text-white/85">{labels.remodel.chosen}</span>
+          </div>
+        )}
+
+        {/* 도구 · 시계 */}
         {ready && (
-          <div data-twin-chrome className="absolute right-3 top-14 z-10 flex items-center gap-1 rounded-full border border-white/12 bg-[#07141b]/80 py-1 pl-3 pr-1 text-[12px] font-semibold tabular-nums text-white/80 backdrop-blur-sm sm:top-4 sm:right-4">
+          <div data-twin-chrome className="absolute right-3 top-14 z-10 flex items-center gap-2 sm:right-4 sm:top-4">
+            <div role="toolbar" aria-label={labels.tools.label} className="flex items-center gap-0.5 rounded-full border border-white/12 bg-[#07141b]/80 p-1 backdrop-blur-sm">
+              {mode !== "rooms" &&
+                (["section", "measure", ...(mode === "remodel" && snap.remodel >= 1 ? (["compare"] as const) : [])] as const).map((k) => (
+                  <ToolButton
+                    key={k}
+                    on={tool === k}
+                    label={labels.tools[k]}
+                    onClick={() => {
+                      // 비교 막대는 열 때마다 가운데에서, 차이가 잘 보이게 열화상과 함께
+                      split.current = 0.5;
+                      setSplitPct(50);
+                      if (k === "compare" && tool !== k) setThermal(true);
+                      setTool(tool === k ? null : k);
+                    }}
+                  >
+                    {TOOL_ICONS[k]}
+                  </ToolButton>
+                ))}
+              <ToolButton on={copied} label={copied ? labels.tools.copied : labels.tools.share} onClick={share}>
+                {TOOL_ICONS.share}
+              </ToolButton>
+            </div>
+            <div className="flex items-center gap-1 rounded-full border border-white/12 bg-[#07141b]/80 py-1 pl-3 pr-1 text-[12px] font-semibold tabular-nums text-white/80 backdrop-blur-sm">
             {hhmm(snap.hour)}
             {!frozen && (
               <button
@@ -267,6 +443,7 @@ export default function LabTwin({
                 )}
               </button>
             )}
+            </div>
           </div>
         )}
 
@@ -288,6 +465,9 @@ export default function LabTwin({
               thermal={thermal}
               onThermal={setThermal}
               onReplay={frozen ? null : replay}
+              tool={tool}
+              cut={cut}
+              onCut={setCut}
             />
           </div>
         )}

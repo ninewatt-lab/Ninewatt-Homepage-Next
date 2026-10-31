@@ -422,6 +422,19 @@
                 "name": "Solaire (proposition)"
               }
             }
+          },
+          "tools": {
+            "label": "Outils",
+            "section": "Coupe",
+            "measure": "Mesure",
+            "compare": "Avant/après",
+            "share": "Copier le lien",
+            "copied": "Copié",
+            "handle": "Position de la comparaison",
+            "height": "Hauteur de coupe",
+            "sectionCaption": "Coupez le bâtiment comme un plan. Changez la hauteur de coupe avec le curseur.",
+            "measureCaption": "Touchez deux points du bâtiment pour mesurer la distance. Touchez à nouveau pour recommencer.",
+            "compareCaption": "À gauche avant travaux, à droite la combinaison choisie. Faites glisser la poignée au milieu."
           }
         }
       },

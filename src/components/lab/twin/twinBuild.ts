@@ -5,6 +5,8 @@
  * - 외벽 18면마다 외단열 판(shellGeometry), 바깥 창 23개마다 새 창(같은 형상 · 새 재질)을 만든다.
  * - 남쪽 지붕면에 태양광 모듈 4장 (EnergyPlus PVWatts 계산과 같은 수 · 크기).
  * - 열화상: 겉면마다 같은 형상의 막을 자식으로 붙여 열관류율 색으로 덮는다. 아래부터 훑는 선(scan) 아래만 보인다.
+ * - 전후 비교: 시공 전 부품(헌 창)은 split.left, 시공 후 부품(외단열 · 새 창 · 태양광)은 split.right 쪽에서만 보인다.
+ *   두 면은 카메라를 지나는 세로면이라 화면을 좌우로 나눈다(TwinScene 이 매 프레임 맞춘다). 비교를 끄면 멀리 치운다.
  */
 
 import * as THREE from "three";
@@ -23,6 +25,7 @@ type Item = { obj: THREE.Object3D; floor: Floor; ceiling?: boolean };
 export type TwinModel = {
   root: THREE.Group;
   plane: THREE.Plane;
+  split: { left: THREE.Plane; right: THREE.Plane };
   scan: { value: number };
   walls: { shell: THREE.Mesh; geos: Record<number, THREE.BufferGeometry>; out: THREE.Vector3; floor: Floor }[];
   windows: { old: THREE.Group; fresh: THREE.Group; at: THREE.Vector3; out: THREE.Vector3; floor: Floor }[];
@@ -39,7 +42,7 @@ export type TwinModel = {
 const U = energy.assumptions;
 
 // 같은 열관류율은 막 재질 하나를 같이 쓴다 (cache 가 없으면 따로 — 색을 바꿀 막)
-function thermalMaterial(cache: Map<number, THREE.MeshBasicMaterial> | null, u: number, plane: THREE.Plane, scan: { value: number }) {
+function thermalMaterial(cache: Map<number, THREE.MeshBasicMaterial> | null, u: number, planes: THREE.Plane[], scan: { value: number }) {
   let m = cache?.get(u);
   if (m) return m;
   m = new THREE.MeshBasicMaterial({
@@ -48,7 +51,7 @@ function thermalMaterial(cache: Map<number, THREE.MeshBasicMaterial> | null, u: 
     polygonOffset: true,
     polygonOffsetFactor: -1,
     polygonOffsetUnits: -4,
-    clippingPlanes: [plane],
+    clippingPlanes: planes,
   });
   m.onBeforeCompile = (s) => {
     s.uniforms.uScan = scan;
@@ -97,6 +100,9 @@ export function buildTwin(scene: THREE.Group): TwinModel {
   const root = scene.clone(true);
   root.updateMatrixWorld(true);
   const plane = new THREE.Plane(new THREE.Vector3(0, -1, 0), 100);
+  const split = { left: new THREE.Plane(new THREE.Vector3(-1, 0, 0), 1e6), right: new THREE.Plane(new THREE.Vector3(1, 0, 0), 1e6) };
+  const before = [plane, split.left];
+  const after = [plane, split.right];
   const scan = { value: -1 };
   const cache = new Map<number, THREE.MeshBasicMaterial>();
   const overlays: THREE.Mesh[] = [];
@@ -130,9 +136,9 @@ export function buildTwin(scene: THREE.Group): TwinModel {
   for (const p of parts) if (/Luminaire/.test(p.name)) p.mesh.material = lamps;
 
   // 외벽 + 외단열 판
-  const shellMat = new THREE.MeshStandardMaterial({ color: "#ddd6c9", roughness: 0.92, clippingPlanes: [plane] });
-  const wallHeat = thermalMaterial(cache, U.before.wallU, plane, scan);
-  const shellHeat = thermalMaterial(null, U.after.wallU, plane, scan);
+  const shellMat = new THREE.MeshStandardMaterial({ color: "#ddd6c9", roughness: 0.92, clippingPlanes: after });
+  const wallHeat = thermalMaterial(cache, U.before.wallU, [plane], scan);
+  const shellHeat = thermalMaterial(null, U.after.wallU, after, scan);
   const walls: TwinModel["walls"] = parts
     .filter(isExteriorWall)
     .sort((a, b) => (a.floor === b.floor ? orderKey(a) - orderKey(b) : a.floor < b.floor ? -1 : 1))
@@ -152,23 +158,42 @@ export function buildTwin(scene: THREE.Group): TwinModel {
     });
 
   // 바깥 창 → 묶음으로 옮기고, 같은 형상의 새 창을 만든다
-  const frame = new THREE.MeshStandardMaterial({ color: "#f1f3f2", roughness: 0.45, metalness: 0.1, clippingPlanes: [plane] });
-  const lowE = new THREE.MeshStandardMaterial({ color: "#86c3d1", roughness: 0.06, metalness: 0.7, transparent: true, opacity: 0.4, depthWrite: false, clippingPlanes: [plane] });
+  const frame = new THREE.MeshStandardMaterial({ color: "#f1f3f2", roughness: 0.45, metalness: 0.1, clippingPlanes: after });
+  const lowE = new THREE.MeshStandardMaterial({ color: "#86c3d1", roughness: 0.06, metalness: 0.7, transparent: true, opacity: 0.4, depthWrite: false, clippingPlanes: after });
   glass.add(lowE);
-  const oldHeat = thermalMaterial(cache, U.before.windowU, plane, scan);
-  const newHeat = thermalMaterial(null, U.after.windowU, plane, scan);
+  const oldHeat = thermalMaterial(null, U.before.windowU, before, scan);
+  const newHeat = thermalMaterial(null, U.after.windowU, after, scan);
+  // 창 부품 재질은 문 등과 같이 쓰므로, 전후 비교용으로 헌 창 · 새 창 쪽을 따로 복제한다
+  const sided = (planes: THREE.Plane[]) => {
+    const made = new Map<THREE.Material, THREE.Material>();
+    return (src: THREE.Material) => {
+      let m = made.get(src);
+      if (!m) {
+        m = src.clone();
+        m.clippingPlanes = planes;
+        if (glass.has(src as THREE.MeshStandardMaterial)) glass.add(m as THREE.MeshStandardMaterial);
+        made.set(src, m);
+      }
+      return m;
+    };
+  };
+  const oldSide = sided(before);
+  const newSide = sided(after);
   const windows: TwinModel["windows"] = windowGroups(parts)
     .sort((a, b) => (a.parts[0].floor === b.parts[0].floor ? orderKey(a.parts[0], a.wall) - orderKey(b.parts[0], b.wall) : a.parts[0].floor < b.parts[0].floor ? -1 : 1))
     .map((w) => {
       const floor = w.parts[0].floor;
       const old = regroup(root, w.parts);
+      old.traverse((o) => {
+        const mesh = o as THREE.Mesh;
+        if (mesh.isMesh) mesh.material = oldSide(mesh.material as THREE.Material);
+      });
       const fresh = old.clone(true);
       fresh.traverse((o) => {
         const mesh = o as THREE.Mesh;
         if (!mesh.isMesh) return;
         const kind = w.parts.find((p) => p.mesh.geometry === mesh.geometry)?.kind;
-        if (kind === "frame") mesh.material = frame;
-        else if (kind === "glass") mesh.material = lowE;
+        mesh.material = kind === "frame" ? frame : kind === "glass" ? lowE : newSide(mesh.material as THREE.Material);
       });
       fresh.visible = false;
       old.userData.special = true;
@@ -182,8 +207,8 @@ export function buildTwin(scene: THREE.Group): TwinModel {
 
   // 지붕 · 바닥판 · 발코니: 전후 같은 값
   for (const p of parts) {
-    if (p.kind === "roof") addOverlay(p.mesh, thermalMaterial(cache, U.roofU, plane, scan), overlays);
-    else if (p.kind === "slab" || p.kind === "floor1" || p.kind === "floor2") addOverlay(p.mesh, thermalMaterial(cache, U.floorU, plane, scan), overlays);
+    if (p.kind === "roof") addOverlay(p.mesh, thermalMaterial(cache, U.roofU, [plane], scan), overlays);
+    else if (p.kind === "slab" || p.kind === "floor1" || p.kind === "floor2") addOverlay(p.mesh, thermalMaterial(cache, U.floorU, [plane], scan), overlays);
   }
 
   // 층 보기용 목록 (창 부품은 묶음째로 위에서 넣었다)
@@ -195,7 +220,7 @@ export function buildTwin(scene: THREE.Group): TwinModel {
     items.push({ obj: top, floor: p.floor, ceiling: /Ceiling/.test(p.name) });
   }
 
-  return { root, plane, scan, walls, windows, pv: solar(root, parts, plane, items), overlays, glass: [...glass], lamps, heat: { shell: shellHeat, fresh: newHeat }, freshGlass: lowE, items };
+  return { root, plane, split, scan, walls, windows, pv: solar(root, parts, after, items), overlays, glass: [...glass], lamps, heat: { shell: shellHeat, fresh: newHeat }, freshGlass: lowE, items };
 }
 
 /** 같은 층 안 순서: 남 → 동 → 북 → 서 (카메라 쪽부터 돌아간다), 같은 면에서는 왼쪽부터 */
@@ -207,7 +232,7 @@ function orderKey(p: Part, wall = p.name) {
   return side * 100 + along;
 }
 
-function solar(root: THREE.Group, parts: Part[], plane: THREE.Plane, items: Item[]): TwinModel["pv"] {
+function solar(root: THREE.Group, parts: Part[], planes: THREE.Plane[], items: Item[]): TwinModel["pv"] {
   const roof = parts.find((p) => /Roof_South/.test(p.name));
   if (!roof) return null;
   const at = roofPlane(roof.mesh);
@@ -218,7 +243,7 @@ function solar(root: THREE.Group, parts: Part[], plane: THREE.Plane, items: Item
   const basis = new THREE.Matrix4().makeBasis(x, normal, z);
   const q = new THREE.Quaternion().setFromRotationMatrix(basis);
   const map = pvTexture();
-  const material = new THREE.MeshStandardMaterial({ map, emissive: "#49B6CA", emissiveMap: map, emissiveIntensity: 0.15, metalness: 0.45, roughness: 0.3, clippingPlanes: [plane] });
+  const material = new THREE.MeshStandardMaterial({ map, emissive: "#49B6CA", emissiveMap: map, emissiveIntensity: 0.15, metalness: 0.45, roughness: 0.3, clippingPlanes: planes });
   const geometry = new THREE.BoxGeometry(MODULE.w, 0.04, MODULE.l);
   const group = new THREE.Group();
   const count = energy.pv.modules;

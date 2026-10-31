@@ -20,6 +20,10 @@ import { BUILD, CENTER, FLOOR_Y, REMODEL, TOP_Y, WIN_U, ease, easeOut, piece, sp
 const BG = "#050d13";
 const TEAL = new THREE.Color("#49B6CA");
 
+/** 다루는 도구: 단면(높이에서 자르기) · 치수(두 점 거리) · 전후 비교(화면을 좌우로 나눔) */
+export type TwinTool = "section" | "measure" | "compare" | null;
+export type MeasureState = { pts: THREE.Vector3[] };
+
 export type TwinRoom = { key: string; floor: TwinFloor; z: number; area: number; review: boolean; label: [number, number]; polygon: [number, number][] };
 export type TwinPlanData = { floors: Record<TwinFloor, { z: number; groups: Record<string, number[]> }> };
 
@@ -205,10 +209,34 @@ const GLOW = new THREE.Color("#ffc983");
 const GLASS_LOWE = new THREE.Color("#86c3d1");
 const GLASS_TRIPLE = new THREE.Color("#7db8ae");
 
-function stepBuilding(m: TwinModel, s: TwinSim, mode: TwinMode, floor: TwinFloor, before: boolean, thermal: boolean, scenario: Scenario, scanRef: { value: number }, delta: number, frozen: boolean) {
-  // 구축: 자르는 면이 올라간다 (다 지으면 치운다)
+type View = { mode: TwinMode; floor: TwinFloor; before: boolean; thermal: boolean; scenario: Scenario; tool: TwinTool; cut: number };
+type SplitTmp = { a: THREE.Vector3; b: THREE.Vector3; c: THREE.Vector3 };
+
+/** 화면 x(0~1)에서 세로로 나누는 면 — 카메라를 지나므로 화면에서는 세로선이 된다. right 는 오른쪽이 보이는 면 */
+function setSplit(m: TwinModel, camera: THREE.Camera, x: number, t: SplitTmp) {
+  const ndc = x * 2 - 1;
+  t.a.set(ndc, -1, 0.5).unproject(camera);
+  t.b.set(ndc, 1, 0.5).unproject(camera);
+  m.split.right.setFromCoplanarPoints(camera.position, t.a, t.b);
+  const toRight = ndc < 0.6;
+  t.c.set(toRight ? ndc + 0.2 : ndc - 0.2, 0, 0.5).unproject(camera);
+  if (m.split.right.distanceToPoint(t.c) * (toRight ? 1 : -1) < 0) m.split.right.negate();
+  m.split.left.copy(m.split.right).negate();
+}
+
+function stepBuilding(m: TwinModel, s: TwinSim, v: View, split: number | null, camera: THREE.Camera, t: SplitTmp, scanRef: { value: number }, delta: number, frozen: boolean) {
+  const { mode, floor, thermal, scenario } = v;
+  // 전후 비교: 시공이 끝난 뒤 화면을 나눠 왼쪽은 전, 오른쪽은 후 (둘 다 제자리에 둔다)
+  const comparing = v.tool === "compare" && split !== null && s.remodel >= 1;
+  const before = v.before && !comparing;
+  if (comparing) setSplit(m, camera, split, t);
+  else {
+    m.split.right.set(new THREE.Vector3(1, 0, 0), 1e6);
+    m.split.left.set(new THREE.Vector3(-1, 0, 0), 1e6);
+  }
+  // 구축: 자르는 면이 올라간다. 다 지은 뒤에는 단면 도구의 높이에서 자르고, 아니면 치운다
   const rise = span(s.build, BUILD.rise);
-  m.plane.constant = s.build >= 1 ? 100 : rise <= 0 ? -0.01 : ease(rise) * TOP_Y;
+  m.plane.constant = s.build >= 1 ? (v.tool === "section" ? v.cut : 100) : rise <= 0 ? -0.01 : ease(rise) * TOP_Y;
 
   // 층 보기: 실 보기에서는 위층 · 지붕 · 천장을 걷는다
   for (const it of m.items) {
@@ -241,9 +269,11 @@ function stepBuilding(m: TwinModel, s: TwinSim, mode: TwinMode, floor: TwinFloor
     // 헌 창이 바깥으로 빠지며 작아지고, 새 창이 바깥에서 들어온다
     const out = easeOut(Math.min(1, p / 0.45));
     const inn = easeOut(Math.max(0, (p - 0.4) / 0.6));
-    w.old.visible = out < 1 && !w.old.userData.hidden;
-    w.old.position.copy(w.at).addScaledVector(w.out, out * 1.4);
-    w.old.scale.setScalar(Math.max(1e-3, 1 - out));
+    // 비교 중에는 헌 창도 제자리에 (왼쪽 화면에만 보인다)
+    const gone = comparing ? 0 : out;
+    w.old.visible = gone < 1 && !w.old.userData.hidden;
+    w.old.position.copy(w.at).addScaledVector(w.out, gone * 1.4);
+    w.old.scale.setScalar(Math.max(1e-3, 1 - gone));
     w.fresh.visible = inn > 0 && !w.fresh.userData.hidden;
     w.fresh.position.copy(w.at).addScaledVector(w.out, (1 - inn) * 1.4);
   });
@@ -283,20 +313,16 @@ function stepBuilding(m: TwinModel, s: TwinSim, mode: TwinMode, floor: TwinFloor
 function Building({
   url,
   simRef,
-  mode,
-  floor,
-  before,
-  thermal,
-  scenario,
+  view,
+  splitRef,
+  measureRef,
   frozen,
 }: {
   url: string;
   simRef: RefObject<TwinSim>;
-  mode: TwinMode;
-  floor: TwinFloor;
-  before: boolean;
-  thermal: boolean;
-  scenario: Scenario;
+  view: View;
+  splitRef: RefObject<number>;
+  measureRef: RefObject<MeasureState>;
   frozen: boolean;
 }) {
   const { scene } = useGLTF(url);
@@ -304,9 +330,104 @@ function Building({
   const model = useMemo(() => buildTwin(scene), [scene]);
   const scanRef = useRef({ value: -0.5 });
   // 움직임 줄이기(그때만 그리는 모드)에서도 보기를 바꾸면 바로 그린다
-  useEffect(() => invalidate(), [mode, floor, before, thermal, scenario, invalidate]);
-  useFrame((_, delta) => stepBuilding(model, simRef.current, mode, floor, before, thermal, scenario, scanRef.current, delta, frozen));
-  return <primitive object={model.root} />;
+  const tmp = useMemo<SplitTmp>(() => ({ a: new THREE.Vector3(), b: new THREE.Vector3(), c: new THREE.Vector3() }), []);
+  useEffect(() => invalidate(), [view, invalidate]);
+  useFrame(({ camera }, delta) => stepBuilding(model, simRef.current, view, splitRef.current, camera, tmp, scanRef.current, delta, frozen));
+  // 치수: 건물에서 누른 점 (끌어서 돌린 것은 무시, 잘려 나간 부분 · 숨긴 부품은 건너뛴다)
+  const pick = (e: ThreeEvent<MouseEvent>) => {
+    if (view.tool !== "measure" || e.delta > 4) return;
+    const hit = e.intersections.find((i) => i.point.y <= model.plane.constant + 1e-3 && shown(i.object));
+    if (!hit) return;
+    e.stopPropagation();
+    const pts = measureRef.current.pts;
+    if (pts.length >= 2) pts.length = 0;
+    pts.push(hit.point.clone());
+    invalidate();
+  };
+  return <primitive object={model.root} onClick={pick} />;
+}
+
+function shown(o: THREE.Object3D | null): boolean {
+  for (let n = o; n; n = n.parent) if (!n.visible) return false;
+  return true;
+}
+
+/* ── 단면 · 치수 표시 ─────────────────────────────────────────────── */
+
+const CUT = new THREE.Color("#7fe3f3");
+
+/** 단면 높이에 얇은 판과 테두리 — 어디서 잘랐는지 보이게 */
+function SectionPlane({ cut, on }: { cut: number; on: boolean }) {
+  const edges = useMemo(() => new THREE.EdgesGeometry(new THREE.PlaneGeometry(15, 13)), []);
+  if (!on) return null;
+  return (
+    <group position={[CENTER.x, cut, CENTER.z - 0.3]} rotation-x={-Math.PI / 2}>
+      <mesh renderOrder={4}>
+        <planeGeometry args={[15, 13]} />
+        <meshBasicMaterial color={CUT} transparent opacity={0.07} depthWrite={false} side={THREE.DoubleSide} toneMapped={false} />
+      </mesh>
+      <lineSegments geometry={edges} renderOrder={4}>
+        <lineBasicMaterial color={CUT} transparent opacity={0.6} depthWrite={false} toneMapped={false} />
+      </lineSegments>
+    </group>
+  );
+}
+
+type MeasureNodes = { a: THREE.Mesh; b: THREE.Mesh; line: THREE.Line };
+
+function stepMeasure(n: MeasureNodes, pts: THREE.Vector3[], on: boolean, label: HTMLElement | null | undefined, camera: THREE.Camera, w: number, h: number, mid: THREE.Vector3) {
+  n.a.visible = on && pts.length > 0;
+  n.b.visible = on && pts.length > 1;
+  n.line.visible = on && pts.length > 1;
+  if (pts[0]) n.a.position.copy(pts[0]);
+  if (pts[1]) {
+    n.b.position.copy(pts[1]);
+    const pos = n.line.geometry.attributes.position as THREE.BufferAttribute;
+    pos.setXYZ(0, pts[0].x, pts[0].y, pts[0].z);
+    pos.setXYZ(1, pts[1].x, pts[1].y, pts[1].z);
+    pos.needsUpdate = true;
+  }
+  if (!label) return;
+  if (!(on && pts.length > 1)) {
+    label.style.visibility = "hidden";
+    return;
+  }
+  const text = `${pts[0].distanceTo(pts[1]).toFixed(2)} m`;
+  if (label.textContent !== text) label.textContent = text;
+  mid.addVectors(pts[0], pts[1]).multiplyScalar(0.5).project(camera);
+  moveChip(label, ((mid.x + 1) / 2) * w, ((1 - mid.y) / 2) * h - 18, mid.z < 1);
+}
+
+function Measure({ on, measureRef, chipsRef }: { on: boolean; measureRef: RefObject<MeasureState>; chipsRef: RefObject<Record<string, HTMLElement | null>> }) {
+  const a = useRef<THREE.Mesh>(null);
+  const b = useRef<THREE.Mesh>(null);
+  const line = useMemo(() => {
+    const g = new THREE.BufferGeometry();
+    g.setAttribute("position", new THREE.BufferAttribute(new Float32Array(6), 3));
+    const l = new THREE.Line(g, new THREE.LineBasicMaterial({ color: "#ffd27a", depthTest: false, transparent: true, toneMapped: false }));
+    l.renderOrder = 10;
+    l.frustumCulled = false;
+    return l;
+  }, []);
+  const mid = useMemo(() => new THREE.Vector3(), []);
+  // 도구를 끄면 재던 점을 지운다
+  useEffect(() => {
+    if (!on) measureRef.current.pts.length = 0;
+  }, [on, measureRef]);
+  useFrame(({ camera, size }) => a.current && b.current && stepMeasure({ a: a.current, b: b.current, line }, measureRef.current.pts, on, chipsRef.current.measure, camera, size.width, size.height, mid));
+  return (
+    <>
+      <mesh ref={a} visible={false} renderOrder={10}>
+        <sphereGeometry args={[0.09, 16, 12]} />
+        <meshBasicMaterial color="#ffd27a" depthTest={false} transparent toneMapped={false} />
+      </mesh>
+      <mesh ref={b} visible={false} renderOrder={10}>
+        <sphereGeometry args={[0.09, 16, 12]} />
+        <meshBasicMaterial color="#ffd27a" depthTest={false} transparent toneMapped={false} />
+      </mesh>
+      <primitive object={line} />
+    </>
+  );
 }
 
 /* ── 실 ───────────────────────────────────────────────────────────── */
@@ -475,6 +596,10 @@ export default function TwinScene({
   before,
   thermal,
   scenario,
+  tool,
+  cut,
+  splitRef,
+  measureRef,
   chipsRef,
   active,
   frozen,
@@ -492,6 +617,10 @@ export default function TwinScene({
   before: boolean;
   thermal: boolean;
   scenario: Scenario;
+  tool: TwinTool;
+  cut: number;
+  splitRef: RefObject<number>;
+  measureRef: RefObject<MeasureState>;
   chipsRef: RefObject<Record<string, HTMLElement | null>>;
   active: boolean;
   frozen: boolean;
@@ -499,6 +628,7 @@ export default function TwinScene({
   onReady: () => void;
 }) {
   const [dpr, setDpr] = useState(() => Math.min(window.devicePixelRatio || 1, 1.75));
+  const view = useMemo<View>(() => ({ mode, floor, before, thermal, scenario, tool, cut }), [mode, floor, before, thermal, scenario, tool, cut]);
   const [fx, setFx] = useState(true);
   const [shadows, setShadows] = useState(true);
   const declines = useRef(0);
@@ -537,7 +667,9 @@ export default function TwinScene({
         <Lights shadows={shadows} />
         <Stage />
         <PlanLines plan={plan} simRef={simRef} mode={mode} floor={floor} />
-        <Building url={modelUrl} simRef={simRef} mode={mode} floor={floor} before={before} thermal={thermal} scenario={scenario} frozen={frozen} />
+        <Building url={modelUrl} simRef={simRef} view={view} splitRef={splitRef} measureRef={measureRef} frozen={frozen} />
+        <SectionPlane cut={cut} on={tool === "section"} />
+        <Measure on={tool === "measure"} measureRef={measureRef} chipsRef={chipsRef} />
         {mode === "rooms" && <Rooms rooms={rooms} floor={floor} selected={selected} onSelect={onSelect} />}
         <Labels rooms={rooms} floor={floor} mode={mode} chipsRef={chipsRef} />
         <OrbitControls makeDefault enableDamping enablePan={false} minDistance={9} maxDistance={60} maxPolarAngle={Math.PI / 2 - 0.08} target={POSES.plan.target.toArray()} />
