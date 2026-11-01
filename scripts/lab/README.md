@@ -234,6 +234,9 @@ cp $W/out/meta.json src/data/lab/ai-building-workspace-b-meta.json
   층 사이 외벽면에 슬래브 띠(`VIS_F<n>_SlabBand`, kind band), 옥상 파라펫 위에 두겁(`VIS_Roof_Coping`, kind trim)을 얹는다.
   둘 다 env.json(에너지 입력)에는 들어가지 않고, 열화상을 켜면 숨긴다. 외벽 조각을 떼고 남는 4 cm 미만 내벽 조각은 버린다
   (외벽 바깥면과 같은 면에 겹쳐 얼룩이 졌다).
+- 외단열 판(`VIS_F<n>_<외벽>_Shell`, kind shell): 외곽선을 10 cm 넓힌 띠(안쪽은 벽에 2 cm 묻힘)에서 외벽마다 창 · 문 구멍(벽 개구부 + 5 mm)을 뚫은 판.
+  꼭짓점마다 `_OFFSET`(바깥으로 밀리는 방향, m 당)을 넣어 `twinModel.offsetShell` 이 고른 두께(50~150 mm)로 민다. 화면에는 그대로 그리지 않는다.
+  예전처럼 벽 조각을 통째로 바깥면에 눌러 붙이면 벽 안쪽 층 · 들어간 부분이 창 앞으로 끌려 나와 리모델링 후 창이 가려졌다(건물 A 는 그 방식 그대로).
 - `energy_idf.py` 는 env.json 에 `zones` · `window` 가 있으면 그것을 쓴다(층마다 바닥 · 층간 · 지붕, 용도별 재실 · 조명 · 설정 온도 —
   어린이집은 평일 7–19시, 난방 20/15 ℃ · 냉방 26/30 ℃). 없으면 건물 A 의 두 층 값 그대로라 A 결과는 바이트 단위로 같다(확인함).
 - 화면에 넣을 때: `src/components/lab/twin/buildings.ts` 에 건물을 추가하고(데이터 경로 · frame · stats · runs · pv · drawn · start),

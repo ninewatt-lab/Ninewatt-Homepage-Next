@@ -217,6 +217,26 @@ export function shellGeometry(wall: THREE.BufferGeometry, out: THREE.Vector3, th
   return g;
 }
 
+/** auto_twin.py 가 외단열 판(kind shell)을 만든 기준 두께(m) */
+const SKIN_T = 0.1;
+
+/**
+ * 도면에서 만든 외단열 판(자동 생성 건물): 외곽선을 따라 창 · 문 구멍까지 뚫린 기준 두께 판의 바깥 꼭짓점을
+ * _offset(m 당 이동, 모서리는 꺾인 방향) × (두께 − 기준 두께)만큼 민다. 벽을 통째로 눌러 붙이는 shellGeometry 와 달리
+ * 벽 안쪽 층 · 들어간 부분이 창 앞으로 끌려 나오지 않는다.
+ */
+export function offsetShell(skin: THREE.BufferGeometry, thickness: number) {
+  const g = skin.clone();
+  const pos = g.attributes.position as THREE.BufferAttribute;
+  const off = g.attributes._offset as THREE.BufferAttribute;
+  const k = thickness - SKIN_T;
+  for (let i = 0; i < pos.count; i++) pos.setXYZ(i, pos.getX(i) + off.getX(i) * k, pos.getY(i), pos.getZ(i) + off.getZ(i) * k);
+  pos.needsUpdate = true;
+  g.computeBoundingBox();
+  g.computeBoundingSphere();
+  return g;
+}
+
 /** 지붕 남쪽 면의 윗면 삼각형들 → 가운데 · 법선 (태양광 모듈을 놓을 면) */
 export function roofPlane(mesh: THREE.Mesh) {
   const g = mesh.geometry;

@@ -349,6 +349,16 @@ function stepPlanLines(s: TwinSim, mode: TwinMode, floor: TwinFloor, floors: Pla
 
 const LAMP = new THREE.Color("#ffd9a8");
 const GLOW = new THREE.Color("#ffc983");
+const GLOW_COOL = new THREE.Color("#ffdcb4");
+
+// 밤 창 불빛의 재실(0~1) — 어린이집(평일 7~19시) 기준: 해 질 녘엔 거의 다 켜져 있고, 밤이 깊을수록 하나씩 꺼진다 (시각, 재실)
+const OCCUPANCY: [number, number][] = [[0, 0.08], [5, 0.08], [7, 0.5], [16, 0.95], [19, 0.85], [21, 0.3], [23, 0.12], [24, 0.08]];
+function occupancy(hour: number) {
+  const i = OCCUPANCY.findIndex(([h]) => h > hour);
+  const [h0, v0] = OCCUPANCY[i - 1];
+  const [h1, v1] = OCCUPANCY[i];
+  return v0 + ((hour - h0) / (h1 - h0)) * (v1 - v0);
+}
 
 const GLASS_LOWE = new THREE.Color("#86c3d1");
 const GLASS_TRIPLE = new THREE.Color("#7db8ae");
@@ -486,8 +496,18 @@ function stepBuilding(m: TwinModel, s: TwinSim, v: View, hourly: HourlyData | nu
   for (const o of m.overlays) o.visible = on;
   for (const t of m.trims) t.visible = !on && !t.userData.hidden;
 
-  // 밤: 창 안쪽 불빛 · 실내 조명
+  // 밤: 창 안쪽 불빛 · 실내 조명. 바깥 창은 창마다 켜지는 재실 기준이 달라 하나씩 켜지고 꺼진다 (꺼진 창도 아주 희미하게)
   for (const g of m.glass) g.emissive.copy(GLOW).multiplyScalar(s.dark * 0.55);
+  const occ = occupancy(s.hour);
+  for (const w of m.windows) {
+    const glow = s.dark * (0.05 + 0.65 * smooth(w.lit - 0.05, w.lit + 0.05, occ));
+    const c = w.cool ? GLOW_COOL : GLOW;
+    for (const g of w.glass.old) g.emissive.copy(c).multiplyScalar(glow);
+    for (const g of w.glass.fresh) {
+      g.emissive.copy(c).multiplyScalar(glow);
+      g.color.copy(m.freshGlass.color);
+    }
+  }
   m.lamps.color.copy(LAMP).multiplyScalar(0.2 + s.dark * 1.4);
 }
 
