@@ -28,6 +28,7 @@ import sys
 
 import ezdxf
 import numpy as np
+import shapely
 import trimesh
 from ezdxf import bbox, disassemble
 from shapely.affinity import scale, translate
@@ -391,6 +392,10 @@ def qa_plot(path, footprint, rooms, pieces, interior, openings):
 
 
 nodes = []  # (name, kind, floor, trimesh)
+# 외단열 판(kind shell): 외곽선을 SKIN_T 만큼 바깥으로 넓힌 띠에서 창 · 문을 뚫은 판. 꼭짓점마다 바깥으로 밀리는 방향(_OFFSET, m 당)을 함께 넣어
+# twinBuild 가 고른 두께 t 에 맞춰 위치 + _OFFSET × (t − SKIN_T) 로 민다. 모서리는 꺾인 방향(마이터)으로 밀려 어떤 두께에서도 맞물린다
+SKIN_T = 0.1
+skin_outline = {}  # 판 이름 → 그 층 외곽선 (모델 좌표)
 
 
 def add(name, kind, floor, meshes):
@@ -439,6 +444,9 @@ for fi, fl in enumerate(FLOORS):
     pieces, interior = split_exterior(footprint, walls)
     if os.environ.get("QA_PNG"):
         qa_plot(os.environ["QA_PNG"].replace(".png", f"-{key}.png"), footprint, rooms, pieces, interior, openings)
+    # 안쪽은 벽에 2 cm 묻는다 — 외곽선과 벽 바깥면이 조금만 어긋나도 판과 벽 사이 틈이 생겨 창 둘레에 그늘 알갱이가 진다
+    ring = footprint.buffer(SKIN_T, join_style=2).difference(footprint.buffer(-0.02, join_style=2))
+    skin_taken = Polygon()
     for piece in pieces:
         mine = [o for o in openings if o["poly"].intersection(piece["poly"]).area > 0.02]
         piece["openings"] = mine
@@ -452,6 +460,27 @@ for fi, fl in enumerate(FLOORS):
                 parts += extrude(reg, z, z + sill)
             parts += extrude(reg, z + head, z + top_ext)
         add(f"VIS_{F}_{piece['name']}", "wall", key, parts)
+        # 외단열 판: 이 외벽 앞의 띠(먼저 잡은 조각이 모서리를 갖는다)에 같은 창 · 문 구멍. 구멍은 개구부를 바깥으로 쓸어 띠를 뚫는다
+        zone = ring.intersection(piece["poly"].buffer(SKIN_T + 0.02, join_style=2)).difference(skin_taken).buffer(0)
+        if zone.area > 0.01:
+            skin_taken = skin_taken.union(zone)
+            nx, ny = {"N": (0, 1), "S": (0, -1), "E": (1, 0), "W": (-1, 0)}[piece["side"]]
+            cuts = []
+            for o in mine:
+                reg = o["poly"].intersection(piece["poly"])
+                # 구멍은 벽 개구부보다 5 mm 넓게 — 판 옆면이 벽 개구부 옆면과 같은 면에 겹치지 않게
+                cuts.append((o, unary_union([reg, translate(reg, nx * 0.4, ny * 0.4)]).convex_hull.buffer(0.005, join_style=2)))
+            sp = extrude(zone.difference(unary_union([c for _, c in cuts])) if cuts else zone, z, z + top_ext)
+            for o, c in cuts:
+                reg = zone.intersection(c)
+                sill = 0 if o["door"] else Hf["sill"]
+                head = Hf["door"] if o["door"] else Hf["head"]
+                if sill > 0:
+                    sp += extrude(reg, z, z + sill)
+                sp += extrude(reg, z + head, z + top_ext)
+            name = f"VIS_{F}_{piece['name']}_Shell"
+            add(name, "shell", key, sp)
+            skin_outline[name] = footprint.boundary
         # 외벽 개구부: 유리 · 틀 · 창대 (문은 유리문으로 본다)
         for k, o in enumerate(mine):
             cx, cy, along, across, ang = axis(o["poly"].intersection(piece["poly"]))
@@ -558,7 +587,7 @@ MATERIALS = {
     "wall": (srgb("#c9c4bb"), "OPAQUE", 0.0, 0.9), "glass": (srgb("#5d8e9c", 0.5), "BLEND", 0.8, 0.05), "frame": (srgb("#33403f"), "OPAQUE", 0.6, 0.35),
     "sill": (srgb("#aeaaa2"), "OPAQUE", 0.0, 0.6), "floor1": (srgb("#a99f90"), "OPAQUE", 0.0, 0.8), "ceiling": (srgb("#dcdcd8"), "OPAQUE", 0.0, 0.9),
     "roof": (srgb("#3a4b52"), "OPAQUE", 0.0, 0.85), "door": (srgb("#7a6049"), "OPAQUE", 0.0, 0.7), "slab": (srgb("#3a4b52"), "OPAQUE", 0.0, 0.85),
-    "trim": (srgb("#2f4047"), "OPAQUE", 0.5, 0.45), "band": (srgb("#a9a59d"), "OPAQUE", 0.0, 0.7),
+    "trim": (srgb("#2f4047"), "OPAQUE", 0.5, 0.45), "band": (srgb("#a9a59d"), "OPAQUE", 0.0, 0.7), "shell": (srgb("#ddd6c9"), "OPAQUE", 0.0, 0.92),
 }
 
 
@@ -589,7 +618,18 @@ def write_glb(path):
         iv = push(idx, 34963)
         accessors.append({"bufferView": iv, "componentType": 5125, "count": len(idx), "type": "SCALAR"})
         a = len(accessors)
-        meshes.append({"name": name, "primitives": [{"attributes": {"POSITION": a - 3, "NORMAL": a - 2}, "indices": a - 1, "material": kinds.index(kind)}]})
+        attributes = {"POSITION": a - 3, "NORMAL": a - 2}
+        if kind == "shell":
+            # 바깥면 꼭짓점: (꼭짓점 − 외곽선의 가장 가까운 점) / SKIN_T, 안쪽면(외곽선 위) 꼭짓점은 0
+            flat = np.column_stack([pos[:, 0], -pos[:, 2]])
+            near = shapely.get_coordinates(shapely.shortest_line(shapely.points(flat), skin_outline[name]))[1::2]
+            d = flat - near
+            outer = np.hypot(d[:, 0], d[:, 1]) > SKIN_T * 0.5
+            off = np.where(outer[:, None], d / SKIN_T, 0.0)
+            ov = push(np.column_stack([off[:, 0], np.zeros(len(off)), -off[:, 1]]).astype(np.float32), 34962)
+            accessors.append({"bufferView": ov, "componentType": 5126, "count": len(pos), "type": "VEC3"})
+            attributes["_OFFSET"] = len(accessors) - 1
+        meshes.append({"name": name, "primitives": [{"attributes": attributes, "indices": a - 1, "material": kinds.index(kind)}]})
         gnodes.append({"name": name, "mesh": len(meshes) - 1, "extras": {"floor": floor, "kind": kind}})
     while len(bin_) % 4:
         bin_ += b"\0"

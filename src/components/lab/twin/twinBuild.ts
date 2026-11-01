@@ -12,7 +12,7 @@
 import * as THREE from "three";
 import energy from "@/data/lab/ai-building-workspace-energy.json";
 import { pvTexture } from "@/components/hero/textures";
-import { isExteriorWall, outward, readParts, roofPlane, shellGeometry, thermalColor, windowGroups, type Part, type TwinFloor } from "./twinModel";
+import { isExteriorWall, offsetShell, outward, readParts, roofPlane, shellGeometry, thermalColor, windowGroups, type Part, type TwinFloor } from "./twinModel";
 
 /** 외단열 판 두께(m) — PF보드 두께(mm) + 스타코 10 mm. 시나리오 비교에서 고른 두께로 바꿔 끼운다 */
 export const SHELL: Record<number, number> = { 50: 0.06, 80: 0.09, 100: 0.11, 150: 0.16 };
@@ -28,7 +28,8 @@ export type TwinModel = {
   split: { left: THREE.Plane; right: THREE.Plane };
   scan: { value: number };
   walls: { shell: THREE.Mesh; geos: Record<number, THREE.BufferGeometry>; out: THREE.Vector3; floor: Floor }[];
-  windows: { old: THREE.Group; fresh: THREE.Group; at: THREE.Vector3; out: THREE.Vector3; floor: Floor }[];
+  /** lit: 이 창이 켜지는 재실 기준(0~1, 창마다 다르다) · cool: 흰빛 조명인 창 · glass: 이 창만 쓰는 유리 재질(밤 불빛) */
+  windows: { old: THREE.Group; fresh: THREE.Group; at: THREE.Vector3; out: THREE.Vector3; floor: Floor; lit: number; cool: boolean; glass: { old: THREE.MeshStandardMaterial[]; fresh: THREE.MeshStandardMaterial[] } }[];
   pv: { group: THREE.Group; modules: THREE.Mesh[]; base: THREE.Vector3[]; normal: THREE.Vector3 } | null;
   overlays: THREE.Mesh[];
   /** 슬래브 띠 · 파라펫 두겁 (자동 생성 건물의 겉모습 부품) — 열화상 막이 없어 열화상을 켜면 숨긴다 */
@@ -79,6 +80,22 @@ function thermalMaterial(cache: Map<number, THREE.MeshBasicMaterial> | null, u: 
   return m;
 }
 
+/** 창 불빛을 천장 조명처럼 위가 밝게 — 유리 형상의 아래 · 위 높이(모델 좌표)를 재질마다 넣는다 */
+function paneGradient(m: THREE.MeshStandardMaterial, geometry: THREE.BufferGeometry) {
+  if (!geometry.boundingBox) geometry.computeBoundingBox();
+  const span = { value: new THREE.Vector2(geometry.boundingBox!.min.y, geometry.boundingBox!.max.y) };
+  m.onBeforeCompile = (s) => {
+    s.uniforms.uPane = span;
+    s.vertexShader = s.vertexShader
+      .replace("#include <common>", "#include <common>\nvarying float vPaneY;")
+      .replace("#include <begin_vertex>", "#include <begin_vertex>\nvPaneY = position.y;");
+    s.fragmentShader = s.fragmentShader
+      .replace("#include <common>", "#include <common>\nuniform vec2 uPane;\nvarying float vPaneY;")
+      .replace("#include <emissivemap_fragment>", "#include <emissivemap_fragment>\ntotalEmissiveRadiance *= mix(0.5, 1.2, smoothstep(uPane.x, uPane.y, vPaneY));");
+  };
+  m.customProgramCacheKey = () => "twin-pane";
+}
+
 function addOverlay(obj: THREE.Object3D, mat: THREE.Material, list: THREE.Mesh[]) {
   obj.traverse((o) => {
     const mesh = o as THREE.Mesh;
@@ -119,7 +136,11 @@ export function buildTwin(scene: THREE.Group): TwinModel {
   const cache = new Map<number, THREE.MeshBasicMaterial>();
   const overlays: THREE.Mesh[] = [];
   const items: Item[] = [];
-  const parts = readParts(root);
+  // 자동 생성 건물은 외단열 판(kind shell)을 도면에서 만들어 넣어 둔다 — 형상만 쓰고 장면에서는 뺀다
+  const all = readParts(root);
+  const skins = new Map(all.filter((p) => p.kind === "shell").map((p) => [p.name, p.mesh.geometry]));
+  for (const p of all) if (p.kind === "shell") p.mesh.removeFromParent();
+  const parts = all.filter((p) => p.kind !== "shell");
 
   // 모든 원래 재질에 자르는 면 · 그림자. 재질은 useGLTF 캐시와 같이 쓰므로 이 모델용으로 복제한다
   const glass = new Set<THREE.MeshStandardMaterial>();
@@ -161,7 +182,8 @@ export function buildTwin(scene: THREE.Group): TwinModel {
     .sort((a, b) => (a.floor === b.floor ? orderKey(a) - orderKey(b) : a.floor < b.floor ? -1 : 1))
     .map((p) => {
       const out = outward(p.name);
-      const geos = Object.fromEntries(Object.entries(SHELL).map(([mm, t]) => [mm, shellGeometry(p.mesh.geometry, out, t)]));
+      const skin = skins.get(`${p.name}_Shell`);
+      const geos = Object.fromEntries(Object.entries(SHELL).map(([mm, t]) => [mm, skin ? offsetShell(skin, t) : shellGeometry(p.mesh.geometry, out, t)]));
       const shell = new THREE.Mesh(geos[100], shellMat);
       shell.castShadow = true;
       shell.receiveShadow = true;
@@ -197,9 +219,24 @@ export function buildTwin(scene: THREE.Group): TwinModel {
   };
   const oldSide = sided(before);
   const newSide = sided(after);
+  // 밤 불빛은 창마다 따로 켜지므로 유리 재질을 창마다 복제한다 (자르는 면은 같은 것을 쓴다 — clone 은 면을 복사한다)
+  const ownGlass = (g: THREE.Object3D) => {
+    const list: THREE.MeshStandardMaterial[] = [];
+    g.traverse((o) => {
+      const mesh = o as THREE.Mesh;
+      const src = mesh.material as THREE.MeshStandardMaterial;
+      if (!mesh.isMesh || mesh.userData.overlay || !glass.has(src)) return;
+      const m = src.clone();
+      m.clippingPlanes = src.clippingPlanes;
+      paneGradient(m, mesh.geometry);
+      mesh.material = m;
+      list.push(m);
+    });
+    return list;
+  };
   const windows: TwinModel["windows"] = windowGroups(parts)
     .sort((a, b) => (a.parts[0].floor === b.parts[0].floor ? orderKey(a.parts[0], a.wall) - orderKey(b.parts[0], b.wall) : a.parts[0].floor < b.parts[0].floor ? -1 : 1))
-    .map((w) => {
+    .map((w, k) => {
       const floor = w.parts[0].floor;
       const old = regroup(root, w.parts);
       old.traverse((o) => {
@@ -214,6 +251,7 @@ export function buildTwin(scene: THREE.Group): TwinModel {
         mesh.material = kind === "frame" ? frame : kind === "glass" ? lowE : newSide(mesh.material as THREE.Material);
       });
       fresh.visible = false;
+      const panes = { old: ownGlass(old), fresh: ownGlass(fresh) };
       old.userData.special = true;
       fresh.userData.special = true;
       root.add(fresh);
@@ -221,7 +259,8 @@ export function buildTwin(scene: THREE.Group): TwinModel {
       addOverlay(old, oldHeat.get(key), overlays);
       addOverlay(fresh, newHeat.get(key), overlays);
       items.push({ obj: old, floor }, { obj: fresh, floor });
-      return { old, fresh, at: old.position.clone(), out: outward(w.wall), floor };
+      // 켜지는 기준은 황금비 수열 — 이웃한 창끼리 겹치지 않고 고르게 흩어진다
+      return { old, fresh, at: old.position.clone(), out: outward(w.wall), floor, lit: (k * 0.618034 + 0.31) % 1, cool: (k * 0.381966) % 1 < 0.28, glass: panes };
     });
 
   // 지붕 · 바닥판 · 발코니: 전후 같은 값
