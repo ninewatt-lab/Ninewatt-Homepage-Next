@@ -304,7 +304,8 @@ def split_exterior(footprint, walls):
         i = count.get(side, 0)
         count[side] = i + 1
         pieces.append({"name": side + letters(i), "side": side[0], "poly": part, "length": length})
-    interior = walls.difference(taken).buffer(0)
+    # 외벽 조각을 떼고 남은 바깥면 가장자리의 얇은 띠(두께 0~2 cm)는 버린다 — 외벽 바깥면과 같은 면에 겹쳐 얼룩(z-fighting)이 진다
+    interior = walls.difference(taken).buffer(-0.02, join_style=2).buffer(0.02, join_style=2)
     return pieces, interior
 
 
@@ -500,6 +501,11 @@ for fi, fl in enumerate(FLOORS):
 
     # 바닥 · 천장 · 지붕
     add(f"VIS_{F}_Floor_0", "floor1", key, extrude(footprint, z - 0.15, z))
+    # 겉모습: 위층 바닥 높이의 슬래브 띠(외벽면에서 3 cm), 옥상 파라펫 두겁(외벽 위 6 cm) — 에너지 입력에는 넣지 않는다
+    if top:
+        add("VIS_Roof_Coping", "trim", "roof", extrude(unary_union([p["poly"] for p in pieces]).buffer(0.025, join_style=2), z + top_ext, z + top_ext + 0.06))
+    else:
+        add(f"VIS_{F}_SlabBand", "band", key, extrude(footprint.buffer(0.03, join_style=2).difference(footprint), z + top_ext - 0.16, z + top_ext))
     add(f"VIS_{F}_ContinuousCeiling", "ceiling", key, extrude(unary_union(rooms), z + top_int, z + top_int + 0.03))
     exposed = 0.0
     if top:
@@ -541,10 +547,18 @@ for fi, fl in enumerate(FLOORS):
 
 # ── glb (v1 모델과 같은 노드 이름 · extras · 재질 이름) ──────────
 
+def srgb(hex_, alpha=1.0):
+    """#rrggbb (화면 색) → glTF baseColorFactor (선형)"""
+    c = [int(hex_[i:i + 2], 16) / 255 for i in (1, 3, 5)]
+    return [round(v / 12.92 if v <= 0.04045 else ((v + 0.055) / 1.055) ** 2.4, 4) for v in c] + [alpha]
+
+
+# 종류: (색, 알파 방식, 금속성, 거칠기) — 밝은 미장 벽에 짙은 금속(창틀 · 두겁) · 비치는 유리 · 짙은 옥상 (홈 히어로와 같은 색 계열)
 MATERIALS = {
-    "wall": ([0.86, 0.84, 0.80, 1], "OPAQUE"), "glass": ([0.62, 0.78, 0.84, 0.35], "BLEND"), "frame": ([0.42, 0.45, 0.47, 1], "OPAQUE"),
-    "sill": ([0.72, 0.70, 0.65, 1], "OPAQUE"), "floor1": ([0.74, 0.70, 0.63, 1], "OPAQUE"), "ceiling": ([0.94, 0.94, 0.93, 1], "OPAQUE"),
-    "roof": ([0.48, 0.51, 0.53, 1], "OPAQUE"), "door": ([0.55, 0.44, 0.33, 1], "OPAQUE"), "slab": ([0.48, 0.51, 0.53, 1], "OPAQUE"),
+    "wall": (srgb("#c9c4bb"), "OPAQUE", 0.0, 0.9), "glass": (srgb("#5d8e9c", 0.5), "BLEND", 0.8, 0.05), "frame": (srgb("#33403f"), "OPAQUE", 0.6, 0.35),
+    "sill": (srgb("#aeaaa2"), "OPAQUE", 0.0, 0.6), "floor1": (srgb("#a99f90"), "OPAQUE", 0.0, 0.8), "ceiling": (srgb("#dcdcd8"), "OPAQUE", 0.0, 0.9),
+    "roof": (srgb("#3a4b52"), "OPAQUE", 0.0, 0.85), "door": (srgb("#7a6049"), "OPAQUE", 0.0, 0.7), "slab": (srgb("#3a4b52"), "OPAQUE", 0.0, 0.85),
+    "trim": (srgb("#2f4047"), "OPAQUE", 0.5, 0.45), "band": (srgb("#a9a59d"), "OPAQUE", 0.0, 0.7),
 }
 
 
@@ -585,7 +599,7 @@ def write_glb(path):
         "scenes": [{"nodes": list(range(len(gnodes)))}],
         "nodes": gnodes,
         "meshes": meshes,
-        "materials": [{"name": k, "pbrMetallicRoughness": {"baseColorFactor": c, "metallicFactor": 0.0, "roughnessFactor": 0.85}, "alphaMode": mode, "doubleSided": True} for k, (c, mode) in MATERIALS.items()],
+        "materials": [{"name": k, "pbrMetallicRoughness": {"baseColorFactor": c, "metallicFactor": mt, "roughnessFactor": rg}, "alphaMode": mode, "doubleSided": True} for k, (c, mode, mt, rg) in MATERIALS.items()],
         "accessors": accessors,
         "bufferViews": views,
         "buffers": [{"byteLength": len(bin_)}],

@@ -230,6 +230,10 @@ cp $W/out/meta.json src/data/lab/ai-building-workspace-b-meta.json
 - 외벽은 같은 직선 위 모서리를 합쳐 방위 + 글자(SouthA …)로 이름 짓는다. 이름 규칙이 v1 모델과 같아(`VIS_F1_<방위…>`)
   `twinBuild.ts` 가 그대로 외단열 판 · 새 창 · 열화상 막을 만든다. 지붕은 평지붕 한 장(`VIS_Roof_Flat_0`).
 - 실 이름은 실 안의 한글 글자(치수 · 면적 표기 제외). 글자가 없으면 페이지에서 "실 n".
+- 겉모습: 재질은 `MATERIALS`(색 · 금속성 · 거칠기, 홈 히어로와 같은 색 계열 — 밝은 미장 벽 · 짙은 창틀 · 비치는 유리 · 짙은 옥상).
+  층 사이 외벽면에 슬래브 띠(`VIS_F<n>_SlabBand`, kind band), 옥상 파라펫 위에 두겁(`VIS_Roof_Coping`, kind trim)을 얹는다.
+  둘 다 env.json(에너지 입력)에는 들어가지 않고, 열화상을 켜면 숨긴다. 외벽 조각을 떼고 남는 4 cm 미만 내벽 조각은 버린다
+  (외벽 바깥면과 같은 면에 겹쳐 얼룩이 졌다).
 - `energy_idf.py` 는 env.json 에 `zones` · `window` 가 있으면 그것을 쓴다(층마다 바닥 · 층간 · 지붕, 용도별 재실 · 조명 · 설정 온도 —
   어린이집은 평일 7–19시, 난방 20/15 ℃ · 냉방 26/30 ℃). 없으면 건물 A 의 두 층 값 그대로라 A 결과는 바이트 단위로 같다(확인함).
 - 화면에 넣을 때: `src/components/lab/twin/buildings.ts` 에 건물을 추가하고(데이터 경로 · frame · stats · runs · pv · drawn · start),

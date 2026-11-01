@@ -31,6 +31,8 @@ export type TwinModel = {
   windows: { old: THREE.Group; fresh: THREE.Group; at: THREE.Vector3; out: THREE.Vector3; floor: Floor }[];
   pv: { group: THREE.Group; modules: THREE.Mesh[]; base: THREE.Vector3[]; normal: THREE.Vector3 } | null;
   overlays: THREE.Mesh[];
+  /** 슬래브 띠 · 파라펫 두겁 (자동 생성 건물의 겉모습 부품) — 열화상 막이 없어 열화상을 켜면 숨긴다 */
+  trims: THREE.Object3D[];
   glass: THREE.MeshStandardMaterial[];
   lamps: THREE.MeshBasicMaterial;
   /** 시나리오에 따라 색을 바꾸는 열화상 막 (외단열 판 · 새 창) 과 새 창 유리 */
@@ -241,7 +243,8 @@ export function buildTwin(scene: THREE.Group): TwinModel {
     items.push({ obj: top, floor: p.floor, ceiling: /Ceiling/.test(p.name) });
   }
 
-  return { root, plane, split, scan, walls, windows, pv: solar(root, parts, after, items), overlays, glass: [...glass], lamps, heat: { wall: wallHeat.made, shell: shellHeat.made, old: oldHeat.made, fresh: newHeat.made, roof: roofHeat, slab: slabHeat, floor: floorHeat }, freshGlass: lowE, items };
+  const trims = parts.filter((p) => p.kind === "band" || p.kind === "trim").map((p) => p.mesh);
+  return { root, plane, split, scan, walls, windows, pv: solar(root, parts, after, items), overlays, trims, glass: [...glass], lamps, heat: { wall: wallHeat.made, shell: shellHeat.made, old: oldHeat.made, fresh: newHeat.made, roof: roofHeat, slab: slabHeat, floor: floorHeat }, freshGlass: lowE, items };
 }
 
 /** EnergyPlus 면 이름과 같은 층 · 방위 키 (F1_N, F2_E, F3_S …) */
