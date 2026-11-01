@@ -8,11 +8,14 @@
 
 import { Canvas, useFrame, useThree, type ThreeEvent } from "@react-three/fiber";
 import { OrbitControls, PerformanceMonitor, useGLTF } from "@react-three/drei";
-import { createContext, useContext, useEffect, useMemo, useRef, useState, type RefObject } from "react";
+import { Suspense, createContext, useContext, useEffect, useMemo, useRef, useState, type RefObject } from "react";
 import * as THREE from "three";
 import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
 import Effects from "@/components/district/Effects";
+import { createSwayMaterial, tickSway } from "@/components/district/Life";
 import { Sky } from "@/components/hero/Atmosphere";
+import { useModelGeometry } from "@/components/hero/models";
+import { pavingTexture } from "@/components/hero/textures";
 import { SimContext, type Sim } from "@/components/hero/heroSim";
 import { buildTwin, type TwinModel } from "./twinBuild";
 import energy from "@/data/lab/ai-building-workspace-energy.json";
@@ -48,7 +51,7 @@ const TEAL = new THREE.Color("#49B6CA");
  * 카메라 자리는 건물 A 에서 맞춘 값을 가운데 기준으로 k 배 한다.
  */
 type Pose = { pos: THREE.Vector3; target: THREE.Vector3 };
-export type Frame = { center: THREE.Vector3; k: number; top: number; floorY: Partial<Record<TwinFloor, number>>; size: [number, number]; poses: Record<string, Pose> };
+export type Frame = { center: THREE.Vector3; k: number; top: number; floorY: Partial<Record<TwinFloor, number>>; box: [number, number]; size: [number, number]; poses: Record<string, Pose> };
 
 export function makeFrame(b: TwinBuilding): Frame {
   const { cx, cy, w, d, height, floors, levels } = b.frame;
@@ -65,6 +68,7 @@ export function makeFrame(b: TwinBuilding): Frame {
     k,
     top: height + 0.21,
     floorY,
+    box: [w, d],
     size: [w + 4 * k, d + 3 * k],
     poses: {
       plan: { pos: at(-1.25, 29, 19.9), target: look(0, 0.5) },
@@ -173,7 +177,70 @@ function Stage() {
         <ringGeometry args={[r - 0.15, r, 128]} />
         <meshBasicMaterial color={TEAL} transparent opacity={0.45} />
       </mesh>
+      <Site />
     </group>
+  );
+}
+
+/**
+ * 대지: 건물 둘레 포장 마당 + 뒤쪽 · 옆 나무 (홈 히어로와 같은 포장 무늬 · 나무 모델).
+ * 나무는 카메라가 오는 남동 · 남서 모서리를 비우고, 벽이 다 솟을 무렵 자란다.
+ */
+const SITE_MARGIN = 3;
+// 마당 가장자리 기준 자리 (−1~1, 북쪽이 −) · 크기
+const TREE_SPOTS: [number, number, number][] = [
+  [-1, -1, 1],
+  [-0.35, -1, 0.85],
+  [0.3, -1, 1.1],
+  [1, -1, 0.9],
+  [-1, -0.2, 0.8],
+  [1, -0.35, 0.95],
+];
+
+function Site() {
+  const f = useFrameInfo();
+  const sim = useSimTwin();
+  const trees = useRef<THREE.Group>(null);
+  const m = SITE_MARGIN * Math.sqrt(f.k);
+  const [w, d] = [f.box[0] + 2 * m, f.box[1] + 2 * m];
+  const paving = useMemo(() => pavingTexture([w / 3, d / 3]), [w, d]);
+  const spots = useMemo(
+    () => TREE_SPOTS.map(([u, v, s]): [number, number, number] => [f.center.x + u * (w / 2 - 0.9), f.center.z + v * (d / 2 - 0.9), s]),
+    [f, w, d],
+  );
+  useFrame(() => {
+    const g = trees.current;
+    if (!g) return;
+    const r = easeOut(span(sim.current.build, [0.7, 1]));
+    g.visible = r > 0.001;
+    g.scale.set(1, Math.max(r, 0.001), 1);
+  });
+  return (
+    <>
+      <mesh position={[f.center.x, -0.06, f.center.z]} receiveShadow>
+        <boxGeometry args={[w, 0.1, d]} />
+        <meshStandardMaterial map={paving} color="#8d9a9e" roughness={0.92} />
+      </mesh>
+      <group ref={trees}>
+        <Suspense fallback={null}>
+          <Trees spots={spots} />
+        </Suspense>
+      </group>
+    </>
+  );
+}
+
+function Trees({ spots }: { spots: [number, number, number][] }) {
+  const a = useModelGeometry("TreeA");
+  const b = useModelGeometry("TreeB");
+  const material = useMemo(() => createSwayMaterial(), []);
+  useFrame(({ clock }) => tickSway(material, clock.elapsedTime));
+  return (
+    <>
+      {spots.map(([x, z, s], i) => (
+        <mesh key={i} geometry={i % 3 === 1 ? b : a} material={material} position={[x, -0.01, z]} scale={1.8 * s} rotation={[0, i * 1.3, 0]} castShadow receiveShadow />
+      ))}
+    </>
   );
 }
 
@@ -417,6 +484,7 @@ function stepBuilding(m: TwinModel, s: TwinSim, v: View, hourly: HourlyData | nu
   m.scan.value = scanRef.value;
   const on = m.scan.value > -0.4;
   for (const o of m.overlays) o.visible = on;
+  for (const t of m.trims) t.visible = !on && !t.userData.hidden;
 
   // 밤: 창 안쪽 불빛 · 실내 조명
   for (const g of m.glass) g.emissive.copy(GLOW).multiplyScalar(s.dark * 0.55);
