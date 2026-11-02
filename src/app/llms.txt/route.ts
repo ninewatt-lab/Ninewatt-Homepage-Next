@@ -35,6 +35,7 @@ const LABELS: Record<string, string> = {
   "/solutions/watti": "Watti — 3D 건물에너지 분석·디지털트윈",
   "/solutions/opti": "Opti — AI 건물에너지 어드바이저",
   "/solutions/save-e": "Save-E — 전력사용량 분석·요금제 최적화",
+  "/solutions/green-remodeling": "그린리모델링 — 외피·설비·지붕·운영 리모델링별 진단·시공·절감 효과(EnergyPlus)",
   "/solutions/rnd": "R&D 수행 이력",
   "/solutions/global": "글로벌 사업 (일본·영국·프랑스·미국)",
   "/company": "회사 소개",

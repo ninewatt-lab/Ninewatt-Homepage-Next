@@ -26,6 +26,7 @@ const footerSections: FooterSection[] = [
       { label: "Opti", href: "/solutions/opti", isLiteral: true },
       { label: "Watti", href: "/solutions/watti", isLiteral: true },
       { label: "Save-E", href: "/solutions/save-e", isLiteral: true },
+      { label: "solutionsMenu.greenRemodeling", href: "/solutions/green-remodeling" },
       { label: "solutionsMenu.cases", href: "/solutions/cases" },
       { label: "solutionsMenu.rnd", href: "/solutions/rnd" },
       { label: "solutionsMenu.services", href: "/solutions/services" },

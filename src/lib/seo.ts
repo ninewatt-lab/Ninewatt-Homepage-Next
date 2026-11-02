@@ -95,6 +95,7 @@ export const ROUTES: readonly RouteDef[] = [
   { path: "/solutions/watti", priority: 0.7, freq: "monthly" },
   { path: "/solutions/opti", priority: 0.7, freq: "monthly" },
   { path: "/solutions/save-e", priority: 0.7, freq: "monthly" },
+  { path: "/solutions/green-remodeling", priority: 0.8, freq: "monthly" },
   { path: "/solutions/rnd", priority: 0.6, freq: "monthly" },
   { path: "/solutions/global", priority: 0.6, freq: "monthly" },
 

@@ -1,0 +1,135 @@
+{
+  "meta": {
+    "title": "Green Remodeling | Ninewatt",
+    "description": "Envelope, systems, roof and operations — follow each type of remodeling from diagnosis to retrofit in 3D, with savings calculated in EnergyPlus."
+  },
+  "hero": {
+    "kicker": "Green Remodeling",
+    "title": "Know the savings<br></br>before you remodel",
+    "subtitle": "Pick a building and follow it from diagnosis to retrofit. Savings calculated in EnergyPlus add up at each step.",
+    "upTo": "Primary energy −{pct}%",
+    "hint": "Click a building or its label to start the retrofit"
+  },
+  "buildings": {
+    "envelope": {
+      "name": "Envelope",
+      "place": "Daycare · 3F",
+      "short": "Insulation · windows · shading",
+      "title": "External insulation · high-performance windows · shading",
+      "desc": "Stops heat escaping through walls and windows — usually the first measure for older, heating-heavy low-rise buildings."
+    },
+    "systems": {
+      "name": "Systems",
+      "place": "Community center · 2F",
+      "short": "Heat pump · ventilation · LED",
+      "title": "Heat pump · heat-recovery ventilation · LED",
+      "desc": "Produces the same heat and light with less energy. Works well even where the envelope is hard to change."
+    },
+    "roof": {
+      "name": "Roof · renewables",
+      "place": "Library · 2F",
+      "short": "Roof insulation · solar",
+      "title": "Roof insulation · cool roof · solar PV",
+      "desc": "A large roof leaks heat — and is the best place for a power plant. Insulate it, then generate the building's own electricity."
+    },
+    "operations": {
+      "name": "Operations",
+      "place": "Office · 6F",
+      "short": "BEMS · remote metering",
+      "title": "Optimized operation with BEMS",
+      "desc": "Savings without construction: metering data reveals waste, and BEMS manages HVAC, standby power and lighting automatically."
+    }
+  },
+  "steps": {
+    "scan": {
+      "envelope": { "title": "Thermal imaging", "desc": "Find where the walls leak heat. Slab edges (thermal bridges) and window frames show up hottest." },
+      "systems": { "title": "Systems audit", "desc": "Check the efficiency of the old boiler and AC units, the ventilation and the lighting load." },
+      "roof": { "title": "Roof thermal scan", "desc": "Find a roof that bakes in summer and loses heat in winter." },
+      "operations": { "title": "Metering · sensors", "desc": "Power and HVAC meters on every floor show when and where energy is wasted." }
+    },
+    "insulation": { "title": "External insulation", "desc": "Wrap the walls from outside with 100 mm phenolic foam boards to close the paths heat escapes through." },
+    "windows": { "title": "High-performance windows", "desc": "Low-E double glazing in insulated frames cuts the heat moving through the windows." },
+    "shading": { "title": "External shading", "desc": "Louvers come down when summer sun is strong to cut cooling, and let winter sun in." },
+    "heatpump": { "title": "Heat pump", "desc": "Replace the old gas boiler and AC units with air-source heat pumps that make the same heat with less energy." },
+    "erv": { "title": "Heat-recovery ventilation", "desc": "Transfer heat from outgoing air to incoming fresh air, so ventilation loses less heat." },
+    "led": { "title": "LED lighting", "desc": "Replace fluorescent lamps with LEDs and halve the lighting load." },
+    "roofIns": { "title": "Roof insulation · cool roof", "desc": "Lay insulation on the roof and cover it with a bright, sun-reflecting finish." },
+    "pv": { "title": "Solar PV", "desc": "Put solar modules on the roof to generate the electricity the building uses." },
+    "schedule": { "title": "Run hours · set points", "desc": "Run HVAC to the occupied hours and set 20 °C heating · 26 °C cooling." },
+    "standby": { "title": "Standby power cut-off", "desc": "Find equipment left on after hours, floor by floor, and switch it off." },
+    "lighting": { "title": "Automatic lighting control", "desc": "Switch off lights automatically in empty hours and areas." }
+  },
+  "uses": {
+    "heating": "Heating",
+    "cooling": "Cooling",
+    "lighting": "Lighting",
+    "equipment": "Plug loads",
+    "pv": "Solar"
+  },
+  "panel": {
+    "primary": "Primary energy saved",
+    "co2": "CO₂ reduced",
+    "co2Unit": "tCO₂/yr",
+    "primaryLine": "Primary energy {before} → {now} kWh/m²·yr",
+    "byUse": "Energy by use (light bar = before)",
+    "pvLine": "{kw} kW · {mwh} MWh/yr",
+    "waiting": "Getting ready",
+    "running": "In progress {pct}%",
+    "done": "Complete",
+    "stepDone": "Done",
+    "stepWaiting": "Waiting",
+    "replay": "Replay",
+    "contact": "Contact us",
+    "close": "Close",
+    "footnote": "Example buildings recalculated after each step with Seoul weather (EnergyPlus 9.0). Results for a real building depend on its diagnosis."
+  },
+  "types": {
+    "kicker": "Four kinds of green remodeling",
+    "title": "Every building saves in a different place",
+    "desc": "The same budget saves very different amounts depending on what you fix. Ninewatt uses data to find the right combination for each building.",
+    "view": "View in 3D",
+    "saving": "Primary energy",
+    "co2": "{t} tCO₂/yr less"
+  },
+  "process": {
+    "kicker": "How we work",
+    "title": "Data from diagnosis to verification",
+    "items": [
+      { "title": "Survey · diagnosis", "desc": "A 72-item site survey and energy-use data reveal the building's condition and where it wastes energy." },
+      { "title": "Simulation · priorities", "desc": "GreenPlanner and EnergyPlus compare measures and pick the combination with the best return." },
+      { "title": "Programs · funding", "desc": "We prepare plans that fit public green remodeling programs and private-sector interest-subsidy schemes." },
+      { "title": "Verification with BEMS", "desc": "After the work, BEMS measures real use to confirm the planned savings — and keeps saving in operation." }
+    ]
+  },
+  "cases": {
+    "kicker": "Track record",
+    "title": "Working on public green remodeling programs",
+    "items": [
+      { "title": "Green remodeling advanced-technology planning and pilot (GRAI)", "client": "Korea Authority of Land & Infrastructure Safety", "period": "2025", "desc": "Platform for energy and carbon analysis of public buildings, retrofit prioritization, scenario simulation and AI envelope analysis" },
+      { "title": "Public-building green remodeling program support", "client": "Korea Authority of Land & Infrastructure Safety", "period": "2023–2025", "desc": "Data and analysis support across the public green remodeling program" },
+      { "title": "Site-survey platform for mandatory green remodeling", "client": "Korea Real Estate Board", "period": "2026", "desc": "Status map and dashboard of target buildings, 72-item site survey input and result management" },
+      { "title": "Consulting for the private green remodeling interest subsidy", "client": "Korea Authority of Land & Infrastructure Safety", "period": "2026", "desc": "Consulting for the interest-subsidy program for private buildings" },
+      { "title": "Gyeonggi Climate Platform — green remodeling simulation", "client": "Gyeonggi Province", "period": "", "desc": "Select a building on a 3D map for thermal analysis and automatic solar yield and payback estimates" },
+      { "title": "Regional carbon-emission visualization system", "client": "Korea Institute of Civil Engineering and Building Technology", "period": "2024–2025", "desc": "3D map of building and road emissions with energy diagnosis and green remodeling simulation" }
+    ],
+    "more": "All projects"
+  },
+  "method": {
+    "kicker": "Method",
+    "title": "Where the numbers come from",
+    "desc": "The four buildings are examples, not real buildings. With the same Seoul weather (2009–2023 typical year), each retrofit step was added in turn and a full year simulated in EnergyPlus 9.0.",
+    "items": [
+      "Primary energy uses Korea's building energy rating factors (electricity 2.75 · gas 1.1); carbon uses 0.4781 (electricity) · 0.2022 (LNG) kgCO₂/kWh.",
+      "Before: old walls (U 1.4 W/m²K), windows (4.0), roof (0.8), gas boiler efficiency 80–85%, cooling COP 2.6–3.0, fluorescent lighting 12 W/m².",
+      "After: 100 mm phenolic external insulation, Low-E double glazing (1.5), roof U 0.15 with reflective finish, heat pump (heating COP 3.2 · cooling 4.0), 70% heat recovery, LED 6 W/m², solar on 45% of the roof.",
+      "Operations (BEMS): HVAC running 1 h before and 2 h after occupied hours trimmed to the occupied hours, set points 22/24 °C → 20/26 °C, after-hours standby 30% → 15%, lights left on 20% → 5%.",
+      "Improved airtightness from new windows is not counted (conservative), and fan and pump energy is excluded."
+    ]
+  },
+  "cta": {
+    "title": "How much could your building save?",
+    "desc": "Share your building details and energy use, and we'll find the right combination through diagnosis and simulation.",
+    "contact": "Ask about green remodeling",
+    "planner": "See GreenPlanner"
+  }
+}
