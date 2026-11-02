@@ -12,7 +12,7 @@ import { Suspense, useMemo, useRef } from "react";
 import * as THREE from "three";
 import { useModelGeometry, useModelMaterial } from "@/components/hero/models";
 import { GR_SPECS, LAMP_COOL, LAMP_WARM, easeOut, hash01, occupancyAt, phaseAt, piece, specHeight, useGrSim, type GrSim } from "./grModel";
-import { Shell, flush, makeFaces, useWindowLights, windowSlots, type WindowSlot } from "./Shell";
+import { Shell, flush, makeFaces, useWindowLights, windowSlots, type ShellOptions, type WindowSlot } from "./Shell";
 
 const S = GR_SPECS.systems;
 const TOP = specHeight(S);
@@ -24,6 +24,8 @@ const UNIT_X = [0.05, 0.3, 0.55, 0.8];
 const UNIT_Z = 0.3;
 const ERV = { x: -0.6, z: -0.2, w: 0.34, h: 0.14, d: 0.22 };
 const HOT = new THREE.Color("#ff5a2a");
+/** 1층 남쪽은 민원실 통유리, 가운데 입구 캐노피 */
+const OPTS: ShellOptions = { groundGlass: ["S"], canopy: { face: "S", bay: 3, bays: 2 } };
 
 type Tmp = { m: THREE.Matrix4; p: THREE.Vector3; q: THREE.Quaternion; s: THREE.Vector3; r: THREE.Matrix4; c: THREE.Color };
 
@@ -164,7 +166,7 @@ function tickSystems(st: SystemsState, s: GrSim, time: number) {
 export default function Systems() {
   const sim = useGrSim();
   const faces = useMemo(() => makeFaces(S), []);
-  const slots = useMemo(() => windowSlots(S, faces), [faces]);
+  const slots = useMemo(() => windowSlots(S, faces, OPTS), [faces]);
   const lights = useWindowLights(S, slots);
   const old = useRef<THREE.Group>(null);
   const units = useRef<THREE.Group>(null);
@@ -183,7 +185,7 @@ export default function Systems() {
 
   return (
     <group position={[S.x, 0, S.z]}>
-      <Shell s={S} faces={faces} slots={slots} />
+      <Shell s={S} faces={faces} slots={slots} opts={OPTS} />
       <primitive object={lights} />
 
       {/* 헌 실외기 */}

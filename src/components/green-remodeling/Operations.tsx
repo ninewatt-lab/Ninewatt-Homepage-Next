@@ -10,8 +10,8 @@ import { useFrame } from "@react-three/fiber";
 import { useMemo, useRef } from "react";
 import * as THREE from "three";
 import { mergeGeometries } from "three/examples/jsm/utils/BufferGeometryUtils.js";
-import { GR_SPECS, LAMP_WARM, hash01, occupancyAt, phaseAt, specHeight, useGrSim } from "./grModel";
-import { Shell, makeFaces, paintLights, useWindowLights, windowSlots } from "./Shell";
+import { GR_SPECS, hash01, occupancyAt, phaseAt, specHeight, useGrSim } from "./grModel";
+import { Curtain, curtainLightMaterial, setCurtainLights } from "./Curtain";
 
 const S = GR_SPECS.operations;
 const TOP = specHeight(S);
@@ -27,9 +27,7 @@ type Tmp = { m: THREE.Matrix4; p: THREE.Vector3; q: THREE.Quaternion; s: THREE.V
 
 export default function Operations() {
   const sim = useGrSim();
-  const faces = useMemo(() => makeFaces(S), []);
-  const slots = useMemo(() => windowSlots(S, faces), [faces]);
-  const lights = useWindowLights(S, slots);
+  const lights = useMemo(() => curtainLightMaterial(S), []);
   const bands = useRef<THREE.InstancedMesh>(null);
   const sensors = useRef<THREE.InstancedMesh>(null);
   const pulses = useRef<THREE.InstancedMesh>(null);
@@ -116,26 +114,13 @@ export default function Operations() {
       if (pulses.current.instanceColor) pulses.current.instanceColor.needsUpdate = true;
     }
 
-    // 창 불빛: 시공 전엔 사람이 없어도 켜 둔 창이 많다(밤에 45%) → 조명 자동 소등 단계에서 꺼진다
-    const occ = occupancyAt(s.hour);
-    const lightFix = ph.steps[2];
-    paintLights(
-      lights,
-      slots,
-      (w, c) => {
-        const h = hash01(w.index, 13);
-        const leftOn = h < 0.45 && h > occ ? 1 - THREE.MathUtils.smoothstep(lightFix, w.order * 0.7, w.order * 0.7 + 0.3) : 0;
-        const lit = Math.max(THREE.MathUtils.smoothstep(occ, h - 0.05, h + 0.05), leftOn);
-        return c.copy(LAMP_WARM).multiplyScalar(s.dark * (0.05 + 0.75 * lit));
-      },
-      tmp.c,
-    );
+    // 창 불빛: 시공 전엔 사람이 없어도 켜 둔 칸이 많다(45%) → 조명 자동 소등 단계에서 5%로 줄어든다
+    setCurtainLights(lights, occupancyAt(s.hour), 0.45 - 0.4 * ph.steps[2], s.dark);
   });
 
   return (
     <group position={[S.x, 0, S.z]}>
-      <Shell s={S} faces={faces} slots={slots} old={false} wallColor="#b7bbbb" />
-      <primitive object={lights} />
+      <Curtain s={S} lights={lights} />
       <instancedMesh ref={bands} args={[bandGeo, undefined, S.floors]} frustumCulled={false} renderOrder={3}>
         <meshBasicMaterial transparent opacity={0.9} blending={THREE.AdditiveBlending} depthWrite={false} toneMapped={false} side={THREE.DoubleSide} />
       </instancedMesh>
