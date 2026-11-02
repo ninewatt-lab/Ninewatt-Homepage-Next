@@ -46,6 +46,7 @@ const format = (locale: string) => (n: number, d = 0) => n.toLocaleString(locale
 
 export default function GRSection() {
   const t = useTranslations("greenRemodeling");
+  const tc = useTranslations("common");
   const fmt = format(useLocale());
   const sectionRef = useRef<HTMLElement>(null);
   const frozen = useSyncExternalStore(subscribeReduce, getReduce, getReduceServer);
@@ -139,6 +140,20 @@ export default function GRSection() {
                 <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-[#050d13] via-[#050d13]/75 via-35% to-transparent to-60% wide:hidden" />
                 {/* 건물 이름표 */}
                 <div className={`pointer-events-none absolute inset-0 transition-opacity duration-500 ${ready && !focus ? "opacity-100" : "invisible opacity-0"}`}>
+                  {(["sharedEss", "peakEss"] as const).map((k) => (
+                    <Link
+                      key={k}
+                      ref={(el) => {
+                        chips.current[k] = el;
+                      }}
+                      href={k === "sharedEss" ? "/product/shared-ess" : "/product/peak-ess"}
+                      data-gr-ui
+                      className="pointer-events-auto absolute left-0 top-0 flex items-center gap-1.5 whitespace-nowrap rounded-full border border-amber-200/25 bg-[#07141b]/80 px-2.5 py-1 text-[11px] font-semibold text-white/85 shadow-lg shadow-black/30 backdrop-blur-sm transition-colors hover:border-amber-200/60 hover:text-white"
+                    >
+                      <span className="h-1.5 w-1.5 rounded-full bg-amber-300" aria-hidden="true" />
+                      {tc(k === "sharedEss" ? "productMenu.sharedEssLabel" : "productMenu.peakEssLabel")}
+                    </Link>
+                  ))}
                   {GR_ORDER.map((k) => {
                     const done = snap[k] >= 1;
                     const pct = savingAt(k, snap[k]).pct;

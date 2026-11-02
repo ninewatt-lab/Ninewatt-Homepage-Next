@@ -374,7 +374,7 @@ function CabinetBoxes({ positions, scale }: { positions: THREE.Vector3[]; scale:
   );
 }
 
-function Cabinets({ positions, scale = 0.1 }: { positions: THREE.Vector3[]; scale?: number }) {
+export function Cabinets({ positions, scale = 0.1 }: { positions: THREE.Vector3[]; scale?: number }) {
   return (
     <Suspense fallback={<CabinetBoxes positions={positions} scale={scale} />}>
       <CabinetModels positions={positions} scale={scale} />
@@ -382,7 +382,7 @@ function Cabinets({ positions, scale = 0.1 }: { positions: THREE.Vector3[]; scal
   );
 }
 
-function FencedPad({ x, z, w, d, color = "#b4bbbc" }: { x: number; z: number; w: number; d: number; color?: string }) {
+export function FencedPad({ x, z, w, d, color = "#b4bbbc" }: { x: number; z: number; w: number; d: number; color?: string }) {
   const fence = useMemo(() => ({ long: fenceTexture(Math.round(w * 30)), short: fenceTexture(Math.round(d * 30)) }), [w, d]);
   const posts = useMemo(() => {
     const list: THREE.Matrix4[] = [];
