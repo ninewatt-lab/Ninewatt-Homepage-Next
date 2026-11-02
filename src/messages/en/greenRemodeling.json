@@ -5,7 +5,7 @@
   },
   "hero": {
     "kicker": "Green Remodeling",
-    "title": "Know the savings<br></br>before you remodel",
+    "title": "Tailored green<br></br>remodeling solutions",
     "subtitle": "Pick a building and follow it from diagnosis to retrofit. Savings calculated in EnergyPlus add up at each step.",
     "upTo": "Primary energy −{pct}%",
     "hint": "Click a building or its label to start the retrofit"

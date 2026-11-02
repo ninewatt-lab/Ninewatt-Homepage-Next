@@ -172,10 +172,10 @@ export default function GRSection() {
 
       {/* 제목 (확대 중에는 넓은 화면에서 비켜 준다) */}
       <div className="pointer-events-none relative z-10 mx-auto flex h-full max-w-7xl flex-col justify-end px-6 pb-6 pt-[7.5rem] sm:pb-10 sm:pt-[8.5rem] wide:justify-center wide:pb-0 lg:px-10">
-        <div className={`max-w-md transition-opacity duration-500 ${focus ? "invisible opacity-0" : "opacity-100"}`}>
+        <div className={`max-w-md lg:max-w-xl transition-opacity duration-500 ${focus ? "invisible opacity-0" : "opacity-100"}`}>
           <p className="text-sm font-semibold text-primary-light">{t("hero.kicker")}</p>
           <h1 className="mt-3 text-3xl font-bold leading-tight tracking-tight sm:text-4xl md:text-5xl">{t.rich("hero.title", { br: () => <br /> })}</h1>
-          <p className="mt-3 hidden text-sm leading-relaxed text-white/65 sm:block sm:text-base md:text-lg">{t("hero.subtitle")}</p>
+          <p className="mt-3 hidden max-w-md text-sm leading-relaxed text-white/65 sm:block sm:text-base md:text-lg">{t("hero.subtitle")}</p>
           <div data-gr-ui className="pointer-events-auto mt-5 grid max-w-sm grid-cols-2 gap-2">
             {GR_ORDER.map((k) => (
               <button

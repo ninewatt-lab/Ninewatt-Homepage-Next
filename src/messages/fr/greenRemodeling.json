@@ -5,7 +5,7 @@
   },
   "hero": {
     "kicker": "Green Remodeling",
-    "title": "Voir les économies<br></br>avant les travaux",
+    "title": "La rénovation verte<br></br>sur mesure",
     "subtitle": "Choisissez un bâtiment et suivez-le du diagnostic aux travaux. Les économies calculées par EnergyPlus s'additionnent à chaque étape.",
     "upTo": "Énergie primaire −{pct}\u00a0%",
     "hint": "Cliquez sur un bâtiment ou son étiquette pour lancer les travaux"
