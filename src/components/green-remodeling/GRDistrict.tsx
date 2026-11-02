@@ -23,7 +23,7 @@ import { ContactShadows, Roads, StreetTrees, grassTexture } from "@/components/d
 import { useModelGeometry } from "@/components/hero/models";
 import { PV_PEAK_KW } from "@/components/hero/heroSim";
 import { pavingTexture, pvTexture } from "@/components/hero/textures";
-import { GR_SPECS, easeOut, phaseAt, piece, useGrSim } from "./grModel";
+import { GR_SPECS, easeOut, essMode, phaseAt, piece, useGrSim } from "./grModel";
 
 const Y = 0.04; // 블록 바닥(보도 · 마당) 높이 — 도로(0.03)보다 조금 높다
 const CAR = 0.13;
@@ -435,7 +435,7 @@ function makePath(pts: [number, number, number][], peak = false): FlowPath {
 
 /**
  * 에너지 흐름 (빛나는 점):
- *  공유형 ESS → 보도 아래 배전선을 따라 네 건물로 (낮에는 태양광 남는 전기를 모으고, 저녁에 나눠 쓴다 — 늘 천천히)
+ *  공유형 ESS ↔ 보도 아래 배전선 ↔ 네 건물: 낮에는 건물 태양광의 남는 전기가 ESS 로 모이고, 저녁에는 건물로 나간다
  *  피크저감 ESS ↔ 업무 빌딩: 낮(10~18시)에는 빌딩으로 방전, 밤(22~7시)에는 거꾸로 충전, 그 밖에는 쉰다
  */
 const FLOW_PATHS: FlowPath[] = (() => {
@@ -472,23 +472,19 @@ const FLOW_PATHS: FlowPath[] = (() => {
 const PER_PATH = 6;
 const FLOW_TMP = { m: new THREE.Matrix4(), p: new THREE.Vector3(), q: new THREE.Quaternion(), s: new THREE.Vector3() };
 
-/** 피크저감 ESS 흐름: +1 방전(→ 빌딩) · −1 충전(← 빌딩) · 0 쉼 */
-function peakMode(hour: number) {
-  if (hour >= 10 && hour < 18) return 1;
-  if (hour >= 22 || hour < 7) return -1;
-  return 0;
-}
-
+/** 흐름 방향 · 세기는 essMode 시간표를 따른다 (패널의 "지금" 상태와 같다) */
 function stepFlow(mesh: THREE.InstancedMesh, time: number, hour: number) {
   const t = FLOW_TMP;
-  const mode = peakMode(hour);
+  const peak = essMode("peakEss", hour);
+  const shared = essMode("sharedEss", hour);
   let i = 0;
   FLOW_PATHS.forEach((path, pi) => {
-    const speed = path.peak ? 0.35 : 0.05;
-    const amount = path.peak ? Math.abs(mode) : 1;
+    const mode = path.peak ? peak : shared;
+    const speed = path.peak ? 0.35 : 0.08;
+    const amount = Math.abs(mode);
     for (let k = 0; k < PER_PATH; k++) {
       let u = (time * speed + k / PER_PATH + pi * 0.17) % 1;
-      if (path.peak && mode < 0) u = 1 - u;
+      if (mode < 0) u = 1 - u;
       const d = u * path.total;
       let j = 1;
       while (j < path.lengths.length - 1 && path.lengths[j] < d) j++;

@@ -20,7 +20,7 @@ import { GlossTicker } from "./gloss";
 import Operations from "./Operations";
 import RoofBuilding from "./RoofBuilding";
 import Systems from "./Systems";
-import { GR_ORDER, GR_SPECS, GrSimContext, ease, specHeight, stepGrSim, useGrSim, type GrKey, type GrSim } from "./grModel";
+import { GR_ORDER, GR_SPECS, GrSimContext, ease, isBuilding, specHeight, stepGrSim, useGrSim, type FacilityKey, type Focus, type GrKey, type GrSim } from "./grModel";
 
 const BG = "#050d13";
 
@@ -52,13 +52,23 @@ function setCursor(v: string) {
   document.body.style.cursor = v;
 }
 
-/** 건물 몸체를 덮는 보이지 않는 상자 — 누르면 그 건물로 간다 */
-function Picker({ k, onSelect }: { k: GrKey; onSelect: (k: GrKey) => void }) {
-  const s = GR_SPECS[k];
-  const h = specHeight(s);
+/** 누를 수 있는 상자 (건물 몸체 · ESS 패드를 덮는다) */
+function pickBox(k: Focus): [number, number, number, number, number, number] {
+  if (isBuilding(k)) {
+    const s = GR_SPECS[k];
+    const h = specHeight(s);
+    return [s.x, h / 2, s.z, s.w + 0.1, h + 0.25, s.d + 0.1];
+  }
+  const p = k === "sharedEss" ? SHARED_ESS : PEAK_ESS;
+  return [p.x, 0.3, p.z, p.w, 0.6, p.d];
+}
+
+/** 보이지 않는 상자 — 누르면 그 건물 · 설비로 간다 */
+function Picker({ k, onSelect }: { k: Focus; onSelect: (k: Focus) => void }) {
+  const [x, y, z, w, h, d] = pickBox(k);
   return (
     <mesh
-      position={[s.x, h / 2, s.z]}
+      position={[x, y, z]}
       onClick={(e: ThreeEvent<MouseEvent>) => {
         if (e.delta > 6) return;
         e.stopPropagation();
@@ -70,7 +80,7 @@ function Picker({ k, onSelect }: { k: GrKey; onSelect: (k: GrKey) => void }) {
       }}
       onPointerOut={() => setCursor("")}
     >
-      <boxGeometry args={[s.w + 0.1, h + 0.25, s.d + 0.1]} />
+      <boxGeometry args={[w, h, d]} />
       <meshBasicMaterial visible={false} />
     </mesh>
   );
@@ -80,26 +90,36 @@ function Picker({ k, onSelect }: { k: GrKey; onSelect: (k: GrKey) => void }) {
 
 const OVERVIEW = { target: new THREE.Vector3(0.3, 0.6, 0.4), dir: new THREE.Vector3(0.45, 0.72, 0.85).normalize(), dist: 41 };
 // 남 · 동 면이 보이게 남동쪽에서. 지붕 건물은 지붕이 보이게 더 위에서
-const FOCUS_DIR: Record<GrKey, THREE.Vector3> = {
+const FOCUS_DIR: Record<Focus, THREE.Vector3> = {
   envelope: new THREE.Vector3(0.75, 0.38, 0.95).normalize(),
   systems: new THREE.Vector3(0.7, 0.7, 0.9).normalize(),
   roof: new THREE.Vector3(0.55, 1.1, 0.9).normalize(),
   operations: new THREE.Vector3(0.8, 0.42, 0.9).normalize(),
+  // ESS: 설비 · 이어진 건물이 함께 보이게 조금 위에서
+  peakEss: new THREE.Vector3(0.75, 0.62, 0.95).normalize(),
+  sharedEss: new THREE.Vector3(0.45, 0.85, 0.95).normalize(),
 };
-const FOCUS_DIST: Record<GrKey, number> = { envelope: 8, systems: 11, roof: 12, operations: 11.5 };
+const FOCUS_DIST: Record<Focus, number> = { envelope: 8, systems: 11, roof: 12, operations: 11.5, peakEss: 8.5, sharedEss: 9 };
 
 // 주민센터는 옆 주차장 카포트 태양광까지 함께 보이게 바라볼 점을 동쪽으로 옮긴다
 const FOCUS_SHIFT: Partial<Record<GrKey, number>> = { systems: 2.4 };
 
-function focusTarget(k: GrKey) {
+// ESS 를 볼 때 바라볼 점: 피크저감은 빌딩 쪽으로, 공유형은 주민센터 쪽으로 조금 (흐름이 이어지는 건물이 같이 보이게)
+const FACILITY_TARGET: Record<FacilityKey, THREE.Vector3> = {
+  peakEss: new THREE.Vector3(PEAK_ESS.x - 0.6, 0.6, PEAK_ESS.z),
+  sharedEss: new THREE.Vector3(SHARED_ESS.x + 0.2, 0.3, SHARED_ESS.z - 1.4),
+};
+
+function focusTarget(k: Focus) {
+  if (!isBuilding(k)) return FACILITY_TARGET[k];
   const s = GR_SPECS[k];
   return new THREE.Vector3(s.x + (FOCUS_SHIFT[k] ?? 0), specHeight(s) * (k === "roof" ? 0.6 : 0.45), s.z);
 }
 
-function Rig({ focus, frozen }: { focus: GrKey | null; frozen: boolean }) {
+function Rig({ focus, frozen }: { focus: Focus | null; frozen: boolean }) {
   const invalidate = useThree((s) => s.invalidate);
   const progress = useRef(0);
-  const last = useRef<GrKey | null>(null);
+  const last = useRef<Focus | null>(null);
   const pointer = useRef({ x: 0, sx: 0 });
   const lastOffset = useRef("");
   const tmp = useMemo(() => ({ pos: new THREE.Vector3(), look: new THREE.Vector3(), a: new THREE.Vector3(), b: new THREE.Vector3(), dir: new THREE.Vector3() }), []);
@@ -162,8 +182,7 @@ function Rig({ focus, frozen }: { focus: GrKey | null; frozen: boolean }) {
 
 /* ── 이름표 (화면 좌표로 옮긴다) ─────────────────────────────────── */
 
-export type FacilityKey = "sharedEss" | "peakEss";
-export type ChipNodes = Partial<Record<GrKey | FacilityKey, HTMLElement | null>>;
+export type ChipNodes = Partial<Record<Focus, HTMLElement | null>>;
 
 /** ESS 이름표 자리 (설비 위) */
 const FACILITY_ANCHORS: Record<FacilityKey, [number, number, number]> = {
@@ -172,7 +191,7 @@ const FACILITY_ANCHORS: Record<FacilityKey, [number, number, number]> = {
 };
 
 function placeChips(chips: ChipNodes, camera: THREE.Camera, size: { width: number; height: number }, v: THREE.Vector3) {
-  const anchors: [GrKey | FacilityKey, number, number, number][] = [
+  const anchors: [Focus, number, number, number][] = [
     ...GR_ORDER.map((k): [GrKey, number, number, number] => [k, GR_SPECS[k].x, specHeight(GR_SPECS[k]) + 0.35, GR_SPECS[k].z]),
     ...(Object.entries(FACILITY_ANCHORS) as [FacilityKey, [number, number, number]][]).map(([k, p]): [FacilityKey, number, number, number] => [k, ...p]),
   ];
@@ -207,8 +226,8 @@ export default function GRScene({
   overlay,
 }: {
   simRef: RefObject<GrSim>;
-  focus: GrKey | null;
-  onSelect: (k: GrKey | null) => void;
+  focus: Focus | null;
+  onSelect: (k: Focus | null) => void;
   chips: RefObject<ChipNodes>;
   active: boolean;
   frozen: boolean;
@@ -259,6 +278,9 @@ export default function GRScene({
           <RoofBuilding />
           <Operations />
           {GR_ORDER.map((k) => (
+            <Picker key={k} k={k} onSelect={onSelect} />
+          ))}
+          {(["sharedEss", "peakEss"] as const).map((k) => (
             <Picker key={k} k={k} onSelect={onSelect} />
           ))}
           <Rig focus={focus} frozen={frozen} />

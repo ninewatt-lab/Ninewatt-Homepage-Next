@@ -8,7 +8,7 @@
 import { createContext, useContext, type RefObject } from "react";
 import * as THREE from "three";
 import { PV_PEAK_KW, daylight } from "@/components/hero/heroSim";
-import { GR_ENERGY, type GrKey } from "./grData";
+import { GR_ENERGY, GR_ORDER, type GrKey } from "./grData";
 
 export { GR_ENERGY, GR_FACTORS, GR_ORDER, type GrEnergy, type GrKey } from "./grData";
 
@@ -134,6 +134,28 @@ export function stepGrSim(sim: GrSim, delta: number, frozen: boolean) {
 
 export const GrSimContext = createContext<RefObject<GrSim> | null>(null);
 export const useGrSim = () => useContext(GrSimContext)!;
+
+/* ── ESS (배경 설비, 눌러서 설명을 본다) ───────────────────────────── */
+
+export type FacilityKey = "sharedEss" | "peakEss";
+export const FACILITY_ORDER: FacilityKey[] = ["peakEss", "sharedEss"];
+/** 확대 대상: 시공하는 건물 넷 + ESS 둘 */
+export type Focus = GrKey | FacilityKey;
+export const isBuilding = (k: Focus): k is GrKey => (GR_ORDER as string[]).includes(k);
+
+/** 시간대별 운전 (설명용): +1 방전 · 공급 → 건물, −1 충전, 0 대기 */
+export function essMode(k: FacilityKey, hour: number) {
+  if (k === "peakEss") {
+    // 낮 피크 시간에 빌딩으로 방전, 심야 경부하 시간에 충전
+    if (hour >= 10 && hour < 18) return 1;
+    if (hour >= 22 || hour < 7) return -1;
+    return 0;
+  }
+  // 공유형: 낮에 지역 태양광의 남는 전기를 모으고, 저녁에 네 건물로 나눠 보낸다
+  if (hour >= 10 && hour < 16) return -1;
+  if (hour >= 17 && hour < 23) return 1;
+  return 0;
+}
 
 /* ── 창 불빛 ──────────────────────────────────────────────────────── */
 

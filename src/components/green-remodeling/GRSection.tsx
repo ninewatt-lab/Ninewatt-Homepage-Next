@@ -12,7 +12,7 @@ import { Component, useCallback, useEffect, useRef, useState, useSyncExternalSto
 import { Link } from "@/i18n/navigation";
 import type { ChipNodes } from "./GRScene";
 import { FOCUS_EVENT } from "./ViewIn3D";
-import { GR_ENERGY, GR_ORDER, createGrSim, phaseAt, savingAt, type GrKey, type GrSim } from "./grModel";
+import { FACILITY_ORDER, GR_ENERGY, GR_ORDER, createGrSim, essMode, isBuilding, phaseAt, savingAt, type FacilityKey, type Focus, type GrKey, type GrSim } from "./grModel";
 
 const GRScene = dynamic(() => import("./GRScene"), { ssr: false });
 
@@ -55,7 +55,7 @@ export default function GRSection() {
   const chips = useRef<ChipNodes>({});
   const [ready, setReady] = useState(false);
   const [visible, setVisible] = useState(true);
-  const [focus, setFocus] = useState<GrKey | null>(null);
+  const [focus, setFocus] = useState<Focus | null>(null);
   const [snap, setSnap] = useState<Snap>({ envelope: 0, systems: 0, roof: 0, operations: 0 });
 
   // 화면 밖에서는 그리지 않는다
@@ -88,7 +88,7 @@ export default function GRSection() {
   );
 
   const select = useCallback(
-    (k: GrKey | null) => {
+    (k: Focus | null) => {
       setFocus(k);
       // 다른 건물로 가면 하던 시공은 그 자리에서 멈춘다 (다시 오면 이어서)
       if (sim.current.running && sim.current.running !== k) sim.current.running = null;
@@ -98,7 +98,7 @@ export default function GRSection() {
 
   // 다가간 뒤 시작 (이미 다 지은 건물은 그대로 보여 준다)
   useEffect(() => {
-    if (!focus) return;
+    if (!focus || !isBuilding(focus)) return;
     const id = window.setTimeout(() => start(focus), frozen ? 0 : START_DELAY_MS);
     return () => window.clearTimeout(id);
   }, [focus, start, frozen]);
@@ -140,19 +140,20 @@ export default function GRSection() {
                 <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-[#050d13] via-[#050d13]/75 via-35% to-transparent to-60% wide:hidden" />
                 {/* 건물 이름표 */}
                 <div className={`pointer-events-none absolute inset-0 transition-opacity duration-500 ${ready && !focus ? "opacity-100" : "invisible opacity-0"}`}>
-                  {(["sharedEss", "peakEss"] as const).map((k) => (
-                    <Link
+                  {FACILITY_ORDER.map((k) => (
+                    <button
                       key={k}
                       ref={(el) => {
                         chips.current[k] = el;
                       }}
-                      href={k === "sharedEss" ? "/product/shared-ess" : "/product/peak-ess"}
+                      type="button"
                       data-gr-ui
+                      onClick={() => select(k)}
                       className="pointer-events-auto absolute left-0 top-0 flex items-center gap-1.5 whitespace-nowrap rounded-full border border-amber-200/25 bg-[#07141b]/80 px-2.5 py-1 text-[11px] font-semibold text-white/85 shadow-lg shadow-black/30 backdrop-blur-sm transition-colors hover:border-amber-200/60 hover:text-white"
                     >
                       <span className="h-1.5 w-1.5 rounded-full bg-amber-300" aria-hidden="true" />
-                      {tc(k === "sharedEss" ? "productMenu.sharedEssLabel" : "productMenu.peakEssLabel")}
-                    </Link>
+                      {tc(ESS_LABEL[k])}
+                    </button>
                   ))}
                   {GR_ORDER.map((k) => {
                     const done = snap[k] >= 1;
@@ -210,9 +211,82 @@ export default function GRSection() {
           <p className="mt-3 text-[11px] text-white/40">{t("hero.hint")}</p>
         </div>
 
-        {focus && <Panel k={focus} progress={snap[focus]} onClose={() => select(null)} onReplay={() => start(focus, true)} />}
+        {focus && isBuilding(focus) && <Panel k={focus} progress={snap[focus]} onClose={() => select(null)} onReplay={() => start(focus, true)} />}
+        {focus && !isBuilding(focus) && <EssPanel k={focus} sim={sim} onClose={() => select(null)} />}
       </div>
     </section>
+  );
+}
+
+/* ── ESS 설명 패널 ─────────────────────────────────────────────────── */
+
+const ESS_LABEL = { sharedEss: "productMenu.sharedEssLabel", peakEss: "productMenu.peakEssLabel" } as const;
+const ESS_HREF = { sharedEss: "/product/shared-ess", peakEss: "/product/peak-ess" } as const;
+const ESS_STATE = { peakEss: { "1": "discharge", "-1": "charge", "0": "idle" }, sharedEss: { "1": "supply", "-1": "charge", "0": "idle" } } as const;
+
+function EssPanel({ k, sim, onClose }: { k: FacilityKey; sim: React.RefObject<GrSim>; onClose: () => void }) {
+  const t = useTranslations("greenRemodeling");
+  const tc = useTranslations("common");
+  const [hour, setHour] = useState(() => sim.current.hour);
+  // 지금 상태 (장면의 흐름과 같은 시간표)
+  useEffect(() => {
+    const id = window.setInterval(() => setHour(sim.current.hour), 400);
+    return () => window.clearInterval(id);
+  }, [sim]);
+  const mode = essMode(k, hour);
+  const state = ESS_STATE[k][String(mode) as "1" | "-1" | "0"];
+  const points = t.raw(`facilities.${k}.points`) as string[];
+  const clock = `${String(Math.floor(hour)).padStart(2, "0")}:${String(Math.floor((hour % 1) * 60)).padStart(2, "0")}`;
+
+  return (
+    <aside
+      data-gr-ui
+      aria-live="polite"
+      className="pointer-events-auto absolute inset-x-3 bottom-3 max-h-[52dvh] overflow-y-auto rounded-2xl border border-white/12 bg-[#07141b]/92 p-4 shadow-2xl backdrop-blur-md sm:inset-x-6 sm:p-5 wide:inset-x-auto wide:bottom-auto wide:right-6 wide:top-[8.5rem] wide:max-h-[calc(100dvh-10rem)] wide:w-[22rem] lg:right-10"
+    >
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <p className="text-[11px] font-semibold tracking-wide text-amber-200">
+            {tc(ESS_LABEL[k])} · {t(`facilities.${k}.place`)}
+          </p>
+          <p className="mt-1 text-lg font-bold">{t(`facilities.${k}.title`)}</p>
+        </div>
+        <button type="button" onClick={onClose} aria-label={t("panel.close")} className="-mr-1 -mt-1 rounded-full p-1.5 text-white/50 transition-colors hover:bg-white/10 hover:text-white">
+          <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">
+            <path d="M3 3l8 8M11 3l-8 8" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+          </svg>
+        </button>
+      </div>
+
+      {/* 지금 상태 */}
+      <div className="mt-4 flex items-center gap-3 border-y border-white/10 py-3">
+        <span className={`h-2.5 w-2.5 shrink-0 rounded-full ${mode === 0 ? "bg-white/30" : mode > 0 ? "bg-primary-light" : "bg-amber-300"} ${mode !== 0 ? "animate-pulse" : ""}`} aria-hidden="true" />
+        <div className="min-w-0">
+          <p className="text-[11px] tabular-nums text-white/50">{t("facilities.now", { time: clock })}</p>
+          <p className="text-[14px] font-semibold">{t(`facilities.${k}.state.${state}`)}</p>
+        </div>
+      </div>
+
+      <p className="mt-3 text-[13px] leading-relaxed text-white/75">{t(`facilities.${k}.desc`)}</p>
+      <ul className="mt-3 space-y-2">
+        {points.map((pt, i) => (
+          <li key={i} className="flex gap-2.5 text-[12px] leading-relaxed text-white/65">
+            <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-amber-300" aria-hidden="true" />
+            {pt}
+          </li>
+        ))}
+      </ul>
+
+      <div className="mt-4 flex flex-wrap justify-end gap-2">
+        <Link href={ESS_HREF[k]} className="rounded-full border border-white/20 px-3 py-1.5 text-[12px] font-semibold text-white/85 transition-colors hover:border-white/40 hover:text-white">
+          {t("facilities.more")}
+        </Link>
+        <Link href="/contact" className="rounded-full bg-primary px-3 py-1.5 text-[12px] font-semibold text-white transition-colors hover:bg-primary-dark">
+          {t("panel.contact")}
+        </Link>
+      </div>
+      <p className="mt-3 text-[10px] leading-relaxed text-white/35">{t("facilities.footnote")}</p>
+    </aside>
   );
 }
 
