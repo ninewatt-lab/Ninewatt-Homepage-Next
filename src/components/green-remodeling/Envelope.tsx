@@ -11,12 +11,13 @@ import { useMemo, useRef } from "react";
 import * as THREE from "three";
 import { mergeGeometries } from "three/examples/jsm/utils/BufferGeometryUtils.js";
 import { GR_SPECS, LAMP_WARM, easeOut, hash01, occupancyAt, phaseAt, piece, useGrSim } from "./grModel";
-import { COLORS, GLASS_OUT, HEAD, SILL, Shell, faceQuat, facePlane, makeFaces, paintLights, setThermal, thermalMaterial, totalBays, useWindowLights, windowSize, windowSlots, type WindowSlot } from "./Shell";
+import { COLORS, GLASS_OUT, HEAD, SILL, Shell, WindowGlass, faceQuat, facePlane, makeFaces, paintLights, setThermal, thermalMaterial, totalBays, useWindowLights, windowSize, windowSlots, type ShellOptions, type WindowSlot } from "./Shell";
 
 const S = GR_SPECS.envelope;
 /** 외단열 판 두께 (PF보드 100 mm + 마감) */
 const T = 0.011;
 const BLADES = 3;
+const OPTS: ShellOptions = { canopy: { face: "S", bay: 2, bays: 2 } };
 const BLADE_L = 0.045;
 
 type Tmp = { m: THREE.Matrix4; p: THREE.Vector3; q: THREE.Quaternion; r: THREE.Quaternion; s: THREE.Vector3; v: THREE.Vector3; e: THREE.Euler; c: THREE.Color };
@@ -97,7 +98,7 @@ function stepLouvers(mesh: THREE.InstancedMesh, slots: WindowSlot[], phase: numb
     // 날개 가운데 = 경첩 + 회전한 날개 방향 × 길이/2
     tmp.v.set(0, -Math.sin(a), Math.cos(a)).multiplyScalar(BLADE_L / 2).applyQuaternion(face);
     for (let j = 0; j < BLADES; j++) {
-      const y = w.floor * S.fh + HEAD * S.fh + 0.03 - j * 0.028 - 0.012;
+      const y = w.floor * S.fh + HEAD * S.fh + 0.034 - j * 0.022;
       tmp.p.copy(w.pos).setY(y).addScaledVector(w.face.normal, T + 0.002).add(tmp.v);
       tmp.s.setScalar(p > 0 ? Math.min(1, p * 4) : 1e-4);
       mesh.setMatrixAt(i * BLADES + j, tmp.m.compose(tmp.p, tmp.q, tmp.s));
@@ -130,17 +131,8 @@ export default function Envelope() {
       oldFrame: frameGeometry(ww, wh, 0.012, 0.012),
       newFrame: frameGeometry(ww, wh, 0.016, 0.009),
       blade: new THREE.BoxGeometry(bw * 0.92, 0.003, BLADE_L),
-      glass: new THREE.BoxGeometry(ww, wh, 0.004),
     };
   }, [faces]);
-
-  // 유리는 그대로 둔다 (창호 교체 때 색만 맑아진다)
-  const glass = useMemo(() => {
-    const m = new THREE.InstancedMesh(geo.glass, new THREE.MeshStandardMaterial({ color: COLORS.glass, metalness: 0.7, roughness: 0.08 }), slots.length);
-    const q = new THREE.Matrix4();
-    slots.forEach((w) => m.setMatrixAt(w.index, q.compose(w.pos.clone().addScaledVector(w.face.normal, GLASS_OUT), faceQuat(w.face), new THREE.Vector3(1, 1, 1))));
-    return m;
-  }, [geo, slots]);
 
   // 열화상: 남 · 동 면
   const thermal = useMemo(() => {
@@ -170,14 +162,14 @@ export default function Envelope() {
 
   return (
     <group position={[S.x, 0, S.z]}>
-      <Shell s={S} faces={faces} slots={slots} hideWindows />
-      <primitive object={glass} />
+      <Shell s={S} faces={faces} slots={slots} hideWindows opts={OPTS} />
+      <WindowGlass slots={slots} />
       <primitive object={lights} />
       <instancedMesh ref={oldFrames} args={[geo.oldFrame, undefined, slots.length]} frustumCulled={false} castShadow>
         <meshStandardMaterial color={COLORS.frameOld} metalness={0.35} roughness={0.5} />
       </instancedMesh>
       <instancedMesh ref={newFrames} args={[geo.newFrame, undefined, slots.length]} frustumCulled={false} castShadow>
-        <meshStandardMaterial color={COLORS.frame} metalness={0.4} roughness={0.35} />
+        <meshStandardMaterial color={COLORS.frameNew} metalness={0.4} roughness={0.35} />
       </instancedMesh>
       <instancedMesh ref={panels} args={[geo.panel, undefined, slots.length]} frustumCulled={false} castShadow receiveShadow>
         <meshStandardMaterial color={COLORS.panel} roughness={0.9} />

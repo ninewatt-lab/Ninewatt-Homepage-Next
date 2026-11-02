@@ -11,7 +11,7 @@ import { useMemo, useRef } from "react";
 import * as THREE from "three";
 import { pvTexture } from "@/components/hero/textures";
 import { GR_ENERGY, GR_SPECS, LAMP_WARM, easeOut, hash01, occupancyAt, phaseAt, piece, specHeight, useGrSim } from "./grModel";
-import { Shell, makeFaces, paintLights, setThermal, thermalMaterial, useWindowLights, windowSlots } from "./Shell";
+import { Shell, makeFaces, paintLights, setThermal, thermalMaterial, useWindowLights, windowSlots, type ShellOptions } from "./Shell";
 
 const S = GR_SPECS.roof;
 const TOP = specHeight(S);
@@ -26,6 +26,8 @@ const MODULE = { w: 0.113, l: 0.172 };
 const MODULES = Math.round(((GR_ENERGY.roof.pvKw ?? 0) * 1000) / 430);
 const TILT_Q = new THREE.Quaternion().setFromEuler(new THREE.Euler((15 * Math.PI) / 180, 0, 0));
 
+/** 1층 남 · 동은 열람실 통유리, 위층은 세로 핀, 남쪽 가운데 입구 캐노피 */
+const OPTS: ShellOptions = { groundGlass: ["S", "E"], fins: true, canopy: { face: "S", bay: 3, bays: 2 } };
 const BOARD = new THREE.Color("#cdb877");
 const MEMBRANE = new THREE.Color("#e8ecee");
 
@@ -84,7 +86,7 @@ function glowPv(m: THREE.MeshStandardMaterial, solarKw: number) {
 export default function RoofBuilding() {
   const sim = useGrSim();
   const faces = useMemo(() => makeFaces(S), []);
-  const slots = useMemo(() => windowSlots(S, faces), [faces]);
+  const slots = useMemo(() => windowSlots(S, faces, OPTS), [faces]);
   const lights = useWindowLights(S, slots);
   const boards = useRef<THREE.InstancedMesh>(null);
   const modules = useRef<THREE.InstancedMesh>(null);
@@ -116,7 +118,7 @@ export default function RoofBuilding() {
 
   return (
     <group position={[S.x, 0, S.z]}>
-      <Shell s={S} faces={faces} slots={slots} />
+      <Shell s={S} faces={faces} slots={slots} opts={OPTS} />
       <primitive object={lights} />
       <instancedMesh ref={boards} args={[undefined, undefined, ROWS * COLS]} frustumCulled={false} castShadow receiveShadow>
         <boxGeometry args={[CW - 0.006, 0.014, CD - 0.006]} />
