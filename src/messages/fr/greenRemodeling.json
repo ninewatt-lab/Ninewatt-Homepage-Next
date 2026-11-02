@@ -60,6 +60,41 @@
     "lighting": { "title": "Extinction automatique", "desc": "Éteindre automatiquement l'éclairage des zones et heures inoccupées." },
     "carportPv": { "title": "Ombrières solaires", "desc": "Des modules solaires sur les ombrières du parking abritent les voitures et produisent l'électricité du bâtiment." }
   },
+  "facilities": {
+    "now": "Maintenant {time}",
+    "more": "Voir le produit",
+    "footnote": "Les flux suivent un horaire illustratif. Le fonctionnement réel dépend du tarif et de la consommation des bâtiments.",
+    "peakEss": {
+      "place": "À côté des bureaux",
+      "title": "Un ESS qui écrête la pointe",
+      "desc": "Il se charge la nuit, quand l'électricité est bon marché, et se décharge dans le bâtiment aux heures chargées de la journée pour abaisser la pointe. La part fixe dépendant de la pointe, la facture baisse aussi.",
+      "points": [
+        "Deux armoires ESS reliées au local électrique par un fourreau enterré",
+        "L'IA prévoit la consommation du jour et décide quand et combien décharger",
+        "Avec la GTB, une alerte de pointe déclenche directement la réponse"
+      ],
+      "state": {
+        "discharge": "Décharge vers le bâtiment · pointe de jour",
+        "charge": "En charge · heures creuses de nuit",
+        "idle": "En veille"
+      }
+    },
+    "sharedEss": {
+      "place": "Au sud du centre communal",
+      "title": "Un ESS partagé entre bâtiments",
+      "desc": "Le jour, il stocke le surplus solaire des bâtiments du quartier, puis le répartit entre les quatre bâtiments le soir — inutile d'avoir un ESS par bâtiment.",
+      "points": [
+        "Deux conteneurs ESS et un transformateur, reliés aux quatre bâtiments par des câbles sous le trottoir",
+        "Le surplus solaire est conservé et couvre la demande du soir",
+        "Peut aussi servir de ressource de flexibilité pour le réseau de distribution"
+      ],
+      "state": {
+        "supply": "Alimente les quatre bâtiments · soir",
+        "charge": "Stocke le surplus solaire · jour",
+        "idle": "En veille"
+      }
+    }
+  },
   "uses": {
     "heating": "Chauffage",
     "cooling": "Clim.",

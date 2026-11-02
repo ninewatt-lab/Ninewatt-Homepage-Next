@@ -60,6 +60,41 @@
     "lighting": { "title": "Automatic lighting control", "desc": "Switch off lights automatically in empty hours and areas." },
     "carportPv": { "title": "Carport solar", "desc": "Solar modules on the parking-lot carports shade the cars and generate the building's electricity." }
   },
+  "facilities": {
+    "now": "Now {time}",
+    "more": "Product details",
+    "footnote": "The flows are an illustrative schedule. Real operation follows the tariff and the buildings' actual use.",
+    "peakEss": {
+      "place": "Next to the office",
+      "title": "ESS that shaves peak demand",
+      "desc": "It charges at night when power is cheap and discharges into the building during busy daytime hours, lowering peak demand. Because the demand charge is set by the peak, the electricity bill drops too.",
+      "points": [
+        "Two cabinet ESS units, linked to the building's electrical room by a buried conduit",
+        "AI forecasts the day's load and decides when and how much to discharge",
+        "With BEMS, a peak alert leads straight to an automatic response"
+      ],
+      "state": {
+        "discharge": "Discharging to the building · daytime peak",
+        "charge": "Charging · late-night off-peak",
+        "idle": "Standing by"
+      }
+    },
+    "sharedEss": {
+      "place": "South of the community center",
+      "title": "ESS shared by several buildings",
+      "desc": "During the day it stores surplus solar power from the district's buildings, then shares it with all four buildings in the evening — no need for an ESS in every building.",
+      "points": [
+        "Two container ESS units and a transformer, linked to the four buildings by cables under the sidewalk",
+        "Surplus solar is kept instead of wasted, covering evening demand",
+        "Can also serve as a flexibility resource for the distribution grid"
+      ],
+      "state": {
+        "supply": "Supplying the four buildings · evening",
+        "charge": "Storing surplus solar · daytime",
+        "idle": "Standing by"
+      }
+    }
+  },
   "uses": {
     "heating": "Heating",
     "cooling": "Cooling",
