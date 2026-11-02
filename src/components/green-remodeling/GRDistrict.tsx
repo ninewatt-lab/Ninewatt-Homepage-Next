@@ -6,6 +6,8 @@
  *  북서: 업무 빌딩(운영) · 앞 광장        북동: 도서관(지붕 · 신재생) · 열람 정원
  *  남서: 어린이집(외피) · 놀이 마당       남동: 주민센터(설비) · 주차장
  * 블록 가장자리에는 Product 지역의 주변 건물 모델을 몇 채 두어 동네처럼 보이게 한다.
+ * 빈 자리에는 공유형 ESS(주민센터 남쪽, 지역 건물들이 나눠 쓴다) · 피크저감 ESS(업무 빌딩 동쪽)를 두고,
+ * 길가 보도 · 건물 둘레 포장 · 출입 보행로로 블록을 마감한다.
  */
 
 import { useFrame } from "@react-three/fiber";
@@ -14,7 +16,7 @@ import * as THREE from "three";
 import CityContext from "@/components/district/CityContext";
 import { Building, Instances, facadeTextures, m4 } from "@/components/district/common";
 import { PLATE } from "@/components/district/districtLayout";
-import { Ground, RoadLamps, Traffic } from "@/components/district/Facilities";
+import { Cabinets, FencedPad, Ground, RoadLamps, Traffic } from "@/components/district/Facilities";
 import { CloudShadows, createSwayMaterial, tickSway } from "@/components/district/Life";
 import { BuildingModel, CAR_COLORS, Props } from "@/components/district/props";
 import { ContactShadows, Roads, StreetTrees, grassTexture } from "@/components/district/Streetscape";
@@ -297,12 +299,229 @@ function ParkingLot() {
   );
 }
 
+/* ── 보도 · 건물 둘레 포장 · 출입 보행로 ─────────────────────────── */
+
+const WALK = { in: 0.62, out: 1.3 }; // 도로 중심에서 보도 안쪽 · 바깥쪽 거리 (도로 폭 1.2)
+const WALK_Y = Y + 0.002;
+const NS_X = -1;
+const HALF_W = PLATE.w / 2;
+const HALF_D = PLATE.d / 2;
+
+/** 길가 보도 띠: 동서 길 양쪽 · 남북 길 양쪽 (교차로는 비운다) */
+const SIDEWALKS: Rect[] = (() => {
+  const list: Rect[] = [];
+  const mid = (WALK.in + WALK.out) / 2;
+  const wid = WALK.out - WALK.in;
+  for (const s of [-1, 1]) {
+    // 동서 길: 서쪽 · 동쪽 토막
+    list.push({ x: (-HALF_W + NS_X - WALK.out) / 2, z: s * mid, w: NS_X - WALK.out + HALF_W, d: wid });
+    list.push({ x: (NS_X + WALK.out + HALF_W) / 2, z: s * mid, w: HALF_W - NS_X - WALK.out, d: wid });
+    // 남북 길: 북쪽 · 남쪽 토막
+    list.push({ x: NS_X + s * mid, z: (-HALF_D - WALK.out) / 2, w: wid, d: HALF_D - WALK.out });
+    list.push({ x: NS_X + s * mid, z: (HALF_D + WALK.out) / 2, w: wid, d: HALF_D - WALK.out });
+  }
+  return list;
+})();
+
+/** 건물 출입 보행로: 길 쪽 면 가운데에서 보도까지 */
+const ENTRY_PATHS: Rect[] = Object.values(GR_SPECS).map((s) => {
+  const north = s.z < 0; // 길 북쪽 블록이면 남쪽 면에서, 남쪽 블록이면 북쪽 면에서
+  const face = north ? s.z + s.d / 2 : s.z - s.d / 2;
+  const edge = north ? -WALK.out : WALK.out;
+  return { x: s.x, z: (face + edge) / 2, w: 0.5, d: Math.abs(face - edge) };
+});
+
+const inRect = (r: Rect, x: number, z: number, pad = 0) => Math.abs(x - r.x) < r.w / 2 + pad && Math.abs(z - r.z) < r.d / 2 + pad;
+
+/** 밝은 보도 블록 (30 cm 판석 줄눈) — 짙은 지역 포장과 구분되게 */
+function walkTexture(w: number, d: number) {
+  const c = document.createElement("canvas");
+  c.width = c.height = 64;
+  const g = c.getContext("2d")!;
+  g.fillStyle = "#c7cbc7";
+  g.fillRect(0, 0, 64, 64);
+  g.strokeStyle = "#a9afac";
+  g.lineWidth = 2;
+  g.strokeRect(1, 1, 62, 62);
+  g.beginPath();
+  g.moveTo(32, 0);
+  g.lineTo(32, 64);
+  g.stroke();
+  const t = new THREE.CanvasTexture(c);
+  t.colorSpace = THREE.SRGBColorSpace;
+  t.wrapS = t.wrapT = THREE.RepeatWrapping;
+  t.repeat.set(Math.max(1, w / 0.3), Math.max(1, d / 0.3));
+  return t;
+}
+
+function Walkways() {
+  // 건물 둘레 포장(0.3 m 띠) — 건물 아래까지 깔아 둘레만 보인다
+  const aprons = useMemo(() => Object.values(GR_SPECS).map((s): Rect => ({ x: s.x, z: s.z, w: s.w + 0.6, d: s.d + 0.6 })), []);
+  const texs = useMemo(() => ({ walks: SIDEWALKS.map((r) => walkTexture(r.w, r.d)), aprons: [...aprons, ...ENTRY_PATHS].map((r) => walkTexture(r.w, r.d)) }), [aprons]);
+  const curbs = useMemo(
+    () =>
+      SIDEWALKS.map((r) => {
+        // 보도 바깥 가장자리(블록 쪽) 경계석
+        const alongX = r.w > r.d;
+        const out = alongX ? Math.sign(r.z) * (r.d / 2) : Math.sign(r.x - NS_X) * (r.w / 2);
+        return alongX ? m4(r.x, Y + 0.01, r.z + out, 0, r.w, 1, 1) : m4(r.x + out, Y + 0.01, r.z, Math.PI / 2, r.d, 1, 1);
+      }),
+    [],
+  );
+  return (
+    <group>
+      {SIDEWALKS.map((r, i) => (
+        <mesh key={`w${i}`} position={[r.x, WALK_Y, r.z]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
+          <planeGeometry args={[r.w, r.d]} />
+          <meshStandardMaterial map={texs.walks[i]} roughness={0.9} />
+        </mesh>
+      ))}
+      {[...aprons, ...ENTRY_PATHS].map((r, i) => (
+        <mesh key={`a${i}`} position={[r.x, Y + 0.004, r.z]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
+          <planeGeometry args={[r.w, r.d]} />
+          <meshStandardMaterial map={texs.aprons[i]} color="#efe8dc" roughness={0.9} />
+        </mesh>
+      ))}
+      <Instances matrices={curbs} cast={false}>
+        <boxGeometry args={[1, 0.02, 0.03]} />
+        <meshStandardMaterial color="#aab3b5" roughness={0.85} />
+      </Instances>
+    </group>
+  );
+}
+
+/* ── 공유형 ESS · 피크저감 ESS · 에너지 흐름 ───────────────────────── */
+
+/** 공유형 ESS 단지 (주민센터 남쪽 띠) — 컨테이너형 ESS 2기(길이 1.7) · 변압기, 지역 건물 넷이 나눠 쓴다 */
+export const SHARED_ESS = { x: 4.5, z: 7.95, w: 3.4, d: 1.6 };
+const ESS_TX = { x: SHARED_ESS.x - 1.2, z: SHARED_ESS.z };
+/** 피크저감 ESS (업무 빌딩 동쪽 벽 옆) — 캐비닛 2기 */
+export const PEAK_ESS = { x: -3.0, z: -4.8, w: 1.5, d: 1.0 };
+const CONTAINER = 0.14;
+
+function EssSites() {
+  const containers = useMemo(() => [-0.38, 0.38].map((dz) => m4(SHARED_ESS.x + 0.5, 0.025 + Y, SHARED_ESS.z + dz, 0, CONTAINER, CONTAINER, CONTAINER)), []);
+  const transformer = useMemo(() => [m4(ESS_TX.x, Y, ESS_TX.z, 0, 0.1, 0.1, 0.1)], []);
+  const cabinets = useMemo(() => [new THREE.Vector3(PEAK_ESS.x - 0.32, Y + 0.025, PEAK_ESS.z), new THREE.Vector3(PEAK_ESS.x + 0.32, Y + 0.025, PEAK_ESS.z)], []);
+  const office = GR_SPECS.operations;
+  const wall = office.x + office.w / 2;
+  const trench = useMemo(() => [m4((PEAK_ESS.x - PEAK_ESS.w / 2 + wall) / 2, Y + 0.004, PEAK_ESS.z, 0, PEAK_ESS.x - PEAK_ESS.w / 2 - wall, 1, 0.09)], [wall]);
+  return (
+    <group>
+      <group position={[0, Y, 0]}>
+        <FencedPad x={SHARED_ESS.x} z={SHARED_ESS.z} w={SHARED_ESS.w} d={SHARED_ESS.d} color="#9da5a6" />
+        <FencedPad x={PEAK_ESS.x} z={PEAK_ESS.z} w={PEAK_ESS.w} d={PEAK_ESS.d} />
+      </group>
+      <Props node="EssContainer" matrices={containers} metalness={0.25} roughness={0.5} />
+      <Props node="Transformer" matrices={transformer} metalness={0.35} roughness={0.5} />
+      <Cabinets positions={cabinets} scale={0.2} />
+      {/* 빌딩 전기실까지 묻힌 전선관 덮개 */}
+      <Instances matrices={trench} cast={false}>
+        <boxGeometry args={[1, 0.008, 1]} />
+        <meshStandardMaterial color="#8d9496" roughness={0.9} />
+      </Instances>
+    </group>
+  );
+}
+
+type FlowPath = { points: THREE.Vector3[]; lengths: number[]; total: number; peak: boolean };
+
+function makePath(pts: [number, number, number][], peak = false): FlowPath {
+  const points = pts.map(([x, y, z]) => new THREE.Vector3(x, y, z));
+  const lengths = [0];
+  for (let i = 1; i < points.length; i++) lengths.push(lengths[i - 1] + points[i].distanceTo(points[i - 1]));
+  return { points, lengths, total: lengths[lengths.length - 1], peak };
+}
+
+/**
+ * 에너지 흐름 (빛나는 점):
+ *  공유형 ESS → 보도 아래 배전선을 따라 네 건물로 (낮에는 태양광 남는 전기를 모으고, 저녁에 나눠 쓴다 — 늘 천천히)
+ *  피크저감 ESS ↔ 업무 빌딩: 낮(10~18시)에는 빌딩으로 방전, 밤(22~7시)에는 거꾸로 충전, 그 밖에는 쉰다
+ */
+const FLOW_PATHS: FlowPath[] = (() => {
+  const y = Y + 0.05;
+  const lane = (WALK.in + WALK.out) / 2; // 남쪽 보도 가운데 (북쪽 보도는 −lane)
+  // 변압기 → 주민센터 동쪽 마당을 지나 남쪽 보도로 → 건물마다 (길 북쪽 건물은 길을 건넌다)
+  const sideX = GR_SPECS.systems.x + GR_SPECS.systems.w / 2 + 0.45;
+  const start: [number, number, number][] = [
+    [ESS_TX.x, 0.35, ESS_TX.z],
+    [ESS_TX.x, y, ESS_TX.z - 0.6],
+    [sideX, y, ESS_TX.z - 0.6],
+    [sideX, y, lane],
+  ];
+  const to = (s: (typeof GR_SPECS)[keyof typeof GR_SPECS]) => {
+    const north = s.z < 0;
+    const face = north ? s.z + s.d / 2 : s.z - s.d / 2;
+    const pts: [number, number, number][] = [...start, [s.x, y, lane]];
+    if (north) pts.push([s.x, y, -lane]);
+    pts.push([s.x, y, face]);
+    return makePath(pts);
+  };
+  const office = GR_SPECS.operations;
+  return [
+    ...Object.values(GR_SPECS).map(to),
+    makePath(
+      [
+        [PEAK_ESS.x - 0.32, 0.3, PEAK_ESS.z],
+        [office.x + office.w / 2 + 0.02, 0.25, PEAK_ESS.z],
+      ],
+      true,
+    ),
+  ];
+})();
+const PER_PATH = 6;
+const FLOW_TMP = { m: new THREE.Matrix4(), p: new THREE.Vector3(), q: new THREE.Quaternion(), s: new THREE.Vector3() };
+
+/** 피크저감 ESS 흐름: +1 방전(→ 빌딩) · −1 충전(← 빌딩) · 0 쉼 */
+function peakMode(hour: number) {
+  if (hour >= 10 && hour < 18) return 1;
+  if (hour >= 22 || hour < 7) return -1;
+  return 0;
+}
+
+function stepFlow(mesh: THREE.InstancedMesh, time: number, hour: number) {
+  const t = FLOW_TMP;
+  const mode = peakMode(hour);
+  let i = 0;
+  FLOW_PATHS.forEach((path, pi) => {
+    const speed = path.peak ? 0.35 : 0.05;
+    const amount = path.peak ? Math.abs(mode) : 1;
+    for (let k = 0; k < PER_PATH; k++) {
+      let u = (time * speed + k / PER_PATH + pi * 0.17) % 1;
+      if (path.peak && mode < 0) u = 1 - u;
+      const d = u * path.total;
+      let j = 1;
+      while (j < path.lengths.length - 1 && path.lengths[j] < d) j++;
+      const seg = path.lengths[j] - path.lengths[j - 1] || 1;
+      t.p.lerpVectors(path.points[j - 1], path.points[j], (d - path.lengths[j - 1]) / seg);
+      t.s.setScalar(Math.max(1e-4, Math.min(1, u * 10, (1 - u) * 10) * amount));
+      mesh.setMatrixAt(i++, t.m.compose(t.p, t.q, t.s));
+    }
+  });
+  mesh.instanceMatrix.needsUpdate = true;
+}
+
+function EnergyFlow() {
+  const sim = useGrSim();
+  const ref = useRef<THREE.InstancedMesh>(null);
+  useFrame(({ clock }) => {
+    if (ref.current) stepFlow(ref.current, clock.elapsedTime, sim.current.hour);
+  });
+  return (
+    <instancedMesh ref={ref} args={[undefined, undefined, FLOW_PATHS.length * PER_PATH]} frustumCulled={false}>
+      <sphereGeometry args={[0.034, 8, 8]} />
+      <meshBasicMaterial color="#a8eaf5" transparent opacity={0.9} blending={THREE.AdditiveBlending} depthWrite={false} toneMapped={false} />
+    </instancedMesh>
+  );
+}
+
 /* ── 전체 ─────────────────────────────────────────────────────────── */
 
 const SHADOWS: [number, number, number, number, number][] = [
   ...Object.values(GR_SPECS).map((s): [number, number, number, number, number] => [s.x, s.z, s.w + 0.7, s.d + 0.7, Y + 0.003]),
   [-11, -5.5, 3.0, 2.6, Y + 0.003],
   [11.2, -6.3, 2.2, 1.6, Y + 0.003],
+  [SHARED_ESS.x + 0.5, SHARED_ESS.z, 2.0, 1.3, Y + 0.03],
 ];
 
 export default function GRDistrict() {
@@ -349,7 +568,10 @@ export default function GRDistrict() {
     beds.forEach((b, bi) => {
       for (let i = 0; i < 40; i++) {
         const k = bi * 100 + i;
-        list.push([m4(b.x + (rand(k) - 0.5) * b.w, Y + 0.03, b.z + (rand(k + 50) - 0.5) * b.d, 0, 1, 1, 1), cols[k % cols.length]]);
+        const x = b.x + (rand(k) - 0.5) * b.w;
+        const z = b.z + (rand(k + 50) - 0.5) * b.d;
+        if (ENTRY_PATHS.some((r) => inRect(r, x, z, 0.08))) continue;
+        list.push([m4(x, Y + 0.03, z, 0, 1, 1, 1), cols[k % cols.length]]);
       }
     });
     return list;
@@ -385,6 +607,9 @@ export default function GRDistrict() {
       <Lawn r={{ x: 3.7, z: 4.8, w: 5.4, d: 6.0 }} tex={tex.plaza} color="#c9d0d1" />
       <ParkingLot />
 
+      <Walkways />
+      <EssSites />
+      <EnergyFlow />
       <ContactShadows spots={SHADOWS} />
       <Props node="Bench" matrices={benches} roughness={0.7} />
       <instancedMesh

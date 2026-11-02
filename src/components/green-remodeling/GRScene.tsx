@@ -15,7 +15,7 @@ import Effects from "@/components/district/Effects";
 import { Lighting, Sky } from "@/components/hero/Atmosphere";
 import { SimContext, type Sim } from "@/components/hero/heroSim";
 import Envelope from "./Envelope";
-import GRDistrict from "./GRDistrict";
+import GRDistrict, { PEAK_ESS, SHARED_ESS } from "./GRDistrict";
 import { GlossTicker } from "./gloss";
 import Operations from "./Operations";
 import RoofBuilding from "./RoofBuilding";
@@ -162,14 +162,24 @@ function Rig({ focus, frozen }: { focus: GrKey | null; frozen: boolean }) {
 
 /* ── 이름표 (화면 좌표로 옮긴다) ─────────────────────────────────── */
 
-export type ChipNodes = Partial<Record<GrKey, HTMLElement | null>>;
+export type FacilityKey = "sharedEss" | "peakEss";
+export type ChipNodes = Partial<Record<GrKey | FacilityKey, HTMLElement | null>>;
+
+/** ESS 이름표 자리 (설비 위) */
+const FACILITY_ANCHORS: Record<FacilityKey, [number, number, number]> = {
+  sharedEss: [SHARED_ESS.x + 0.5, 0.75, SHARED_ESS.z],
+  peakEss: [PEAK_ESS.x, 0.75, PEAK_ESS.z],
+};
 
 function placeChips(chips: ChipNodes, camera: THREE.Camera, size: { width: number; height: number }, v: THREE.Vector3) {
-  for (const k of GR_ORDER) {
+  const anchors: [GrKey | FacilityKey, number, number, number][] = [
+    ...GR_ORDER.map((k): [GrKey, number, number, number] => [k, GR_SPECS[k].x, specHeight(GR_SPECS[k]) + 0.35, GR_SPECS[k].z]),
+    ...(Object.entries(FACILITY_ANCHORS) as [FacilityKey, [number, number, number]][]).map(([k, p]): [FacilityKey, number, number, number] => [k, ...p]),
+  ];
+  for (const [k, ax, ay, az] of anchors) {
     const el = chips[k];
     if (!el) continue;
-    const s = GR_SPECS[k];
-    v.set(s.x, specHeight(s) + 0.35, s.z).project(camera);
+    v.set(ax, ay, az).project(camera);
     const x = (v.x * 0.5 + 0.5) * size.width;
     const y = (-v.y * 0.5 + 0.5) * size.height;
     el.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px) translate(-50%, -100%)`;
