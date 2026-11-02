@@ -38,6 +38,8 @@
     "bemsDesc": "ビルエネルギー管理システム"
   },
   "solutionsMenu": {
+    "greenRemodeling": "グリーンリモデリング",
+    "greenRemodelingDesc": "改修タイプ別の診断・施工・削減効果",
     "overview": "全体を見る",
     "solutions": "ソリューション",
     "capabilities": "ケイパビリティ",

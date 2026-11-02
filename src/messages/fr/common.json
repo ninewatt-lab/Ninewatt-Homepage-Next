@@ -38,6 +38,8 @@
     "bemsDesc": "Système de gestion de l'énergie du bâtiment"
   },
   "solutionsMenu": {
+    "greenRemodeling": "Rénovation verte",
+    "greenRemodelingDesc": "Diagnostic, travaux et économies par type de rénovation",
     "overview": "Vue d'ensemble",
     "solutions": "Solutions",
     "capabilities": "Compétences",

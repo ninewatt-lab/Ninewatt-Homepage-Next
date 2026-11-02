@@ -48,6 +48,13 @@ export default getRequestConfig(async ({ requestLocale }) => {
     expo = (await import(`../messages/en/expo.json`)).default;
   }
 
+  let greenRemodeling = {};
+  try {
+    greenRemodeling = (await import(`../messages/${locale}/greenRemodeling.json`)).default;
+  } catch {
+    greenRemodeling = (await import(`../messages/ko/greenRemodeling.json`)).default;
+  }
+
   return {
     locale,
     messages: {
@@ -63,6 +70,7 @@ export default getRequestConfig(async ({ requestLocale }) => {
       energy,
       ess,
       expo,
+      greenRemodeling,
     },
   };
 });

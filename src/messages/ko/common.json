@@ -38,6 +38,8 @@
     "bemsDesc": "건물 에너지 관리 시스템"
   },
   "solutionsMenu": {
+    "greenRemodeling": "그린리모델링",
+    "greenRemodelingDesc": "리모델링 종류별 진단 · 시공 · 절감 효과",
     "overview": "전체 보기",
     "solutions": "솔루션",
     "capabilities": "역량",

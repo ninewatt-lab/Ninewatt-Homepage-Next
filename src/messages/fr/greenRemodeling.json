@@ -1,0 +1,135 @@
+{
+  "meta": {
+    "title": "Rénovation verte | Ninewatt",
+    "description": "Enveloppe, équipements, toiture et exploitation : suivez chaque type de rénovation du diagnostic aux travaux en 3D, avec des économies calculées par EnergyPlus."
+  },
+  "hero": {
+    "kicker": "Green Remodeling",
+    "title": "Voir les économies<br></br>avant les travaux",
+    "subtitle": "Choisissez un bâtiment et suivez-le du diagnostic aux travaux. Les économies calculées par EnergyPlus s'additionnent à chaque étape.",
+    "upTo": "Énergie primaire −{pct}\u00a0%",
+    "hint": "Cliquez sur un bâtiment ou son étiquette pour lancer les travaux"
+  },
+  "buildings": {
+    "envelope": {
+      "name": "Enveloppe",
+      "place": "Crèche · R+2",
+      "short": "Isolation · fenêtres · protection solaire",
+      "title": "Isolation extérieure · fenêtres performantes · protection solaire",
+      "desc": "Bloque la chaleur qui s'échappe par les murs et les fenêtres — la première mesure pour les bâtiments bas et anciens, gros consommateurs de chauffage."
+    },
+    "systems": {
+      "name": "Équipements",
+      "place": "Centre communal · R+1",
+      "short": "Pompe à chaleur · ventilation · LED",
+      "title": "Pompe à chaleur · ventilation double flux · LED",
+      "desc": "La même chaleur et la même lumière avec moins d'énergie. Efficace même là où l'enveloppe est difficile à modifier."
+    },
+    "roof": {
+      "name": "Toiture · renouvelable",
+      "place": "Bibliothèque · R+1",
+      "short": "Isolation de toiture · solaire",
+      "title": "Isolation de toiture · toit frais · photovoltaïque",
+      "desc": "Un grand toit perd de la chaleur — et c'est la meilleure place pour une centrale. On l'isole, puis il produit l'électricité du bâtiment."
+    },
+    "operations": {
+      "name": "Exploitation",
+      "place": "Bureaux · R+5",
+      "short": "GTB · télérelève",
+      "title": "Exploitation optimisée par la GTB",
+      "desc": "Des économies sans travaux : les données de comptage révèlent le gaspillage, et la GTB pilote le CVC, la veille et l'éclairage."
+    }
+  },
+  "steps": {
+    "scan": {
+      "envelope": { "title": "Thermographie", "desc": "Repérer où les murs perdent de la chaleur. Les nez de dalle (ponts thermiques) et le tour des fenêtres sont les plus chauds." },
+      "systems": { "title": "Audit des équipements", "desc": "Vérifier le rendement de la vieille chaudière et des climatiseurs, la ventilation et la puissance d'éclairage." },
+      "roof": { "title": "Thermographie de toiture", "desc": "Repérer un toit qui chauffe l'été et laisse fuir la chaleur l'hiver." },
+      "operations": { "title": "Télérelève · capteurs", "desc": "Des compteurs électricité et CVC à chaque étage montrent quand et où l'énergie est gaspillée." }
+    },
+    "insulation": { "title": "Isolation extérieure", "desc": "Envelopper les murs par l'extérieur avec 100 mm de mousse phénolique pour couper les fuites de chaleur." },
+    "windows": { "title": "Fenêtres performantes", "desc": "Double vitrage peu émissif et menuiseries isolées réduisent la chaleur qui traverse les fenêtres." },
+    "shading": { "title": "Protection solaire", "desc": "Les lames descendent quand le soleil d'été est fort pour réduire la climatisation, et laissent entrer le soleil d'hiver." },
+    "heatpump": { "title": "Pompe à chaleur", "desc": "Remplacer la vieille chaudière gaz et les climatiseurs par des pompes à chaleur air, qui produisent la même chaleur avec moins d'énergie." },
+    "erv": { "title": "Ventilation double flux", "desc": "Transférer la chaleur de l'air extrait à l'air neuf entrant pour moins perdre en ventilant." },
+    "led": { "title": "Éclairage LED", "desc": "Remplacer les tubes fluorescents par des LED et diviser par deux la puissance d'éclairage." },
+    "roofIns": { "title": "Isolation · toit frais", "desc": "Poser un isolant sur la toiture et le couvrir d'une finition claire qui réfléchit le soleil." },
+    "pv": { "title": "Photovoltaïque", "desc": "Installer des modules solaires sur le toit pour produire l'électricité consommée par le bâtiment." },
+    "schedule": { "title": "Horaires · consignes", "desc": "Faire fonctionner le CVC aux heures d'occupation, avec 20 °C en chauffage et 26 °C en climatisation." },
+    "standby": { "title": "Coupure des veilles", "desc": "Repérer étage par étage les appareils restés allumés après le travail et les éteindre." },
+    "lighting": { "title": "Extinction automatique", "desc": "Éteindre automatiquement l'éclairage des zones et heures inoccupées." }
+  },
+  "uses": {
+    "heating": "Chauffage",
+    "cooling": "Clim.",
+    "lighting": "Éclairage",
+    "equipment": "Appareils",
+    "pv": "Solaire"
+  },
+  "panel": {
+    "primary": "Énergie primaire économisée",
+    "co2": "CO₂ évité",
+    "co2Unit": "tCO₂/an",
+    "primaryLine": "Énergie primaire {before} → {now} kWh/m²·an",
+    "byUse": "Énergie par usage (barre claire = avant)",
+    "pvLine": "{kw} kW · {mwh} MWh/an",
+    "waiting": "Préparation",
+    "running": "Travaux {pct} %",
+    "done": "Terminé",
+    "stepDone": "Fait",
+    "stepWaiting": "En attente",
+    "replay": "Revoir",
+    "contact": "Nous contacter",
+    "close": "Fermer",
+    "footnote": "Bâtiments d'exemple recalculés après chaque étape avec la météo de Séoul (EnergyPlus 9.0). Pour un vrai bâtiment, le résultat dépend du diagnostic."
+  },
+  "types": {
+    "kicker": "Quatre types de rénovation verte",
+    "title": "Chaque bâtiment économise à un endroit différent",
+    "desc": "À budget égal, les économies varient beaucoup selon ce qu'on rénove. Ninewatt s'appuie sur les données pour trouver la bonne combinaison pour chaque bâtiment.",
+    "view": "Voir en 3D",
+    "saving": "Énergie primaire",
+    "co2": "{t} tCO₂/an en moins"
+  },
+  "process": {
+    "kicker": "Notre démarche",
+    "title": "Des données du diagnostic à la vérification",
+    "items": [
+      { "title": "Visite · diagnostic", "desc": "Une visite en 72 points et les données de consommation révèlent l'état du bâtiment et ses gaspillages." },
+      { "title": "Simulation · priorités", "desc": "GreenPlanner et EnergyPlus comparent les mesures et retiennent la combinaison la plus rentable." },
+      { "title": "Programmes · financement", "desc": "Nous préparons des plans adaptés aux programmes publics de rénovation verte et aux aides aux intérêts pour le privé." },
+      { "title": "Vérification par GTB", "desc": "Après les travaux, la GTB mesure la consommation réelle pour confirmer les économies prévues — et continue d'en faire en exploitation." }
+    ]
+  },
+  "cases": {
+    "kicker": "Références",
+    "title": "Partenaire des programmes publics de rénovation verte",
+    "items": [
+      { "title": "Planification et pilote des technologies de rénovation verte (GRAI)", "client": "Korea Authority of Land & Infrastructure Safety", "period": "2025", "desc": "Plateforme d'analyse énergie-carbone des bâtiments publics, priorisation, simulation de scénarios et analyse d'enveloppe par IA" },
+      { "title": "Appui au programme de rénovation verte des bâtiments publics", "client": "Korea Authority of Land & Infrastructure Safety", "period": "2023–2025", "desc": "Données et analyses pour l'ensemble du programme public de rénovation verte" },
+      { "title": "Plateforme d'enquête pour la rénovation verte obligatoire", "client": "Korea Real Estate Board", "period": "2026", "desc": "Carte et tableau de bord des bâtiments ciblés, saisie d'enquête en 72 points et suivi des résultats" },
+      { "title": "Conseil pour l'aide aux intérêts de rénovation verte (privé)", "client": "Korea Authority of Land & Infrastructure Safety", "period": "2026", "desc": "Conseil pour le programme d'aide aux intérêts destiné aux bâtiments privés" },
+      { "title": "Gyeonggi Climate Platform — simulation de rénovation verte", "client": "Province de Gyeonggi", "period": "", "desc": "Choisir un bâtiment sur une carte 3D pour une thermographie et un calcul automatique du productible et de la rentabilité solaires" },
+      { "title": "Système de visualisation des émissions à l'échelle régionale", "client": "Korea Institute of Civil Engineering and Building Technology", "period": "2024–2025", "desc": "Carte 3D des émissions des bâtiments et des routes, diagnostic énergétique et simulation de rénovation verte" }
+    ],
+    "more": "Toutes les références"
+  },
+  "method": {
+    "kicker": "Méthode",
+    "title": "D'où viennent les chiffres",
+    "desc": "Les quatre bâtiments sont des exemples, pas des bâtiments réels. Avec la même météo de Séoul (année type 2009–2023), chaque étape a été ajoutée tour à tour et une année complète simulée sous EnergyPlus 9.0.",
+    "items": [
+      "L'énergie primaire utilise les coefficients du label énergétique coréen (électricité 2,75 · gaz 1,1) ; le carbone 0,4781 (électricité) · 0,2022 (GNL) kgCO₂/kWh.",
+      "Avant : murs anciens (U 1,4 W/m²K), fenêtres (4,0), toiture (0,8), chaudière gaz 80–85 %, climatisation COP 2,6–3,0, fluorescent 12 W/m².",
+      "Après : isolation extérieure 100 mm, double vitrage peu émissif (1,5), toiture U 0,15 avec finition réfléchissante, pompe à chaleur (COP 3,2 chaud · 4,0 froid), récupération 70 %, LED 6 W/m², solaire sur 45 % du toit.",
+      "Exploitation (GTB) : CVC ramené aux heures d'occupation (au lieu d'1 h avant et 2 h après), consignes 22/24 °C → 20/26 °C, veille hors heures 30 % → 15 %, éclairage laissé allumé 20 % → 5 %.",
+      "Le gain d'étanchéité des nouvelles fenêtres n'est pas compté (prudent), et l'énergie des ventilateurs et pompes est exclue."
+    ]
+  },
+  "cta": {
+    "title": "Combien votre bâtiment pourrait-il économiser ?",
+    "desc": "Partagez les informations et les consommations de votre bâtiment : diagnostic et simulation trouveront la bonne combinaison.",
+    "contact": "Parler de rénovation verte",
+    "planner": "Découvrir GreenPlanner"
+  }
+}

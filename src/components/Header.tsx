@@ -172,6 +172,16 @@ const solutionsNav: NavItemWithChildren = {
             </svg>
           ),
         },
+        {
+          href: "/solutions/green-remodeling",
+          labelKey: "solutionsMenu.greenRemodeling",
+          descKey: "solutionsMenu.greenRemodelingDesc",
+          icon: (
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
+              <path d="M3 21h18" /><path d="M5 21V9l7-5 7 5v12" /><path d="M9 21v-6h6v6" /><path d="M12 4c2.5 0 4 1.5 4 3.5" />
+            </svg>
+          ),
+        },
       ],
     },
     {
@@ -492,7 +502,7 @@ export default function Header() {
   }, [router, pathname]);
 
   // 첫 화면이 어두운 3D 캔버스인 페이지: 맨 위에서는 헤더가 캔버스 위에 투명하게 겹친다
-  const overDarkHero = pathname === "/" || pathname === "/product";
+  const overDarkHero = pathname === "/" || pathname === "/product" || pathname === "/solutions/green-remodeling";
   const isTransparent = overDarkHero && !scrolled && !mobileOpen && !activeMenu;
 
   // Helper to resolve label — product names are literal, others are translation keys

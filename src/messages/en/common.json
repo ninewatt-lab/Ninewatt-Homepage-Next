@@ -38,6 +38,8 @@
     "bemsDesc": "Building Energy Management System"
   },
   "solutionsMenu": {
+    "greenRemodeling": "Green Remodeling",
+    "greenRemodelingDesc": "Diagnosis, retrofit and savings by remodeling type",
     "overview": "Overview",
     "solutions": "Solutions",
     "capabilities": "Capabilities",
