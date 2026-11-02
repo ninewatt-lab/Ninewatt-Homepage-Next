@@ -11,6 +11,7 @@ import * as THREE from "three";
 import { louverTexture } from "@/components/hero/textures";
 import type { GrSpec } from "./grModel";
 import { COLORS } from "./Shell";
+import { glossGlass, glossMetal } from "./gloss";
 
 const MODULE = 0.17;
 const SPANDREL = 0.05;
@@ -51,7 +52,10 @@ const lightFragment = /* glsl */ `
     float bay = smoothstep(0.0, 0.12, bx) * smoothstep(1.0, 0.88, bx);
     float band = step(uSpandrel, ly);
     float ceiling = mix(0.45, 1.0, (ly - uSpandrel) / (uFh - uSpandrel));
-    gl_FragColor = vec4(uColor * on * bay * band * ceiling * (0.015 + uDark * 0.9), 1.0);
+    // 칸마다 밝기 · 색온도가 조금씩 달라 한 장의 판이 아니라 불 켜진 방들로 읽힌다
+    float level = mix(0.45, 1.0, hash(k * 7.13 + fl * 3.1 + face));
+    vec3 tint = mix(uColor, vec3(1.0, 0.95, 0.88), step(0.7, hash(k * 1.7 + fl * 9.2 + face)));
+    gl_FragColor = vec4(tint * on * bay * band * ceiling * level * (0.01 + uDark * 0.5), 1.0);
   }
 `;
 
@@ -99,13 +103,14 @@ export function Curtain({ s, lights }: { s: GrSpec; lights: THREE.ShaderMaterial
         list.push(new THREE.Matrix4().compose(new THREE.Vector3(alongX ? t : fixed, h / 2, alongX ? fixed : t), new THREE.Quaternion(), new THREE.Vector3(corner ? 2 : 1, 1, corner ? 2 : 1)));
       }
     }
-    const mesh = new THREE.InstancedMesh(new THREE.BoxGeometry(0.008, h, 0.008), new THREE.MeshStandardMaterial({ color: COLORS.metal, metalness: 0.75, roughness: 0.3 }), list.length);
+    const mesh = new THREE.InstancedMesh(new THREE.BoxGeometry(0.008, h, 0.008), glossMetal({ color: COLORS.metal }), list.length);
     list.forEach((m, i) => mesh.setMatrixAt(i, m));
     mesh.castShadow = true;
     mesh.computeBoundingSphere();
     return mesh;
   }, [s, h]);
   const louver = useMemo(() => louverTexture("#53656b", "#2c3a3f"), []);
+  const mats = useMemo(() => ({ spandrel: glossMetal({ color: "#26363c" }), glass: glossGlass({ color: "#3d6d7b", transparent: true, opacity: 0.6, depthWrite: false }) }), []);
 
   return (
     <group>
@@ -121,13 +126,13 @@ export function Curtain({ s, lights }: { s: GrSpec; lights: THREE.ShaderMaterial
       {Array.from({ length: s.floors + 1 }, (_, f) => (
         <mesh key={f} position={[0, f * s.fh + SPANDREL / 2 - (f === s.floors ? SPANDREL : 0), 0]} castShadow receiveShadow>
           <boxGeometry args={[s.w + 0.014, SPANDREL, s.d + 0.014]} />
-          <meshStandardMaterial color="#26363c" metalness={0.55} roughness={0.4} />
+          <primitive object={mats.spandrel} attach="material" />
         </mesh>
       ))}
       {/* 유리 — 그림자는 건물 덩어리로 떨어지게 유리도 드리운다 */}
       <mesh position={[0, h / 2, 0]} castShadow renderOrder={2}>
         <boxGeometry args={[s.w, h, s.d]} />
-        <meshStandardMaterial color="#7fb6c6" transparent opacity={0.34} metalness={0.9} roughness={0.05} depthWrite={false} />
+        <primitive object={mats.glass} attach="material" />
       </mesh>
       <primitive object={mullions} />
       {/* 옥상: 슬래브 · 파라펫 · 기계실 루버 차폐벽 */}

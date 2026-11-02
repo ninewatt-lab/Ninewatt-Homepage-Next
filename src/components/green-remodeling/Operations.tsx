@@ -115,7 +115,8 @@ export default function Operations() {
     }
 
     // 창 불빛: 시공 전엔 사람이 없어도 켜 둔 칸이 많다(45%) → 조명 자동 소등 단계에서 5%로 줄어든다
-    setCurtainLights(lights, occupancyAt(s.hour), 0.45 - 0.4 * ph.steps[2], s.dark);
+    // 업무 빌딩은 저녁에 하나둘 퇴근한다 (재실 곡선을 낮춰 쓴다) — 켜 둔 칸이 눈에 띄게
+    setCurtainLights(lights, occupancyAt(s.hour) * 0.6, 0.45 - 0.4 * ph.steps[2], s.dark);
   });
 
   return (
