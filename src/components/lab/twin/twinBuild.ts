@@ -93,7 +93,8 @@ function paneGradient(m: THREE.MeshStandardMaterial, geometry: THREE.BufferGeome
       .replace("#include <common>", "#include <common>\nuniform vec2 uPane;\nvarying float vPaneY;")
       .replace("#include <emissivemap_fragment>", "#include <emissivemap_fragment>\ntotalEmissiveRadiance *= mix(0.5, 1.2, smoothstep(uPane.x, uPane.y, vPaneY));");
   };
-  m.customProgramCacheKey = () => "twin-pane";
+  // 키가 같으면 onBeforeCompile 이 건너뛰어져 앞 창의 높이 범위를 쓰게 된다 — 높이 범위마다 키를 나눈다
+  m.customProgramCacheKey = () => `twin-pane-${span.value.x.toFixed(3)}-${span.value.y.toFixed(3)}`;
 }
 
 function addOverlay(obj: THREE.Object3D, mat: THREE.Material, list: THREE.Mesh[]) {

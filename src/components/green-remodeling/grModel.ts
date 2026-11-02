@@ -19,16 +19,20 @@ const spec = (key: GrKey, x: number, z: number, bay: number): GrSpec => {
   // energy.py 의 건물 크기(m)와 같게: 연면적 = 가로 × 세로 × 층
   const size: Record<GrKey, [number, number, number]> = { envelope: [18, 12, 3.3], systems: [22, 14, 3.6], roof: [32, 20, 4.2], operations: [26, 18, 3.6] };
   const [w, d, fh] = size[key];
-  return { key, x, z, w: w / 10, d: d / 10, floors: e.floors, fh: fh / 10, bay };
+  return { key, x, z, w: (w / 10) * VIS, d: (d / 10) * VIS, floors: e.floors, fh: (fh / 10) * VIS, bay: bay * VIS };
 };
+/**
+ * 화면용 배율 — 판(260 × 180 m)에 비해 실제 크기 건물은 너무 작아 보여 1.4 배로 그린다 (Product 지역 건물도 과장되어 있다).
+ * 층 수 · 창 수 · 시공 순서는 그대로고, 절감 계산(energy.py)은 실제 크기로 했다.
+ */
+const VIS = 1.4;
+/** Product 지역과 같은 판(26 × 18)의 네 블록 — 동서 도로 z = 0 · 남북 도로 x = -1 (GRDistrict) */
 export const GR_SPECS: Record<GrKey, GrSpec> = {
-  envelope: spec("envelope", -2.15, 2.1, 0.3),
-  systems: spec("systems", 2.2, 2.15, 0.34),
-  roof: spec("roof", 2.2, -1.9, 0.4),
-  operations: spec("operations", -2.15, -1.95, 0.32),
+  envelope: spec("envelope", -7.0, 3.9, 0.3),
+  systems: spec("systems", 4.0, 3.9, 0.34),
+  roof: spec("roof", 6.0, -4.9, 0.4),
+  operations: spec("operations", -6.0, -4.8, 0.32),
 };
-/** 대지 — 홈 히어로 무대를 감싸는 길(±4.6) 안쪽 */
-export const PLATE = { w: 8.4, d: 8.4 };
 
 export const specHeight = (s: GrSpec) => s.floors * s.fh;
 

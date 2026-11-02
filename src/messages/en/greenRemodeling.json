@@ -21,8 +21,8 @@
     "systems": {
       "name": "Systems",
       "place": "Community center · 2F",
-      "short": "Heat pump · ventilation · LED",
-      "title": "Heat pump · heat-recovery ventilation · LED",
+      "short": "Heat pump · ventilation · LED · carport solar",
+      "title": "Heat pump · heat-recovery ventilation · LED · carport solar",
       "desc": "Produces the same heat and light with less energy. Works well even where the envelope is hard to change."
     },
     "roof": {
@@ -57,7 +57,8 @@
     "pv": { "title": "Solar PV", "desc": "Put solar modules on the roof to generate the electricity the building uses." },
     "schedule": { "title": "Run hours · set points", "desc": "Run HVAC to the occupied hours and set 20 °C heating · 26 °C cooling." },
     "standby": { "title": "Standby power cut-off", "desc": "Find equipment left on after hours, floor by floor, and switch it off." },
-    "lighting": { "title": "Automatic lighting control", "desc": "Switch off lights automatically in empty hours and areas." }
+    "lighting": { "title": "Automatic lighting control", "desc": "Switch off lights automatically in empty hours and areas." },
+    "carportPv": { "title": "Carport solar", "desc": "Solar modules on the parking-lot carports shade the cars and generate the building's electricity." }
   },
   "uses": {
     "heating": "Heating",
@@ -121,7 +122,7 @@
     "items": [
       "Primary energy uses Korea's building energy rating factors (electricity 2.75 · gas 1.1); carbon uses 0.4781 (electricity) · 0.2022 (LNG) kgCO₂/kWh.",
       "Before: old walls (U 1.4 W/m²K), windows (4.0), roof (0.8), gas boiler efficiency 80–85%, cooling COP 2.6–3.0, fluorescent lighting 12 W/m².",
-      "After: 100 mm phenolic external insulation, Low-E double glazing (1.5), roof U 0.15 with reflective finish, heat pump (heating COP 3.2 · cooling 4.0), 70% heat recovery, LED 6 W/m², solar on 45% of the roof.",
+      "After: 100 mm phenolic external insulation, Low-E double glazing (1.5), roof U 0.15 with reflective finish, heat pump (heating COP 3.2 · cooling 4.0), 70% heat recovery, LED 6 W/m², solar on 45% of the roof, 13.8 kW of carport solar (32 modules, 10° south).",
       "Operations (BEMS): HVAC running 1 h before and 2 h after occupied hours trimmed to the occupied hours, set points 22/24 °C → 20/26 °C, after-hours standby 30% → 15%, lights left on 20% → 5%.",
       "Improved airtightness from new windows is not counted (conservative), and fan and pump energy is excluded."
     ]

@@ -25,7 +25,7 @@ const UNIT_Z = 0.3;
 const ERV = { x: -0.6, z: -0.2, w: 0.34, h: 0.14, d: 0.22 };
 const HOT = new THREE.Color("#ff5a2a");
 /** 1층 남쪽은 민원실 통유리, 가운데 입구 캐노피 */
-const OPTS: ShellOptions = { groundGlass: ["S"], canopy: { face: "S", bay: 3, bays: 2 } };
+const OPTS: ShellOptions = { groundGlass: ["S"], canopy: { face: "S", bay: 3, bays: 2 }, penthouse: { x: 1.1, z: -0.6, w: 0.5, d: 0.42, color: "#a87b55" }, base: "#5f6b6f", crown: "#a87b55" };
 
 type Tmp = { m: THREE.Matrix4; p: THREE.Vector3; q: THREE.Quaternion; s: THREE.Vector3; r: THREE.Matrix4; c: THREE.Color };
 

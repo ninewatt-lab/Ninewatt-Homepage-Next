@@ -7,7 +7,7 @@
  */
 
 import { useFrame } from "@react-three/fiber";
-import { useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 import { mergeGeometries } from "three/examples/jsm/utils/BufferGeometryUtils.js";
 import { GR_SPECS, LAMP_WARM, easeOut, hash01, occupancyAt, phaseAt, piece, useGrSim } from "./grModel";
@@ -17,7 +17,12 @@ const S = GR_SPECS.envelope;
 /** 외단열 판 두께 (PF보드 100 mm + 마감) */
 const T = 0.011;
 const BLADES = 3;
-const OPTS: ShellOptions = { canopy: { face: "S", bay: 2, bays: 2 } };
+const OPTS: ShellOptions = {
+  canopy: { face: "S", bay: 2, bays: 2 },
+  penthouse: { x: -0.78, z: -0.42, w: 0.44, d: 0.42, color: "#c9785a" },
+  base: "#9e8f80",
+  garden: { x: 0.25, z: 0.05, w: 1.3, d: 0.9 },
+};
 const BLADE_L = 0.045;
 
 type Tmp = { m: THREE.Matrix4; p: THREE.Vector3; q: THREE.Quaternion; r: THREE.Quaternion; s: THREE.Vector3; v: THREE.Vector3; e: THREE.Euler; c: THREE.Color };
@@ -50,6 +55,20 @@ function frameGeometry(ww: number, wh: number, depth: number, bar: number) {
     // 가운데 세로살 (새 창은 2짝)
     new THREE.BoxGeometry(bar * 0.7, wh, depth).translate(0, 0, 0),
   ])!;
+}
+
+// 외단열 판 마감: 1층은 따뜻한 돌색 기단, 위층은 밝은 미장에 몇 칸만 파스텔 포인트 (어린이집다운 리듬)
+const PANEL_BASE = new THREE.Color("#c4ad94");
+const PANEL_MAIN = new THREE.Color(COLORS.panel);
+const PANEL_ACCENT = ["#f0c96a", "#8fcfc4", "#ef9f86"].map((c) => new THREE.Color(c));
+
+function paintPanels(mesh: THREE.InstancedMesh, slots: WindowSlot[]) {
+  for (const w of slots) {
+    const h = hash01(w.index, 17);
+    const c = w.floor === 0 ? PANEL_BASE : h < 0.2 ? PANEL_ACCENT[Math.floor(hash01(w.index, 29) * PANEL_ACCENT.length)] : PANEL_MAIN;
+    mesh.setColorAt(w.index, c);
+  }
+  if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true;
 }
 
 function stepPanels(mesh: THREE.InstancedMesh, slots: WindowSlot[], phase: number, tmp: Tmp) {
@@ -118,6 +137,9 @@ export default function Envelope() {
   const newFrames = useRef<THREE.InstancedMesh>(null);
   const louvers = useRef<THREE.InstancedMesh>(null);
   const last = useRef(-1);
+  useEffect(() => {
+    if (panels.current) paintPanels(panels.current, slots);
+  }, [slots]);
   const tmp = useMemo<Tmp>(() => ({ m: new THREE.Matrix4(), p: new THREE.Vector3(), q: new THREE.Quaternion(), r: new THREE.Quaternion(), s: new THREE.Vector3(), v: new THREE.Vector3(), e: new THREE.Euler(), c: new THREE.Color() }), []);
   const louverCount = slots.filter((w) => w.face.key !== "N").length * BLADES;
 
@@ -172,7 +194,7 @@ export default function Envelope() {
         <meshStandardMaterial color={COLORS.frameNew} metalness={0.4} roughness={0.35} />
       </instancedMesh>
       <instancedMesh ref={panels} args={[geo.panel, undefined, slots.length]} frustumCulled={false} castShadow receiveShadow>
-        <meshStandardMaterial color={COLORS.panel} roughness={0.9} />
+        <meshStandardMaterial roughness={0.9} />
       </instancedMesh>
       <instancedMesh ref={louvers} args={[geo.blade, undefined, louverCount]} frustumCulled={false} castShadow>
         <meshStandardMaterial color="#d4dadc" metalness={0.6} roughness={0.35} />

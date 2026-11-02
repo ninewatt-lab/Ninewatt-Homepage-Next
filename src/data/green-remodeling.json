@@ -91,9 +91,10 @@
    "steps": [
     "heatpump",
     "erv",
-    "led"
+    "led",
+    "carportPv"
    ],
-   "pvKw": null,
+   "pvKw": 13.8,
    "runs": [
     {
      "use": {
@@ -150,13 +151,28 @@
      "primary": 132716,
      "primaryPerM2": 215.4,
      "co2": 23.07
+    },
+    {
+     "use": {
+      "heating": 10098,
+      "cooling": 6004,
+      "lighting": 9835,
+      "equipment": 22324,
+      "pv": 17555
+     },
+     "gas": 0,
+     "elec": 30705,
+     "primary": 84439,
+     "primaryPerM2": 137.1,
+     "co2": 14.68
     }
    ],
    "saving": [
     0.0,
     14.4,
     16.4,
-    30.4
+    30.4,
+    55.7
    ]
   },
   "roof": {
