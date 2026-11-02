@@ -16,6 +16,7 @@ import { Lighting, Sky } from "@/components/hero/Atmosphere";
 import { SimContext, type Sim } from "@/components/hero/heroSim";
 import Envelope from "./Envelope";
 import GRDistrict from "./GRDistrict";
+import { GlossTicker } from "./gloss";
 import Operations from "./Operations";
 import RoofBuilding from "./RoofBuilding";
 import Systems from "./Systems";
@@ -242,6 +243,7 @@ export default function GRScene({
           <Sky radius={220} />
           <Lighting shadows={shadows} mapSize={2048} bounds={16} reach={30} />
           <GRDistrict />
+          <GlossTicker />
           <Envelope />
           <Systems />
           <RoofBuilding />

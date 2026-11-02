@@ -10,6 +10,7 @@ import { useFrame } from "@react-three/fiber";
 import { useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 import { mergeGeometries } from "three/examples/jsm/utils/BufferGeometryUtils.js";
+import { glossMetal, glossWall } from "./gloss";
 import { GR_SPECS, LAMP_WARM, easeOut, hash01, occupancyAt, phaseAt, piece, useGrSim } from "./grModel";
 import { COLORS, GLASS_OUT, HEAD, SILL, Shell, WindowGlass, faceQuat, facePlane, makeFaces, paintLights, setThermal, thermalMaterial, totalBays, useWindowLights, windowSize, windowSlots, type ShellOptions, type WindowSlot } from "./Shell";
 
@@ -137,6 +138,7 @@ export default function Envelope() {
   const newFrames = useRef<THREE.InstancedMesh>(null);
   const louvers = useRef<THREE.InstancedMesh>(null);
   const last = useRef(-1);
+  const mats = useMemo(() => ({ panel: glossWall(), frame: glossMetal({ color: COLORS.frameNew }), blade: glossMetal({ color: "#b9c3c7", roughness: 0.35 }, 0.45) }), []);
   useEffect(() => {
     if (panels.current) paintPanels(panels.current, slots);
   }, [slots]);
@@ -191,13 +193,13 @@ export default function Envelope() {
         <meshStandardMaterial color={COLORS.frameOld} metalness={0.35} roughness={0.5} />
       </instancedMesh>
       <instancedMesh ref={newFrames} args={[geo.newFrame, undefined, slots.length]} frustumCulled={false} castShadow>
-        <meshStandardMaterial color={COLORS.frameNew} metalness={0.4} roughness={0.35} />
+        <primitive object={mats.frame} attach="material" />
       </instancedMesh>
       <instancedMesh ref={panels} args={[geo.panel, undefined, slots.length]} frustumCulled={false} castShadow receiveShadow>
-        <meshStandardMaterial roughness={0.9} />
+        <primitive object={mats.panel} attach="material" />
       </instancedMesh>
       <instancedMesh ref={louvers} args={[geo.blade, undefined, louverCount]} frustumCulled={false} castShadow>
-        <meshStandardMaterial color="#d4dadc" metalness={0.6} roughness={0.35} />
+        <primitive object={mats.blade} attach="material" />
       </instancedMesh>
       {thermal.map((th, i) => (
         <mesh key={i} geometry={th.geometry} material={th.material} renderOrder={3} />

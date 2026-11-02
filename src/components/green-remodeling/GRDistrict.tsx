@@ -159,17 +159,36 @@ function glowPanels(m: THREE.MeshStandardMaterial, solarKw: number) {
 
 const PANEL_TMP = { m: new THREE.Matrix4(), p: new THREE.Vector3(), q: new THREE.Quaternion(), s: new THREE.Vector3() };
 
-/** 시공 단계 진행(0~1)만큼 패널이 순서대로 내려앉는다 */
-function placePanels(mesh: THREE.InstancedMesh, phase: number) {
+/** 시공 단계 진행(0~1)만큼 패널이 순서대로 내려앉는다. 아직 안 올라간 자리에는 "설치 예정" 윤곽이 남는다 */
+function placePanels(mesh: THREE.InstancedMesh, ghosts: THREE.InstancedMesh, phase: number) {
   const t = PANEL_TMP;
   CARPORT.panels.forEach((m, i) => {
     m.decompose(t.p, t.q, t.s);
     const e = easeOut(piece(phase, i / CARPORT.panels.length));
+    ghosts.setMatrixAt(i, e < 0.95 ? m : t.m.makeScale(1e-4, 1e-4, 1e-4));
     t.p.y += (1 - e) * 0.6;
     if (e <= 0) t.s.setScalar(1e-4);
     mesh.setMatrixAt(i, t.m.compose(t.p, t.q, t.s));
   });
   mesh.instanceMatrix.needsUpdate = true;
+  ghosts.instanceMatrix.needsUpdate = true;
+}
+
+/** 설치 예정 윤곽: 청록 테두리 + 옅은 면 (밤에도 보이게 빛나는 재질) */
+function ghostTexture() {
+  const c = document.createElement("canvas");
+  c.width = 64;
+  c.height = 40;
+  const g = c.getContext("2d")!;
+  g.fillStyle = "rgba(73,182,202,0.1)";
+  g.fillRect(0, 0, 64, 40);
+  g.strokeStyle = "rgba(127,227,243,0.75)";
+  g.lineWidth = 3;
+  g.setLineDash([8, 5]);
+  g.strokeRect(2, 2, 60, 36);
+  const tex = new THREE.CanvasTexture(c);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  return tex;
 }
 
 function Carport() {
@@ -177,13 +196,15 @@ function Carport() {
   const tex = useMemo(() => pvTexture(), []);
   const mat = useMemo(() => new THREE.MeshStandardMaterial({ map: tex, emissive: "#49B6CA", emissiveMap: tex, metalness: 0.45, roughness: 0.3 }), [tex]);
   const panels = useRef<THREE.InstancedMesh>(null);
+  const ghosts = useRef<THREE.InstancedMesh>(null);
+  const ghostMat = useMemo(() => new THREE.MeshBasicMaterial({ map: ghostTexture(), color: "#8a9a9d", transparent: true, depthWrite: false, toneMapped: false }), []);
   const last = useRef(-1);
   useFrame(() => {
     glowPanels(mat, sim.current.solarKw);
     const phase = phaseAt("systems", sim.current.progress.systems).steps[3] ?? 1;
-    if (panels.current && phase !== last.current) {
+    if (panels.current && ghosts.current && phase !== last.current) {
       last.current = phase;
-      placePanels(panels.current, phase);
+      placePanels(panels.current, ghosts.current, phase);
     }
   });
   return (
@@ -208,6 +229,9 @@ function Carport() {
         receiveShadow
       >
         <boxGeometry args={[0.5, 0.025, 0.32]} />
+      </instancedMesh>
+      <instancedMesh ref={ghosts} args={[undefined, ghostMat, CARPORT.panels.length]} frustumCulled={false} renderOrder={2}>
+        <boxGeometry args={[0.5, 0.004, 0.32]} />
       </instancedMesh>
       <Instances matrices={CARPORT.chargers}>
         <boxGeometry args={[0.08, 0.26, 0.05]} />

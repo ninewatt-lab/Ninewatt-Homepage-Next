@@ -11,6 +11,7 @@ import { useMemo, useRef } from "react";
 import * as THREE from "three";
 import { pvTexture } from "@/components/hero/textures";
 import { GR_ENERGY, GR_SPECS, LAMP_WARM, easeOut, hash01, occupancyAt, phaseAt, piece, specHeight, useGrSim } from "./grModel";
+import { glossWall } from "./gloss";
 import { Shell, makeFaces, paintLights, setThermal, thermalMaterial, useWindowLights, windowSlots, type ShellOptions } from "./Shell";
 
 const S = GR_SPECS.roof;
@@ -93,6 +94,7 @@ export default function RoofBuilding() {
   const last = useRef(-1);
   const tmp = useMemo<Tmp>(() => ({ m: new THREE.Matrix4(), p: new THREE.Vector3(), q: new THREE.Quaternion(), s: new THREE.Vector3(), c: new THREE.Color() }), []);
   const pv = useMemo(() => pvTexture(), []);
+  const boardMat = useMemo(() => glossWall({ roughness: 0.6, clearcoat: 0.3 }, 0.3), []);
   const pvMat = useMemo(() => new THREE.MeshStandardMaterial({ map: pv, emissive: "#49B6CA", emissiveMap: pv, emissiveIntensity: 0.15, metalness: 0.45, roughness: 0.3 }), [pv]);
 
   const thermal = useMemo(() => {
@@ -122,7 +124,7 @@ export default function RoofBuilding() {
       <primitive object={lights} />
       <instancedMesh ref={boards} args={[undefined, undefined, ROWS * COLS]} frustumCulled={false} castShadow receiveShadow>
         <boxGeometry args={[CW - 0.006, 0.014, CD - 0.006]} />
-        <meshStandardMaterial roughness={0.85} />
+        <primitive object={boardMat} attach="material" />
       </instancedMesh>
       <instancedMesh ref={modules} args={[undefined, pvMat, PV_SLOTS.length]} frustumCulled={false} castShadow receiveShadow>
         <boxGeometry args={[MODULE.w, 0.004, MODULE.l]} />

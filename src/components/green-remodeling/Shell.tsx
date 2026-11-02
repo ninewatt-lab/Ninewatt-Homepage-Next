@@ -12,6 +12,7 @@ import { useMemo } from "react";
 import * as THREE from "three";
 import { mergeGeometries } from "three/examples/jsm/utils/BufferGeometryUtils.js";
 import { THERMAL_STOPS, type GrSpec } from "./grModel";
+import { addNightLift, glossGlass, glossMetal, glossWall } from "./gloss";
 
 export type FaceKey = "S" | "E" | "N" | "W";
 export const FACE_ORDER: FaceKey[] = ["S", "E", "N", "W"];
@@ -79,9 +80,10 @@ export type ShellOptions = {
  * 높이는 건물 좌표 y(바닥 0)로 칠한다 — 벽 형상의 꼭짓점이 듬성해서 꼭짓점 색으로는 층 경계가 번진다.
  */
 function wallMaterial(color: string, base: string | undefined, fh: number, top: number) {
-  const m = new THREE.MeshStandardMaterial({ color, roughness: 0.93 });
+  const m = glossWall({ color });
   const uniforms = { uBase: { value: new THREE.Color(base ?? color) }, uFh: { value: base ? fh : -1 }, uTop: { value: top } };
   m.onBeforeCompile = (sh) => {
+    addNightLift(sh);
     Object.assign(sh.uniforms, uniforms);
     sh.vertexShader = sh.vertexShader
       .replace("#include <common>", "#include <common>\nvarying float vWallY;")
@@ -239,7 +241,7 @@ export function WindowGlass({ slots }: { slots: WindowSlot[] }) {
     const room = new THREE.InstancedMesh(new THREE.PlaneGeometry(1, 1), new THREE.MeshStandardMaterial({ color: COLORS.room, roughness: 1 }), slots.length);
     const glass = new THREE.InstancedMesh(
       new THREE.PlaneGeometry(1, 1),
-      new THREE.MeshStandardMaterial({ color: COLORS.glass, metalness: 0.85, roughness: 0.06, transparent: true, opacity: 0.62, depthWrite: false }),
+      glossGlass({ color: "#3f6f7d", transparent: true, opacity: 0.78, depthWrite: false }),
       slots.length,
     );
     glass.renderOrder = 2;
@@ -273,7 +275,7 @@ function Frames({ slots, color }: { slots: WindowSlot[]; color: string }) {
       const k = w.size.join(":");
       by.set(k, [...(by.get(k) ?? []), w]);
     }
-    const mat = new THREE.MeshStandardMaterial({ color, metalness: 0.5, roughness: 0.4 });
+    const mat = glossMetal({ color });
     return [...by.values()].map((list) => {
       const [ww, wh] = list[0].size;
       const big = ww > 0.3;
@@ -328,7 +330,7 @@ function Fins({ s, faces }: { s: GrSpec; faces: Face[] }) {
         items.push(new THREE.Matrix4().compose(p, faceQuat(face), new THREE.Vector3(1, 1, 1)));
       }
     }
-    const m = new THREE.InstancedMesh(new THREE.BoxGeometry(0.012, h - 0.02, 0.04), new THREE.MeshStandardMaterial({ color: COLORS.metal, metalness: 0.7, roughness: 0.3 }), items.length);
+    const m = new THREE.InstancedMesh(new THREE.BoxGeometry(0.012, h - 0.02, 0.04), glossMetal({ color: COLORS.metal }), items.length);
     items.forEach((t, i) => m.setMatrixAt(i, t));
     m.castShadow = true;
     m.computeBoundingSphere();
@@ -366,6 +368,9 @@ function Canopy({ s, faces, at }: { s: GrSpec; faces: Face[]; at: NonNullable<Sh
   );
 }
 
+const useGlossWall = (color: string) => useMemo(() => glossWall({ color }), [color]);
+const useGlossGlass = () => useMemo(() => glossGlass({ color: "#3f6f7d" }), []);
+
 /** 옥상 계단실: 포인트 색 덩어리 + 문 + 금속 지붕 띠 */
 function Penthouse({ s, p }: { s: GrSpec; p: NonNullable<ShellOptions["penthouse"]> }) {
   const top = s.floors * s.fh;
@@ -374,7 +379,7 @@ function Penthouse({ s, p }: { s: GrSpec; p: NonNullable<ShellOptions["penthouse
     <group position={[p.x, top, p.z]}>
       <mesh position={[0, h / 2, 0]} castShadow receiveShadow>
         <boxGeometry args={[p.w, h, p.d]} />
-        <meshStandardMaterial color={p.color} roughness={0.8} />
+        <primitive object={useGlossWall(p.color)} attach="material" />
       </mesh>
       <mesh position={[0, h + 0.008, 0]} castShadow>
         <boxGeometry args={[p.w + 0.03, 0.016, p.d + 0.03]} />
@@ -383,7 +388,7 @@ function Penthouse({ s, p }: { s: GrSpec; p: NonNullable<ShellOptions["penthouse
       {/* 옥상으로 나가는 유리문 (남쪽) */}
       <mesh position={[0, h * 0.4, p.d / 2 + 0.002]}>
         <planeGeometry args={[p.w * 0.35, h * 0.75]} />
-        <meshStandardMaterial color={COLORS.glass} metalness={0.8} roughness={0.08} />
+        <primitive object={useGlossGlass()} attach="material" />
       </mesh>
     </group>
   );
@@ -445,6 +450,10 @@ export function Shell({
 }) {
   const h = s.floors * s.fh;
   const walls = useMemo(() => wallGeometry(s, faces, slots), [s, faces, slots]);
+  const plinthMat = useMemo(() => glossWall({ color: COLORS.plinth, roughness: 0.3 }, 0.7), []);
+  const bandMat = useMemo(() => glossWall({ color: COLORS.band }), []);
+  const crownMat = useMemo(() => glossWall({ color: opts.crown ?? wallColor ?? (old ? COLORS.wallOld : COLORS.wall) }), [opts.crown, wallColor, old]);
+  const copingMat = useMemo(() => glossMetal({ color: COLORS.coping }), []);
   const wallMat = useMemo(() => wallMaterial(wallColor ?? (old ? COLORS.wallOld : COLORS.wall), opts.base, s.fh, s.floors * s.fh), [wallColor, old, opts.base, s]);
   const gravel = useMemo(() => {
     const t = gravelTexture();
@@ -459,13 +468,13 @@ export function Shell({
       {/* 기단 (짙은 돌) */}
       <mesh position={[0, 0.02, 0]} castShadow receiveShadow>
         <boxGeometry args={[s.w + 0.012, 0.04, s.d + 0.012]} />
-        <meshStandardMaterial color={COLORS.plinth} roughness={0.8} />
+        <primitive object={plinthMat} attach="material" />
       </mesh>
       {/* 층 띠 (슬래브 끝) */}
       {Array.from({ length: s.floors - 1 }, (_, f) => (
         <mesh key={f} position={[0, (f + 1) * s.fh, 0]} castShadow receiveShadow>
           <boxGeometry args={[s.w + 0.01, 0.014, s.d + 0.01]} />
-          <meshStandardMaterial color={COLORS.band} roughness={0.7} />
+          <primitive object={bandMat} attach="material" />
         </mesh>
       ))}
       {/* 옥상: 슬래브 · 자갈 · 파라펫 · 금속 두겁 */}
@@ -486,11 +495,11 @@ export function Shell({
         <group key={i}>
           <mesh position={[x, h + 0.035, z]} castShadow receiveShadow>
             <boxGeometry args={[sx, 0.07, sz]} />
-            <meshStandardMaterial color={opts.crown ?? wallColor ?? (old ? COLORS.wallOld : COLORS.wall)} roughness={0.9} />
+            <primitive object={crownMat} attach="material" />
           </mesh>
           <mesh position={[x, h + 0.073, z]} castShadow>
             <boxGeometry args={[sx + 0.008, 0.008, sz + 0.008]} />
-            <meshStandardMaterial color={COLORS.coping} metalness={0.6} roughness={0.35} />
+            <primitive object={copingMat} attach="material" />
           </mesh>
         </group>
       ))}
