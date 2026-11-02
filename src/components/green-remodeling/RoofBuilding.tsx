@@ -27,7 +27,7 @@ const MODULES = Math.round(((GR_ENERGY.roof.pvKw ?? 0) * 1000) / 430);
 const TILT_Q = new THREE.Quaternion().setFromEuler(new THREE.Euler((15 * Math.PI) / 180, 0, 0));
 
 /** 1층 남 · 동은 열람실 통유리, 위층은 세로 핀, 남쪽 가운데 입구 캐노피 */
-const OPTS: ShellOptions = { groundGlass: ["S", "E"], fins: true, canopy: { face: "S", bay: 3, bays: 2 } };
+const OPTS: ShellOptions = { groundGlass: ["S", "E"], fins: true, canopy: { face: "S", bay: 3, bays: 2 }, base: "#4e5a5f", crown: "#56656b" };
 const BOARD = new THREE.Color("#cdb877");
 const MEMBRANE = new THREE.Color("#e8ecee");
 

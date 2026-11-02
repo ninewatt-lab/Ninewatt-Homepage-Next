@@ -64,7 +64,42 @@ export type ShellOptions = {
   fins?: boolean;
   /** 입구 캐노피: 면 · 칸 번호(가운데) · 칸 수 */
   canopy?: { face: FaceKey; bay: number; bays: number };
+  /** 옥상 계단실 (건물 좌표 x · z, 크기 비율은 건물 폭 기준) · 포인트 색 */
+  penthouse?: { x: number; z: number; w: number; d: number; color: string };
+  /** 옥상 정원 (잔디 · 나무 화분) */
+  garden?: { x: number; z: number; w: number; d: number };
+  /** 1층 벽 재료색 (기단) — 위층과 다른 재료로 기단 · 몸통 · 옥상 구성을 만든다 */
+  base?: string;
+  /** 맨 위층 위 파라펫 띠 색 (몸통과 다른 마감) */
+  crown?: string;
 };
+
+/**
+ * 벽 재질: 1층(기단)은 base 색, 땅에 닿는 곳은 은은하게 어둡게(흙받이 그늘), 꼭대기 아래도 살짝 어둡게.
+ * 높이는 건물 좌표 y(바닥 0)로 칠한다 — 벽 형상의 꼭짓점이 듬성해서 꼭짓점 색으로는 층 경계가 번진다.
+ */
+function wallMaterial(color: string, base: string | undefined, fh: number, top: number) {
+  const m = new THREE.MeshStandardMaterial({ color, roughness: 0.93 });
+  const uniforms = { uBase: { value: new THREE.Color(base ?? color) }, uFh: { value: base ? fh : -1 }, uTop: { value: top } };
+  m.onBeforeCompile = (sh) => {
+    Object.assign(sh.uniforms, uniforms);
+    sh.vertexShader = sh.vertexShader
+      .replace("#include <common>", "#include <common>\nvarying float vWallY;")
+      .replace("#include <begin_vertex>", "#include <begin_vertex>\nvWallY = position.y;");
+    sh.fragmentShader = sh.fragmentShader
+      .replace("#include <common>", "#include <common>\nuniform vec3 uBase;\nuniform float uFh;\nuniform float uTop;\nvarying float vWallY;")
+      .replace(
+        "#include <color_fragment>",
+        `#include <color_fragment>
+        if (vWallY < uFh) diffuseColor.rgb = uBase;
+        diffuseColor.rgb *= mix(0.6, 1.0, smoothstep(0.0, 0.22, vWallY));
+        diffuseColor.rgb *= mix(1.0, 0.9, smoothstep(uTop - 0.12, uTop, vWallY));`,
+      );
+  };
+  // 키가 같으면 three.js 가 onBeforeCompile 을 건너뛰고 앞 재질의 프로그램을 쓰므로, 값이 다른 재질은 키도 다르게
+  m.customProgramCacheKey = () => `gr-wall-${base ?? "-"}-${fh}-${top}`;
+  return m;
+}
 
 export function makeFaces(s: GrSpec): Face[] {
   const defs: Record<FaceKey, [THREE.Vector3, THREE.Vector3, number]> = {
@@ -331,6 +366,63 @@ function Canopy({ s, faces, at }: { s: GrSpec; faces: Face[]; at: NonNullable<Sh
   );
 }
 
+/** 옥상 계단실: 포인트 색 덩어리 + 문 + 금속 지붕 띠 */
+function Penthouse({ s, p }: { s: GrSpec; p: NonNullable<ShellOptions["penthouse"]> }) {
+  const top = s.floors * s.fh;
+  const h = s.fh * 0.95;
+  return (
+    <group position={[p.x, top, p.z]}>
+      <mesh position={[0, h / 2, 0]} castShadow receiveShadow>
+        <boxGeometry args={[p.w, h, p.d]} />
+        <meshStandardMaterial color={p.color} roughness={0.8} />
+      </mesh>
+      <mesh position={[0, h + 0.008, 0]} castShadow>
+        <boxGeometry args={[p.w + 0.03, 0.016, p.d + 0.03]} />
+        <meshStandardMaterial color={COLORS.coping} metalness={0.6} roughness={0.35} />
+      </mesh>
+      {/* 옥상으로 나가는 유리문 (남쪽) */}
+      <mesh position={[0, h * 0.4, p.d / 2 + 0.002]}>
+        <planeGeometry args={[p.w * 0.35, h * 0.75]} />
+        <meshStandardMaterial color={COLORS.glass} metalness={0.8} roughness={0.08} />
+      </mesh>
+    </group>
+  );
+}
+
+/** 옥상 정원: 잔디 판 + 둥근 화분 나무 + 데크 */
+function RoofGarden({ s, g }: { s: GrSpec; g: NonNullable<ShellOptions["garden"]> }) {
+  const top = s.floors * s.fh;
+  const pots = [
+    [g.x - g.w / 2 + 0.12, g.z - g.d / 2 + 0.12],
+    [g.x + g.w / 2 - 0.12, g.z - g.d / 2 + 0.12],
+    [g.x - g.w / 2 + 0.12, g.z + g.d / 2 - 0.12],
+  ];
+  return (
+    <group position={[0, top, 0]}>
+      <mesh position={[g.x, 0.012, g.z]} castShadow receiveShadow>
+        <boxGeometry args={[g.w, 0.02, g.d]} />
+        <meshStandardMaterial color="#4f7a52" roughness={0.95} />
+      </mesh>
+      <mesh position={[g.x + g.w / 4, 0.024, g.z + g.d / 4]} receiveShadow>
+        <boxGeometry args={[g.w / 2.2, 0.006, g.d / 2.2]} />
+        <meshStandardMaterial color="#a57d58" roughness={0.8} />
+      </mesh>
+      {pots.map(([x, z], i) => (
+        <group key={i} position={[x, 0.02, z]}>
+          <mesh position={[0, 0.025, 0]} castShadow>
+            <cylinderGeometry args={[0.045, 0.04, 0.05, 12]} />
+            <meshStandardMaterial color="#cfc8bb" roughness={0.8} />
+          </mesh>
+          <mesh position={[0, 0.1, 0]} castShadow>
+            <icosahedronGeometry args={[0.07, 1]} />
+            <meshStandardMaterial color="#567f5c" roughness={0.85} flatShading />
+          </mesh>
+        </group>
+      ))}
+    </group>
+  );
+}
+
 /**
  * old: 시공 전 모습(바랜 벽 · 옛 알루미늄 창틀). 외피 건물은 창틀 · 유리를 따로 그리므로 hideWindows 로 뺀다.
  */
@@ -353,6 +445,7 @@ export function Shell({
 }) {
   const h = s.floors * s.fh;
   const walls = useMemo(() => wallGeometry(s, faces, slots), [s, faces, slots]);
+  const wallMat = useMemo(() => wallMaterial(wallColor ?? (old ? COLORS.wallOld : COLORS.wall), opts.base, s.fh, s.floors * s.fh), [wallColor, old, opts.base, s]);
   const gravel = useMemo(() => {
     const t = gravelTexture();
     t.repeat.set(s.w * 3, s.d * 3);
@@ -362,9 +455,7 @@ export function Shell({
   return (
     <group>
       {/* 창 구멍이 뚫린 벽 — 창 둘레(안쪽 면)에 그림자가 진다 */}
-      <mesh geometry={walls} castShadow receiveShadow>
-        <meshStandardMaterial color={wallColor ?? (old ? COLORS.wallOld : COLORS.wall)} roughness={0.93} />
-      </mesh>
+      <mesh geometry={walls} material={wallMat} castShadow receiveShadow />
       {/* 기단 (짙은 돌) */}
       <mesh position={[0, 0.02, 0]} castShadow receiveShadow>
         <boxGeometry args={[s.w + 0.012, 0.04, s.d + 0.012]} />
@@ -395,7 +486,7 @@ export function Shell({
         <group key={i}>
           <mesh position={[x, h + 0.035, z]} castShadow receiveShadow>
             <boxGeometry args={[sx, 0.07, sz]} />
-            <meshStandardMaterial color={wallColor ?? (old ? COLORS.wallOld : COLORS.wall)} roughness={0.9} />
+            <meshStandardMaterial color={opts.crown ?? wallColor ?? (old ? COLORS.wallOld : COLORS.wall)} roughness={0.9} />
           </mesh>
           <mesh position={[x, h + 0.073, z]} castShadow>
             <boxGeometry args={[sx + 0.008, 0.008, sz + 0.008]} />
@@ -412,6 +503,8 @@ export function Shell({
       )}
       {opts.fins && <Fins s={s} faces={faces} />}
       {opts.canopy && <Canopy s={s} faces={faces} at={opts.canopy} />}
+      {opts.penthouse && <Penthouse s={s} p={opts.penthouse} />}
+      {opts.garden && <RoofGarden s={s} g={opts.garden} />}
     </group>
   );
 }

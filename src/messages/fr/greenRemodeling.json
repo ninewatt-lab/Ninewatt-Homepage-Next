@@ -21,8 +21,8 @@
     "systems": {
       "name": "Équipements",
       "place": "Centre communal · R+1",
-      "short": "Pompe à chaleur · ventilation · LED",
-      "title": "Pompe à chaleur · ventilation double flux · LED",
+      "short": "PAC · ventilation · LED · ombrières",
+      "title": "Pompe à chaleur · double flux · LED · ombrières solaires",
       "desc": "La même chaleur et la même lumière avec moins d'énergie. Efficace même là où l'enveloppe est difficile à modifier."
     },
     "roof": {
@@ -57,7 +57,8 @@
     "pv": { "title": "Photovoltaïque", "desc": "Installer des modules solaires sur le toit pour produire l'électricité consommée par le bâtiment." },
     "schedule": { "title": "Horaires · consignes", "desc": "Faire fonctionner le CVC aux heures d'occupation, avec 20 °C en chauffage et 26 °C en climatisation." },
     "standby": { "title": "Coupure des veilles", "desc": "Repérer étage par étage les appareils restés allumés après le travail et les éteindre." },
-    "lighting": { "title": "Extinction automatique", "desc": "Éteindre automatiquement l'éclairage des zones et heures inoccupées." }
+    "lighting": { "title": "Extinction automatique", "desc": "Éteindre automatiquement l'éclairage des zones et heures inoccupées." },
+    "carportPv": { "title": "Ombrières solaires", "desc": "Des modules solaires sur les ombrières du parking abritent les voitures et produisent l'électricité du bâtiment." }
   },
   "uses": {
     "heating": "Chauffage",
@@ -121,7 +122,7 @@
     "items": [
       "L'énergie primaire utilise les coefficients du label énergétique coréen (électricité 2,75 · gaz 1,1) ; le carbone 0,4781 (électricité) · 0,2022 (GNL) kgCO₂/kWh.",
       "Avant : murs anciens (U 1,4 W/m²K), fenêtres (4,0), toiture (0,8), chaudière gaz 80–85 %, climatisation COP 2,6–3,0, fluorescent 12 W/m².",
-      "Après : isolation extérieure 100 mm, double vitrage peu émissif (1,5), toiture U 0,15 avec finition réfléchissante, pompe à chaleur (COP 3,2 chaud · 4,0 froid), récupération 70 %, LED 6 W/m², solaire sur 45 % du toit.",
+      "Après : isolation extérieure 100 mm, double vitrage peu émissif (1,5), toiture U 0,15 avec finition réfléchissante, pompe à chaleur (COP 3,2 chaud · 4,0 froid), récupération 70 %, LED 6 W/m², solaire sur 45 % du toit, 13,8 kW d'ombrières (32 modules, 10° sud).",
       "Exploitation (GTB) : CVC ramené aux heures d'occupation (au lieu d'1 h avant et 2 h après), consignes 22/24 °C → 20/26 °C, veille hors heures 30 % → 15 %, éclairage laissé allumé 20 % → 5 %.",
       "Le gain d'étanchéité des nouvelles fenêtres n'est pas compté (prudent), et l'énergie des ventilateurs et pompes est exclue."
     ]

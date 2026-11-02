@@ -3,7 +3,7 @@
 건물마다 시공 단계를 하나씩 더해 가며(누적) 돌린다. 페이지의 시공 연출도 같은 단계 순서로 진행된다.
 
   envelope   어린이집 3층   외단열(PF보드 100 mm) → 고성능 창호(로이 복층) → 외부 차양(남 · 동 · 서, 냉방철 햇빛이 셀 때 내림)
-  systems    주민센터 2층   히트펌프(노후 보일러 · 냉방기 교체) → 전열교환 환기 → LED 조명
+  systems    주민센터 2층   히트펌프(노후 보일러 · 냉방기 교체) → 전열교환 환기 → LED 조명 → 주차장 카포트 태양광
   roof       도서관 2층     옥상 단열 · 쿨루프(밝은 마감) → 태양광
   operations 업무 빌딩 6층  운전 시간 · 설정 온도 최적화 → 야간 대기전력 차단 → 조명 자동 소등 (BEMS)
 
@@ -39,7 +39,7 @@ BUILDINGS = {
 # 단계: 시공 전 상태에서 바뀌는 값만 적는다 (누적)
 STEPS = {
     "envelope": ["insulation", "windows", "shading"],
-    "systems": ["heatpump", "erv", "led"],
+    "systems": ["heatpump", "erv", "led", "carportPv"],
     "roof": ["roofIns", "pv"],
     "operations": ["schedule", "standby", "lighting"],
 }
@@ -80,6 +80,7 @@ CHANGE = {
     "led": {"lpd": 6},
     "roofIns": {"roofU": 0.15, "roofAbs": 0.3},
     "pv": {"pvKw": "roof"},  # 옥상 면적의 45 %에 모듈
+    "carportPv": {"pvKw": "carport"},  # 주차 16면 카포트, 면마다 CARPORT_PER_STALL 장
     "schedule": {"hours": "opt", "heatSp": 20, "coolSp": 26},
     "standby": {"standby": 0.15},
     "lighting": {"lightOff": 0.05},
@@ -94,6 +95,10 @@ USE = {
 }
 OA_PER_PERSON = 0.007  # m³/s · 인 (25 m³/h)
 MODULE = {"w": 430, "area": 1.72 * 1.13}
+# 주차장 카포트: 16면(2줄 × 8면) × 면당 모듈 2장 = 32장 (화면의 카포트 패널 수와 같다), 10° 남향
+CARPORT_STALLS = 16
+CARPORT_PER_STALL = int(os.environ.get("CARPORT_PER_STALL", "2"))
+CARPORT_TILT = 10
 
 # 지면 온도: EPW 머리말의 0.5 m 깊이 월별 값 (Lab 의 energy_idf.py 와 같은 방식)
 GROUND = [8, 6, 6, 8, 12, 16, 19, 21, 21, 18, 14, 10]
@@ -202,9 +207,11 @@ def idf(key, s):
             f"Flow/Person,{OA_PER_PERSON},,,,OccupancySchedule,NoEconomizer,{'Sensible' if s['erv'] else 'None'},{s['erv'] or 0.7},0.65;",
         ]
     if s["pvKw"]:
-        kw = pv_kw(b)
+        kw = pv_kw(b, s["pvKw"])
+        tilt = CARPORT_TILT if s["pvKw"] == "carport" else 15
         L += [
-            f"Generator:PVWatts,PV,5,{kw * 1000:.0f},Standard,FixedRoofMounted,0.14,TiltAzimuth,15,180,,0.4;",
+            f"Generator:PVWatts,PV,5,{kw * 1000:.0f},Standard,FixedOpenRack,0.14,TiltAzimuth,{tilt},180,,0.4;" if s["pvKw"] == "carport" else
+            f"Generator:PVWatts,PV,5,{kw * 1000:.0f},Standard,FixedRoofMounted,0.14,TiltAzimuth,{tilt},180,,0.4;",
             f"ElectricLoadCenter:Generators,PV Gens,PV,Generator:PVWatts,{kw * 1000:.0f},,;",
             "ElectricLoadCenter:Inverter:PVWatts,PV Inverter,1.1,0.96;",
             "ElectricLoadCenter:Distribution,PV Dist,PV Gens,Baseload,0,,,DirectCurrentWithInverter,PV Inverter;",
@@ -220,7 +227,9 @@ def idf(key, s):
     return "\n".join(L)
 
 
-def pv_kw(b):
+def pv_kw(b, where="roof"):
+    if where == "carport":
+        return CARPORT_STALLS * CARPORT_PER_STALL * MODULE["w"] / 1000
     modules = int(b["w"] * b["d"] * 0.45 / MODULE["area"])
     return modules * MODULE["w"] / 1000
 
@@ -287,7 +296,7 @@ for key, b in BUILDINGS.items():
         "floors": b["floors"],
         "area": b["w"] * b["d"] * b["floors"],
         "steps": STEPS[key],
-        "pvKw": round(pv_kw(b), 1) if "pv" in STEPS[key] else None,
+        "pvKw": round(pv_kw(b, "roof"), 1) if "pv" in STEPS[key] else round(pv_kw(b, "carport"), 1) if "carportPv" in STEPS[key] else None,
         "runs": runs,
         # 단계까지 누적 절감률 (1차 에너지)
         "saving": [round((base - r["primary"]) / base * 100, 1) for r in runs],

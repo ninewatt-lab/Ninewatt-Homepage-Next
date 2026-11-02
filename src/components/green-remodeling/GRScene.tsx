@@ -8,24 +8,20 @@
 
 import { Canvas, useFrame, useThree, type ThreeEvent } from "@react-three/fiber";
 import { PerformanceMonitor } from "@react-three/drei";
-import { Suspense, useEffect, useMemo, useRef, useState, type ReactNode, type RefObject } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode, type RefObject } from "react";
 import * as THREE from "three";
 import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
 import Effects from "@/components/district/Effects";
-import { createSwayMaterial, tickSway } from "@/components/district/Life";
 import { Lighting, Sky } from "@/components/hero/Atmosphere";
-import HeroCity from "@/components/hero/HeroCity";
 import { SimContext, type Sim } from "@/components/hero/heroSim";
-import { useModelGeometry } from "@/components/hero/models";
-import { pavingTexture } from "@/components/hero/textures";
 import Envelope from "./Envelope";
+import GRDistrict from "./GRDistrict";
 import Operations from "./Operations";
 import RoofBuilding from "./RoofBuilding";
 import Systems from "./Systems";
-import { GR_ORDER, GR_SPECS, GrSimContext, PLATE, ease, specHeight, stepGrSim, useGrSim, type GrKey, type GrSim } from "./grModel";
+import { GR_ORDER, GR_SPECS, GrSimContext, ease, specHeight, stepGrSim, useGrSim, type GrKey, type GrSim } from "./grModel";
 
 const BG = "#050d13";
-const SITE_TOP = 0.012;
 
 /* ── 시간 ─────────────────────────────────────────────────────────── */
 
@@ -47,63 +43,6 @@ function Driver({ frozen }: { frozen: boolean }) {
     return () => window.clearInterval(id);
   }, [frozen, sim, invalidate]);
   return null;
-}
-
-/* ── 대지 ─────────────────────────────────────────────────────────── */
-
-// 대지 가장자리 · 건물 사이 길가 나무 (x, z, 크기)
-const TREES: [number, number, number][] = [
-  [-3.9, 0.15, 1],
-  [-3.2, 0.2, 0.85],
-  [-0.4, 3.7, 0.9],
-  [0.4, 3.9, 1.05],
-  [0.35, -0.2, 0.8],
-  [-0.4, 0.3, 0.95],
-  [3.9, 0.1, 0.9],
-  [3.95, -3.8, 0.85],
-  [-3.9, -3.8, 1.1],
-  [0.3, -3.9, 0.9],
-  [-0.35, 1.6, 0.8],
-  [0.4, -1.6, 0.85],
-];
-
-function Trees() {
-  const a = useModelGeometry("TreeA");
-  const b = useModelGeometry("TreeB");
-  const material = useMemo(() => createSwayMaterial(), []);
-  useFrame(({ clock }) => tickSway(material, clock.elapsedTime));
-  return (
-    <>
-      {TREES.map(([x, z, k], i) => (
-        <mesh key={i} geometry={i % 3 === 1 ? b : a} material={material} position={[x, SITE_TOP, z]} scale={0.17 * k} rotation={[0, i * 1.3, 0]} castShadow receiveShadow />
-      ))}
-    </>
-  );
-}
-
-function Site() {
-  const paving = useMemo(() => pavingTexture([PLATE.w / 0.3, PLATE.d / 0.3]), []);
-  return (
-    <>
-      <mesh position={[0, SITE_TOP / 2 - 0.04, 0]} receiveShadow>
-        <boxGeometry args={[PLATE.w, SITE_TOP + 0.08, PLATE.d]} />
-        <meshStandardMaterial map={paving} color="#9aa6aa" roughness={0.92} />
-      </mesh>
-      {/* 건물 사이 십자 보행로 (조금 밝은 띠) */}
-      {[
-        [0, 0, 0.7, PLATE.d],
-        [0, 0, PLATE.w, 0.7],
-      ].map(([x, z, w, d], i) => (
-        <mesh key={i} position={[x, SITE_TOP + 0.001, z]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
-          <planeGeometry args={[w, d]} />
-          <meshStandardMaterial color="#6a7a80" roughness={0.9} transparent opacity={0.35} depthWrite={false} />
-        </mesh>
-      ))}
-      <Suspense fallback={null}>
-        <Trees />
-      </Suspense>
-    </>
-  );
 }
 
 /* ── 건물 고르기 ──────────────────────────────────────────────────── */
@@ -138,7 +77,7 @@ function Picker({ k, onSelect }: { k: GrKey; onSelect: (k: GrKey) => void }) {
 
 /* ── 카메라 ───────────────────────────────────────────────────────── */
 
-const OVERVIEW = { target: new THREE.Vector3(0.2, 0.5, 0.2), dir: new THREE.Vector3(0.62, 0.66, 0.82).normalize(), dist: 19.5 };
+const OVERVIEW = { target: new THREE.Vector3(0.3, 0.6, 0.4), dir: new THREE.Vector3(0.45, 0.72, 0.85).normalize(), dist: 41 };
 // 남 · 동 면이 보이게 남동쪽에서. 지붕 건물은 지붕이 보이게 더 위에서
 const FOCUS_DIR: Record<GrKey, THREE.Vector3> = {
   envelope: new THREE.Vector3(0.75, 0.38, 0.95).normalize(),
@@ -146,11 +85,14 @@ const FOCUS_DIR: Record<GrKey, THREE.Vector3> = {
   roof: new THREE.Vector3(0.55, 1.1, 0.9).normalize(),
   operations: new THREE.Vector3(0.8, 0.42, 0.9).normalize(),
 };
-const FOCUS_DIST: Record<GrKey, number> = { envelope: 7, systems: 7.4, roof: 8.6, operations: 10.5 };
+const FOCUS_DIST: Record<GrKey, number> = { envelope: 8, systems: 11, roof: 12, operations: 11.5 };
+
+// 주민센터는 옆 주차장 카포트 태양광까지 함께 보이게 바라볼 점을 동쪽으로 옮긴다
+const FOCUS_SHIFT: Partial<Record<GrKey, number>> = { systems: 2.4 };
 
 function focusTarget(k: GrKey) {
   const s = GR_SPECS[k];
-  return new THREE.Vector3(s.x, specHeight(s) * (k === "roof" ? 0.6 : 0.45), s.z);
+  return new THREE.Vector3(s.x + (FOCUS_SHIFT[k] ?? 0), specHeight(s) * (k === "roof" ? 0.6 : 0.45), s.z);
 }
 
 function Rig({ focus, frozen }: { focus: GrKey | null; frozen: boolean }) {
@@ -189,14 +131,15 @@ function Rig({ focus, frozen }: { focus: GrKey | null; frozen: boolean }) {
     const t = frozen ? 0 : performance.now() / 1000;
     // 개요: 천천히 좌우로 흔들리고 마우스를 조금 따른다
     const yaw = Math.sin(t * 0.09) * 0.12 + p.sx * 0.12;
-    const distO = OVERVIEW.dist * (wide ? 1 : 1.55);
+    // 세로 화면은 지역 너비(26)가 다 들어오도록 멀리서 (Product 지역과 같은 방식)
+    const distO = OVERVIEW.dist * (wide ? 1 : Math.min(1.8, 0.82 / Math.max(size.width / size.height, 0.4)));
     tmp.dir.copy(OVERVIEW.dir).applyAxisAngle(THREE.Object3D.DEFAULT_UP, yaw);
     tmp.a.copy(tmp.dir).multiplyScalar(distO).add(OVERVIEW.target);
     tmp.look.copy(OVERVIEW.target);
     if (last.current && f > 0) {
       const target = focusTarget(last.current);
       tmp.dir.copy(FOCUS_DIR[last.current]).applyAxisAngle(THREE.Object3D.DEFAULT_UP, yaw * 0.4);
-      tmp.b.copy(tmp.dir).multiplyScalar(FOCUS_DIST[last.current] * (wide ? 1 : 1.5)).add(target);
+      tmp.b.copy(tmp.dir).multiplyScalar(FOCUS_DIST[last.current] * (wide ? 1 : 1.95)).add(target);
       tmp.a.lerp(tmp.b, f);
       tmp.look.lerp(target, f);
     }
@@ -204,8 +147,8 @@ function Rig({ focus, frozen }: { focus: GrKey | null; frozen: boolean }) {
     cam.lookAt(tmp.look);
 
     // 화면 배치: 넓은 화면은 개요에서 왼쪽 제목을 비키고, 확대 때는 오른쪽 패널을 비킨다. 세로 화면은 아래 패널 위로
-    const ox = (wide ? -0.18 + 0.36 * f : 0) * size.width;
-    const oy = (wide ? 0 : 0.22 - 0.02 * f) * size.height;
+    const ox = (wide ? -0.21 + 0.39 * f : 0) * size.width;
+    const oy = (wide ? 0 : 0.13 + 0.07 * f) * size.height;
     const key = `${size.width}x${size.height}:${ox.toFixed(1)}:${oy.toFixed(1)}`;
     if (key !== lastOffset.current) {
       lastOffset.current = key;
@@ -272,7 +215,7 @@ export default function GRScene({
         <Canvas
           dpr={dpr}
           shadows
-          camera={{ fov: 32, near: 0.3, far: 220, position: [9, 9, 12] }}
+          camera={{ fov: 30, near: 0.5, far: 320, position: [16, 26, 30] }}
           frameloop={frozen ? "demand" : active ? "always" : "never"}
           gl={{ antialias: true, powerPreference: "high-performance" }}
           onPointerMissed={() => onSelect(null)}
@@ -295,11 +238,10 @@ export default function GRScene({
           />
           <Driver frozen={frozen} />
           <color attach="background" args={[BG]} />
-          <fog attach="fog" args={[BG, 22, 48]} />
-          <Sky />
-          <Lighting shadows={shadows} mapSize={2048} bounds={7} reach={14} />
-          <HeroCity />
-          <Site />
+          <fog attach="fog" args={[BG, 48, 92]} />
+          <Sky radius={220} />
+          <Lighting shadows={shadows} mapSize={2048} bounds={16} reach={30} />
+          <GRDistrict />
           <Envelope />
           <Systems />
           <RoofBuilding />
