@@ -100,15 +100,16 @@ export default async function WattiPage() {
       {/* Product Video */}
       <section className="px-6 py-20">
         <div className="mx-auto max-w-5xl overflow-hidden rounded-2xl">
+          {/* 인터뷰 홍보영상 (영문 자막 포함, 소리 있음) — 자동재생 대신 컨트롤로 재생 */}
           <video
-            className="h-auto w-full rounded-2xl"
-            autoPlay
-            loop
-            muted
+            className="aspect-video h-auto w-full rounded-2xl bg-black"
+            controls
             playsInline
+            preload="metadata"
+            poster="https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/videos/watti-interview-poster.jpg"
           >
             <source
-              src="https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/videos/watti-scene.mp4"
+              src="https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/videos/watti-interview.mp4"
               type="video/mp4"
             />
           </video>

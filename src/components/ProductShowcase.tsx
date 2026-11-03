@@ -13,7 +13,7 @@ interface Product {
   href: string;
   linkTextKey: string;
   media:
-    | { type: "video"; src: string }
+    | { type: "video"; src: string; poster?: string }
     | { type: "image"; src: string; alt: string }
     | { type: "imageSlider"; images: { src: string; alt: string }[] };
 }
@@ -52,7 +52,9 @@ const products: Product[] = [
     linkTextKey: "showcase.watti.linkText",
     media: {
       type: "video",
-      src: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/videos/watti-scene.mp4",
+      // 인터뷰 홍보영상의 홈용 경량본 (720p · 무음). 원본은 /solutions/watti 에서 소리와 함께 재생
+      src: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/videos/watti-interview-720p.mp4",
+      poster: "https://ninewatt-homepage.s3.ap-northeast-2.amazonaws.com/videos/watti-interview-poster.jpg",
     },
   },
   {
@@ -351,7 +353,14 @@ function MediaBlock({
 
   if (product.media.type === "video") {
     content = (
-      <video className="h-auto w-full" autoPlay loop muted playsInline>
+      <video
+        className="h-auto w-full"
+        autoPlay
+        loop
+        muted
+        playsInline
+        poster={product.media.poster}
+      >
         <source src={product.media.src} type="video/mp4" />
       </video>
     );
