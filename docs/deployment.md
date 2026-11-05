@@ -146,6 +146,25 @@ Cafe24 도메인 관리에서 네임서버를 Cloudflare로 변경:
 - SSL/TLS → Overview → **Full (Strict)** 모드 선택
 - Origin Server → **Origin Certificate** 발급 (유효기간 15년)
 
+### 5. 이미지 캐시 (Cache Rule, 2026-11-05)
+
+`next/image` 가 만든 최적화 이미지(`/_next/image?...`)는 확장자가 없어 Cloudflare 가 기본으로 캐시하지 않는다(`cf-cache-status: DYNAMIC`). 그래서 Caching → Cache Rules 에 규칙을 하나 둔다.
+
+| 항목 | 값 |
+|------|-----|
+| Rule name | `Next image optimizer` |
+| Expression | `(starts_with(http.request.uri.path, "/_next/image") and any(http.request.headers["accept"][*] contains "image/webp"))` |
+| Cache eligibility | Eligible for cache |
+| Edge TTL | Ignore cache-control header → **7 days** |
+| Browser TTL | Respect origin (Next 기본 4시간) |
+| Cache key | 기본값 (쿼리스트링 `url`·`w`·`q` 포함 필수) |
+
+- **`accept` 조건을 빼지 말 것** — 무료 플랜은 `Vary: Accept` 를 무시한다. 조건이 없으면 WebP 를 못 받는 봇이 먼저 요청했을 때 PNG 원본이 캐시돼 모두에게 나간다. 지금은 WebP 요청만 캐시하고 나머지는 `DYNAMIC` 으로 서버에 간다.
+- **S3 이미지를 같은 이름으로 다시 올리면** URL 의 `?v=` 를 올리거나(예: [bems/page.tsx](../src/app/[locale]/(main)/product/bems/page.tsx)) Caching → Configuration → Purge Cache 로 비운다. 안 하면 엣지에 최대 7일 예전 이미지가 남는다.
+- 확인: `curl -sI -H "Accept: image/webp" "https://ninewatt.com/_next/image?url=...&w=640&q=75" | grep cf-cache-status` → 두 번째부터 `HIT`
+
+서버 쪽 캐시는 `.next/cache/images` 를 Docker 볼륨 `ninewatt-image-cache` 로 붙여 배포 사이에도 남긴다([deploy.yml](../.github/workflows/deploy.yml)). 상한은 `next.config.ts` 의 `images.maximumDiskCacheSize`(500MB) — 볼륨이라 쌓이므로 디스크(20GB)가 차지 않게 걸어 둔 것이다. 볼륨을 비우려면 EC2 에서 `docker volume rm ninewatt-image-cache` (컨테이너를 멈춘 뒤).
+
 ## Nginx 설정 (SSL + 리버스 프록시)
 
 ### Nginx 설치
