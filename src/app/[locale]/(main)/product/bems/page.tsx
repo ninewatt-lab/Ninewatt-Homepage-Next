@@ -85,7 +85,7 @@ export default async function BemsPage() {
       {/* Product Screens */}
       <section className="px-6 py-20">
         <div className="mx-auto max-w-5xl">
-          <ScreenGallery screens={overviewScreens} alt="BEMS" />
+          <ScreenGallery screens={overviewScreens} alt="BEMS" preload />
         </div>
       </section>
 

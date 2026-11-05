@@ -74,6 +74,7 @@ jobs:
               --name ninewatt-homepage \
               --restart unless-stopped \
               -p 3000:3000 \
+              -v ninewatt-image-cache:/app/.next/cache/images \
               -e "TEAMS_WEBHOOK_URL=$TEAMS_WEBHOOK_URL" \
               -e "ANTHROPIC_API_KEY=$ANTHROPIC_API_KEY" \
               -e "NAVER_SITE_VERIFICATION=$NAVER_SITE_VERIFICATION" \
