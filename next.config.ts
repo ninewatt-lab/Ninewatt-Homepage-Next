@@ -6,6 +6,9 @@ const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
 const nextConfig: NextConfig = {
   output: "standalone",
   images: {
+    // 캐시는 볼륨에 남아 배포해도 쌓인다. 기본 상한은 디스크 여유의 50% 라
+    // 디스크(20GB)가 차지 않게 줄여 둔다 — 넘치면 오래 안 쓴 것부터 지운다
+    maximumDiskCacheSize: 500_000_000,
     remotePatterns: [
       {
         protocol: "https",
