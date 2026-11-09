@@ -12,6 +12,10 @@
       "title": "Peak Shaving ESS Optimal Control",
       "description": "AI learns building and factory power usage patterns to precisely predict peak times and optimally control ESS charge/discharge schedules. Significantly reduces demand charges and efficiently manages contracted power capacity."
     },
+    "ems": {
+      "title": "EMS Platforms - Energy Management for Buildings, Factories and Vertiports",
+      "description": "Six EMS platforms Ninewatt builds and operates for multi-site buildings, office towers, UAM vertiports, renewable heat-source plants, factories and electrical switchgear."
+    },
     "bems": {
       "title": "BEMS - Building Energy Management System",
       "description": "Collect and analyze building energy consumption data in real time, visualizing energy usage by source, purpose, and zone. Reduce energy costs and carbon emissions with AI-based forecasting and automated control integration."
@@ -57,6 +61,7 @@
     "pvIntelligenceDesc": "Beyond showing generation numbers — AI detects anomalies, calculates loss amounts, and maximizes revenue. A Solar AI platform proven at our own power plants.",
     "sharedEssDesc": "A new business model where multiple buildings share a single large-scale ESS connected to the distribution grid. Reduces electricity costs through virtual net metering and supplies grid flexibility.",
     "peakEssDesc": "AI learns building power usage patterns to predict peak times and optimally control ESS charge/discharge. Significantly reduces demand charges and optimizes contracted power capacity.",
+    "emsDesc": "Multi-site buildings, office towers, UAM vertiports, renewable heat sources, factories and switchgear: all six EMS platforms Ninewatt builds and operates, in one place.",
     "bemsDesc": "Collect and analyze building energy data in real time, visualizing consumption by source, purpose, and zone. Reduce energy costs with AI forecasting and automated control."
   },
   "opti": {
@@ -862,6 +867,220 @@
     "ctaTitle": "Manage your building energy with data",
     "ctaDesc": "Reduce energy costs and move closer to carbon neutrality with BEMS.",
     "ctaContact": "Contact Us"
+  },
+  "ems": {
+    "heroTitle": "EMS Platforms",
+    "heroSubtitle": "From buildings to factories, vertiports, heat-source plants and switchgear",
+    "heroDesc": "Ninewatt builds and operates six EMS platforms for multi-site buildings, office towers, UAM vertiports, renewable heat-source plants, factories and electrical switchgear. Each serves a different kind of site, but all share one foundation: collect and monitor field data in real time, analyze and forecast it with AI, and turn the results into operating decisions.",
+    "requestDemo": "Request a Demo",
+    "overviewTitle": "Six platforms",
+    "overviewSubtitle": "Select a card to jump to that platform.",
+    "baseTitle": "Different sites, one technology foundation",
+    "baseSubtitle": "All six platforms follow the same flow: gather data, make sense of it, and act on it.",
+    "base": [
+      { "title": "Collect & monitor", "desc": "Meters, CT sensors, indoor-air sensors, cameras, switchgear monitors and KEPCO metering data: whatever each site has is brought together and monitored live through dashboards, system diagrams, maps and alarms." },
+      { "title": "AI analysis & forecasting", "desc": "Load characteristics and performance indicators are calculated, and usage, cost and load are forecast. The AI assistants show the data behind every answer and never invent missing values." },
+      { "title": "Operating decisions", "desc": "Alarm handling records, response procedures (SOP · EOP), investment economics and custom dashboards turn analysis into the next action on site." }
+    ],
+    "featuresTitle": "Key features",
+    "gallery": {
+      "open": "View larger",
+      "close": "Close",
+      "prev": "Previous screen",
+      "next": "Next screen"
+    },
+    "related": {
+      "opti": "Learn more about Opti",
+      "cases": "See project cases",
+      "rnd": "See R&D projects"
+    },
+    "note": "Screens were captured from each platform's demo environment in November 2026 and show demo data. Hydrothermal AI Platform screens show data from early October 2026.",
+    "ctaTitle": "Which EMS fits your site?",
+    "ctaDesc": "Tell us about your site and we'll suggest the right platform and arrange a demo.",
+    "ctaContact": "Contact Us",
+    "platforms": {
+      "buildat": {
+        "name": "BUILDAT",
+        "kind": "Integrated building operations · Disaster response",
+        "brief": "One platform for equipment, indoor environment and disaster risk across multi-site buildings",
+        "lead": "BUILDAT brings equipment, sensor and indoor-environment data from many buildings together with disaster and risk information, managing everything from routine operations (SOP) to emergency response (EOP). Where a typical BEMS focuses on energy use, BUILDAT combines indoor air quality, equipment status and energy with disaster risk and incident response, covering the full workflow of a building operations team.",
+        "spec": [
+          { "label": "Field", "value": "Integrated building operations · Disaster response" },
+          { "label": "Project", "value": "Rakuten, Azbil & Comtec (Japan)" },
+          { "label": "For", "value": "Teams operating multi-site building portfolios" },
+          { "label": "Data", "value": "11 indoor-environment metrics, cameras, energy, Japan Meteorological Agency alerts" },
+          { "label": "Languages", "value": "日本語 · English · 한국어" }
+        ],
+        "figs": [
+          { "value": "11", "label": "Indoor air quality (IAQ) metrics" },
+          { "value": "5", "label": "Disaster types integrated (earthquake · typhoon · heatwave · flood · traffic)" },
+          { "value": "SOP · EOP", "label": "Operating and emergency procedure templates" }
+        ],
+        "features": [
+          { "title": "Multi-site monitoring", "desc": "Sensor status, average indoor conditions, monthly energy use (vs. the same month last year) and incidents across every managed building on one screen." },
+          { "title": "Remote indoor & equipment monitoring", "desc": "11 metrics including CO₂, TVOC, HCHO and particulates on 3D floor plans, plus reading cameras and thermal cameras for analog gauges and equipment surface temperature." },
+          { "title": "Disaster risk overlay", "desc": "Rain radar, earthquakes, warnings and typhoon tracks are overlaid on site locations to find affected sites and rank them by risk." },
+          { "title": "Incident & BCP response", "desc": "From occupant QR reports to field photo feeds, task progress and auto-generated situation summaries, every response is logged, and the AI walks through registered EOPs step by step." }
+        ],
+        "shots": [
+          "Portfolio monitoring (sensor status · indoor environment · energy · incidents)",
+          "Building monitoring (3D floor plans · reading and thermal cameras)",
+          "Disaster map (rain radar · earthquake info · sites ranked by risk)",
+          "Situation Board (field feed · progress · auto summary)",
+          "BUILDAT AI · Earthquake first-response procedure (EOP)"
+        ]
+      },
+      "opti": {
+        "name": "Opti",
+        "kind": "Building energy diagnostics · AI",
+        "brief": "Diagnostics from KEPCO 15-minute data, solar and ESS economics, and an AI advisor",
+        "lead": "Opti diagnoses a building's load profile and tariff structure using only KEPCO 15-minute metering data, with no extra meters, and has AI present solar and ESS investment economics and savings priorities with the evidence behind them. Its analysis has been validated on more than 200 buildings, and it was named a CES 2026 Innovation Awards Honoree.",
+        "spec": [
+          { "label": "Field", "value": "Building energy diagnostics · Optimization" },
+          { "label": "Data", "value": "KEPCO 15-minute metering, weather and irradiance, building registry, 3D geometry" },
+          { "label": "Demo", "value": "32-story office building · 11,500 kW contract demand" },
+          { "label": "Track record", "value": "CES 2026 Innovation Awards Honoree · Subscription agreement with Johnson Controls (US)" }
+        ],
+        "figs": [
+          { "value": "200+", "label": "Buildings validated" },
+          { "value": "~12%", "label": "Energy cost savings" },
+          { "value": "80%", "label": "Less time writing M&V reports" }
+        ],
+        "features": [
+          { "title": "Load diagnostics & benchmarking", "desc": "Calculates base load, heating and cooling sensitivity (kWh/℃), balance temperature and energy use intensity (EUI), and compares them with buildings of similar use and size." },
+          { "title": "Tariff & peak analysis", "desc": "Analyzes charges by off-peak, mid-peak and peak periods and maximum demand, and finds the best tariff with a recommendation algorithm." },
+          { "title": "Solar & ESS economics", "desc": "Estimates rooftop area and generation from a 3D building model, and optimal ESS capacity, peak reduction and DR revenue, with payback periods." },
+          { "title": "AI energy advisor", "desc": "Recommends savings measures in priority order based on the analysis, showing the indicators behind each answer. It never invents values it has no data for." }
+        ],
+        "shots": [
+          "Home with AI insights (AI reading of each indicator)",
+          "Energy overview (charges · peak demand · peer comparison · self-sufficiency · measures)",
+          "Solar economics (rooftop area · panel layout · payback)",
+          "ESS economics (optimal capacity · peak reduction · DR revenue)",
+          "Opti AI · Prioritized savings measures"
+        ]
+      },
+      "vertiport": {
+        "name": "Vertiport Energy Operations Platform",
+        "kind": "EMS for mobility charging infrastructure",
+        "brief": "Integrated eVTOL and EV charging loads with ESS and solar, plus usage, cost and peak forecasts",
+        "lead": "A demand-responsive EMS that runs a UAM vertiport's grid supply, ESS and solar together with eVTOL and EV charging loads. Large loads that cluster around flight schedules, such as eVTOL charging, are managed together with flight information, and same-day usage, cost and peaks are forecast to guide ESS operation and charging schedules.",
+        "spec": [
+          { "label": "Field", "value": "EMS for mobility charging infrastructure" },
+          { "label": "Project", "value": "Energy-map-based demand-responsive modular vertiport technology" },
+          { "label": "Funded by", "value": "Ministry of SMEs and Startups, Korea (2023.12 ~ 2026.12)" },
+          { "label": "Team", "value": "Ninewatt (lead) · Korea Institute of Civil Engineering and Building Technology" },
+          { "label": "Sites", "value": "Bukhang · Haeundae · Incheon · Gimpo · Seongnam" }
+        ],
+        "figs": [
+          { "value": "5", "label": "Vertiport sites" },
+          { "value": "4 + 17", "label": "eVTOL stands · EV chargers" },
+          { "value": "6,000 kWh", "label": "ESS capacity" }
+        ],
+        "features": [
+          { "title": "Power flow", "desc": "A Sankey diagram shows power flowing from grid, ESS and solar to eVTOL, EV, equipment and ancillary loads, in real time or over the last 24 hours." },
+          { "title": "Flight-linked charging", "desc": "Manages eVTOL arrival, charging and departure schedules together with per-stand charging power and SoC, with playback of past moments." },
+          { "title": "Usage, cost & peak forecasts", "desc": "Compares measured and forecast same-day usage, cost and daily or monthly peaks to guide ESS operation and charging schedules." },
+          { "title": "Multi-tenant SaaS", "desc": "Manages plans, visible screens, user permissions and API usage for each operator (tenant)." }
+        ],
+        "shots": [
+          "Home (peak · usage · power flow · charging · ESS)",
+          "Power flow (sources → loads, Sankey)",
+          "eVTOL charging (stand timeline · linked flight info)",
+          "EV charging (17 fast chargers · output vs. grid capacity)",
+          "Energy & cost (measured vs. forecast · peak calendar)"
+        ]
+      },
+      "wshp": {
+        "name": "Hydrothermal AI Platform",
+        "kind": "Renewable heat-source monitoring · Performance analysis",
+        "brief": "System-diagram monitoring and COP analysis for a hybrid water-source heat pump and thermal storage plant",
+        "lead": "An R&D platform that monitors a hybrid heat-source system of water-source heat pumps, an absorption chiller-heater and thermal energy storage through its system diagram, and provides heat and COP calculations, storage performance analysis and AI Q&A. Because heat-source efficiency swings with water-source conditions, it focuses on managing temperature, flow and COP across the whole system together.",
+        "spec": [
+          { "label": "Field", "value": "Renewable heat-source monitoring · Performance analysis" },
+          { "label": "Equipment", "value": "Water-source HP · hot-water HP · absorption chiller-heater · 2 storage tanks · 6 AHUs · 7 FCUs" },
+          { "label": "Data", "value": "1,451 monitoring points (temperature · pressure · flow · power · valves)" },
+          { "label": "Related project", "value": "Large-scale centralized hydrothermal energy demonstration plant" }
+        ],
+        "figs": [
+          { "value": "1,451", "label": "Monitoring points" },
+          { "value": "5.14", "label": "Water-source heat pump COP (Oct 2026, 2 weeks)" },
+          { "value": "5", "label": "System sections monitored separately" }
+        ],
+        "features": [
+          { "title": "P&ID-based monitoring", "desc": "Shows the full system from water source → heat exchangers → heat pumps and absorption unit → storage → building loads, with temperature, pressure, flow and valve points." },
+          { "title": "Heat & efficiency", "desc": "Calculates heat produced and supplied, storage charge and discharge, heat pump and system COP, and remaining storage from measurements." },
+          { "title": "Performance & operating history", "desc": "Analyzes COP patterns and distributions and top, middle and bottom storage temperatures by period, alongside data validity rates." },
+          { "title": "AI Q&A & load forecasting", "desc": "Answers natural-language questions by querying monitoring points directly, and is validating a model that forecasts next-day load from weather forecasts and operating schedules." }
+        ],
+        "shots": [
+          "Dashboard (heat · power · COP · storage level)",
+          "System diagram (P&ID · live monitoring points)",
+          "COP analysis (scatter · box plot · week over week)",
+          "AI Q&A (daily operations summary)"
+        ]
+      },
+      "fems": {
+        "name": "Factory Power Monitoring",
+        "kind": "FEMS · Circuit-level metering",
+        "brief": "CT submetering at the panel, with custom dashboards built by AI",
+        "lead": "A factory energy management platform that meters power per piece of equipment (submetering) with CT sensors on each panel and MCC circuit, and builds a custom dashboard when users tell the AI which metrics they need. Cost drivers such as new demand peaks, night-time standby power and three-phase imbalance are managed as alerts with their expected cost impact.",
+        "spec": [
+          { "label": "Field", "value": "Factory energy management (FEMS)" },
+          { "label": "Metering", "value": "CT sensors per panel and MCC circuit → gateway" },
+          { "label": "Data", "value": "Per-phase (R · S · T) current, power, consumption" },
+          { "label": "Demo", "value": "12 machines (demo data)" }
+        ],
+        "figs": [
+          { "value": "12", "label": "Demo machines" },
+          { "value": "3 steps", "label": "AI screen building (ask · preview · apply)" },
+          { "value": "R · S · T", "label": "Per-phase current and power" }
+        ],
+        "features": [
+          { "title": "Circuit-level submetering", "desc": "CTs on each panel and MCC circuit collect per-phase current, power and consumption to manage each machine's load profile and three-phase balance." },
+          { "title": "AI custom dashboards", "desc": "Say which metric you need and the AI asks follow-up questions, previews the card, then adds it to your screen. Change type and size by clicking or by asking." },
+          { "title": "Evidence-based AI analysis", "desc": "Every answer shows the equipment and data behind it. Questions that need data not yet connected get an explanation of what's missing rather than a guess." },
+          { "title": "Cost-focused alerts", "desc": "Rising night-time standby power, new monthly peaks (simultaneous starts) and lost sensor signals are flagged by severity and expected cost impact." }
+        ],
+        "shots": [
+          "Custom screen built with AI (usage by machine · load curve · this month's bill)",
+          "Card preview and editing",
+          "AI analysis · source equipment shown",
+          "Equipment (circuit mapping · status · usage)",
+          "Alerts (expected cost impact per event)"
+        ]
+      },
+      "jj1000": {
+        "name": "JJ-1000 Switchgear Monitoring",
+        "kind": "Switchgear predictive maintenance",
+        "brief": "Continuous monitoring of electrical deterioration and fire signs with 11 sensor types",
+        "lead": "A predictive-maintenance platform that connects Jungjin Electric's JJ-1000 monitors through gateways to watch switchgear around the clock for deterioration and fire signs such as overload, overheating, leakage current, partial discharge and arcing, and manages alarm handling records. Unlike typical power monitoring that only tracks current, it reads thermal, insulation, discharge and gas indicators together to catch different failure paths early.",
+        "spec": [
+          { "label": "Field", "value": "Switchgear predictive maintenance" },
+          { "label": "Client", "value": "Jungjin Electric (Innovation Voucher Program, 2026)" },
+          { "label": "Site", "value": "Office building · 1,500 kW service · 6 panels" },
+          { "label": "Protocol", "value": "JJ-1000 ↔ gateway over RS485 Modbus RTU" },
+          { "label": "Interval", "value": "Measurements every 1 min · alarms every 1 s" }
+        ],
+        "figs": [
+          { "value": "11", "label": "Metrics per panel" },
+          { "value": "1 min / 1 s", "label": "Measurement / alarm interval" },
+          { "value": "99.5%+", "label": "24-hour data reception rate" }
+        ],
+        "features": [
+          { "title": "Multi-sensor monitoring", "desc": "Three-phase current and imbalance, temperature and temperature rise (ΔT), leakage current (ZCT), partial discharge, arcing (UV), flame, CO₂ and CO, for every panel." },
+          { "title": "Auto-built single-line diagram", "desc": "Lays out the system automatically from main incoming panel → transformer → low-voltage switchboards → distribution boards, showing load, temperature and status for each." },
+          { "title": "Alarm workflow", "desc": "Two-level warning and danger thresholds, with raised → acknowledged → closed history, action notes and average acknowledgement time." },
+          { "title": "Data & asset management", "desc": "Panel comparisons and 1-minute raw data export, plus site, zone, panel and gateway structure and per-metric thresholds." }
+        ],
+        "shots": [
+          "Overview (panel status · live alarms · load · reception rate)",
+          "Single-line diagram (auto-built)",
+          "Panel detail (11 metrics · threshold lines)",
+          "Alarm center (raised → acknowledged → closed)"
+        ]
+      }
+    }
   },
   "district": {
     "hint": "Select a facility to explore its product",

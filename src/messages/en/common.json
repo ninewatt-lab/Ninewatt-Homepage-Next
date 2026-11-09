@@ -34,6 +34,8 @@
     "peakEssDesc": "AI-based peak power reduction ESS optimal control system",
     "pvRemsLabel": "PV REMS",
     "solarScopeLabel": "Solar Site Analysis",
+    "emsPlatformLabel": "EMS Platforms",
+    "emsPlatformDesc": "Six EMS platforms for buildings, factories, vertiports and more",
     "bemsLabel": "BEMS",
     "bemsDesc": "Building Energy Management System"
   },

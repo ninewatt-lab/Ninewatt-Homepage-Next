@@ -12,6 +12,10 @@
       "title": "ESS Écrêtement de Pointe",
       "description": "L'IA apprend les schémas de consommation des bâtiments et usines pour prédire précisément les heures de pointe et contrôler de manière optimale les cycles de charge/décharge de l'ESS. Réduction significative des frais de demande et gestion efficace de la capacité contractuelle."
     },
+    "ems": {
+      "title": "Plateformes EMS - Gestion de l'énergie des bâtiments, usines et vertiports",
+      "description": "Six plateformes EMS développées et exploitées par Ninewatt pour les parcs immobiliers multisites, les immeubles de bureaux, les vertiports UAM, les installations de chaleur renouvelable, les usines et les tableaux électriques."
+    },
     "bems": {
       "title": "BEMS - Building Energy Management System",
       "description": "Collectez et analysez en temps réel les données de consommation énergétique des bâtiments, en visualisant l'utilisation par source, usage et zone. Réduisez les coûts énergétiques et les émissions de carbone grâce à la prévision IA et au contrôle automatisé."
@@ -57,6 +61,7 @@
     "pvIntelligenceDesc": "Au-delà de l'affichage de la production — l'IA détecte les anomalies, calcule les pertes et maximise les revenus. Une plateforme Solar AI éprouvée sur nos propres centrales.",
     "sharedEssDesc": "Un nouveau modèle d'affaires où plusieurs bâtiments partagent un seul ESS de grande capacité connecté au réseau de distribution. Réduit les coûts d'électricité par compensation virtuelle et fournit la flexibilité au réseau.",
     "peakEssDesc": "L'IA apprend les schémas de consommation électrique des bâtiments pour prédire les heures de pointe et contrôler de manière optimale la charge/décharge de l'ESS. Réduit considérablement les frais de demande et optimise la capacité contractuelle.",
+    "emsDesc": "Parcs immobiliers multisites, immeubles de bureaux, vertiports UAM, sources de chaleur renouvelables, usines et tableaux électriques : les six plateformes EMS développées et exploitées par Ninewatt, réunies en un seul endroit.",
     "bemsDesc": "Collectez et analysez en temps réel les données de consommation énergétique, en visualisant par source, usage et zone. Réduisez les coûts avec la prévision IA et le contrôle automatisé."
   },
   "opti": {
@@ -992,6 +997,220 @@
     "ctaTitle": "Gérez l'énergie de votre bâtiment avec les données",
     "ctaDesc": "Réduisez les coûts énergétiques et progressez vers la neutralité carbone avec le BEMS.",
     "ctaContact": "Nous contacter"
+  },
+  "ems": {
+    "heroTitle": "Plateformes EMS",
+    "heroSubtitle": "Des bâtiments aux usines, vertiports, centrales thermiques et tableaux électriques",
+    "heroDesc": "Ninewatt développe et exploite six plateformes EMS pour des parcs immobiliers multisites, des immeubles de bureaux, des vertiports UAM, des installations de chaleur renouvelable, des usines et des tableaux électriques. Chaque site est différent, mais toutes reposent sur le même socle : collecter et superviser les données de terrain en temps réel, les analyser et les prévoir grâce à l'IA, puis en faire des décisions d'exploitation.",
+    "requestDemo": "Demander une démo",
+    "overviewTitle": "Six plateformes",
+    "overviewSubtitle": "Sélectionnez une carte pour accéder à la plateforme.",
+    "baseTitle": "Des sites différents, un même socle technologique",
+    "baseSubtitle": "Les six plateformes suivent le même parcours : rassembler les données, les comprendre, puis agir.",
+    "base": [
+      { "title": "Collecte et supervision", "desc": "Compteurs, capteurs CT, capteurs de qualité de l'air, caméras, équipements de surveillance des tableaux, données de comptage KEPCO : les données propres à chaque site sont rassemblées et supervisées en temps réel via tableaux de bord, schémas, cartes et alarmes." },
+      { "title": "Analyse et prévision par l'IA", "desc": "Les caractéristiques de charge et les indicateurs de performance sont calculés, et la consommation, le coût et la charge sont prévus. Les assistants IA montrent les données derrière chaque réponse et n'inventent jamais de valeur manquante." },
+      { "title": "Décisions d'exploitation", "desc": "Historique de traitement des alarmes, procédures (SOP · EOP), rentabilité des investissements et tableaux de bord personnalisés transforment l'analyse en prochaine action sur le terrain." }
+    ],
+    "featuresTitle": "Fonctionnalités clés",
+    "gallery": {
+      "open": "Agrandir",
+      "close": "Fermer",
+      "prev": "Écran précédent",
+      "next": "Écran suivant"
+    },
+    "related": {
+      "opti": "En savoir plus sur Opti",
+      "cases": "Voir les références",
+      "rnd": "Voir les projets R&D"
+    },
+    "note": "Les écrans ont été capturés en novembre 2026 dans l'environnement de démonstration de chaque plateforme et présentent des données de démonstration. Les écrans de la plateforme IA hydrothermique affichent des données de début octobre 2026.",
+    "ctaTitle": "Quel EMS pour votre site ?",
+    "ctaDesc": "Décrivez-nous votre site : nous vous orienterons vers la bonne plateforme et organiserons une démo.",
+    "ctaContact": "Nous contacter",
+    "platforms": {
+      "buildat": {
+        "name": "BUILDAT",
+        "kind": "Exploitation intégrée des bâtiments · Gestion des risques",
+        "brief": "Une plateforme pour les équipements, l'environnement intérieur et les risques naturels de parcs multisites",
+        "lead": "BUILDAT réunit les données d'équipements, de capteurs et d'environnement intérieur de nombreux bâtiments avec les informations sur les catastrophes et les risques, de l'exploitation courante (SOP) jusqu'à la réponse d'urgence (EOP). Là où un BEMS classique se concentre sur la consommation d'énergie, BUILDAT associe qualité de l'air, état des équipements et énergie aux risques naturels et à la gestion des incidents, pour couvrir l'ensemble du travail d'une équipe d'exploitation.",
+        "spec": [
+          { "label": "Domaine", "value": "Exploitation intégrée des bâtiments · Gestion des risques" },
+          { "label": "Projet", "value": "Rakuten, Azbil et Comtec (Japon)" },
+          { "label": "Pour", "value": "Équipes exploitant des parcs immobiliers multisites" },
+          { "label": "Données", "value": "11 indicateurs d'environnement intérieur, caméras, énergie, alertes de l'Agence météorologique du Japon" },
+          { "label": "Langues", "value": "日本語 · English · 한국어" }
+        ],
+        "figs": [
+          { "value": "11", "label": "Indicateurs de qualité de l'air intérieur (QAI)" },
+          { "value": "5", "label": "Types de catastrophes intégrés (séisme · typhon · canicule · inondation · trafic)" },
+          { "value": "SOP · EOP", "label": "Modèles de procédures d'exploitation et d'urgence" }
+        ],
+        "features": [
+          { "title": "Supervision multisite", "desc": "État des capteurs, moyennes de l'environnement intérieur, consommation mensuelle (par rapport au même mois de l'année précédente) et incidents de tous les bâtiments sur un seul écran." },
+          { "title": "Surveillance à distance", "desc": "11 indicateurs dont CO₂, COVT, formaldéhyde et particules sur des plans 3D par étage, avec caméras de lecture et caméras thermiques pour les jauges analogiques et la température de surface des équipements." },
+          { "title": "Croisement avec les risques naturels", "desc": "Radar de pluie, séismes, alertes et trajectoires de typhons sont superposés aux sites pour repérer ceux qui sont touchés et les classer par niveau de risque." },
+          { "title": "Incidents et continuité d'activité", "desc": "Du signalement par QR code des occupants au fil photo du terrain, à l'avancement des tâches et au résumé automatique de situation, toute la réponse est tracée, et l'IA guide pas à pas les EOP enregistrées." }
+        ],
+        "shots": [
+          "Supervision du parc (capteurs · environnement intérieur · énergie · incidents)",
+          "Supervision par bâtiment (plans 3D · caméras de lecture et thermiques)",
+          "Carte des risques (radar de pluie · séismes · classement par risque)",
+          "Situation Board (fil terrain · avancement · résumé automatique)",
+          "BUILDAT AI · Procédure de première réponse en cas de séisme (EOP)"
+        ]
+      },
+      "opti": {
+        "name": "Opti",
+        "kind": "Diagnostic énergétique des bâtiments · IA",
+        "brief": "Diagnostic à partir des données KEPCO au pas de 15 minutes, rentabilité solaire et ESS, conseiller IA",
+        "lead": "Opti diagnostique le profil de charge et la structure tarifaire d'un bâtiment à partir des seules données de comptage KEPCO au pas de 15 minutes, sans compteur supplémentaire, et l'IA présente la rentabilité du solaire et du stockage ainsi que les priorités d'économies, preuves à l'appui. Son analyse a été validée sur plus de 200 bâtiments, et Opti a été distingué CES 2026 Innovation Awards Honoree.",
+        "spec": [
+          { "label": "Domaine", "value": "Diagnostic et optimisation énergétique des bâtiments" },
+          { "label": "Données", "value": "Comptage KEPCO 15 min, météo et ensoleillement, registre des bâtiments, géométrie 3D" },
+          { "label": "Démo", "value": "Immeuble de bureaux de 32 étages · puissance souscrite 11 500 kW" },
+          { "label": "Références", "value": "CES 2026 Innovation Awards Honoree · Contrat d'abonnement avec Johnson Controls (États-Unis)" }
+        ],
+        "figs": [
+          { "value": "200+", "label": "Bâtiments validés" },
+          { "value": "~12%", "label": "Économies sur la facture d'énergie" },
+          { "value": "80%", "label": "De temps gagné sur les rapports M&V" }
+        ],
+        "features": [
+          { "title": "Diagnostic de charge et benchmark", "desc": "Calcule la charge de base, la sensibilité au chauffage et à la climatisation (kWh/℃), la température d'équilibre et l'intensité énergétique (EUI), puis compare avec des bâtiments d'usage et de taille similaires." },
+          { "title": "Analyse tarifaire et des pointes", "desc": "Analyse les coûts par période (creuse, intermédiaire, pointe) et la puissance maximale appelée, et identifie le meilleur tarif grâce à un algorithme de recommandation." },
+          { "title": "Rentabilité solaire et ESS", "desc": "Estime la surface de toiture et la production à partir d'un modèle 3D, ainsi que la capacité ESS optimale, l'écrêtement des pointes et les revenus d'effacement, avec le délai de retour sur investissement." },
+          { "title": "Conseiller énergétique IA", "desc": "Recommande les mesures d'économies par ordre de priorité à partir de l'analyse, en affichant les indicateurs qui les justifient. Il n'invente jamais de valeur sans données." }
+        ],
+        "shots": [
+          "Accueil et analyses IA (lecture IA de chaque indicateur)",
+          "Vue d'ensemble énergétique (coûts · pointe · comparaison · autonomie · mesures)",
+          "Rentabilité solaire (surface de toiture · calepinage · retour sur investissement)",
+          "Rentabilité ESS (capacité optimale · écrêtement · revenus d'effacement)",
+          "Opti AI · Mesures d'économies par priorité"
+        ]
+      },
+      "vertiport": {
+        "name": "Plateforme d'exploitation énergétique de vertiport",
+        "kind": "EMS pour infrastructures de recharge de mobilité",
+        "brief": "Recharge eVTOL et VE, stockage et solaire pilotés ensemble, avec prévision de consommation, de coût et de pointe",
+        "lead": "Un EMS à effacement de la demande qui pilote l'alimentation réseau, le stockage et le solaire d'un vertiport UAM avec les charges de recharge des eVTOL et des véhicules électriques. Les fortes charges concentrées autour des horaires de vol, comme la recharge des eVTOL, sont gérées avec les informations de vol, et la consommation, le coût et les pointes du jour sont prévus pour guider le pilotage du stockage et la planification des recharges.",
+        "spec": [
+          { "label": "Domaine", "value": "EMS pour infrastructures de recharge de mobilité" },
+          { "label": "Projet", "value": "Technologie de vertiport modulaire à effacement de la demande basée sur une carte énergétique" },
+          { "label": "Financement", "value": "Ministère coréen des PME et des start-up (2023.12 ~ 2026.12)" },
+          { "label": "Équipe", "value": "Ninewatt (pilote) · Korea Institute of Civil Engineering and Building Technology" },
+          { "label": "Sites", "value": "Bukhang · Haeundae · Incheon · Gimpo · Seongnam" }
+        ],
+        "figs": [
+          { "value": "5", "label": "Sites de vertiport" },
+          { "value": "4 + 17", "label": "Postes eVTOL · bornes VE" },
+          { "value": "6 000 kWh", "label": "Capacité de stockage" }
+        ],
+        "features": [
+          { "title": "Flux d'énergie", "desc": "Un diagramme de Sankey montre l'énergie du réseau, du stockage et du solaire vers les eVTOL, les VE, les équipements et les services annexes, en temps réel ou sur 24 heures." },
+          { "title": "Recharge liée aux vols", "desc": "Gère les horaires d'arrivée, de recharge et de départ des eVTOL avec la puissance et l'état de charge de chaque poste, et permet de revoir des moments passés." },
+          { "title": "Prévision de consommation, coût et pointe", "desc": "Compare mesures et prévisions de consommation, de coût et de pointes journalières ou mensuelles pour guider le stockage et la planification des recharges." },
+          { "title": "SaaS multi-locataire", "desc": "Gère les offres, les écrans visibles, les droits des utilisateurs et l'usage de l'API pour chaque exploitant (locataire)." }
+        ],
+        "shots": [
+          "Accueil (pointe · consommation · flux · recharge · stockage)",
+          "Flux d'énergie (sources → charges, Sankey)",
+          "Recharge eVTOL (chronologie des postes · informations de vol)",
+          "Recharge VE (17 bornes rapides · puissance vs capacité réseau)",
+          "Énergie et coût (mesure vs prévision · calendrier des pointes)"
+        ]
+      },
+      "wshp": {
+        "name": "Plateforme IA hydrothermique",
+        "kind": "Supervision de chaleur renouvelable · Analyse de performance",
+        "brief": "Supervision par schéma et analyse du COP d'une centrale hybride pompes à chaleur sur eau et stockage thermique",
+        "lead": "Une plateforme de R&D qui supervise, à partir de son schéma, un système hybride composé de pompes à chaleur sur eau, d'un groupe à absorption et d'un stockage thermique, et fournit le calcul de chaleur et de COP, l'analyse des performances du stockage et un assistant IA. L'efficacité variant fortement selon la source d'eau, elle vise à suivre ensemble températures, débits et COP sur tout le système.",
+        "spec": [
+          { "label": "Domaine", "value": "Supervision de chaleur renouvelable · Analyse de performance" },
+          { "label": "Équipements", "value": "PAC sur eau · PAC eau chaude · groupe à absorption · 2 cuves de stockage · 6 CTA · 7 ventilo-convecteurs" },
+          { "label": "Données", "value": "1 451 points de mesure (température · pression · débit · puissance · vannes)" },
+          { "label": "Projet associé", "value": "Centrale de démonstration d'énergie hydrothermique centralisée à grande échelle" }
+        ],
+        "figs": [
+          { "value": "1 451", "label": "Points de mesure" },
+          { "value": "5,14", "label": "COP de la pompe à chaleur sur eau (oct. 2026, 2 semaines)" },
+          { "value": "5", "label": "Sections du système supervisées séparément" }
+        ],
+        "features": [
+          { "title": "Supervision par schéma (P&ID)", "desc": "Affiche tout le système, de la source d'eau aux échangeurs, pompes à chaleur, groupe à absorption, stockage et charges du bâtiment, avec les points de température, pression, débit et vannes." },
+          { "title": "Chaleur et efficacité", "desc": "Calcule à partir des mesures la chaleur produite et fournie, la charge et la décharge du stockage, le COP des pompes à chaleur et du système, et le niveau du stockage." },
+          { "title": "Performance et historique", "desc": "Analyse par période les profils et distributions de COP et les températures haute, moyenne et basse du stockage, avec le taux de validité des données." },
+          { "title": "Assistant IA et prévision de charge", "desc": "Répond aux questions en langage naturel en interrogeant directement les points de mesure, et valide un modèle qui prévoit la charge du lendemain à partir de la météo et des horaires d'exploitation." }
+        ],
+        "shots": [
+          "Tableau de bord (chaleur · puissance · COP · niveau de stockage)",
+          "Schéma du système (P&ID · points en temps réel)",
+          "Analyse du COP (nuage de points · boîte à moustaches · semaine précédente)",
+          "Assistant IA (synthèse de l'exploitation du jour)"
+        ]
+      },
+      "fems": {
+        "name": "Supervision électrique d'usine",
+        "kind": "FEMS · Comptage par circuit",
+        "brief": "Sous-comptage par capteurs CT dans les tableaux, et tableaux de bord personnalisés construits par l'IA",
+        "lead": "Une plateforme de gestion de l'énergie industrielle qui mesure la puissance de chaque machine (sous-comptage) grâce à des capteurs CT sur chaque circuit de tableau et de MCC, et construit un tableau de bord personnalisé lorsque l'utilisateur indique à l'IA les indicateurs dont il a besoin. Les facteurs de coût comme les nouvelles pointes, la consommation de veille la nuit ou le déséquilibre triphasé sont gérés sous forme d'alertes avec leur impact financier estimé.",
+        "spec": [
+          { "label": "Domaine", "value": "Gestion de l'énergie industrielle (FEMS)" },
+          { "label": "Comptage", "value": "Capteurs CT par circuit de tableau et de MCC → passerelle" },
+          { "label": "Données", "value": "Courant par phase (R · S · T), puissance, consommation" },
+          { "label": "Démo", "value": "12 machines (données de démonstration)" }
+        ],
+        "figs": [
+          { "value": "12", "label": "Machines de démonstration" },
+          { "value": "3 étapes", "label": "Écran construit par l'IA (demande · aperçu · application)" },
+          { "value": "R · S · T", "label": "Courant et puissance par phase" }
+        ],
+        "features": [
+          { "title": "Sous-comptage par circuit", "desc": "Des CT sur chaque circuit de tableau et de MCC collectent courant, puissance et consommation par phase pour suivre le profil de charge de chaque machine et l'équilibre triphasé." },
+          { "title": "Tableaux de bord IA", "desc": "Indiquez l'indicateur voulu : l'IA pose des questions, présente un aperçu de la carte, puis l'ajoute à votre écran. Type et taille se modifient d'un clic ou à la voix." },
+          { "title": "Analyse IA justifiée", "desc": "Chaque réponse indique les équipements et données utilisés. Pour les questions nécessitant des données non connectées, elle explique ce qui manque plutôt que de deviner." },
+          { "title": "Alertes orientées coûts", "desc": "Hausse de la veille nocturne, nouvelle pointe mensuelle (démarrages simultanés) et perte de signal des capteurs sont signalées par niveau et impact financier estimé." }
+        ],
+        "shots": [
+          "Écran personnalisé construit par l'IA (consommation par machine · courbe de charge · facture du mois)",
+          "Aperçu et modification de carte",
+          "Analyse IA · équipements sources affichés",
+          "Équipements (affectation des circuits · état · consommation)",
+          "Alertes (impact financier estimé par événement)"
+        ]
+      },
+      "jj1000": {
+        "name": "Supervision de tableaux électriques JJ-1000",
+        "kind": "Maintenance prédictive des tableaux électriques",
+        "brief": "Surveillance continue des signes de dégradation et d'incendie avec 11 types de capteurs",
+        "lead": "Une plateforme de maintenance prédictive qui relie par passerelle les équipements de surveillance JJ-1000 de Jungjin Electric pour surveiller en continu les signes de dégradation et d'incendie des tableaux électriques, comme la surcharge, la surchauffe, les courants de fuite, les décharges partielles et les arcs, et qui trace le traitement des alarmes. Contrairement à une surveillance classique limitée au courant, elle croise indicateurs thermiques, d'isolement, de décharge et de gaz pour détecter tôt différents modes de défaillance.",
+        "spec": [
+          { "label": "Domaine", "value": "Maintenance prédictive des tableaux électriques" },
+          { "label": "Client", "value": "Jungjin Electric (programme Innovation Voucher, 2026)" },
+          { "label": "Site", "value": "Immeuble de bureaux · raccordement 1 500 kW · 6 tableaux" },
+          { "label": "Protocole", "value": "JJ-1000 ↔ passerelle en RS485 Modbus RTU" },
+          { "label": "Fréquence", "value": "Mesures toutes les minutes · alarmes chaque seconde" }
+        ],
+        "figs": [
+          { "value": "11", "label": "Indicateurs par tableau" },
+          { "value": "1 min / 1 s", "label": "Fréquence de mesure / d'alarme" },
+          { "value": "99,5 %+", "label": "Taux de réception des données sur 24 h" }
+        ],
+        "features": [
+          { "title": "Surveillance multicapteur", "desc": "Courant triphasé et déséquilibre, température et échauffement (ΔT), courant de fuite (ZCT), décharges partielles, arcs (UV), flamme, CO₂ et CO, pour chaque tableau." },
+          { "title": "Schéma unifilaire automatique", "desc": "Dispose automatiquement le réseau, du tableau d'arrivée au transformateur, aux TGBT puis aux tableaux divisionnaires, avec charge, température et état de chacun." },
+          { "title": "Gestion des alarmes", "desc": "Deux seuils (vigilance et danger), historique déclenchée → acquittée → clôturée, notes d'intervention et délai moyen d'acquittement." },
+          { "title": "Données et patrimoine", "desc": "Comparaison des tableaux et export des données brutes à la minute, structure site · zone · tableau · passerelle et seuils par indicateur." }
+        ],
+        "shots": [
+          "Vue d'ensemble (état des tableaux · alarmes en direct · charge · réception)",
+          "Schéma unifilaire (généré automatiquement)",
+          "Détail d'un tableau (11 indicateurs · seuils)",
+          "Centre d'alarmes (déclenchée → acquittée → clôturée)"
+        ]
+      }
+    }
   },
   "district": {
     "hint": "Sélectionnez une installation pour découvrir son produit",

@@ -44,6 +44,7 @@ export default function ProductNav() {
     {
       label: t("productMenu.ems"),
       items: [
+        { href: "/product/ems", label: t("productMenu.emsPlatformLabel") },
         { href: "/product/bems", label: "BEMS" },
         { href: "/product/pv-intelligence", label: t("productMenu.pvRemsLabel") },
       ],

@@ -45,6 +45,13 @@ const categories = [
     titleKey: "productMenu.ems" as const,
     products: [
       {
+        href: "/product/ems" as const,
+        nameKey: "productMenu.emsPlatformLabel" as const,
+        badge: null,
+        tagline: "Energy Management Platforms",
+        descKey: "list.emsDesc" as const,
+      },
+      {
         href: "/product/bems" as const,
         name: "BEMS",
         badge: null,
