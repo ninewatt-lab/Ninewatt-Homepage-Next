@@ -115,6 +115,7 @@ export default function Footer() {
               <p>{t("footer.hq")}</p>
               <p>{t("footer.rnd")}</p>
               <p>{t("footer.gyeonggi")}</p>
+              <p>{t("footer.japan")}</p>
               <p>Tel. 070-8866-7226 | Email. <Email address="ninewatt@ninewatt.com" /></p>
             </div>
             <div className="mt-4 flex gap-3">

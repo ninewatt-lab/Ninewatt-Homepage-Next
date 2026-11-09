@@ -36,6 +36,19 @@ export function organizationJsonLd() {
         addressCountry: "KR",
       },
     ],
+    // 일본지사는 별도 법인이라 본사 address 가 아닌 자회사로 둔다
+    subOrganization: {
+      "@type": "Organization",
+      "@id": `${SITE_URL}/#organization-japan`,
+      name: companyInfo.japan.name,
+      alternateName: companyInfo.japan.alternateName,
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: companyInfo.japan.address,
+        addressCountry: "JP",
+      },
+      parentOrganization: { "@id": `${SITE_URL}/#organization` },
+    },
     contactPoint: {
       "@type": "ContactPoint",
       contactType: "sales",
