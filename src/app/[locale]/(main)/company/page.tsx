@@ -177,6 +177,13 @@ export default async function CompanyPage({
                 <td className="py-4 pr-6 font-semibold align-top whitespace-nowrap">{t("about.ggLabel")}</td>
                 <td className="py-4 text-muted">{t("about.ggAddress")}</td>
               </tr>
+              <tr className="border-b border-border">
+                <td className="py-4 pr-6 font-semibold align-top whitespace-nowrap">{t("about.jpLabel")}</td>
+                <td className="py-4 text-muted">
+                  <span className="block text-foreground">{t("about.jpCompany")}</span>
+                  {t("about.jpAddress")}
+                </td>
+              </tr>
             </tbody>
           </table>
         </div>
