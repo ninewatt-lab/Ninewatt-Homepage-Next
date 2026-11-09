@@ -82,6 +82,7 @@ export const ROUTES: readonly RouteDef[] = [
   { path: "/product", priority: 0.9, freq: "monthly" },
   { path: "/product/shared-ess", priority: 0.9, freq: "monthly" },
   { path: "/product/peak-ess", priority: 0.9, freq: "monthly" },
+  { path: "/product/ems", priority: 0.9, freq: "monthly" },
   { path: "/product/bems", priority: 0.9, freq: "monthly" },
   { path: "/product/solar-site", priority: 0.9, freq: "monthly" },
   { path: "/product/pv-intelligence", priority: 0.9, freq: "monthly" },

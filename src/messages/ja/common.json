@@ -34,6 +34,8 @@
     "peakEssDesc": "AI基盤ピーク電力低減ESS最適制御システム",
     "pvRemsLabel": "PV REMS",
     "solarScopeLabel": "太陽光適地分析",
+    "emsPlatformLabel": "EMSプラットフォーム",
+    "emsPlatformDesc": "ビル・工場・バーティポートなどEMSプラットフォーム6種",
     "bemsLabel": "BEMS",
     "bemsDesc": "ビルエネルギー管理システム"
   },

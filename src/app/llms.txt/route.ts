@@ -24,6 +24,7 @@ const LABELS: Record<string, string> = {
   "/product": "제품 전체",
   "/product/shared-ess": "공용ESS — 다수 건물이 공유하는 대용량 ESS",
   "/product/peak-ess": "피크저감 ESS — AI 부하 예측 기반 충·방전 최적제어",
+  "/product/ems": "EMS 플랫폼 — 빌딩 통합운영 · 건물 에너지 진단 · 버티포트 · 수열원 · 공장 · 수배전반 EMS 6종",
   "/product/bems": "BEMS — 건물에너지관리시스템",
   "/product/solar-site": "SolarScope — 태양광 후보지 규제·발전량·수익성 분석",
   "/product/pv-intelligence": "PV REMS — 태양광 AI 모니터링·이상진단",

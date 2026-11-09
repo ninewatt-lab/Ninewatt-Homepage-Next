@@ -39,6 +39,7 @@ const footerSections: FooterSection[] = [
     links: [
       { label: "productMenu.sharedEssLabel", href: "/product/shared-ess" },
       { label: "productMenu.peakEssLabel", href: "/product/peak-ess" },
+      { label: "productMenu.emsPlatformLabel", href: "/product/ems" },
       { label: "productMenu.bemsLabel", href: "/product/bems" },
       { label: "GreenPlanner", href: "/product/greenplanner", isLiteral: true },
       { label: "RE:park", href: "/product/repark", isLiteral: true },
