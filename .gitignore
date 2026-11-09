@@ -51,6 +51,8 @@ prod_dump.sql
 .gstack/
 .claude/skills/gstack/
 public/temp/
+# EMS 플랫폼 원본 자료 — 접속 계정(credentials.md) · 대외비 시연가이드 포함
+/NINEWATT_FILES/NINEWATT_EMS/
 
 # python
 __pycache__/
