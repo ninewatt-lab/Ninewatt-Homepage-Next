@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { inquiryWebhooks, postInquiry } from "@/lib/inquiry";
 
 export async function POST(request: Request) {
   try {
@@ -11,8 +12,8 @@ export async function POST(request: Request) {
       );
     }
 
-    const webhookUrl = process.env.TEAMS_WEBHOOK_URL;
-    if (!webhookUrl) {
+    const webhooks = inquiryWebhooks();
+    if (webhooks.length === 0) {
       console.error("TEAMS_WEBHOOK_URL 환경변수가 설정되지 않았습니다.");
       return NextResponse.json(
         { error: "서버 설정 오류입니다." },
@@ -20,22 +21,16 @@ export async function POST(request: Request) {
       );
     }
 
-    const res = await fetch(webhookUrl, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        name,
-        company: company || "-",
-        email,
-        phone: phone || "-",
-        type,
-        message,
-      }),
+    const sent = await postInquiry(webhooks, {
+      name,
+      company: company || "-",
+      email,
+      phone: phone || "-",
+      type,
+      message,
     });
 
-    if (!res.ok) {
-      const text = await res.text();
-      console.error("Teams 웹훅 전송 실패:", res.status, text);
+    if (!sent) {
       return NextResponse.json(
         { error: "문의 전송에 실패했습니다." },
         { status: 500 }
