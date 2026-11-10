@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { checkRateLimit, sweepIfNeeded } from "@/lib/chatbot/rateLimit";
+import { inquiryWebhooks, postInquiry } from "@/lib/inquiry";
 
 export const runtime = "nodejs";
 
@@ -78,8 +79,8 @@ export async function POST(req: Request) {
     );
   }
 
-  const webhookUrl = process.env.TEAMS_WEBHOOK_URL;
-  if (!webhookUrl) {
+  const webhooks = inquiryWebhooks();
+  if (webhooks.length === 0) {
     console.error("TEAMS_WEBHOOK_URL not set");
     return NextResponse.json(
       { error: "Server configuration error" },
@@ -93,30 +94,16 @@ export async function POST(req: Request) {
     `\n\n— 대화 요약 —\n${summarizeConversation(body.conversation)}`,
   ].join("");
 
-  try {
-    const res = await fetch(webhookUrl, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        name,
-        company: company || "-",
-        email,
-        phone: phone || "-",
-        type: "챗봇 상담",
-        message: composedMessage,
-      }),
-    });
-    if (!res.ok) {
-      const text = await res.text();
-      console.error("Teams webhook failed:", res.status, text);
-      return NextResponse.json(
-        { error: "Send failed" },
-        { status: 500 }
-      );
-    }
-    return NextResponse.json({ success: true });
-  } catch (err) {
-    console.error("chatbot lead error:", err);
+  const sent = await postInquiry(webhooks, {
+    name,
+    company: company || "-",
+    email,
+    phone: phone || "-",
+    type: "챗봇 상담",
+    message: composedMessage,
+  });
+  if (!sent) {
     return NextResponse.json({ error: "Send failed" }, { status: 500 });
   }
+  return NextResponse.json({ success: true });
 }
